@@ -15,7 +15,7 @@ RobotContainer::RobotContainer() {
 
 void RobotContainer::ConfigureBindings() {
   using namespace frc2::cmd;
-  _driverController.Start().WhileTrue(SubAmp::GetInstance().AmpShooter()); //outtake
+  _driverController.X().WhileTrue(SubAmp::GetInstance().AmpShooter()); //outtake
 
 }
 

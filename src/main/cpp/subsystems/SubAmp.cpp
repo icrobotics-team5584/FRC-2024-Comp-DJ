@@ -11,13 +11,13 @@ SubAmp::SubAmp() = default;
 
 // This method will be called once per scheduler run
 void SubAmp::Periodic(){
-    frc::SmartDashboard::PutNumber("amp/Amp Shooter Motor: ", _AmpMotorSpin.Get());
+    frc::SmartDashboard::PutNumber("amp/Amp Shooter Motor: ", _ampMotorSpin.Get());
 }
 
 frc2::CommandPtr SubAmp::AmpShooter(){
    return StartEnd(
-    [this]{_AmpMotorSpin.Set(0.01);},
-    [this]{_AmpMotorSpin.Set(0);}
+    [this]{_ampMotorSpin.Set(0.01);},
+    [this]{_ampMotorSpin.Set(0);}
    );
 
 }
