@@ -1,0 +1,23 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo"
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "SmartDashboard": {
+        "DB": {
+          "open": true
+        },
+        "Intake": {
+          "open": true
+        },
+        "Shooter": {
+          "open": true
+        },
+        "open": true
+      }
+    }
+  }
+}
