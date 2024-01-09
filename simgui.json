@@ -3,6 +3,7 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Chosen Path": "String Chooser",
+      "/SmartDashboard/Delay By": "String Chooser",
       "/SmartDashboard/delay by": "String Chooser"
     }
   },
