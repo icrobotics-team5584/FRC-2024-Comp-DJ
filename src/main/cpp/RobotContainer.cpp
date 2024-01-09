@@ -6,11 +6,18 @@
 
 #include <frc2/command/Commands.h>
 
+#include "subsystems/SubAmp.h"
+
 RobotContainer::RobotContainer() {
+  SubAmp::GetInstance();
   ConfigureBindings();
 }
 
-void RobotContainer::ConfigureBindings() {}
+void RobotContainer::ConfigureBindings() {
+  using namespace frc2::cmd;
+  _driverController.Start().WhileTrue(SubAmp::GetInstance().AmpShooter()); //outtake
+
+}
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   return frc2::cmd::Print("No autonomous command configured");
