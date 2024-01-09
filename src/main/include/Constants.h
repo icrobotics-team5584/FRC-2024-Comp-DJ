@@ -20,9 +20,9 @@ namespace canivore {
 
 namespace canid {
     //amp
-    constexpr int clawMotorJoint = 100;
-    constexpr int elevatorMotor = 101;
-    constexpr int AmpMotorSpin = 102;
+    constexpr int ClawMotorJoint = 100;
+    constexpr int ElevatorMotor = 101;
+    constexpr int AmpMotorSpin = 13;
     
 }
 

@@ -25,8 +25,13 @@ class SubAmp : public frc2::SubsystemBase {
    */
   void Periodic() override;
   frc2::CommandPtr AmpShooter();
+  frc2::CommandPtr ReverseAmpShooter();
 
-
+  /*
+  frc2::CommandPtr ClawTiltDown();
+  frc2::CommandPtr ClawTiltUp();
+  */
+  
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
