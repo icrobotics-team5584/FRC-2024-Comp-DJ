@@ -14,8 +14,14 @@ RobotContainer::RobotContainer() {
 
 void RobotContainer::ConfigureBindings() {
   using namespace frc2::cmd;
+
+  // Amp Shooter
   _driverController.X().WhileTrue(SubAmp::GetInstance().AmpShooter());
   _driverController.Y().WhileTrue(SubAmp::GetInstance().ReverseAmpShooter());
+
+  // Dizzy Amp
+  _driverController.A().OnTrue(SubAmp::GetInstance().ClawOpen());
+  _driverController.B().OnTrue(SubAmp::GetInstance().ClawClose());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

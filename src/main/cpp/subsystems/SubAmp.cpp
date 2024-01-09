@@ -3,6 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <units/angular_velocity.h>
+#include <units/angular_acceleration.h>
+#include <units/angle.h>
 
 #include "subsystems/SubAmp.h"
 
@@ -15,40 +18,38 @@ SubAmp::SubAmp(){
 // This method will be called once per scheduler run
 void SubAmp::Periodic(){
     frc::SmartDashboard::PutNumber("amp/Amp Shooter Motor: ", _ampMotorSpin.Get());
+    frc::SmartDashboard::PutNumber("amp/Dizzy Claw tilt motor speed: ", _clawMotorJoint.Get());
 }
+
+
+// Shooter Amp
 
 frc2::CommandPtr SubAmp::AmpShooter(){
    return StartEnd(
-    [this]{_ampMotorSpin.Set(0.5);},
+    [this]{_ampMotorSpin.Set(0.7);},
     [this]{_ampMotorSpin.Set(0);}
    );
 }
 
 frc2::CommandPtr SubAmp::ReverseAmpShooter(){
     return StartEnd(
-    [this]{_ampMotorSpin.Set(-0.5);},
-    [this]{_ampMotorSpin.Set(0);}
-   );
-}
-
-/*
-constexpr int ClawMotorJoint = 100;
-constexpr int ElevatorMotor = 101;
-constexpr int AmpMotorSpin = 1
-
-frc2::CommandPtr CubeConeSwitch(){
-        return RunOnce([]{
-            if(RobotContainer::isConeMode){RobotContainer::isConeMode = false;}
-            else{RobotContainer::isConeMode = true;}          
-        });
-    }
-
-
-frc2::CommandPtr SubAmp::ClawTiltDown(){
-    return RunOnce(
-        []{  }
+        [this]{_ampMotorSpin.Set(-0.7);},
+        [this]{_ampMotorSpin.Set(0);}
     );
 }
-frc2::CommandPtr SubAmp::ClawTiltUp(){}
 
-*/
+// dizzy amp
+
+frc2::CommandPtr SubAmp::ClawOpen(){
+    
+}
+
+frc2::CommandPtr SubAmp::ClawClose(){}
+
+frc2::CommandPtr SubAmp::ClawTiltDown(){
+    return RunOnce([this]{_clawMotorJoint.Set(-0.7);});
+}
+
+frc2::CommandPtr SubAmp::ClawTiltUp(){
+    return RunOnce([this]{_clawMotorJoint.Set(0.7);});
+}

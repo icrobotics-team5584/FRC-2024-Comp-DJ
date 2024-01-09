@@ -24,13 +24,20 @@ class SubAmp : public frc2::SubsystemBase {
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
+
+  // shooter amp
   frc2::CommandPtr AmpShooter();
   frc2::CommandPtr ReverseAmpShooter();
+  frc2::CommandPtr TilingRamp();
 
-  /*
+  // dizzy amp
+  frc2::CommandPtr ClawOpen();
+  frc2::CommandPtr ClawClose();
+
   frc2::CommandPtr ClawTiltDown();
   frc2::CommandPtr ClawTiltUp();
-  */
+  
+  
   
 
  private:
@@ -39,6 +46,10 @@ class SubAmp : public frc2::SubsystemBase {
 
   rev::CANSparkMax _ampMotorSpin{
      canid::AmpMotorSpin, rev::CANSparkMax::MotorType::kBrushless
+  };
+
+  rev::CANSparkMax _clawMotorJoint{
+    canid::ClawMotorJoint, rev::CANSparkMax::MotorType::kBrushless
   };
 
 };
