@@ -5,14 +5,26 @@
 #include "RobotContainer.h"
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <frc2/command/Commands.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
 
 RobotContainer::RobotContainer() {
   ConfigureBindings();
-}
+  _delayChooser.AddOption("0 Seconds", 0);
+  _delayChooser.AddOption("1 Seconds", 1);
+  _delayChooser.AddOption("2 Seconds", 2);
+  frc::SmartDashboard::PutData("Delay By", &_delayChooser);
+
+  _autoChooser.AddOption("Middle Path", "Middle Path");
+  _autoChooser.AddOption("Amp Path", "Amp Path");
+ // _autoChooser.AddOption("Podium Path", "Podium Path");
+frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
+  }
 
 void RobotContainer::ConfigureBindings() {}
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     _autoSelected = _autoChooser.GetSelected();
-  return pathplanner::PathPlannerAuto(_autoSelected).ToPtr();
+    units::second_t delay = _delayChooser.GetSelected() *1_s;
+  return frc2::cmd::Wait(delay).AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr());
 }

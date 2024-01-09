@@ -17,5 +17,6 @@ class RobotContainer {
   void ConfigureBindings();
 
   frc::SendableChooser<std::string> _autoChooser;
+  frc::SendableChooser<int> _delayChooser;
   std::string _autoSelected;
 };
