@@ -27,6 +27,13 @@ namespace canid {
     
 }
 
+namespace pcm0 {
+    constexpr int IntakeExtend = 2;
+    constexpr int IntakeRetract = 3;
+    constexpr int Pcm0Id = 0;
+}
+
+
 namespace dio {
 
 }

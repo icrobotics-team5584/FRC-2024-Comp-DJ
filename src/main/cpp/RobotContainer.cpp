@@ -8,6 +8,7 @@
 #include "subsystems/SubIntake.h"
 
 RobotContainer::RobotContainer() {
+  SubIntake::GetInstance();
   ConfigureBindings();
 }
 
