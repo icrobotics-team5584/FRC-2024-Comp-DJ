@@ -5,6 +5,7 @@
 #pragma once
 
 #include <frc2/command/CommandPtr.h>
+#include <frc/smartdashboard/SendableChooser.h>
 
 class RobotContainer {
  public:
@@ -14,4 +15,7 @@ class RobotContainer {
 
  private:
   void ConfigureBindings();
+
+  frc::SendableChooser<std::string> _autoChooser;
+  std::string _autoSelected;
 };
