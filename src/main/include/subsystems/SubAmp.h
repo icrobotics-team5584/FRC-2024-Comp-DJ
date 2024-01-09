@@ -28,7 +28,9 @@ class SubAmp : public frc2::SubsystemBase {
   // shooter amp
   frc2::CommandPtr AmpShooter();
   frc2::CommandPtr ReverseAmpShooter();
-  frc2::CommandPtr TilingRamp();
+
+  frc2::CommandPtr ExtraMotor();
+  frc2::CommandPtr ReverseExtraMotor();
 
   // dizzy amp
   frc2::CommandPtr ClawOpen();
@@ -44,12 +46,23 @@ class SubAmp : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
+  //units::turn_t TopArmAngleToEncoderAngle(units::turn_t topArmAngle);
+
   rev::CANSparkMax _ampMotorSpin{
      canid::AmpMotorSpin, rev::CANSparkMax::MotorType::kBrushless
   };
+  
 
   rev::CANSparkMax _clawMotorJoint{
     canid::ClawMotorJoint, rev::CANSparkMax::MotorType::kBrushless
+  };
+
+  rev::CANSparkMax _motorForTilt{
+    canid::MotorForTilt, rev::CANSparkMax::MotorType::kBrushless
+  };
+
+  rev::CANSparkMax _extraMotorForAmpShooter{
+    canid::ExtraMotorForAmpShooter, rev::CANSparkMax::MotorType::kBrushless
   };
 
 };

@@ -16,13 +16,21 @@ void RobotContainer::ConfigureBindings() {
   using namespace frc2::cmd;
 
   // Amp Shooter
-  _driverController.X().WhileTrue(SubAmp::GetInstance().AmpShooter());
-  _driverController.Y().WhileTrue(SubAmp::GetInstance().ReverseAmpShooter());
+  _driverController.Start().WhileTrue(SubAmp::GetInstance().AmpShooter());
+  _driverController.Back().WhileTrue(SubAmp::GetInstance().ReverseAmpShooter());
+
+  _driverController.LeftBumper().WhileTrue(SubAmp::GetInstance().ExtraMotor());
+  _driverController.RightBumper().WhileTrue(SubAmp::GetInstance().ReverseExtraMotor());
+
 
   // Dizzy Amp
-  _driverController.A().OnTrue(SubAmp::GetInstance().ClawOpen());
-  _driverController.B().OnTrue(SubAmp::GetInstance().ClawClose());
-}
+  _driverController.A().WhileTrue(SubAmp::GetInstance().ClawOpen());
+  _driverController.B().WhileTrue(SubAmp::GetInstance().ClawClose());
+
+  _driverController.X().WhileTrue(SubAmp::GetInstance().ClawTiltDown());
+  _driverController.Y().WhileTrue(SubAmp::GetInstance().ClawTiltUp());
+
+  }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   return frc2::cmd::Print("No autonomous command configured");

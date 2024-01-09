@@ -38,18 +38,33 @@ frc2::CommandPtr SubAmp::ReverseAmpShooter(){
     );
 }
 
-// dizzy amp
-
-frc2::CommandPtr SubAmp::ClawOpen(){
-    
+frc2::CommandPtr SubAmp::ExtraMotor(){
+   return StartEnd(
+    [this]{_ampMotorSpin.Set(0.7);},
+    [this]{_ampMotorSpin.Set(0);}
+   );
 }
 
-frc2::CommandPtr SubAmp::ClawClose(){}
+frc2::CommandPtr SubAmp::ReverseExtraMotor(){
+   return StartEnd(
+    [this]{_ampMotorSpin.Set(-0.7);},
+    [this]{_ampMotorSpin.Set(0);}
+   );
+}
+
+// dizzy amp
+frc2::CommandPtr SubAmp::ClawOpen(){
+    return RunOnce([this]{_clawMotorJoint.Set(0.1);});
+}
+
+frc2::CommandPtr SubAmp::ClawClose(){
+    return RunOnce([this]{_clawMotorJoint.Set(0.2);});
+}
 
 frc2::CommandPtr SubAmp::ClawTiltDown(){
-    return RunOnce([this]{_clawMotorJoint.Set(-0.7);});
+    return RunOnce([this]{_clawMotorJoint.Set(-0.5);});
 }
 
 frc2::CommandPtr SubAmp::ClawTiltUp(){
-    return RunOnce([this]{_clawMotorJoint.Set(0.7);});
+    return RunOnce([this]{_clawMotorJoint.Set(0.5);});
 }
