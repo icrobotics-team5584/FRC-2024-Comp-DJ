@@ -46,6 +46,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::Rotation2d GetHeading();
   units::meters_per_second_t GetVelocity();
   frc::SwerveDriveKinematics<4> GetKinematics();
+  frc::ChassisSpeeds GetRobotRelativeSpeeds();
 
   static constexpr units::meters_per_second_t MAX_VELOCITY = 3_mps;
   static constexpr units::degrees_per_second_t MAX_ANGULAR_VELOCITY =

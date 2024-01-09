@@ -7,6 +7,9 @@
 #include <frc/RobotBase.h>
 #include <units/time.h> 
 #include <frc/DriverStation.h>
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
+#include <pathplanner/lib/util/PIDConstants.h>
 
 #include "subsystems/SubDrivebase.h"
 
@@ -15,6 +18,32 @@ SubDrivebase::SubDrivebase(){
   Rcontroller.EnableContinuousInput(-180_deg, 180_deg);
   SyncSensors();
   frc::SmartDashboard::PutData("field", &_fieldDisplay);
+
+  using namespace pathplanner;
+  AutoBuilder::configureHolonomic(
+  [this](){ return GetPose(); }, // Robot pose supplier
+  [this](frc::Pose2d pose){ SetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
+  [this](){ return GetRobotRelativeSpeeds (); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+  [this](frc::ChassisSpeeds speeds){ Drive(speeds.vx , speeds.vy , speeds.omega, false); }, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+  HolonomicPathFollowerConfig(  
+            PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+            4.5_mps, // Max module speed, in m/s
+            0.4_m, // Drive base radius in meters. Distance from robot center to furthest module. NEEDS TO BE CHECKED AND MADE ACCURATE!!
+            ReplanningConfig() // Default path replanning config. See the API for the options here
+        ), 
+          []() {
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE ), // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            auto alliance = frc::DriverStation::GetAlliance();
+            if (alliance) {
+                return alliance.value() == frc::DriverStation::Alliance::kRed;
+            }
+            return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
 }
 
 // This method will be called once per scheduler run
@@ -73,6 +102,17 @@ void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_se
   _backLeft.SendSensorsToDash();
   _backRight.SendSensorsToDash();
 }
+
+frc::ChassisSpeeds SubDrivebase::GetRobotRelativeSpeeds(){
+  auto fl = _frontLeft.GetState();
+  auto fr = _frontRight.GetState();
+  auto bl = _backLeft.GetState();
+  auto br = _backRight.GetState();
+  return _kinematics.ToChassisSpeeds(fl, fr, bl, br);
+
+}
+
+
 
 // Syncs encoder values when the robot is turned on
 void SubDrivebase::SyncSensors() {
