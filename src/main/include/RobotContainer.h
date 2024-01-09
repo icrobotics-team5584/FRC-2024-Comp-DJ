@@ -5,6 +5,20 @@
 #pragma once
 
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/Command.h>
+#include <frc2/command/button/CommandXboxController.h>
+#include <frc2/command/button/JoystickButton.h>
+#include <frc2/command/button/CommandGenericHID.h> 
+#include <frc2/command/InstantCommand.h>
+#include <frc/XboxController.h>
+#include <frc/smartdashboard/SendableChooser.h>
+
+#include "Constants.h"
+#include <frc/XboxController.h>
+#include <frc2/command/button/CommandGenericHID.h>
+#include <frc2/command/InstantCommand.h>
+#include <frc/DigitalInput.h>
+
 
 class RobotContainer {
  public:
@@ -14,4 +28,6 @@ class RobotContainer {
 
  private:
   void ConfigureBindings();
+  frc2::CommandXboxController _driverController{0};
+
 };
