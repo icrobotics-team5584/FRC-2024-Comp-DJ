@@ -17,7 +17,7 @@ RobotContainer::RobotContainer() {
 
   _autoChooser.AddOption("Middle Path", "Middle Path");
   _autoChooser.AddOption("Amp Path", "Amp Path");
- // _autoChooser.AddOption("Podium Path", "Podium Path");
+  _autoChooser.AddOption("Podium Path", "Podium Path");
 frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
   }
 
