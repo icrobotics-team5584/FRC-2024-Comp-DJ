@@ -29,6 +29,15 @@
       },
       "SmartDashboard": {
         "amp": {
+          "Dizzy Claw tilt motor speed:: ": {
+            "open": true
+          },
+          "Dizzy Claw tilt motor: ": {
+            "open": true
+          },
+          "open": true
+        },
+        "arm": {
           "open": true
         },
         "open": true
@@ -50,8 +59,5 @@
         "open": true
       }
     }
-  },
-  "NetworkTables View": {
-    "visible": false
   }
 }

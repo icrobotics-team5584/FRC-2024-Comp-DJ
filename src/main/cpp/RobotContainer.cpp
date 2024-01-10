@@ -15,20 +15,19 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   using namespace frc2::cmd;
 
+  // Motor to angle auto
+  _driverController.Start().WhileTrue(SubAmp::GetInstance().MotorTiltToAngle());
+
   // Amp Shooter
-  _driverController.Start().WhileTrue(SubAmp::GetInstance().AmpShooter());
-  _driverController.Back().WhileTrue(SubAmp::GetInstance().ReverseAmpShooter());
+  _driverController.A().WhileTrue(SubAmp::GetInstance().AmpShooter());
+  _driverController.B().WhileTrue(SubAmp::GetInstance().ReverseAmpShooter());
 
-  _driverController.LeftBumper().WhileTrue(SubAmp::GetInstance().ExtraMotor());
-  _driverController.RightBumper().WhileTrue(SubAmp::GetInstance().ReverseExtraMotor());
-
+  _driverController.X().WhileTrue(SubAmp::GetInstance().ExtraMotor());
+  _driverController.Y().WhileTrue(SubAmp::GetInstance().ReverseExtraMotor());
 
   // Dizzy Amp
-  _driverController.A().WhileTrue(SubAmp::GetInstance().ClawOpen());
-  _driverController.B().WhileTrue(SubAmp::GetInstance().ClawClose());
-
-  _driverController.X().WhileTrue(SubAmp::GetInstance().ClawTiltDown());
-  _driverController.Y().WhileTrue(SubAmp::GetInstance().ClawTiltUp());
+  _driverController.LeftTrigger().WhileTrue(SubAmp::GetInstance().ClawTiltDown());
+  _driverController.RightTrigger().WhileTrue(SubAmp::GetInstance().ClawTiltUp());
 
   }
 

@@ -8,19 +8,32 @@
 #include <units/angle.h>
 
 #include "subsystems/SubAmp.h"
+#include "utilities/ICSparkMax.h"
 
 using namespace frc2::cmd;
 
-SubAmp::SubAmp(){
-    _ampMotorSpin.RestoreFactoryDefaults();
-}
+SubAmp::SubAmp(){ _ampMotorSpin.RestoreFactoryDefaults(); }
 
 // This method will be called once per scheduler run
 void SubAmp::Periodic(){
     frc::SmartDashboard::PutNumber("amp/Amp Shooter Motor: ", _ampMotorSpin.Get());
     frc::SmartDashboard::PutNumber("amp/Dizzy Claw tilt motor speed: ", _clawMotorJoint.Get());
+
+    /*
+    // angle of motor
+    frc::SmartDashboard::PutData("amp/Dizzy Claw tilt motor: ", (wpi::Sendable*)&_motorForTilt);
+    _motorForTilt.SetConversionFactor(1 / GEAR_RATIO);
+    _motorForTilt.SetPIDFF(P, I, D, F);
+    _motorForTilt.ConfigSmartMotion(MAX_VEL, MAX_ACCEL, TOLERANCE);
+    */
+
 }
 
+frc2::CommandPtr SubAmp::MotorTiltToAngle(){ 
+    return RunOnce( 
+        [this]{ _motorForTilt.SetSmartMotionTarget(10_deg); } 
+    );
+}
 
 // Shooter Amp
 
@@ -52,19 +65,34 @@ frc2::CommandPtr SubAmp::ReverseExtraMotor(){
    );
 }
 
-// dizzy amp
-frc2::CommandPtr SubAmp::ClawOpen(){
-    return RunOnce([this]{_clawMotorJoint.Set(0.1);});
-}
-
-frc2::CommandPtr SubAmp::ClawClose(){
-    return RunOnce([this]{_clawMotorJoint.Set(0.2);});
-}
-
+// dizzy Amp
 frc2::CommandPtr SubAmp::ClawTiltDown(){
-    return RunOnce([this]{_clawMotorJoint.Set(-0.5);});
+    return StartEnd(
+        [this]{_clawMotorJoint.Set(-0.5);},
+        [this]{_clawMotorJoint.Set(-0.01);}
+    );
 }
 
 frc2::CommandPtr SubAmp::ClawTiltUp(){
-    return RunOnce([this]{_clawMotorJoint.Set(0.5);});
+    return StartEnd(
+        [this]{_clawMotorJoint.Set(0.5);},
+        [this]{_clawMotorJoint.Set(0.01);}
+    );
 }
+
+/*
+void SubArm::SimulationPeriodic() {
+  _armSim.SetInputVoltage(_armMotorBottom.GetSimVoltage());
+  _armSim.Update(20_ms);
+
+  _armSim2.SetInputVoltage(_armMotorTop.GetSimVoltage());
+  _armSim2.Update(20_ms);
+
+  auto armAngle = _armSim.GetAngle();
+  auto armVel = _armSim.GetVelocity();
+  _armMotorBottom.UpdateSimEncoder(armAngle, armVel);
+
+  auto armAngle2 = _armSim2.GetAngle();
+  auto armVel2 = _armSim2.GetVelocity();
+  _armMotorTop.UpdateSimEncoder(armAngle2, armVel2);
+  */

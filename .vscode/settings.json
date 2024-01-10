@@ -16,7 +16,9 @@
   },
   "C_Cpp.default.configurationProvider": "vscode-wpilib",
   "files.associations": {
-    "*.tpp": "cpp"
+    "*.tpp": "cpp",
+    "*.inc": "cpp",
+    "string_view": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled"
 }
