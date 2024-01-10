@@ -13,7 +13,15 @@
   },
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Climber/Mech Display": "Mechanism2d"
+    },
+    "windows": {
+      "/SmartDashboard/Climber/Mech Display": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables": {
@@ -28,7 +36,7 @@
         "open": true
       },
       "SmartDashboard": {
-        "amp": {
+        "Climber": {
           "open": true
         },
         "open": true
@@ -49,9 +57,7 @@
       "Subscribers": {
         "open": true
       }
-    }
-  },
-  "NetworkTables View": {
-    "visible": false
+    },
+    "visible": true
   }
 }
