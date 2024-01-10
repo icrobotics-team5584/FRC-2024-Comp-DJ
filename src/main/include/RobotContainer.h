@@ -6,6 +6,7 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <frc2/command/button/CommandXboxController.h>
 
 class RobotContainer {
  public:
@@ -15,6 +16,7 @@ class RobotContainer {
 
  private:
   void ConfigureBindings();
+  frc2::CommandXboxController _driverController{0};
 
   frc::SendableChooser<std::string> _autoChooser;
   frc::SendableChooser<int> _delayChooser;

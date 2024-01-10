@@ -4,7 +4,15 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Chosen Path": "String Chooser",
       "/SmartDashboard/Delay By": "String Chooser",
-      "/SmartDashboard/delay by": "String Chooser"
+      "/SmartDashboard/delay by": "String Chooser",
+      "/SmartDashboard/field": "Field2d"
+    },
+    "windows": {
+      "/SmartDashboard/field": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables Info": {
