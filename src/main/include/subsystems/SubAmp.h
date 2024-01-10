@@ -53,13 +53,13 @@ class SubAmp : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  ICSparkMax _motorForTilt{canid::MotorForTilt};
   ICSparkMax _ampMotorSpin{canid::AmpMotorSpin};
   ICSparkMax _clawMotorJoint{canid::ClawMotorJoint};
+  ICSparkMax _elevatorMotor{canid::ElevatorMotor};
 
   // tilting a motor to an angle
 
-  rev::SparkMaxAbsoluteEncoder _topEncoder{_motorForTilt.GetAbsoluteEncoder(
+  rev::SparkMaxAbsoluteEncoder _topEncoder{_clawMotorJoint.GetAbsoluteEncoder(
       rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle)};
   
   // plank + claw (tune values for robot)
