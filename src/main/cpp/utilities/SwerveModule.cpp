@@ -43,8 +43,8 @@ _canTurnMotor.BurnFlash();
   _configCanDriveMotor.CurrentLimits.SupplyCurrentLimit = 20.0;
   _configCanDriveMotor.CurrentLimits.SupplyCurrentThreshold = 40.0;
   _configCanDriveMotor.CurrentLimits.SupplyTimeThreshold = 0.5;
-  _configCanDriveMotor.Slot0.kS = 0.62004; // Units is V
-  _configCanDriveMotor.Slot0.kV = 2.2731; // Units is V/1m/s
+  // _configCanDriveMotor.Slot0.kS = 0.62004; // Units is V
+  // _configCanDriveMotor.Slot0.kV = 2.2731; // Units is V/1m/s
   // _configCanDriveMotor.Slot0.kA = 0.23244_V/1_mps_sq; // Units is V/1m/s^2
   _canDriveMotor.GetConfigurator().Apply(_configCanDriveMotor);
 }
