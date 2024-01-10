@@ -28,7 +28,6 @@ void RobotContainer::ConfigureBindings() {
   // Dizzy Amp
   _driverController.LeftTrigger().WhileTrue(SubAmp::GetInstance().ClawTiltDown());
   _driverController.RightTrigger().WhileTrue(SubAmp::GetInstance().ClawTiltUp());
-
   }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

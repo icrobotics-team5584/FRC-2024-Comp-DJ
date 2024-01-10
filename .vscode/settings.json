@@ -18,7 +18,8 @@
   "files.associations": {
     "*.tpp": "cpp",
     "*.inc": "cpp",
-    "string_view": "cpp"
+    "string_view": "cpp",
+    "cmath": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled"
 }
