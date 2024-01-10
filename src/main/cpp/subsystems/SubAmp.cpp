@@ -52,13 +52,11 @@ void SubAmp::SimulationPeriodic(){
 
 }
 
-frc2::CommandPtr SubAmp::MotorTiltToAngle(){ 
-    return Run(
-    [this]{ _motorForTilt.SetSmartMotionTarget(-10_deg); }
-    ); 
+// drive motor to target angle
+
+frc2::CommandPtr SubAmp::MotorTiltToAngle(units::degree_t targetAngle){ 
+    return Run( [this, targetAngle]{_motorForTilt.SetSmartMotionTarget(targetAngle);} ); 
 }
-
-
 
 // Shooter Amp
 
@@ -74,20 +72,6 @@ frc2::CommandPtr SubAmp::ReverseAmpShooter(){
         [this]{_ampMotorSpin.Set(-0.7);},
         [this]{_ampMotorSpin.Set(0);}
     );
-}
-
-frc2::CommandPtr SubAmp::ExtraMotor(){
-   return StartEnd(
-    [this]{_ampMotorSpin.Set(0.7);},
-    [this]{_ampMotorSpin.Set(0);}
-   );
-}
-
-frc2::CommandPtr SubAmp::ReverseExtraMotor(){
-   return StartEnd(
-    [this]{_ampMotorSpin.Set(-0.7);},
-    [this]{_ampMotorSpin.Set(0);}
-   );
 }
 
 // dizzy Amp
