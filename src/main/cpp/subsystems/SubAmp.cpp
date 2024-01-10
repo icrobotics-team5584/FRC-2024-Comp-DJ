@@ -21,13 +21,15 @@
 
 using namespace frc2::cmd;
 
+// tilts _clawMotorJoint
+
 SubAmp::SubAmp(){ 
     _ampMotorSpin.RestoreFactoryDefaults(); 
-    _motorForTilt.SetInverted(true);
+    _clawMotorJoint.SetInverted(true);
 
-    _motorForTilt.SetConversionFactor(1 / GEAR_RATIO);
-    _motorForTilt.SetPIDFF(P, I, D, F);
-    _motorForTilt.ConfigSmartMotion(MAX_VEL, MAX_ACCEL, TOLERANCE);
+    _clawMotorJoint.SetConversionFactor(1 / GEAR_RATIO);
+    _clawMotorJoint.SetPIDFF(P, I, D, F);
+    _clawMotorJoint.ConfigSmartMotion(MAX_VEL, MAX_ACCEL, TOLERANCE);
 }
 
 // This method will be called once per scheduler run
@@ -35,22 +37,22 @@ void SubAmp::Periodic(){
     frc::SmartDashboard::PutData("amp/Mechanism Display", &_doubleJointedArmMech);
     frc::SmartDashboard::PutNumber("amp/Amp Shooter Motor: ", _ampMotorSpin.Get());
     frc::SmartDashboard::PutNumber("amp/Dizzy Claw tilt motor speed: ", _clawMotorJoint.Get());
-    frc::SmartDashboard::PutNumber("amp/Dizzy Claw tilt motor speed: ", _motorForTilt.Get());
+    frc::SmartDashboard::PutNumber("amp/Dizzy Claw tilt motor speed: ", _clawMotorJoint.Get());
 
     // angle of motor
-    frc::SmartDashboard::PutData("amp/Dizzy Claw tilt motor: ", (wpi::Sendable*)&_motorForTilt);
-    _arm1Ligament->SetAngle(_motorForTilt.GetPosition());
+    frc::SmartDashboard::PutData("amp/Dizzy Claw tilt motor: ", (wpi::Sendable*)&_clawMotorJoint);
+    _arm1Ligament->SetAngle(_clawMotorJoint.GetPosition());
     
 
 }
 
 void SubAmp::SimulationPeriodic(){
-    _clawSim.SetInputVoltage(_motorForTilt.GetSimVoltage());
+    _clawSim.SetInputVoltage(_clawMotorJoint.GetSimVoltage());
     _clawSim.Update(20_ms);
     
     auto clawAngle = _clawSim.GetAngle();
     auto clawVel = _clawSim.GetVelocity();
-    _motorForTilt.UpdateSimEncoder(-clawAngle, -clawVel);
+    _clawMotorJoint.UpdateSimEncoder(-clawAngle, -clawVel);
 
 }
 
@@ -72,8 +74,7 @@ frc2::CommandPtr SubAmp::ReverseAmpShooter(){
 
 
 // dizzy Amp
-
 frc2::CommandPtr SubAmp::MotorTiltToAngle(units::degree_t targetAngle){ 
-    return Run( [this, targetAngle]{ _motorForTilt.SetSmartMotionTarget(targetAngle); }); 
+    return Run( [this, targetAngle]{ _clawMotorJoint.SetSmartMotionTarget(targetAngle); }); 
 }
 

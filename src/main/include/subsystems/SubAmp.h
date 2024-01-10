@@ -62,11 +62,11 @@ class SubAmp : public frc2::SubsystemBase {
   rev::SparkMaxAbsoluteEncoder _topEncoder{_motorForTilt.GetAbsoluteEncoder(
       rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle)};
   
-  // plank + claw
+  // plank + claw (tune values for robot)
   static constexpr double P = 0.0;
   static constexpr double I = 0.0;
   static constexpr double D = 0.0;
-  static constexpr double F = 15;
+  static constexpr double F = 50.0; 
   
   static constexpr double GEAR_RATIO = 218.27;
   static constexpr units::degrees_per_second_t MAX_VEL = 18_deg_per_s;
