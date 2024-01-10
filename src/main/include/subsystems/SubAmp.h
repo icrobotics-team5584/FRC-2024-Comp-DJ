@@ -90,4 +90,12 @@ class SubAmp : public frc2::SubsystemBase {
     0_deg
   };
 
+  // displaying claw in smartdashboard
+  frc::Mechanism2d _doubleJointedArmMech{3, 3}; //canvas width and height
+  frc::MechanismRoot2d* _root = _doubleJointedArmMech.GetRoot("clawRoot", 1, 1); //root x and y
+  frc::MechanismLigament2d* _arm1Ligament = _root->Append<frc::MechanismLigament2d>("ligament1", LENGTH.value(), 0_deg);
+
+  nt::GenericEntry* _xoffset;
+  nt::GenericEntry* _yoffset;
+
 };

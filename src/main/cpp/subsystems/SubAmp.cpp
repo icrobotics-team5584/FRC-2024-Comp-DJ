@@ -24,20 +24,22 @@ using namespace frc2::cmd;
 SubAmp::SubAmp(){ 
     _ampMotorSpin.RestoreFactoryDefaults(); 
     _motorForTilt.SetInverted(true);
+
+    _motorForTilt.SetConversionFactor(1 / GEAR_RATIO);
+    _motorForTilt.SetPIDFF(P, I, D, F);
+    _motorForTilt.ConfigSmartMotion(MAX_VEL, MAX_ACCEL, TOLERANCE);
 }
 
 // This method will be called once per scheduler run
 void SubAmp::Periodic(){
+    frc::SmartDashboard::PutData("amp/Mechanism Display", &_doubleJointedArmMech);
     frc::SmartDashboard::PutNumber("amp/Amp Shooter Motor: ", _ampMotorSpin.Get());
     frc::SmartDashboard::PutNumber("amp/Dizzy Claw tilt motor speed: ", _clawMotorJoint.Get());
     frc::SmartDashboard::PutNumber("amp/Dizzy Claw tilt motor speed: ", _motorForTilt.Get());
 
-
     // angle of motor
     frc::SmartDashboard::PutData("amp/Dizzy Claw tilt motor: ", (wpi::Sendable*)&_motorForTilt);
-    _motorForTilt.SetConversionFactor(1 / GEAR_RATIO);
-    _motorForTilt.SetPIDFF(P, I, D, F);
-    _motorForTilt.ConfigSmartMotion(MAX_VEL, MAX_ACCEL, TOLERANCE);
+    _arm1Ligament->SetAngle(_motorForTilt.GetPosition());
     
 
 }
