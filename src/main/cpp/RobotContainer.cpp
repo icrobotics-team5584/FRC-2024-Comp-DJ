@@ -22,9 +22,6 @@ void RobotContainer::ConfigureBindings() {
   _driverController.A().WhileTrue(SubAmp::GetInstance().AmpShooter());
   _driverController.B().WhileTrue(SubAmp::GetInstance().ReverseAmpShooter());
 
-  _driverController.X().WhileTrue(SubAmp::GetInstance().ExtraMotor());
-  _driverController.Y().WhileTrue(SubAmp::GetInstance().ReverseExtraMotor());
-
   // Dizzy Amp
   _driverController.LeftTrigger().WhileTrue(SubAmp::GetInstance().ClawTiltDown());
   _driverController.RightTrigger().WhileTrue(SubAmp::GetInstance().ClawTiltUp());

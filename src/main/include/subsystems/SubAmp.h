@@ -46,9 +46,6 @@ class SubAmp : public frc2::SubsystemBase {
   frc2::CommandPtr AmpShooter();
   frc2::CommandPtr ReverseAmpShooter();
 
-  frc2::CommandPtr ExtraMotor();
-  frc2::CommandPtr ReverseExtraMotor();
-
   // dizzy amp
   frc2::CommandPtr ClawTiltDown();
   frc2::CommandPtr ClawTiltUp();
@@ -60,7 +57,6 @@ class SubAmp : public frc2::SubsystemBase {
   ICSparkMax _motorForTilt{canid::MotorForTilt};
   ICSparkMax _ampMotorSpin{canid::AmpMotorSpin};
   ICSparkMax _clawMotorJoint{canid::ClawMotorJoint};
-  ICSparkMax _extraMotorForAmpShooter{canid::ExtraMotorForAmpShooter};
 
   // tilting a motor to an angle
 

@@ -58,8 +58,6 @@ frc2::CommandPtr SubAmp::MotorTiltToAngle(){
     ); 
 }
 
-
-
 // Shooter Amp
 
 frc2::CommandPtr SubAmp::AmpShooter(){
@@ -76,19 +74,6 @@ frc2::CommandPtr SubAmp::ReverseAmpShooter(){
     );
 }
 
-frc2::CommandPtr SubAmp::ExtraMotor(){
-   return StartEnd(
-    [this]{_ampMotorSpin.Set(0.7);},
-    [this]{_ampMotorSpin.Set(0);}
-   );
-}
-
-frc2::CommandPtr SubAmp::ReverseExtraMotor(){
-   return StartEnd(
-    [this]{_ampMotorSpin.Set(-0.7);},
-    [this]{_ampMotorSpin.Set(0);}
-   );
-}
 
 // dizzy Amp
 frc2::CommandPtr SubAmp::ClawTiltDown(){
