@@ -34,6 +34,10 @@ class SubShooter : public frc2::SubsystemBase {
      canid::ShooterMotorFollower, rev::CANSparkMax::MotorType::kBrushless
   };
 
+  rev::SparkRelativeEncoder _shooterMainEncoder = _shooterMotorMainSpin.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+  rev::SparkRelativeEncoder _shooterFollowerEncoder = _shooterMotorFollowerSpin.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+
+
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };
