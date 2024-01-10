@@ -23,6 +23,9 @@ void RobotContainer::ConfigureBindings() {
   _driverController.A().WhileTrue(SubAmp::GetInstance().MotorTiltToAngle(-45_deg)); // claw tilt down
   _driverController.B().WhileTrue(SubAmp::GetInstance().MotorTiltToAngle(0_deg)); // claw tilt up
 
+  // Arm
+  _driverController.X().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(20_deg));
+  _driverController.Y().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(40_deg));
   }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
