@@ -23,7 +23,9 @@ namespace canid {
     constexpr int ClawMotorJoint = 100;
     constexpr int ElevatorMotor = 101;
     constexpr int AmpMotorSpin = 13;
-    constexpr int MotorForTilt = 102;    
+    constexpr int MotorForTilt = 102;
+    constexpr int ExtraMotorForAmpShooter = 103;
+    
 }
 
 namespace dio {
