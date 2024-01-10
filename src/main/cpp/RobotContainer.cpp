@@ -10,6 +10,7 @@
 
 RobotContainer::RobotContainer() {
 SubDrivebase::GetInstance();
+SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
   _delayChooser.AddOption("1 Seconds", 1);

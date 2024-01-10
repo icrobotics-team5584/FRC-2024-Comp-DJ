@@ -10,7 +10,7 @@
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
 #include <pathplanner/lib/util/PIDConstants.h>
-
+#include <frc2/command/Commands.h>
 #include "subsystems/SubDrivebase.h"
 
 SubDrivebase::SubDrivebase(){
@@ -63,6 +63,17 @@ void SubDrivebase::Periodic() {
    UpdateOdometry();
   frc::SmartDashboard::PutNumber("drivebase/loop time (sec)", (frc::GetTime()-loopStart).value());
 }
+
+frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller) {
+  return Run([this, &controller]{
+    auto forwardSpeed = controller.GetRightY()*MAX_VELOCITY;
+    auto rotationSpeed = controller.GetLeftX()*MAX_ANGULAR_VELOCITY;
+    auto sidewaysSpeed = controller.GetRightX()*MAX_VELOCITY;
+      Drive(forwardSpeed, sidewaysSpeed, rotationSpeed, true);
+      });
+}
+
+
 
 void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed, 
                       units::degrees_per_second_t rot, bool fieldRelative) {

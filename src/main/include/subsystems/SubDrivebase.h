@@ -13,9 +13,10 @@
 #include <frc/smartdashboard/Field2d.h>
 #include <frc/controller/HolonomicDriveController.h>
 #include <numbers>
-
+#include <frc2/command/CommandPtr.h>
 #include "Constants.h"
 #include "utilities/SwerveModule.h"
+#include <frc2/command/button/CommandXboxController.h>
 
 class SubDrivebase : public frc2::SubsystemBase {
  public:
@@ -53,6 +54,14 @@ class SubDrivebase : public frc2::SubsystemBase {
       180_deg_per_s;
   static constexpr units::radians_per_second_squared_t MAX_ANGULAR_ACCEL{
       std::numbers::pi};
+
+//Commands
+frc2::CommandPtr JoystickDrive(frc2::CommandXboxController& controller);
+
+
+
+
+
 
  private:
 
