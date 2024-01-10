@@ -12,7 +12,7 @@
 SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID,
                            int canTurnEncoderID, double cancoderMagOffset)
     : _canDriveMotor(canDriveMotorID, "Canivore"),
-      _canTurnMotor(canTurnMotorID, "Canivore"),
+      _canTurnMotor(canTurnMotorID, 40_A),
       _canTurnEncoder(canTurnEncoderID, "Canivore") {
   
   using namespace ctre::phoenix6::signals;
@@ -24,19 +24,13 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID,
   _canTurnEncoder.GetConfigurator().Apply(_configTurnEncoder);
 
   // Config Turning Motor
-  _configCanTurnMotor.Feedback.FeedbackSensorSource = ctre::phoenix6::signals::FeedbackSensorSourceValue::RotorSensor;
-  _configCanTurnMotor.ClosedLoopGeneral.ContinuousWrap = true;
-  _configCanTurnMotor.Slot0.kP = TURN_P;
-  _configCanTurnMotor.Slot0.kI = TURN_I;
-  _configCanTurnMotor.Slot0.kD = TURN_D;
-  _configCanTurnMotor.CurrentLimits.SupplyCurrentLimitEnable = true;
-  _configCanTurnMotor.CurrentLimits.SupplyCurrentLimit = 20.0;
-  _configCanTurnMotor.CurrentLimits.SupplyCurrentThreshold = 40.0;
-  _configCanTurnMotor.CurrentLimits.SupplyTimeThreshold = 0.5;
-  _configCanTurnMotor.MotorOutput.NeutralMode = NeutralModeValue::Brake;
-  _canTurnMotor.GetConfigurator().Apply(_configCanTurnMotor);
-
-  _canTurnMotor.SetInverted(true); // make counter clockwise rotations positive
+_canTurnMotor.RestoreFactoryDefaults();
+_canTurnMotor.SetConversionFactor(TURNING_GEAR_RATIO);
+_canTurnMotor.EnableSensorWrapping(0, 1);
+_canTurnMotor.SetPIDFF(50, 0, 1);
+_canTurnMotor.SetInverted(true);
+_canTurnMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+_canTurnMotor.BurnFlash();
 
   // Config Driving Motor
   _canDriveMotor.GetConfigurator().Apply(TalonFXConfiguration{});
@@ -77,23 +71,20 @@ frc::SwerveModulePosition SwerveModule::GetPosition() {
 
 void SwerveModule::SendSensorsToDash() {
   std::string driveMotorName = "drive motor " + std::to_string(_canDriveMotor.GetDeviceID());
-  std::string turnMotorName = "turn motor " + std::to_string(_canTurnMotor.GetDeviceID());
+  std::string turnMotorName = "turn motor " + std::to_string(_canTurnMotor.GetDeviceId());
   std::string turnEncoderName = "turn encoder " + std::to_string(_canTurnEncoder.GetDeviceID());
 
   frc::SmartDashboard::PutNumber(driveMotorName + " Target velocity", _canDriveMotor.GetClosedLoopReference().GetValue());
   frc::SmartDashboard::PutNumber(driveMotorName + " velocity", _canDriveMotor.GetVelocity().GetValue().value());
   frc::SmartDashboard::PutNumber(turnMotorName  + " position degrees", GetAngle().Degrees().value());
-  frc::SmartDashboard::PutNumber(turnMotorName  + " target", _canTurnMotor.GetClosedLoopReference().GetValue());
-  frc::SmartDashboard::PutNumber(turnMotorName  + " error", _canTurnMotor.GetClosedLoopError().GetValue());
+  frc::SmartDashboard::PutNumber(turnMotorName  + " target", _canTurnMotor.GetPositionTarget().value());
+  frc::SmartDashboard::PutNumber(turnMotorName  + " error", _canTurnMotor.GetPosError().value());
   frc::SmartDashboard::PutNumber(turnEncoderName+ " Abs position", _canTurnEncoder.GetAbsolutePosition().GetValue().value());
 }
 
 frc::Rotation2d SwerveModule::GetAngle() {
-  auto angle = ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(_canTurnMotor.GetPosition(), _canTurnMotor.GetVelocity());
-  // frc::Rotation2d rot = angle.convert<frc::Rotation2d>();
-  units::degree_t deg = angle;
-  frc::Rotation2d rot = deg;
-  return rot;
+  units::radian_t turnAngle = _canTurnMotor.GetPosition();
+  return turnAngle;
 }
 
 units::meters_per_second_t SwerveModule::GetSpeed() {
@@ -106,7 +97,7 @@ frc::SwerveModuleState SwerveModule::GetState() {
 }
 
 void SwerveModule::SetDesiredAngle(units::degree_t angle) {
-  _canTurnMotor.SetControl(ctre::phoenix6::controls::PositionVoltage{angle});
+  _canTurnMotor.SetPositionTarget(angle);
 }
 
 void SwerveModule::SetDesiredVelocity(units::meters_per_second_t velocity) {
@@ -127,14 +118,13 @@ void SwerveModule::StopMotors() {
 }
 
 void SwerveModule::SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode) {
-  _configCanDriveMotor.MotorOutput.NeutralMode = mode;
-  _configCanTurnMotor.MotorOutput.NeutralMode = mode;
-  _canTurnMotor.GetConfigurator().Apply(_configCanTurnMotor);
-  _canDriveMotor.GetConfigurator().Apply(_configCanDriveMotor);
+//   _configCanDriveMotor.MotorOutput.NeutralMode = mode;
+//   _canTurnMotor.
+//   _canDriveMotor.GetConfigurator().Apply(_configCanDriveMotor);
 }
 
 void SwerveModule::SyncSensors() {
-  // units::degree_t cancoderDegrees = _canTurnEncoder.GetAbsolutePosition().GetValue();
-  // _canTurnMotor.
+units::degree_t cancoderDegrees = _canTurnEncoder.GetAbsolutePosition().GetValue();
+_canTurnMotor.SetPosition(cancoderDegrees);
 }
 

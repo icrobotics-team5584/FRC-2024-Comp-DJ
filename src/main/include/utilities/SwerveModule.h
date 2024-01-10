@@ -23,6 +23,7 @@
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <numbers>
+#include <utilities/ICSparkMax.h>
 
 
 class SwerveModule {
@@ -60,7 +61,7 @@ class SwerveModule {
   //tuned at 12.38V battery
   frc::SimpleMotorFeedforward<units::meters> _feedFoward{0.62004_V, 2.2731_V/1_mps, 0.23244_V/1_mps_sq};
   ctre::phoenix6::hardware::TalonFX _canDriveMotor;
-  ctre::phoenix6::hardware::TalonFX _canTurnMotor;
+  ICSparkMax _canTurnMotor;
   ctre::phoenix6::hardware::CANcoder _canTurnEncoder;
 
   ctre::phoenix6::configs::TalonFXConfiguration _configCanDriveMotor{};
