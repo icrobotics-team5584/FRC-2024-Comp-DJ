@@ -7,7 +7,6 @@
 #include <frc2/command/Commands.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
-
 RobotContainer::RobotContainer() {
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
