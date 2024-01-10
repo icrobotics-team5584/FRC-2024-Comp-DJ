@@ -15,16 +15,14 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   using namespace frc2::cmd;
 
-  // Motor to angle auto
-  _driverController.Start().WhileTrue(SubAmp::GetInstance().MotorTiltToAngle());
-
   // Amp Shooter
-  _driverController.A().WhileTrue(SubAmp::GetInstance().AmpShooter());
-  _driverController.B().WhileTrue(SubAmp::GetInstance().ReverseAmpShooter());
+  _driverController.LeftTrigger().WhileTrue(SubAmp::GetInstance().AmpShooter());
+  _driverController.RightTrigger().WhileTrue(SubAmp::GetInstance().ReverseAmpShooter());
 
   // Dizzy Amp
-  _driverController.LeftTrigger().WhileTrue(SubAmp::GetInstance().ClawTiltDown());
-  _driverController.RightTrigger().WhileTrue(SubAmp::GetInstance().ClawTiltUp());
+  _driverController.A().WhileTrue(SubAmp::GetInstance().MotorTiltToAngle(-45_deg)); // claw tilt down
+  _driverController.B().WhileTrue(SubAmp::GetInstance().MotorTiltToAngle(0_deg)); // claw tilt up
+
   }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

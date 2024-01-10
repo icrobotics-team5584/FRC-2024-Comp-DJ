@@ -40,15 +40,14 @@ class SubAmp : public frc2::SubsystemBase {
   void Periodic() override;
   void SimulationPeriodic() override;
 
-  frc2::CommandPtr MotorTiltToAngle();
+ 
 
   // shooter amp
   frc2::CommandPtr AmpShooter();
   frc2::CommandPtr ReverseAmpShooter();
 
   // dizzy amp
-  frc2::CommandPtr ClawTiltDown();
-  frc2::CommandPtr ClawTiltUp();
+  frc2::CommandPtr MotorTiltToAngle(units::degree_t targetAngle);
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
