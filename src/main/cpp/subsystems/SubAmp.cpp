@@ -31,7 +31,6 @@ SubAmp::SubAmp(){
     _clawMotorJoint.SetConversionFactor(1 / CLAW_GEAR_RATIO);
     _clawMotorJoint.SetPIDFF(CLAW_P, CLAW_I, CLAW_D, CLAW_F);
     _clawMotorJoint.ConfigSmartMotion(CLAW_MAX_VEL, CLAW_MAX_ACCEL, CLAW_TOLERANCE);
-
     _clawMotorJoint.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
     // arm
@@ -41,10 +40,8 @@ SubAmp::SubAmp(){
     _armMotor.ConfigSmartMotion(CLAW_MAX_VEL, CLAW_MAX_ACCEL, CLAW_TOLERANCE);
 
     _armMotorFollow.Follow(_armMotor);
-
     _armMotor.SetInverted(true);
     _armMotorFollow.SetInverted(true);
-    
     _armMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     _armMotorFollow.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 }
@@ -64,7 +61,6 @@ void SubAmp::Periodic(){
 
     frc::SmartDashboard::PutData("amp/Dizzy Arm tilt motor: ", (wpi::Sendable*)&_armMotor);
     _arm1Ligament->SetAngle(_armMotor.GetPosition());
-
 }
 
 void SubAmp::SimulationPeriodic(){

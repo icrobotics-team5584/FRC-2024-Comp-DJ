@@ -76,7 +76,6 @@ class SubAmp : public frc2::SubsystemBase {
   static constexpr units::degree_t CLAW_MIN_ANGLE = -180_deg; // only sim
   static constexpr units::degree_t CLAW_MAX_ANGLE = 180_deg; // only sim
 
-
   // simulating claw in smartdashboard
   frc::sim::SingleJointedArmSim _clawSim{
     frc::DCMotor::NEO(2),

@@ -1,6 +1,7 @@
 #pragma once
 
 namespace canivore {
+  // 1-12 inclusive
   constexpr int DriveBaseFrontLeftDrive = 7;
   constexpr int DriveBaseFrontLeftTurn = 8;
   constexpr int DriveBaseFrontLeftEncoder = 10;
@@ -23,8 +24,8 @@ namespace canid {
     constexpr int AmpMotorSpin = 13;
 
     // dizzy amp
-    constexpr int ClawMotorJoint = 100; // dizzy claw
-    constexpr int ElevatorMotor = 101; // dizzy elevator
+    constexpr int ClawMotorJoint = 100;
+    constexpr int ElevatorMotor = 101;
     
     // arm   
     constexpr int ArmMotor = 102;
