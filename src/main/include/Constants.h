@@ -22,10 +22,6 @@ namespace canivore {
 namespace canid {
     // shooter amp
     constexpr int AmpMotorSpin = 13;
-
-    // dizzy amp
-    constexpr int ClawMotorJoint = 100;
-    constexpr int ElevatorMotor = 101;
     
     // arm   
     constexpr int ArmMotor = 102;
