@@ -37,8 +37,13 @@ void ICSparkMax::InitSendable(wpi::SendableBuilder& builder) {
 }
 
 void ICSparkMax::SetPosition(units::turn_t position) {
-  _encoder->SetPosition(position.value());
-}
+  std::cout << "setting pos of spark " << GetDeviceId() << " to " << position.value() << '\n';
+  std::cout << "old position from spark: " << _encoder.GetPosition() << '\n';
+  auto  err = (rev::SparkRelativeEncoder*)_encoder.SetPosition(position.value());
+  std::cout << "err code: " << (int)err;
+  std::cout << "new position from spark: " << _encoder.GetPosition() << '\n';
+
+  }
 
 void ICSparkMax::SetPositionTarget(units::turn_t target, units::volt_t arbFeedForward) {
   _positionTarget = target;
@@ -116,19 +121,19 @@ void ICSparkMax::ConfigSmartMotion(units::turns_per_second_t maxVelocity,
 }
 
 void ICSparkMax::SetConversionFactor(double rotationsToDesired) {
-  _encoder->SetPositionConversionFactor(rotationsToDesired);
+  _encoder.SetPositionConversionFactor(rotationsToDesired);
   // Need to divide vel by 60 because Spark Max uses Revs per minute not Revs per second
-  _encoder->SetVelocityConversionFactor(rotationsToDesired / 60);
+  _encoder.SetVelocityConversionFactor(rotationsToDesired / 60);
 }
 
 void ICSparkMax::UseAlternateEncoder(int countsPerRev) {
-  const double posConversion = _encoder->GetPositionConversionFactor();
+  // const double posConversion = _encoder->GetPositionConversionFactor();
 
-  _encoder = std::make_unique<rev::SparkMaxAlternateEncoder>(
-      CANSparkMax::GetAlternateEncoder(countsPerRev));
-  _pidController.SetFeedbackDevice(*_encoder);
+  // _encoder = std::make_unique<rev::SparkMaxAlternateEncoder>(
+  //     CANSparkMax::GetAlternateEncoder(countsPerRev));
+  // _pidController.SetFeedbackDevice(*_encoder);
 
-  SetConversionFactor(posConversion);
+  // SetConversionFactor(posConversion);
 }
 
 void ICSparkMax::UseAbsoluteEncoder(rev::SparkAbsoluteEncoder& encoder) {
@@ -179,7 +184,7 @@ units::turns_per_second_t ICSparkMax::GetVelocity() {
   if (frc::RobotBase::IsSimulation()) {
     return _simVelocity;
   } else {
-    return units::turns_per_second_t{_encoder->GetVelocity()};
+    return units::turns_per_second_t{_encoder.GetVelocity()};
   }
 }
 
@@ -227,7 +232,7 @@ units::volt_t ICSparkMax::GetSimVoltage() {
 }
 
 void ICSparkMax::UpdateSimEncoder(units::turn_t position, units::turns_per_second_t velocity) {
-  _encoder->SetPosition(position.value());
+  _encoder.SetPosition(position.value());
   _simVelocity = velocity;
 }
 

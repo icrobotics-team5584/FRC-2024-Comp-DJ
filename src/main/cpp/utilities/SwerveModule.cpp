@@ -7,6 +7,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/MathUtil.h>
 #include <frc/RobotBase.h>
+#include <iostream>
 
 
 SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID,
@@ -25,9 +26,9 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID,
 
   // Config Turning Motor
 _canTurnMotor.RestoreFactoryDefaults();
-_canTurnMotor.SetConversionFactor(TURNING_GEAR_RATIO);
-_canTurnMotor.EnableSensorWrapping(0, 1);
-_canTurnMotor.SetPIDFF(50, 0, 1);
+_canTurnMotor.SetConversionFactor(1.0/TURNING_GEAR_RATIO);
+_canTurnMotor.EnableClosedLoopWrapping(0_tr, 1_tr);
+_canTurnMotor.SetPIDFF(TURN_P, TURN_I, TURN_D);
 _canTurnMotor.SetInverted(true);
 _canTurnMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 _canTurnMotor.BurnFlash();
@@ -60,7 +61,7 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState& referenceState)
 
   // Drive! These functions do some conversions and send targets to falcons
   SetDesiredAngle(targetAngle);
-  SetDesiredVelocity(targetState.speed);
+  //SetDesiredVelocity(targetState.speed);
 }
 
 frc::SwerveModulePosition SwerveModule::GetPosition() {
@@ -80,6 +81,7 @@ void SwerveModule::SendSensorsToDash() {
   frc::SmartDashboard::PutNumber(turnMotorName  + " target", _canTurnMotor.GetPositionTarget().value());
   frc::SmartDashboard::PutNumber(turnMotorName  + " error", _canTurnMotor.GetPosError().value());
   frc::SmartDashboard::PutNumber(turnEncoderName+ " Abs position", _canTurnEncoder.GetAbsolutePosition().GetValue().value());
+  frc::SmartDashboard::PutNumber("Swerve/Volatages/"+turnMotorName+ "voltage", _canTurnMotor.GetAppliedOutput()*12);
 }
 
 frc::Rotation2d SwerveModule::GetAngle() {
@@ -124,7 +126,9 @@ void SwerveModule::SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode
 }
 
 void SwerveModule::SyncSensors() {
-units::degree_t cancoderDegrees = _canTurnEncoder.GetAbsolutePosition().GetValue();
+  std::string turnMotorID = std::to_string(_canTurnMotor.GetDeviceId());
+units::turn_t cancoderDegrees = _canTurnEncoder.GetAbsolutePosition().GetValue();
+std::cout << "Setting Sweve turn motor" + turnMotorID +" position to" << cancoderDegrees.value() << std::endl;
 _canTurnMotor.SetPosition(cancoderDegrees);
 }
 

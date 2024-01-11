@@ -16,7 +16,7 @@
 SubDrivebase::SubDrivebase(){
   _gyro.Calibrate();
   Rcontroller.EnableContinuousInput(-180_deg, 180_deg);
-  SyncSensors();
+  //SyncSensors();
   frc::SmartDashboard::PutData("field", &_fieldDisplay);
 
   using namespace pathplanner;
@@ -59,6 +59,11 @@ void SubDrivebase::Periodic() {
     _backLeft.GetAngle().Degrees().value(), _backLeft.GetSpeed().value(),
      _backRight.GetAngle().Degrees().value(), _backRight.GetSpeed().value(),
    });
+
+  _frontLeft.SendSensorsToDash();
+  _frontRight.SendSensorsToDash();
+  _backLeft.SendSensorsToDash();
+  _backRight.SendSensorsToDash();
 
    UpdateOdometry();
   frc::SmartDashboard::PutNumber("drivebase/loop time (sec)", (frc::GetTime()-loopStart).value());
@@ -108,10 +113,7 @@ void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_se
     _gyro.SetAngleAdjustment(-newHeading.value()); // negative to switch to CW from CCW
   }
 
-  _frontLeft.SendSensorsToDash();
-  _frontRight.SendSensorsToDash();
-  _backLeft.SendSensorsToDash();
-  _backRight.SendSensorsToDash();
+
 }
 
 frc::ChassisSpeeds SubDrivebase::GetRobotRelativeSpeeds(){

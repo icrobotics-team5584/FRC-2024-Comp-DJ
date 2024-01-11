@@ -137,7 +137,7 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
   /**
    * Get the position of the motor.
    */
-  units::turn_t GetPosition() { return units::turn_t{_encoder->GetPosition()}; };
+  units::turn_t GetPosition() { return units::turn_t{_encoder.GetPosition()}; };
 
   /**
    * Common interface to stop the motor until Set is called again or closed loop control is started.
@@ -269,28 +269,27 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
 
   // Conversion helpers
   units::turn_t SparkRevsToPos(double revs) {
-    return units::turn_t{revs * _encoder->GetPositionConversionFactor()};
+    return units::turn_t{revs * _encoder.GetPositionConversionFactor()};
   }
   units::turns_per_second_t SparkRPMToVel(double rpm) {
-    return units::turns_per_second_t{rpm * _encoder->GetVelocityConversionFactor()};
+    return units::turns_per_second_t{rpm * _encoder.GetVelocityConversionFactor()};
   }
   units::turns_per_second_squared_t SparkRPMpsToAccel(double accel) {
-    return units::turns_per_second_squared_t{accel * _encoder->GetVelocityConversionFactor()};
+    return units::turns_per_second_squared_t{accel * _encoder.GetVelocityConversionFactor()};
   }
   double PosToSparkRevs(units::turn_t pos) {
-    return pos.value() / _encoder->GetPositionConversionFactor();
+    return pos.value() / _encoder.GetPositionConversionFactor();
   }
   double VelToSparkRPM(units::turns_per_second_t vel) {
-    return vel.value() / _encoder->GetVelocityConversionFactor();
+    return vel.value() / _encoder.GetVelocityConversionFactor();
   }
   double AccelToSparkRPMps(units::turns_per_second_squared_t accel) {
-    return accel.value() / _encoder->GetVelocityConversionFactor();
+    return accel.value() / _encoder.GetVelocityConversionFactor();
   }
 
   // Related REVLib objects
   rev::SparkPIDController _pidController{CANSparkMax::GetPIDController()};
-  std::unique_ptr<rev::RelativeEncoder> _encoder = std::make_unique<rev::SparkRelativeEncoder>(
-      CANSparkBase::GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor));
+  rev::SparkRelativeEncoder _encoder{CANSparkBase::GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)};
 
   // PID simulation configuration
   bool _updatingTargetFromSendable = false;
