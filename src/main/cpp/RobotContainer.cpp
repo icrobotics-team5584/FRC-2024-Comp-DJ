@@ -23,7 +23,9 @@ SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().Joysti
 frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
   }
 
-void RobotContainer::ConfigureBindings() {}
+void RobotContainer::ConfigureBindings() {
+   _driverController.X().OnTrue(SubDrivebase::GetInstance().SyncSensorBut());
+}
 using namespace frc2::cmd;
 
   //Main Controller

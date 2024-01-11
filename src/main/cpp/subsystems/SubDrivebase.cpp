@@ -136,6 +136,10 @@ void SubDrivebase::SyncSensors() {
   _gyro.Calibrate();
 }
 
+frc2::CommandPtr SubDrivebase::SyncSensorBut(){
+  return RunOnce([this]{SyncSensors();});
+}
+
 frc::Rotation2d SubDrivebase::GetHeading() {
   return _gyro.GetRotation2d();
 }

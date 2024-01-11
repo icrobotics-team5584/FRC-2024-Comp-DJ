@@ -57,7 +57,7 @@ class SubDrivebase : public frc2::SubsystemBase {
 
 //Commands
 frc2::CommandPtr JoystickDrive(frc2::CommandXboxController& controller);
-
+frc2::CommandPtr SyncSensorBut();
 
 
 
