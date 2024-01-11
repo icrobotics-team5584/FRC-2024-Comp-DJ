@@ -20,7 +20,9 @@ void RobotContainer::ConfigureBindings() {
   _driverController.RightTrigger().WhileTrue(SubAmp::GetInstance().ReverseAmpShooter());
 
   // Arm
-  _driverController.X().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(20_deg));
+  _driverController.A().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(0_deg));
+  _driverController.B().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(180_deg));
+  _driverController.X().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(20_deg)); 
   _driverController.Y().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(40_deg));
   }
 

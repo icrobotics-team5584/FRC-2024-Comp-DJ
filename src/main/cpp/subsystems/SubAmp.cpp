@@ -75,5 +75,5 @@ frc2::CommandPtr SubAmp::ReverseAmpShooter(){
 
 // arm
 frc2::CommandPtr SubAmp::TiltArmToAngle(units::degree_t targetAngle){ 
-    return Run( [this, targetAngle]{_armMotor.SetSmartMotionTarget(targetAngle);}); 
+    return Run([this, targetAngle]{_armMotor.SetSmartMotionTarget(targetAngle);}); 
 }

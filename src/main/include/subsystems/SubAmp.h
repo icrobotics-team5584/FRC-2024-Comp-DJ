@@ -42,14 +42,14 @@ class SubAmp : public frc2::SubsystemBase {
   frc2::CommandPtr AmpShooter();
   frc2::CommandPtr ReverseAmpShooter();
 
-  frc2::CommandPtr TiltArmToAngle(units::degree_t targetAngle); // arm
+  // amp
+  frc2::CommandPtr TiltArmToAngle(units::degree_t targetAngle);
 
  private:
   // motors
   ICSparkMax _ampMotorSpin{canid::AmpMotorSpin}; // Amp shooter
-
   ICSparkMax _armMotor{canid::ArmMotor}; // arm
-  ICSparkMax _armMotorFollow{canid::ArmMotorFollow}; // arm
+  ICSparkMax _armMotorFollow{canid::ArmMotorFollow}; //arm
 
   // encoders
   rev::SparkAbsoluteEncoder _armEncoder{_armMotor.GetAbsoluteEncoder(
@@ -59,7 +59,7 @@ class SubAmp : public frc2::SubsystemBase {
   static constexpr double ARM_P = 0.0;
   static constexpr double ARM_I = 0.0;
   static constexpr double ARM_D = 0.0;
-  static constexpr double ARM_F = 50.0; 
+  static constexpr double ARM_F = 100.0; 
   
   static constexpr double ARM_GEAR_RATIO = 218.27;
   static constexpr units::degrees_per_second_t ARM_MAX_VEL = 18_deg_per_s;

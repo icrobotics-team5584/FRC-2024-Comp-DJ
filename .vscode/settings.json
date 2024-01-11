@@ -19,7 +19,8 @@
     "*.tpp": "cpp",
     "*.inc": "cpp",
     "string_view": "cpp",
-    "cmath": "cpp"
+    "cmath": "cpp",
+    "optional": "cpp"
   },
   "C_Cpp.errorSquiggles": "enabled"
 }
