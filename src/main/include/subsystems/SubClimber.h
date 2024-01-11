@@ -9,10 +9,15 @@
 #include <frc/smartdashboard/MechanismRoot2d.h>
 #include <frc/smartdashboard/MechanismLigament2d.h>
 #include <frc/simulation/ElevatorSim.h>
-#include <rev/CANSparkMax.h>
+#include <frc/system/plant/DCMotor.h>
+#include <rev/SparkMaxAbsoluteEncoder.h>
 #include <Constants.h>
 
 #include "Utilities/ICSparkMax.h"
+
+#include <frc/simulation/DCMotorSim.h>
+#include <units/angle.h>
+#include <units/moment_of_inertia.h>
 
 class SubClimber : public frc2::SubsystemBase {
  public:
@@ -27,19 +32,42 @@ class SubClimber : public frc2::SubsystemBase {
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
+  void SimulationPeriodic() override;
 
-  void Up();
-  void Down();
+  void SetTarget(units::meter_t);
+
+  void Extend();
+  void Retract();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  rev::CANSparkMax leftClimbMotor{41, rev::CANSparkMax::MotorType::kBrushless}; //not set up yet
-  rev::CANSparkMax rightClimbMotor{42, rev::CANSparkMax::MotorType::kBrushless};//not set up yet
 
-  frc::Mechanism2d mech{3,5};
-  frc::MechanismRoot2d* root = mech.GetRoot("Climber", 1, 1);
-  frc::MechanismLigament2d* arm = root->Append<frc::MechanismLigament2d>("Arm", 2, 90_deg);
+  units::meter_t TargetDistance;
 
-  float pos = 2;
+  ICSparkMax lClimbMotor{41};
+  ICSparkMax rClimbMotor{42};
+
+  // rev::SparkAbsoluteEncoder lClimbEncoder{lClimbMotor.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle)};
+  // rev::SparkAbsoluteEncoder rClimbEncoder{rClimbMotor.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle)};
+
+  static constexpr double GearRatio = 100;
+  static constexpr double lP = 0.0, lI = 0.0, lD = 0.0, lF = 50,
+                          rP = 0.0, rI = 0.0, rD = 0.0, rF = 50;
+  
+  static constexpr units::degrees_per_second_t MaxVelocity = 360_deg_per_s;
+  static constexpr units::degrees_per_second_squared_t MaxAcceleration = 1000_deg_per_s_sq;
+  static constexpr units::degree_t Tolerance = 30_deg;
+
+  static constexpr units::kilogram_square_meter_t Turret_moi = 0.005_kg_sq_m;
+  frc::sim::DCMotorSim lSim{frc::DCMotor::NEO(), GearRatio, Turret_moi};
+  frc::sim::DCMotorSim rSim{frc::DCMotor::NEO(), GearRatio, Turret_moi};
+
+  frc::Mechanism2d mech{6,7};
+  frc::MechanismRoot2d* mechRootL = mech.GetRoot("ClimberL", 1, 1);
+  frc::MechanismRoot2d* mechRootR = mech.GetRoot("ClimberR", 5, 1);
+  frc::MechanismRoot2d* mechRootT = mech.GetRoot("ClimberT", 3, 1);
+  frc::MechanismLigament2d* mechLeftElevator = mechRootL->Append<frc::MechanismLigament2d>("Left elevator", 1, 90_deg);
+  frc::MechanismLigament2d* mechRightElevator = mechRootR->Append<frc::MechanismLigament2d>("Right elevator", 3, 90_deg);
+  frc::MechanismLigament2d* mechTar = mechRootT->Append<frc::MechanismLigament2d>("Target", 2, 90_deg);
 };

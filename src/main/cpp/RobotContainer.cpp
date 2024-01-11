@@ -38,7 +38,7 @@ void RobotContainer::ConfigureBindings() {
   _driverController.A().OnTrue(cmd::ClimberUp());
   _driverController.B().OnTrue(cmd::ClimberDown());
   }
-
+  
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   return frc2::cmd::Print("No autonomous command configured");
 }
