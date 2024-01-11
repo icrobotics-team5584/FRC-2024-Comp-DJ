@@ -39,11 +39,10 @@ void ICSparkMax::InitSendable(wpi::SendableBuilder& builder) {
 void ICSparkMax::SetPosition(units::turn_t position) {
   std::cout << "setting pos of spark " << GetDeviceId() << " to " << position.value() << '\n';
   std::cout << "old position from spark: " << _encoder.GetPosition() << '\n';
-  auto  err = (rev::SparkRelativeEncoder*)_encoder.SetPosition(position.value());
+  auto err = _encoder.SetPosition(position.value());
   std::cout << "err code: " << (int)err;
   std::cout << "new position from spark: " << _encoder.GetPosition() << '\n';
-
-  }
+}
 
 void ICSparkMax::SetPositionTarget(units::turn_t target, units::volt_t arbFeedForward) {
   _positionTarget = target;
@@ -213,9 +212,9 @@ units::volt_t ICSparkMax::GetSimVoltage() {
       break;
 
     case Mode::kSmartMotion:
-      output = units::volt_t{
-          _simController.Calculate(VelToSparkRPM(GetVelocity()), VelToSparkRPM(EstimateSMVelocity()) +
-          _simFF * VelToSparkRPM(EstimateSMVelocity()))};
+      output = units::volt_t{_simController.Calculate(
+          VelToSparkRPM(GetVelocity()),
+          VelToSparkRPM(EstimateSMVelocity()) + _simFF * VelToSparkRPM(EstimateSMVelocity()))};
       break;
 
     case Mode::kCurrent:
