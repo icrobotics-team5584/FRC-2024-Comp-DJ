@@ -26,12 +26,14 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID,
 
   // Config Turning Motor
 _canTurnMotor.RestoreFactoryDefaults();
+_canTurnMotor.SetCANTimeout(500);
 _canTurnMotor.SetConversionFactor(1.0/TURNING_GEAR_RATIO);
 _canTurnMotor.EnableClosedLoopWrapping(0_tr, 1_tr);
 _canTurnMotor.SetPIDFF(TURN_P, TURN_I, TURN_D);
 _canTurnMotor.SetInverted(true);
 _canTurnMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 _canTurnMotor.BurnFlash();
+_canTurnMotor.SetCANTimeout(10);
 
   // Config Driving Motor
   _canDriveMotor.GetConfigurator().Apply(TalonFXConfiguration{});
@@ -127,8 +129,8 @@ void SwerveModule::SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode
 
 void SwerveModule::SyncSensors() {
   std::string turnMotorID = std::to_string(_canTurnMotor.GetDeviceId());
-units::turn_t cancoderDegrees = _canTurnEncoder.GetAbsolutePosition().GetValue();
-std::cout << "Setting Sweve turn motor" + turnMotorID +" position to" << cancoderDegrees.value() << std::endl;
-_canTurnMotor.SetPosition(cancoderDegrees);
+units::turn_t cancoderAngle = _canTurnEncoder.GetAbsolutePosition().GetValue();
+std::cout << "Setting Sweve turn motor" + turnMotorID +" position to" << cancoderAngle.value() << std::endl;
+_canTurnMotor.SetPosition(cancoderAngle);
 }
 
