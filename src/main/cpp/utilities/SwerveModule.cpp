@@ -9,18 +9,17 @@
 #include <frc/RobotBase.h>
 #include <iostream>
 
-
-SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID,
-                           int canTurnEncoderID, double cancoderMagOffset)
+SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnEncoderID,
+                           double cancoderMagOffset)
     : _canDriveMotor(canDriveMotorID, "Canivore"),
       _canTurnMotor(canTurnMotorID, 40_A),
       _canTurnEncoder(canTurnEncoderID, "Canivore") {
-  
   using namespace ctre::phoenix6::signals;
   using namespace ctre::phoenix6::configs;
 
   // Config CANCoder
-  _configTurnEncoder.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue::Signed_PlusMinusHalf;
+  _configTurnEncoder.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue::Unsigned_0To1;
+  _configTurnEncoder.MagnetSensor.SensorDirection = SensorDirectionValue::Clockwise_Positive;
   _configTurnEncoder.MagnetSensor.MagnetOffset = cancoderMagOffset;
   _canTurnEncoder.GetConfigurator().Apply(_configTurnEncoder);
 
@@ -57,33 +56,35 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState& referenceState)
   auto targetState = frc::SwerveModuleState::Optimize(referenceState, GetAngle());
 
   // Move target angle so we can cross over the 180 degree line without going the long way round
-  auto difference = targetState.angle.Degrees() - GetAngle().Degrees();
-  difference = frc::InputModulus(difference, -180_deg, 180_deg);
-  auto targetAngle = GetAngle().Degrees() + difference;
+  // auto difference = targetState.angle.Degrees() - GetAngle().Degrees();
+  // difference = frc::InputModulus(difference, -180_deg, 180_deg);
+  // auto targetAngle = GetAngle().Degrees() + difference;
 
   // Drive! These functions do some conversions and send targets to falcons
-  SetDesiredAngle(targetAngle);
-  //SetDesiredVelocity(targetState.speed);
+  SetDesiredAngle(targetState.angle.Degrees());
+  // SetDesiredVelocity(targetState.speed);
 }
 
 frc::SwerveModulePosition SwerveModule::GetPosition() {
-  auto wheelRot = ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(_canDriveMotor.GetPosition(), _canDriveMotor.GetVelocity());
+  auto wheelRot = ctre::phoenix6::BaseStatusSignal::GetLatencyCompensatedValue(
+      _canDriveMotor.GetPosition(), _canDriveMotor.GetVelocity());
   units::meter_t distance = (WHEEL_CIRCUMFERENCE.value() * wheelRot.value()) * 1_m;
   return {distance, GetAngle()};
 }
 
 void SwerveModule::SendSensorsToDash() {
-  std::string driveMotorName = "drive motor " + std::to_string(_canDriveMotor.GetDeviceID());
-  std::string turnMotorName = "turn motor " + std::to_string(_canTurnMotor.GetDeviceId());
-  std::string turnEncoderName = "turn encoder " + std::to_string(_canTurnEncoder.GetDeviceID());
+  // clang-format off
+  std::string driveMotorName = "swerve/drive motor " + std::to_string(_canDriveMotor.GetDeviceID());
+  std::string turnMotorName = "swerve/turn motor " + std::to_string(_canTurnMotor.GetDeviceId());
+  std::string turnEncoderName = "swerve/turn encoder " + std::to_string(_canTurnEncoder.GetDeviceID());
 
   frc::SmartDashboard::PutNumber(driveMotorName + " Target velocity", _canDriveMotor.GetClosedLoopReference().GetValue());
   frc::SmartDashboard::PutNumber(driveMotorName + " velocity", _canDriveMotor.GetVelocity().GetValue().value());
-  frc::SmartDashboard::PutNumber(turnMotorName  + " position degrees", GetAngle().Degrees().value());
+  frc::SmartDashboard::PutNumber(turnMotorName  + " position", GetAngle().Degrees().value()/360.0);
   frc::SmartDashboard::PutNumber(turnMotorName  + " target", _canTurnMotor.GetPositionTarget().value());
   frc::SmartDashboard::PutNumber(turnMotorName  + " error", _canTurnMotor.GetPosError().value());
   frc::SmartDashboard::PutNumber(turnEncoderName+ " Abs position", _canTurnEncoder.GetAbsolutePosition().GetValue().value());
-  frc::SmartDashboard::PutNumber("Swerve/Volatages/"+turnMotorName+ "voltage", _canTurnMotor.GetAppliedOutput()*12);
+  // clang-format on
 }
 
 frc::Rotation2d SwerveModule::GetAngle() {
@@ -92,7 +93,6 @@ frc::Rotation2d SwerveModule::GetAngle() {
 }
 
 units::meters_per_second_t SwerveModule::GetSpeed() {
-  // If in simulation, pretend swerve is always at target state
   return (_canDriveMotor.GetVelocity().GetValue().value() * WHEEL_CIRCUMFERENCE.value()) * 1_mps;
 }
 
@@ -113,7 +113,8 @@ void SwerveModule::SetDesiredVelocity(units::meters_per_second_t velocity) {
   //                    DemandType::DemandType_ArbitraryFeedForward, ffpercent);
   // _simulatorDistanceTravelled += velocity * 20_ms;
 
-  _canDriveMotor.SetControl(ctre::phoenix6::controls::VelocityVoltage{(velocity.value()/WHEEL_CIRCUMFERENCE.value())*1_tps});
+  _canDriveMotor.SetControl(ctre::phoenix6::controls::VelocityVoltage{
+      (velocity.value() / WHEEL_CIRCUMFERENCE.value()) * 1_tps});
 }
 
 void SwerveModule::StopMotors() {
@@ -122,15 +123,14 @@ void SwerveModule::StopMotors() {
 }
 
 void SwerveModule::SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode) {
-//   _configCanDriveMotor.MotorOutput.NeutralMode = mode;
-//   _canTurnMotor.
-//   _canDriveMotor.GetConfigurator().Apply(_configCanDriveMotor);
+  //   _configCanDriveMotor.MotorOutput.NeutralMode = mode;
+  //   _canTurnMotor.
+  //   _canDriveMotor.GetConfigurator().Apply(_configCanDriveMotor);
 }
 
 void SwerveModule::SyncSensors() {
   std::string turnMotorID = std::to_string(_canTurnMotor.GetDeviceId());
-units::turn_t cancoderAngle = _canTurnEncoder.GetAbsolutePosition().GetValue();
-std::cout << "Setting Sweve turn motor" + turnMotorID +" position to" << cancoderAngle.value() << std::endl;
-_canTurnMotor.SetPosition(cancoderAngle);
+  units::turn_t cancoderAngle = _canTurnEncoder.GetAbsolutePosition().GetValue();
+  std::cout << "Setting Sweve turn motor" + turnMotorID +" position to" << cancoderAngle.value() << std::endl;
+  _canTurnMotor.SetPosition(cancoderAngle);
 }
-
