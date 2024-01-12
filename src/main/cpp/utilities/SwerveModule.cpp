@@ -129,8 +129,22 @@ void SwerveModule::SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode
 }
 
 void SwerveModule::SyncSensors() {
-  std::string turnMotorID = std::to_string(_canTurnMotor.GetDeviceId());
-  units::turn_t cancoderAngle = _canTurnEncoder.GetAbsolutePosition().GetValue();
-  std::cout << "Setting Sweve turn motor" + turnMotorID +" position to" << cancoderAngle.value() << std::endl;
-  _canTurnMotor.SetPosition(cancoderAngle);
+  std::cout << "SyncSensors run pre anything" << '\n';
+  _canTurnMotor.SetCANTimeout(500);
+  units::turn_t truePos = _canTurnEncoder.GetAbsolutePosition().GetValue();
+  int maxAttempts = 15;
+  int currentAttempts = 0;
+  units::turn_t tolerance = 0.01_tr;
+  
+  std::cout << "SyncSensors run pre while loop" << '\n';
+
+  while(units::math::abs(_canTurnMotor.GetPosition()-truePos) > tolerance && currentAttempts < maxAttempts) {
+    std::cout << "attempt " << currentAttempts << '\n';
+   _canTurnMotor.SetPosition(truePos);
+    currentAttempts++;
+  }
+
+
+  currentAttempts = 0;
+  _canTurnMotor.SetCANTimeout(10);
 }

@@ -39,9 +39,10 @@ void ICSparkMax::InitSendable(wpi::SendableBuilder& builder) {
 void ICSparkMax::SetPosition(units::turn_t position) {
   std::cout << "setting pos of spark " << GetDeviceId() << " to " << position.value() << '\n';
   std::cout << "old position from spark: " << _encoder.GetPosition() << '\n';
-  auto err = _encoder.SetPosition(position.value());
-  std::cout << "err code: " << (int)err;
-  std::cout << "new position from spark: " << _encoder.GetPosition() << '\n';
+  _encoder.SetPosition(position.value());
+  auto err = GetLastError();
+  std::cout << "err code: " << (int)err << '\n';
+  std::cout << '\n';
 }
 
 void ICSparkMax::SetPositionTarget(units::turn_t target, units::volt_t arbFeedForward) {

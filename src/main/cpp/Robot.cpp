@@ -7,8 +7,7 @@
 #include <frc2/command/CommandScheduler.h>
 #include "subsystems/SubDrivebase.h"
 
-void Robot::RobotInit() {
-}
+void Robot::RobotInit() {}
 
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
@@ -26,6 +25,7 @@ void Robot::AutonomousInit() {
   if (m_autonomousCommand) {
     m_autonomousCommand->Schedule();
   }
+  SubDrivebase::GetInstance().SyncSensors();
 }
 
 void Robot::AutonomousPeriodic() {}
@@ -36,7 +36,7 @@ void Robot::TeleopInit() {
   if (m_autonomousCommand) {
     m_autonomousCommand->Cancel();
   }
-
+  SubDrivebase::GetInstance().SyncSensors();
 }
 
 void Robot::TeleopPeriodic() {}

@@ -75,7 +75,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   SwerveModule _frontRight{canivore::DriveBaseFrontRightDrive, canivore::DriveBaseFrontRightTurn,
                            canivore::DriveBaseFrontRightEncoder, FRONT_RIGHT_MAG_OFFSET};
   SwerveModule _backLeft{canivore::DriveBaseBackLeftDrive, canivore::DriveBaseBackLeftTurn,
-                         canivore::DriveBaseBackLeftEncoder, BACK_LEFT_MAG_OFFSET};
+                         canivore::DriveBaseBackLeftEncoder, BACK_LEFT_MAG_OFFSET}; 
   SwerveModule _backRight{canivore::DriveBaseBackRightDrive, canivore::DriveBaseBackRightTurn,
                           canivore::DriveBaseBackRightEncoder, BACK_RIGHT_MAG_OFFSET};
 

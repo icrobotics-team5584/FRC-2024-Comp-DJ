@@ -16,7 +16,6 @@
 SubDrivebase::SubDrivebase() {
   _gyro.Calibrate();
   Rcontroller.EnableContinuousInput(-180_deg, 180_deg);
-  SyncSensors();
   frc::SmartDashboard::PutData("field", &_fieldDisplay);
 
   using namespace pathplanner;
