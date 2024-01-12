@@ -16,7 +16,7 @@
 
 namespace canivore {
   constexpr int DriveBaseFrontLeftDrive = 7;
-  constexpr int DriveBaseFrontLeftTurn = 4;
+  constexpr int DriveBaseFrontLeftTurn = 8;
   constexpr int DriveBaseFrontLeftEncoder = 10;
 
   constexpr int DriveBaseFrontRightDrive = 3;
@@ -28,7 +28,7 @@ namespace canivore {
   constexpr int DriveBaseBackLeftEncoder = 12;
 
   constexpr int DriveBaseBackRightDrive = 1;
-  constexpr int DriveBaseBackRightTurn = 8;
+  constexpr int DriveBaseBackRightTurn = 4;
   constexpr int DriveBaseBackRightEncoder = 11;
 }
 

@@ -24,15 +24,15 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _canTurnEncoder.GetConfigurator().Apply(_configTurnEncoder);
 
   // Config Turning Motor
-_canTurnMotor.RestoreFactoryDefaults();
-_canTurnMotor.SetCANTimeout(500);
-_canTurnMotor.SetConversionFactor(1.0/TURNING_GEAR_RATIO);
-_canTurnMotor.EnableClosedLoopWrapping(0_tr, 1_tr);
-_canTurnMotor.SetPIDFF(TURN_P, TURN_I, TURN_D);
-_canTurnMotor.SetInverted(true);
-_canTurnMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-_canTurnMotor.BurnFlash();
-_canTurnMotor.SetCANTimeout(10);
+  _canTurnMotor.RestoreFactoryDefaults();
+  _canTurnMotor.SetCANTimeout(500);
+  _canTurnMotor.SetConversionFactor(1.0/TURNING_GEAR_RATIO);
+ // _canTurnMotor.EnableClosedLoopWrapping(0_tr, 1_tr);
+  _canTurnMotor.SetPIDFF(TURN_P, TURN_I, TURN_D);
+  //_canTurnMotor.SetInverted(true);
+  _canTurnMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+  _canTurnMotor.BurnFlash();
+  _canTurnMotor.SetCANTimeout(10);
 
   // Config Driving Motor
   _canDriveMotor.GetConfigurator().Apply(TalonFXConfiguration{});
