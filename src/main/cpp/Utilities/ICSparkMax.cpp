@@ -140,8 +140,8 @@ void ICSparkMax::UseAbsoluteEncoder(rev::SparkAbsoluteEncoder& encoder) {
 }
 
 void ICSparkMax::EnableClosedLoopWrapping(units::turn_t min, units::turn_t max) {
-  _pidController.SetPositionPIDWrappingMinInput(PosToSparkRevs(min));
-  _pidController.SetPositionPIDWrappingMaxInput(PosToSparkRevs(max));
+  _pidController.SetPositionPIDWrappingMinInput(min.value());
+  _pidController.SetPositionPIDWrappingMaxInput(max.value());
   _pidController.SetPositionPIDWrappingEnabled(true);
   _simController.EnableContinuousInput(PosToSparkRevs(min), PosToSparkRevs(max));
 }
