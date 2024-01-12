@@ -48,6 +48,7 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _configCanDriveMotor.Slot0.kS = 0.62004; // Units is V
   _configCanDriveMotor.Slot0.kV = 2.2731; // Units is V/1m/s
   _configCanDriveMotor.Slot0.kA = 0.23244; // Units is V/1m/s^2
+  _configCanDriveMotor.MotorOutput.NeutralMode = NeutralModeValue::Brake;
   _canDriveMotor.GetConfigurator().Apply(_configCanDriveMotor);
 }
 
@@ -105,7 +106,6 @@ void SwerveModule::SetDesiredAngle(units::degree_t angle) {
 }
 
 void SwerveModule::SetDesiredVelocity(units::meters_per_second_t velocity) {
-  std::cout <<"SetDesiredVelocity called" << velocity.value() << '\n';
   units::turns_per_second_t TurnsPerSec = (velocity.value() / WHEEL_CIRCUMFERENCE.value())*1_tps;
    units::volt_t ffvolts = _feedFoward.Calculate(velocity);
 
@@ -125,17 +125,13 @@ void SwerveModule::SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode
 }
 
 void SwerveModule::SyncSensors() {
-  std::cout << "SyncSensors run pre anything" << '\n';
   _canTurnMotor.SetCANTimeout(500);
   units::turn_t truePos = _canTurnEncoder.GetAbsolutePosition().GetValue();
   int maxAttempts = 15;
   int currentAttempts = 0;
   units::turn_t tolerance = 0.01_tr;
-  
-  std::cout << "SyncSensors run pre while loop" << '\n';
 
   while(units::math::abs(_canTurnMotor.GetPosition()-truePos) > tolerance && currentAttempts < maxAttempts) {
-    std::cout << "attempt " << currentAttempts << '\n';
    _canTurnMotor.SetPosition(truePos);
     currentAttempts++;
   }

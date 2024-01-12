@@ -76,7 +76,7 @@ void SubDrivebase::Periodic() {
 
 frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller) {
   return Run([this, &controller] {
-    auto forwardSpeed = controller.GetLeftY() * MAX_VELOCITY;
+    auto forwardSpeed = controller.GetLeftY() * -MAX_VELOCITY;
     auto rotationSpeed = controller.GetRightX() * MAX_ANGULAR_VELOCITY;
     auto sidewaysSpeed = controller.GetLeftX() * MAX_VELOCITY;
     Drive(forwardSpeed, sidewaysSpeed, rotationSpeed, true);
@@ -87,7 +87,7 @@ void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_se
                          units::degrees_per_second_t rot, bool fieldRelative) {
   // Get states of all swerve modules
   auto states = _kinematics.ToSwerveModuleStates(
-      fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, GetHeading())
+      fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, -GetHeading())
                     : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
 
   // Set speed limit and apply speed limit to all modules

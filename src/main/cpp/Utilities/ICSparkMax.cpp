@@ -37,12 +37,8 @@ void ICSparkMax::InitSendable(wpi::SendableBuilder& builder) {
 }
 
 void ICSparkMax::SetPosition(units::turn_t position) {
-  std::cout << "setting pos of spark " << GetDeviceId() << " to " << position.value() << '\n';
-  std::cout << "old position from spark: " << _encoder.GetPosition() << '\n';
   _encoder.SetPosition(position.value());
   auto err = GetLastError();
-  std::cout << "err code: " << (int)err << '\n';
-  std::cout << '\n';
 }
 
 void ICSparkMax::SetPositionTarget(units::turn_t target, units::volt_t arbFeedForward) {
@@ -219,12 +215,9 @@ units::volt_t ICSparkMax::GetSimVoltage() {
       break;
 
     case Mode::kCurrent:
-      std::cout << "Warning: closed loop Current control not supported by ICSparkMax in "
-                   "Simulation\n";
       break;
 
     case Mode::kSmartVelocity:
-      std::cout << "Warning: smart velocity control not supported by ICSparkMax in Simulation\n";
       break;
   }
   output += _arbFeedForward;
