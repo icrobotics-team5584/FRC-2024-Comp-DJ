@@ -20,6 +20,12 @@
         "Intake": {
           "open": true
         },
+        "Main Shooter": {
+          "open": true
+        },
+        "Secondary Shooter": {
+          "open": true
+        },
         "Shooter": {
           "open": true
         },

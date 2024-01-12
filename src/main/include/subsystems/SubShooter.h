@@ -11,34 +11,29 @@
 #include "Constants.h"
 
 class SubShooter : public frc2::SubsystemBase {
- public:
-  SubShooter();
-
-  static SubShooter &GetInstance(){
-    static SubShooter inst;
-    return inst;
-  }
+  public:
+    SubShooter();
+    
+    static SubShooter &GetInstance(){
+      static SubShooter inst;
+      return inst;
+      }
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
-  void Periodic() override;
-  frc2::CommandPtr ShootNote();
+    void Periodic() override;
+    frc2::CommandPtr ShootNote();
 
- private:
+  private:
+    // Components (e.g. motor controllers and sensors) should generally be
+    // declared private and exposed only through public methods.
 
- rev::CANSparkMax _shooterMotorMainSpin{
-     canid::ShooterMotorMain, rev::CANSparkMax::MotorType::kBrushless
-  };
+    rev::CANSparkMax _shooterMotorMainSpin{canid::ShooterMotorMain, rev::CANSparkMax::MotorType::kBrushless};
+    rev::CANSparkMax _secondaryShooterMotorSpin{canid::SecondaryShooterMotor, rev::CANSparkMax::MotorType::kBrushless};
+    rev::SparkRelativeEncoder _shooterMainEncoder = _shooterMotorMainSpin.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+    rev::SparkRelativeEncoder _secondaryShooterEncoder = _secondaryShooterMotorSpin.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+    
+    double mainMotorVel = 0.6;
+    double secondaryMotorVel = 0.6;
 
- rev::CANSparkMax _secondaryShooterMotorSpin{
-     canid::SecondaryShooterMotor, rev::CANSparkMax::MotorType::kBrushless
-  };
-
-  rev::SparkRelativeEncoder _shooterMainEncoder = _shooterMotorMainSpin.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
-  rev::SparkRelativeEncoder _secondaryShooterEncoder = _secondaryShooterMotorSpin.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
-
-  double mainMotorVel = 0.6;
-  double secondaryMotorVel = 0.6;
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
 };
