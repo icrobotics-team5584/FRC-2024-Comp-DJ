@@ -45,9 +45,9 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _configCanDriveMotor.CurrentLimits.SupplyCurrentLimit = 20.0;
   _configCanDriveMotor.CurrentLimits.SupplyCurrentThreshold = 40.0;
   _configCanDriveMotor.CurrentLimits.SupplyTimeThreshold = 0.5;
-  // _configCanDriveMotor.Slot0.kS = 0.62004; // Units is V
-  // _configCanDriveMotor.Slot0.kV = 2.2731; // Units is V/1m/s
-  // _configCanDriveMotor.Slot0.kA = 0.23244_V/1_mps_sq; // Units is V/1m/s^2
+  _configCanDriveMotor.Slot0.kS = 0.62004; // Units is V
+  _configCanDriveMotor.Slot0.kV = 2.2731; // Units is V/1m/s
+  _configCanDriveMotor.Slot0.kA = 0.23244; // Units is V/1m/s^2
   _canDriveMotor.GetConfigurator().Apply(_configCanDriveMotor);
 }
 
@@ -62,7 +62,7 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState& referenceState)
 
   // Drive! These functions do some conversions and send targets to falcons
   SetDesiredAngle(targetState.angle.Degrees());
-  // SetDesiredVelocity(targetState.speed);
+  SetDesiredVelocity(targetState.speed);
 }
 
 frc::SwerveModulePosition SwerveModule::GetPosition() {
@@ -105,16 +105,12 @@ void SwerveModule::SetDesiredAngle(units::degree_t angle) {
 }
 
 void SwerveModule::SetDesiredVelocity(units::meters_per_second_t velocity) {
-  // double falconVel = Conversions::RobotVelToFalconVel(
-  //     velocity, DRIVE_GEAR_RATIO, WHEEL_RADIUS);
-  // units::volt_t ffvolts = _feedFoward.Calculate(velocity);
-  // double ffpercent = ffvolts.value()/12;
-  // _canDriveMotor.Set(TalonFXControlMode::Velocity, falconVel,
-  //                    DemandType::DemandType_ArbitraryFeedForward, ffpercent);
-  // _simulatorDistanceTravelled += velocity * 20_ms;
+  std::cout <<"SetDesiredVelocity called" << velocity.value() << '\n';
+  units::turns_per_second_t TurnsPerSec = (velocity.value() / WHEEL_CIRCUMFERENCE.value())*1_tps;
+   units::volt_t ffvolts = _feedFoward.Calculate(velocity);
 
   _canDriveMotor.SetControl(ctre::phoenix6::controls::VelocityVoltage{
-      (velocity.value() / WHEEL_CIRCUMFERENCE.value()) * 1_tps});
+      (TurnsPerSec)}.WithFeedForward(ffvolts));
 }
 
 void SwerveModule::StopMotors() {

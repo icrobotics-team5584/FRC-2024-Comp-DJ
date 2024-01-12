@@ -56,6 +56,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   // Commands
   frc2::CommandPtr JoystickDrive(frc2::CommandXboxController& controller);
   frc2::CommandPtr SyncSensorBut();
+  frc2::CommandPtr ResetGyroCmd();
 
  private:
   AHRS _gyro{frc::SerialPort::kMXP};
@@ -65,10 +66,10 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::Translation2d _backLeftLocation{-0.281_m, +0.281_m};
   frc::Translation2d _backRightLocation{-0.281_m, -0.281_m};
 
-  const double FRONT_LEFT_MAG_OFFSET = -0.872803;   //-0.127930 ;
-  const double FRONT_RIGHT_MAG_OFFSET = -0.800049;  //-0.198730;
-  const double BACK_LEFT_MAG_OFFSET = -0.668701;    //-0.331543;
-  const double BACK_RIGHT_MAG_OFFSET = -0.532715;   //-0.467041;
+  const double FRONT_RIGHT_MAG_OFFSET = -0.872803;   //-0.127930 ;
+  const double FRONT_LEFT_MAG_OFFSET = -0.800049;  //-0.198730;
+  const double BACK_RIGHT_MAG_OFFSET = -0.668701;    //-0.331543;
+  const double BACK_LEFT_MAG_OFFSET = -0.532715;   //-0.467041;
 
   SwerveModule _frontLeft{canivore::DriveBaseFrontLeftDrive, canivore::DriveBaseFrontLeftTurn,
                           canivore::DriveBaseFrontLeftEncoder, FRONT_LEFT_MAG_OFFSET};

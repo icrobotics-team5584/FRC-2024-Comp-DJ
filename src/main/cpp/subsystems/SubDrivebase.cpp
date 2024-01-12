@@ -76,9 +76,9 @@ void SubDrivebase::Periodic() {
 
 frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller) {
   return Run([this, &controller] {
-    auto forwardSpeed = controller.GetRightY() * MAX_VELOCITY;
-    auto rotationSpeed = controller.GetLeftX() * MAX_ANGULAR_VELOCITY;
-    auto sidewaysSpeed = controller.GetRightX() * MAX_VELOCITY;
+    auto forwardSpeed = controller.GetLeftY() * MAX_VELOCITY;
+    auto rotationSpeed = controller.GetRightX() * MAX_ANGULAR_VELOCITY;
+    auto sidewaysSpeed = controller.GetLeftX() * MAX_VELOCITY;
     Drive(forwardSpeed, sidewaysSpeed, rotationSpeed, true);
   });
 }
@@ -208,6 +208,10 @@ bool SubDrivebase::IsAtPose(frc::Pose2d pose) {
 void SubDrivebase::ResetGyroHeading(units::degree_t startingAngle) {
   _gyro.Reset();
   _gyro.SetAngleAdjustment(startingAngle.value());
+}
+
+frc2::CommandPtr SubDrivebase::ResetGyroCmd(){
+  return RunOnce([this]{ResetGyroHeading();});
 }
 
 frc::Pose2d SubDrivebase::GetPose() {
