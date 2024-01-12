@@ -23,7 +23,7 @@ namespace canid {
     constexpr int clawMotorJoint = 100;
     constexpr int elevatorMotor = 101;
     constexpr int ShooterMotorMain = 12;
-    constexpr int ShooterMotorFollower = 13;
+    constexpr int SecondaryShooterMotor = 13;
     
 }
 
