@@ -55,18 +55,18 @@ class SubClimber : public frc2::SubsystemBase {
   static constexpr double lP = 0.0, lI = 0.0, lD = 0.0, lF = 50,
                           rP = 0.0, rI = 0.0, rD = 0.0, rF = 50;
   
-  static constexpr units::degrees_per_second_t MaxVelocity = 360_deg_per_s;
-  static constexpr units::degrees_per_second_squared_t MaxAcceleration = 1000_deg_per_s_sq;
+  static constexpr units::degrees_per_second_t MaxVelocity = 6000_deg_per_s;
+  static constexpr units::degrees_per_second_squared_t MaxAcceleration = 6000_deg_per_s_sq;
   static constexpr units::degree_t Tolerance = 30_deg;
 
   static constexpr units::kilogram_square_meter_t Turret_moi = 0.005_kg_sq_m;
   frc::sim::DCMotorSim lSim{frc::DCMotor::NEO(), GearRatio, Turret_moi};
   frc::sim::DCMotorSim rSim{frc::DCMotor::NEO(), GearRatio, Turret_moi};
 
-  frc::Mechanism2d mech{6,7};
+  frc::Mechanism2d mech{4,4};
   frc::MechanismRoot2d* mechRootL = mech.GetRoot("ClimberL", 1, 1);
-  frc::MechanismRoot2d* mechRootR = mech.GetRoot("ClimberR", 5, 1);
-  frc::MechanismRoot2d* mechRootT = mech.GetRoot("ClimberT", 3, 1);
+  frc::MechanismRoot2d* mechRootR = mech.GetRoot("ClimberR", 3, 1);
+  frc::MechanismRoot2d* mechRootT = mech.GetRoot("ClimberT", 2, 1);
   frc::MechanismLigament2d* mechLeftElevator = mechRootL->Append<frc::MechanismLigament2d>("Left elevator", 1, 90_deg);
   frc::MechanismLigament2d* mechRightElevator = mechRootR->Append<frc::MechanismLigament2d>("Right elevator", 3, 90_deg);
   frc::MechanismLigament2d* mechTar = mechRootT->Append<frc::MechanismLigament2d>("Target", 2, 90_deg);

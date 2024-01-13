@@ -19,11 +19,8 @@ SubClimber::SubClimber() {
     lClimbMotor.SetInverted(true);
     // lClimbEncoder.SetInverted(true);
     frc::SmartDashboard::PutNumber("Climber/test", 0);
+    
 
-    // lClimbEncoder.SetZeroOffset(0);
-    // rClimbEncoder.SetZeroOffset(0);
-
-    lClimbMotor.SetPosition(20_deg);
 };
 
 // This method will be called once per scheduler run
@@ -34,6 +31,7 @@ void SubClimber::Periodic() {
 void SubClimber::SimulationPeriodic() {
     frc::SmartDashboard::PutNumber("Climber/Left position", lClimbMotor.GetPosition().value());
     frc::SmartDashboard::PutNumber("Climber/Left position target", lClimbMotor.GetPositionTarget().value());
+    frc::SmartDashboard::PutNumber("Climber/Left distance", lClimbMotor.GetPosition().value() / 20 * 3);
     frc::SmartDashboard::PutNumber("Climber/Right position", rClimbMotor.GetPosition().value());
     frc::SmartDashboard::PutNumber("Climber/Right position target", rClimbMotor.GetPositionTarget().value());
     frc::SmartDashboard::PutNumber("Climber/Left velocity", lClimbMotor.GetVelocity().value());
@@ -54,8 +52,8 @@ void SubClimber::SimulationPeriodic() {
     velocity = rSim.GetAngularVelocity();
     rClimbMotor.UpdateSimEncoder(angle,velocity);
 
-    mechLeftElevator->SetLength(lClimbMotor.GetPosition().value() / 20);
-    mechRightElevator->SetLength(rClimbMotor.GetPosition().value() / -20);
+    mechLeftElevator->SetLength(lClimbMotor.GetPosition().value() / 20 * 3); // 1 unit = 3m
+    mechRightElevator->SetLength(rClimbMotor.GetPosition().value() / -20 * 3);
     mechTar->SetLength(TargetDistance.value());
 }
 
@@ -64,15 +62,17 @@ void SubClimber::SetTarget(units::meter_t Distance) {
 }
 
 void SubClimber::Retract() {
-    SetTarget(1_m);
-    lClimbMotor.SetPositionTarget(20_deg);
+    SetTarget(0_m);
+    // lClimbMotor.SetPositionTarget(20_deg);
+    lClimbMotor.Set(1);
     rClimbMotor.SetSmartMotionTarget(20_deg);
     frc::SmartDashboard::PutNumber("Climber/test", 1);
 }
 
 void SubClimber::Extend() {
-    SetTarget(4_m);
-    lClimbMotor.SetPositionTarget(80_deg);
+    SetTarget(1.5_m);
+    // lClimbMotor.SetPositionTarget(80_deg);
+    lClimbMotor.Set(1);
     rClimbMotor.SetSmartMotionTarget(80_deg);
     frc::SmartDashboard::PutNumber("Climber/test", 2);
 }
