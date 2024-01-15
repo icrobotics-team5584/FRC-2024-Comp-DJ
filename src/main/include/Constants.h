@@ -22,8 +22,8 @@ namespace canid {
     //amp
     constexpr int clawMotorJoint = 100;
     constexpr int elevatorMotor = 101;
-    constexpr int ShooterMotorMain = 12;
-    constexpr int SecondaryShooterMotor = 13;
+    constexpr int ShooterMotorMain = 22; // top motor
+    constexpr int SecondaryShooterMotor = 4; // bottom motor
     
 }
 
