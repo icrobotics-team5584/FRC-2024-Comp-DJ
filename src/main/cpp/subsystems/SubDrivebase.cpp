@@ -12,8 +12,13 @@
 #include <pathplanner/lib/util/PIDConstants.h>
 #include <frc2/command/Commands.h>
 #include "subsystems/SubDrivebase.h"
+#include <frc/filter/SlewRateLimiter.h>
 
 SubDrivebase::SubDrivebase() {
+  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value());
+  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value());
+  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAcceleration", MAX_ACCEL);
+  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration", MAX_ANG_ACCEL);
   _gyro.Calibrate();
   Rcontroller.EnableContinuousInput(-180_deg, 180_deg);
   frc::SmartDashboard::PutData("field", &_fieldDisplay);
@@ -50,7 +55,7 @@ SubDrivebase::SubDrivebase() {
 void SubDrivebase::Periodic() {
   auto loopStart = frc::GetTime();
   // Dashboard Displays:
-  frc::SmartDashboard::PutNumber("drivebase/heading", GetHeading().Degrees().value());
+  frc::SmartDashboard::PutNumber("Drivebase/heading", GetHeading().Degrees().value());
   frc::SmartDashboard::PutNumber("Drivebase/velocity", GetVelocity().value());
 
   frc::SmartDashboard::PutNumberArray("drivebase/true swerve states",
@@ -76,9 +81,13 @@ void SubDrivebase::Periodic() {
 
 frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller) {
   return Run([this, &controller] {
-    auto forwardSpeed = controller.GetLeftY() * -MAX_VELOCITY;
-    auto rotationSpeed = controller.GetRightX() * MAX_ANGULAR_VELOCITY;
-    auto sidewaysSpeed = controller.GetLeftX() * MAX_VELOCITY;
+    double deadband = 0.08;
+   static frc::SlewRateLimiter<units::scalar> _xspeedLimiter{frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAcceleration", MAX_ACCEL)/1_s};
+   static frc::SlewRateLimiter<units::scalar> _yspeedLimiter{frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAcceleration", MAX_ACCEL)/1_s};
+   static frc::SlewRateLimiter<units::scalar> _rotLimiter{frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAnglularAcceleration", MAX_ACCEL)/1_s};
+    auto forwardSpeed = _yspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftY(), deadband)) * -frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value())*1_mps;
+    auto rotationSpeed =_rotLimiter.Calculate(frc::ApplyDeadband(controller.GetRightX(), deadband)) * frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value())*1_deg_per_s;
+    auto sidewaysSpeed = _xspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftX(), deadband)) * frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value())*1_mps;
     Drive(forwardSpeed, sidewaysSpeed, rotationSpeed, true);
   });
 }
