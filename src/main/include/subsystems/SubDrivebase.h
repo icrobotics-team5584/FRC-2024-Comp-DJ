@@ -26,6 +26,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   }
   SubDrivebase();
   void Periodic() override;
+  void SimulationPeriodic() override;
   void Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
              units::degrees_per_second_t rot, bool fieldRelative);
   void AddVisionMeasurement(frc::Pose2d pose, double ambiguity, units::second_t timeStamp);

@@ -74,6 +74,13 @@ void SubDrivebase::Periodic() {
   frc::SmartDashboard::PutNumber("drivebase/loop time (sec)", (frc::GetTime() - loopStart).value());
 }
 
+void SubDrivebase::SimulationPeriodic(){
+  _frontLeft.UpdateSim(20_ms);
+  _frontRight.UpdateSim(20_ms);
+  _backLeft.UpdateSim(20_ms);
+  _backRight.UpdateSim(20_ms);
+}
+
 frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller) {
   return Run([this, &controller] {
     auto forwardSpeed = controller.GetLeftY() * -MAX_VELOCITY;
@@ -254,3 +261,5 @@ void SubDrivebase::SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode
 units::degree_t SubDrivebase::GetPitch() {
   return _gyro.GetPitch() * 1_deg;
 }
+
+
