@@ -48,11 +48,14 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::SwerveDriveKinematics<4> GetKinematics();
   frc::ChassisSpeeds GetRobotRelativeSpeeds();
 
-  static constexpr units::meters_per_second_t MAX_VELOCITY = 3_mps;
+  static constexpr units::meters_per_second_t MAX_VELOCITY = 0.5_mps;
   static constexpr units::degrees_per_second_t MAX_ANGULAR_VELOCITY =
-      180_deg_per_s;
+      90_deg_per_s;
   static constexpr units::radians_per_second_squared_t MAX_ANGULAR_ACCEL{
       std::numbers::pi};
+
+ double MAX_ACCEL = 0.5;
+ double MAX_ANG_ACCEL = 0.5;
 
   // Commands
   frc2::CommandPtr JoystickDrive(frc2::CommandXboxController& controller);
