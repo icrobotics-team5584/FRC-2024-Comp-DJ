@@ -7,11 +7,11 @@
 #include <rev/SparkMaxAbsoluteEncoder.h>
 
 SubClimber::SubClimber() {
-    lClimbMotor.SetConversionFactor(1);
+    lClimbMotor.SetConversionFactor(1 / GearRatio);
     lClimbMotor.SetPIDFF(lP,lI,lD,lF);
     lClimbMotor.ConfigSmartMotion(MaxVelocity,MaxAcceleration,Tolerance);
     // lClimbMotor.UseAbsoluteEncoder(lClimbEncoder);
-    rClimbMotor.SetConversionFactor(1);
+    rClimbMotor.SetConversionFactor(1 / GearRatio);
     rClimbMotor.SetPIDFF(rP,rI,rD,rF);
     rClimbMotor.ConfigSmartMotion(MaxVelocity,MaxAcceleration,Tolerance);
     // rClimbMotor.UseAbsoluteEncoder(rClimbEncoder);
@@ -25,13 +25,14 @@ SubClimber::SubClimber() {
 
 // This method will be called once per scheduler run
 void SubClimber::Periodic() {
-    frc::SmartDashboard::PutData("Climber/Mech Display", &mech);
+
 }
 
 void SubClimber::SimulationPeriodic() {
+    frc::SmartDashboard::PutData("Climber/Mech Display", &mech);
     frc::SmartDashboard::PutNumber("Climber/Left position", lClimbMotor.GetPosition().value());
     frc::SmartDashboard::PutNumber("Climber/Left position target", lClimbMotor.GetPositionTarget().value());
-    frc::SmartDashboard::PutNumber("Climber/Left distance", lClimbMotor.GetPosition().value() / 20 * 3);
+    frc::SmartDashboard::PutNumber("Climber/Left distance", TurnToDistance(lClimbMotor.GetPosition()).value());
     frc::SmartDashboard::PutNumber("Climber/Right position", rClimbMotor.GetPosition().value());
     frc::SmartDashboard::PutNumber("Climber/Right position target", rClimbMotor.GetPositionTarget().value());
     frc::SmartDashboard::PutNumber("Climber/Left velocity", lClimbMotor.GetVelocity().value());
@@ -52,8 +53,8 @@ void SubClimber::SimulationPeriodic() {
     velocity = rSim.GetAngularVelocity();
     rClimbMotor.UpdateSimEncoder(angle,velocity);
 
-    mechLeftElevator->SetLength(lClimbMotor.GetPosition().value() / 20 * 3); // 1 unit = 3m
-    mechRightElevator->SetLength(rClimbMotor.GetPosition().value() / -20 * 3);
+    mechLeftElevator->SetLength(TurnToDistance(lClimbMotor.GetPosition()).value()); // 1 unit = 3m
+    mechRightElevator->SetLength(TurnToDistance(rClimbMotor.GetPosition()).value());
     mechTar->SetLength(TargetDistance.value());
 }
 
@@ -63,16 +64,21 @@ void SubClimber::SetTarget(units::meter_t Distance) {
 
 void SubClimber::Retract() {
     SetTarget(0_m);
-    // lClimbMotor.SetPositionTarget(20_deg);
-    lClimbMotor.Set(1);
+    lClimbMotor.SetPositionTarget(0_deg);
     rClimbMotor.SetSmartMotionTarget(20_deg);
     frc::SmartDashboard::PutNumber("Climber/test", 1);
 }
 
 void SubClimber::Extend() {
     SetTarget(1.5_m);
-    // lClimbMotor.SetPositionTarget(80_deg);
-    lClimbMotor.Set(1);
-    rClimbMotor.SetSmartMotionTarget(80_deg);
+    lClimbMotor.SetPositionTarget(DistanceToTurn(1.5_m));
+    rClimbMotor.SetPositionTarget(DistanceToTurn(1.5_m));
     frc::SmartDashboard::PutNumber("Climber/test", 2);
 }
+
+units::turn_t SubClimber::DistanceToTurn(units::meter_t distance) {
+    return distance / WheelDiameter * 1_tr;
+}
+units::meter_t SubClimber::TurnToDistance(units::turn_t turn) {
+    return turn.value() * WheelDiameter;
+};

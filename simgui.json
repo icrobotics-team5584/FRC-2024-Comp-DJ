@@ -14,10 +14,16 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/Climber/Mech Display": "Mechanism2d"
+      "/SmartDashboard/Climber/Mech Display": "Mechanism2d",
+      "/SmartDashboard/Climber/testMech": "Mechanism2d"
     },
     "windows": {
       "/SmartDashboard/Climber/Mech Display": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Climber/testMech": {
         "window": {
           "visible": true
         }
@@ -51,12 +57,10 @@
       "open": true
     },
     "Server": {
-      "Publishers": {
-        "open": true
-      },
       "Subscribers": {
         "open": true
-      }
+      },
+      "open": true
     },
     "visible": true
   }

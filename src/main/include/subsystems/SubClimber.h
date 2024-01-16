@@ -36,6 +36,9 @@ class SubClimber : public frc2::SubsystemBase {
 
   void SetTarget(units::meter_t);
 
+  units::turn_t DistanceToTurn(units::meter_t distance);
+  units::meter_t TurnToDistance(units::turn_t turn);
+
   void Extend();
   void Retract();
 
@@ -52,12 +55,14 @@ class SubClimber : public frc2::SubsystemBase {
   // rev::SparkAbsoluteEncoder rClimbEncoder{rClimbMotor.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle)};
 
   static constexpr double GearRatio = 100;
-  static constexpr double lP = 0.0, lI = 0.0, lD = 0.0, lF = 50,
-                          rP = 0.0, rI = 0.0, rD = 0.0, rF = 50;
+  static constexpr double lP = 0.1, lI = 0.0, lD = 0.1, lF = 0.0,
+                          rP = 0.1, rI = 0.0, rD = 0.1, rF = 0.0;
   
   static constexpr units::degrees_per_second_t MaxVelocity = 6000_deg_per_s;
   static constexpr units::degrees_per_second_squared_t MaxAcceleration = 6000_deg_per_s_sq;
   static constexpr units::degree_t Tolerance = 30_deg;
+
+  static constexpr units::meter_t WheelDiameter = 0.12_m;
 
   static constexpr units::kilogram_square_meter_t Turret_moi = 0.005_kg_sq_m;
   frc::sim::DCMotorSim lSim{frc::DCMotor::NEO(), GearRatio, Turret_moi};
