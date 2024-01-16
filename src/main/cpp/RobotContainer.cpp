@@ -20,6 +20,8 @@ SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().Joysti
   _autoChooser.AddOption("Middle Path", "Middle Path");
   _autoChooser.AddOption("Amp Path", "Amp Path");
   _autoChooser.AddOption("Podium Path", "Podium Path");
+  _autoChooser.AddOption("Mid Path-Break Podium", "Mid Path-Break Podium");
+  _autoChooser.AddOption("Mid Path-Break Amp", "Mid Path-Break Amp");
 frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
   }
 
