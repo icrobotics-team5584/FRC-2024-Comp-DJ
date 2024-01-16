@@ -126,7 +126,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Alliance Steal",
+  "folder": null,
   "previewStartingState": null,
   "useDefaultConstraints": false
 }
