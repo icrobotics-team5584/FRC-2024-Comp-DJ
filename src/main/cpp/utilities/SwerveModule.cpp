@@ -29,7 +29,7 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _canTurnMotor.SetConversionFactor(1.0/TURNING_GEAR_RATIO);
   _canTurnMotor.EnableClosedLoopWrapping(0_tr, 1_tr);
   _canTurnMotor.SetPIDFF(TURN_P, TURN_I, TURN_D);
-  //_canTurnMotor.SetInverted(true);
+  _canTurnMotor.SetInverted(false);
   _canTurnMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
   _canTurnMotor.BurnFlash();
   _canTurnMotor.SetCANTimeout(10);
@@ -38,6 +38,7 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _canDriveMotor.GetConfigurator().Apply(TalonFXConfiguration{});
   _configCanDriveMotor.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue::RotorSensor;
   _configCanDriveMotor.ClosedLoopGeneral.ContinuousWrap = false;
+  _configCanDriveMotor.Feedback.SensorToMechanismRatio = DRIVE_GEAR_RATIO;
   _configCanDriveMotor.Slot0.kP = DRIVE_P;
   _configCanDriveMotor.Slot0.kI = DRIVE_I;
   _configCanDriveMotor.Slot0.kD = DRIVE_D;

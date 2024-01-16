@@ -93,8 +93,8 @@ frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& contro
    static frc::SlewRateLimiter<units::scalar> _yspeedLimiter{frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAcceleration", MAX_ACCEL)/1_s};
    static frc::SlewRateLimiter<units::scalar> _rotLimiter{frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAnglularAcceleration", MAX_ACCEL)/1_s};
     auto forwardSpeed = _yspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftY(), deadband)) * -frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value())*1_mps;
-    auto rotationSpeed =_rotLimiter.Calculate(frc::ApplyDeadband(controller.GetRightX(), deadband)) * frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value())*1_deg_per_s;
-    auto sidewaysSpeed = _xspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftX(), deadband)) * frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value())*1_mps;
+    auto rotationSpeed =_rotLimiter.Calculate(frc::ApplyDeadband(controller.GetRightX(), deadband)) * -frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value())*1_deg_per_s;
+    auto sidewaysSpeed = _xspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftX(), deadband)) * -frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value())*1_mps;
     Drive(forwardSpeed, sidewaysSpeed, rotationSpeed, true);
   });
 }
@@ -103,7 +103,7 @@ void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_se
                          units::degrees_per_second_t rot, bool fieldRelative) {
   // Get states of all swerve modules
   auto states = _kinematics.ToSwerveModuleStates(
-      fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, -GetHeading())
+      fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, GetHeading())
                     : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
 
   // Set speed limit and apply speed limit to all modules
