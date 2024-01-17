@@ -21,29 +21,16 @@ SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().Joysti
   _autoChooser.AddOption("Middle Path", "Middle Path");
   _autoChooser.AddOption("Amp Path", "Amp Path");
   _autoChooser.AddOption("Podium Path", "Podium Path");
-frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
+  frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
   }
 
 void RobotContainer::ConfigureBindings() {
    _driverController.X().OnTrue(SubDrivebase::GetInstance().SyncSensorBut());
    _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
+   _driverController.RightBumper().OnTrue(SubShooter::GetInstance().ChangeAngle());
+   _driverController.RightTrigger().OnTrue(SubShooter::GetInstance().StartShooter());
+   _driverController.LeftBumper().OnTrue(SubShooter::GetInstance().ShootSequence());
 }
-using namespace frc2::cmd;
-
-  //Main Controller
- // _driverController.Start().OnTrue(frc2::cmd::RunOnce([]{SubDriveBase::GetInstance().ResetGyroHeading();}));
- // _driverController.leftJoystick().WhileTrue(frc2::cmd::RunEnd([]{SubDrivebase::GetInstance().Drive();}));
-
-
-
-
-<<<<<<< HEAD
-void RobotContainer::ConfigureBindings() {
-  _driverController.RightBumper().OnTrue(SubShooter::GetInstance().ChangeAngle());
-  _driverController.RightTrigger().OnTrue(SubShooter::GetInstance().ShootNoteFixed());
-}
-=======
->>>>>>> main
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     _autoSelected = _autoChooser.GetSelected();

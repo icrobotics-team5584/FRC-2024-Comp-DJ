@@ -8,6 +8,7 @@
 #include <rev/CANSparkMax.h>
 #include <frc2/command/commands.h>
 #include <frc/DoubleSolenoid.h>
+#include "utilities/ICSparkMax.h"
 
 #include "Constants.h"
 
@@ -23,18 +24,23 @@ class SubShooter : public frc2::SubsystemBase {
    * Will be called periodically whenever the CommandScheduler runs.
    */
     void Periodic() override;
-    frc2::CommandPtr ShootNoteFixed();
+    frc2::CommandPtr StartShooter();
     frc2::CommandPtr ChangeAngle();
+    frc2::CommandPtr ShootNote();
+    frc2::CommandPtr ShootSequence();
 
   private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
+    static constexpr double ShooterP = 0.1;
+    static constexpr double ShooterI = 0;
+    static constexpr double ShooterD = 0;
+    static constexpr double ShooterFF = 0.1;
 
-    rev::CANSparkMax _shooterMotorMainSpin{canid::ShooterMotorMain, rev::CANSparkMax::MotorType::kBrushless};
-    rev::CANSparkMax _secondaryShooterMotorSpin{canid::SecondaryShooterMotor, rev::CANSparkMax::MotorType::kBrushless};
-    rev::SparkRelativeEncoder _shooterMainEncoder = _shooterMotorMainSpin.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
-    rev::SparkRelativeEncoder _secondaryShooterEncoder = _secondaryShooterMotorSpin.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+    ICSparkMax _shooterMotorMainSpin{canid::ShooterMotorMain};
+    ICSparkMax _secondaryShooterMotorSpin{canid::SecondaryShooterMotor};
 
+    ICSparkMax _shooterFeederMotor{canid::ShooterFeederMotor};
     frc::DoubleSolenoid solShooter{pcm0::Pcm0Id, frc::PneumaticsModuleType::CTREPCM, pcm0::ShootFar, pcm0::ShootClose};
     
     double mainMotorPower = 0.3;

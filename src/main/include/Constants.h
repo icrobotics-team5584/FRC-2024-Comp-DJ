@@ -24,6 +24,7 @@ namespace canid {
     constexpr int elevatorMotor = 101;
     constexpr int ShooterMotorMain = 22; // top motor
     constexpr int SecondaryShooterMotor = 4; // bottom motor
+    constexpr int ShooterFeederMotor = 102; //Shooter feeder
     
 }
 

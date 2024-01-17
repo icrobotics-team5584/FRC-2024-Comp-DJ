@@ -10,36 +10,50 @@ SubShooter::SubShooter(){
     _shooterMotorMainSpin.RestoreFactoryDefaults();
 
     _secondaryShooterMotorSpin.SetInverted(true);
-    
-    }
+    _shooterMotorMainSpin.SetPIDFF(ShooterP, ShooterI, ShooterD, ShooterFF);
+    _secondaryShooterMotorSpin.SetPIDFF(ShooterP, ShooterI, ShooterD, ShooterFF);
+    frc::SmartDashboard::PutData("Shooter/Main Motor", (wpi::Sendable*)&_shooterMotorMainSpin);
+    frc::SmartDashboard::PutData("Shooter/Second Motor", (wpi::Sendable*)&_secondaryShooterMotorSpin);
+}
 
 using namespace frc2::cmd;
 
 // This method will be called once per scheduler run
 void SubShooter::Periodic() {
-    frc::SmartDashboard::PutNumber("Main Shooter/ 2 Main Motor velocity: ", _shooterMainEncoder.GetVelocity());
-    frc::SmartDashboard::PutNumber("Main Shooter/ 3 Main Shooter Motor Power: ", _shooterMotorMainSpin.Get());
-    frc::SmartDashboard::PutNumber("Main Shooter/ 4 Main Motor Temp: ", _shooterMotorMainSpin.GetMotorTemperature());
-
-    frc::SmartDashboard::PutNumber("Secondary Shooter/ 2 Secondary Shooter Motor Velocity: ", _secondaryShooterEncoder.GetVelocity());
-    frc::SmartDashboard::PutNumber("Secondary Shooter/ 3 Secondary Shooter Motor Power: ", _secondaryShooterMotorSpin.Get());
-    frc::SmartDashboard::PutNumber("Secondary Shooter/ 4 Secondary Shooter Motor Temp: ", _secondaryShooterMotorSpin.GetMotorTemperature());
-    frc::SmartDashboard::PutNumber("Shooter/Shooter Piston Position", solShooter.Get());
+    frc::SmartDashboard::PutNumber("Shooter/Piston Position", solShooter.Get());
 
     if (solShooter.Get() == frc::DoubleSolenoid::kReverse){
-        frc::SmartDashboard::PutString("Shooter/Shooter Angle: ", "Score From Podium");
-    } else{frc::SmartDashboard::PutString("Shooter/Shooter Angle: ", "Score From Subwoofer");}
+        frc::SmartDashboard::PutString("Shooter/Angle: ", "Score From Podium");
+    } else{frc::SmartDashboard::PutString("Shooter/Angle: ", "Score From Subwoofer");}
     
 }   
 
 
-frc2::CommandPtr SubShooter::ShootNoteFixed(){
+frc2::CommandPtr SubShooter::StartShooter(){
     return StartEnd(
         [this]{
-            if(solShooter.Get() == frc::DoubleSolenoid::kReverse){_shooterMotorMainSpin.Set(0.6), _secondaryShooterMotorSpin.Set(0.6);} 
-            else {_shooterMotorMainSpin.Set(0.4), _secondaryShooterMotorSpin.Set(0.4);}},
-        [this]{_shooterMotorMainSpin.Set(0), _secondaryShooterMotorSpin.Set(0);}
+            if(solShooter.Get() == frc::DoubleSolenoid::kReverse){_shooterMotorMainSpin.SetVelocityTarget(3405_rpm), _secondaryShooterMotorSpin.SetVelocityTarget(3405_rpm);} 
+            else {_shooterMotorMainSpin.SetVelocityTarget(2270_rpm), _secondaryShooterMotorSpin.SetVelocityTarget(2270_rpm);}},
+        [this]{_shooterMotorMainSpin.SetVelocityTarget(0_rpm), _secondaryShooterMotorSpin.SetVelocityTarget(0_rpm);}
     );
+}
+
+frc2::CommandPtr SubShooter::ShootNote(){
+    return RunOnce([this]{
+        if(solShooter.Get() == frc::DoubleSolenoid::kReverse) {
+            if(_shooterMotorMainSpin.GetVelocity() >= 3400_rpm && _secondaryShooterMotorSpin.GetVelocity() >= 3400_rpm){
+                _shooterFeederMotor.Set(0.5);
+            }
+        } else if(solShooter.Get() == frc::DoubleSolenoid::kForward){
+            if(_shooterMotorMainSpin.GetVelocity() >= 2200_rpm && _secondaryShooterMotorSpin.GetVelocity() >= 2200_rpm){
+                _shooterFeederMotor.Set(0.5);
+            }
+        }
+    });
+}
+
+frc2::CommandPtr SubShooter::ShootSequence(){
+    return Sequence(StartShooter(), ShootNote());
 }
 
 frc2::CommandPtr SubShooter::ChangeAngle(){
