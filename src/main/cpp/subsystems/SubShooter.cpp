@@ -10,8 +10,8 @@ SubShooter::SubShooter(){
     _shooterMotorMainSpin.RestoreFactoryDefaults();
 
     _secondaryShooterMotorSpin.SetInverted(true);
-    frc::SmartDashboard::PutString("Shooter/Shooter Angle: ", "Score From Podium");
-}
+    
+    }
 
 using namespace frc2::cmd;
 

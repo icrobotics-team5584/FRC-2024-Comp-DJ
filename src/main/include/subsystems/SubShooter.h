@@ -37,7 +37,7 @@ class SubShooter : public frc2::SubsystemBase {
 
     frc::DoubleSolenoid solShooter{pcm0::Pcm0Id, frc::PneumaticsModuleType::CTREPCM, pcm0::ShootFar, pcm0::ShootClose};
     
-    double mainMotorVel = 0.6;
-    double secondaryMotorVel = 0.6;
+    double mainMotorPower = 0.3;
+    double secondaryMotorPower = 0.3;
 
 };
