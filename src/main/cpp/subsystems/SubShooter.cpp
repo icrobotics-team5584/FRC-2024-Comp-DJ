@@ -28,8 +28,14 @@ void SubShooter::Periodic() {
     frc::SmartDashboard::PutNumber("Secondary Shooter/ 2 Secondary Shooter Motor Velocity: ", _secondaryShooterEncoder.GetVelocity());
     frc::SmartDashboard::PutNumber("Secondary Shooter/ 3 Secondary Shooter Motor Power: ", _secondaryShooterMotorSpin.Get());
     frc::SmartDashboard::PutNumber("Secondary Shooter/ 4 Secondary Shooter Motor Temp: ", _secondaryShooterMotorSpin.GetMotorTemperature());
+    frc::SmartDashboard::PutNumber("Shooter/Shooter Piston Position", solShooter.Get());
+
+    if (solShooter.Get() == frc::DoubleSolenoid::kReverse){
+        frc::SmartDashboard::PutString("Shooter/Shooter Angle: ", "Score From Podium");
+    } else{frc::SmartDashboard::PutString("Shooter/Shooter Angle: ", "Score From Subwoofer");}
     
 }   
+
 
 frc2::CommandPtr SubShooter::ShootNote(){
     return StartEnd(
@@ -37,3 +43,14 @@ frc2::CommandPtr SubShooter::ShootNote(){
         [this]{_shooterMotorMainSpin.Set(0), _secondaryShooterMotorSpin.Set(0);}
     );
 }
+
+frc2::CommandPtr SubShooter::ChangeAngle(){
+    return RunOnce(
+        [this]{
+            if(solShooter.Get() == frc::DoubleSolenoid::kReverse){
+                solShooter.Set(frc::DoubleSolenoid::kForward);
+            } else {solShooter.Set(frc::DoubleSolenoid::kReverse);}
+        }
+    );
+}
+

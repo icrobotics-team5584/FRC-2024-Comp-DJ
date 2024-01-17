@@ -7,6 +7,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include <rev/CANSparkMax.h>
 #include <frc2/command/commands.h>
+#include <frc/DoubleSolenoid.h>
 
 #include "Constants.h"
 
@@ -23,6 +24,7 @@ class SubShooter : public frc2::SubsystemBase {
    */
     void Periodic() override;
     frc2::CommandPtr ShootNote();
+    frc2::CommandPtr ChangeAngle();
 
   private:
     // Components (e.g. motor controllers and sensors) should generally be
@@ -32,6 +34,8 @@ class SubShooter : public frc2::SubsystemBase {
     rev::CANSparkMax _secondaryShooterMotorSpin{canid::SecondaryShooterMotor, rev::CANSparkMax::MotorType::kBrushless};
     rev::SparkRelativeEncoder _shooterMainEncoder = _shooterMotorMainSpin.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
     rev::SparkRelativeEncoder _secondaryShooterEncoder = _secondaryShooterMotorSpin.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
+
+    frc::DoubleSolenoid solShooter{pcm0::Pcm0Id, frc::PneumaticsModuleType::CTREPCM, pcm0::ShootFar, pcm0::ShootClose};
     
     double mainMotorPower = 0.3;
     double secondaryMotorPower = 0.3;

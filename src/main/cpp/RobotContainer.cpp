@@ -13,6 +13,7 @@ RobotContainer::RobotContainer() {
 
 void RobotContainer::ConfigureBindings() {
   _driverController.LeftBumper().WhileTrue(SubShooter::GetInstance().ShootNote());
+  _driverController.RightBumper().OnTrue(SubShooter::GetInstance().ChangeAngle());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
