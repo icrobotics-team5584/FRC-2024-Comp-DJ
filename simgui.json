@@ -27,6 +27,9 @@
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
+        "Drivebase": {
+          "open": true
+        },
         "open": true
       }
     }
