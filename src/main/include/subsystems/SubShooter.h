@@ -33,7 +33,7 @@ class SubShooter : public frc2::SubsystemBase {
     rev::SparkRelativeEncoder _shooterMainEncoder = _shooterMotorMainSpin.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
     rev::SparkRelativeEncoder _secondaryShooterEncoder = _secondaryShooterMotorSpin.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
     
-    double mainMotorVel = 0.6;
-    double secondaryMotorVel = 0.6;
+    double mainMotorPower = 0.3;
+    double secondaryMotorPower = 0.3;
 
 };
