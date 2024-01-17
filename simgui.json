@@ -1,39 +1,30 @@
 {
   "HALProvider": {
     "Other Devices": {
-      "window": {
-        "visible": false
+      "SPARK MAX [8]": {
+        "header": {
+          "open": true
+        }
       }
     }
   },
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
-    }
-  },
-  "NetworkTables": {
-    "transitory": {
-      "SmartDashboard": {
-        "DB": {
-          "open": true
-        },
-        "Intake": {
-          "open": true
-        },
-        "Main Shooter": {
-          "open": true
-        },
-        "Secondary Shooter": {
-          "open": true
-        },
-        "Shooter": {
-          "open": true
-        },
-        "open": true
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Chosen Path": "String Chooser",
+      "/SmartDashboard/Delay By": "String Chooser",
+      "/SmartDashboard/delay by": "String Chooser",
+      "/SmartDashboard/field": "Field2d"
+    },
+    "windows": {
+      "/SmartDashboard/field": {
+        "window": {
+          "visible": true
+        }
       }
     }
   },
-  "NetworkTables View": {
-    "visible": false
+  "NetworkTables Info": {
+    "visible": true
   }
 }
