@@ -23,7 +23,7 @@ class SubShooter : public frc2::SubsystemBase {
    * Will be called periodically whenever the CommandScheduler runs.
    */
     void Periodic() override;
-    frc2::CommandPtr ShootNote();
+    frc2::CommandPtr ShootNoteFixed();
     frc2::CommandPtr ChangeAngle();
 
   private:
