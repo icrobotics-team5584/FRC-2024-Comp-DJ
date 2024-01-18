@@ -28,14 +28,18 @@ class SubClimber : public frc2::SubsystemBase {
     return inst;
   }
 
+  //Periodic
   void Periodic() override;
   void SimulationPeriodic() override;
 
+  //Sim
   void SetTarget(units::meter_t);
 
+  //Units translation
   units::turn_t DistanceToTurn(units::meter_t distance);
   units::meter_t TurnToDistance(units::turn_t turn);
 
+  // Actions
   void Extend();
   void Retract();
   void UpliftMiddle();
@@ -43,19 +47,23 @@ class SubClimber : public frc2::SubsystemBase {
  private:
   units::meter_t TargetDistance;
 
+  // Motor
   ICSparkMax lClimbMotor{41};
   ICSparkMax rClimbMotor{42};
 
+  // Motor Setup
   static constexpr double GearRatio = 100;
-  static constexpr double lP = 3.5, lI = 0.0, lD = 0.0, lF = 0.0,
-                          rP = 3.5, rI = 0.0, rD = 0.0, rF = 0.0;
+  static constexpr double lP = 0, lI = 0.0, lD = 0.0, lF = 12.5,
+                          rP = 0, rI = 0.0, rD = 0.0, rF = 12.5;
   
-  static constexpr units::degrees_per_second_t MaxVelocity = 40000_deg_per_s;
-  static constexpr units::degrees_per_second_squared_t MaxAcceleration = 40000_deg_per_s_sq;
+  static constexpr units::degrees_per_second_t MaxVelocity = 320_deg_per_s;
+  static constexpr units::degrees_per_second_squared_t MaxAcceleration = 160_deg_per_s_sq;
   static constexpr units::degree_t Tolerance = 0.5_deg;
 
+  // Unit translation
   static constexpr units::meter_t WheelCir = 0.3_m;
-
+  
+  // Sim
   static constexpr units::kilogram_square_meter_t Turret_moi = 0.005_kg_sq_m;
   frc::sim::DCMotorSim lSim{frc::DCMotor::NEO(), GearRatio, Turret_moi};
   frc::sim::DCMotorSim rSim{frc::DCMotor::NEO(), GearRatio, Turret_moi};

@@ -77,14 +77,14 @@ void SubClimber::Extend() {
     // currentPosition = 4;
 }
 
-// void SubClimber::UpliftMiddle() {
-//     // if (currentPosition == 4) {
-//         SetTarget(0.6_m);
-//         lClimbMotor.SetPositionTarget(DistanceToTurn(0.6_m));
-//         rClimbMotor.SetPositionTarget(DistanceToTurn(0.6_m));
-//         currentPosition = 2;
-//     // }
-// }
+void SubClimber::UpliftMiddle() {
+    // if (currentPosition == 4) {
+        SetTarget(0.6_m);
+        lClimbMotor.SetPositionTarget(DistanceToTurn(0.6_m));
+        rClimbMotor.SetPositionTarget(DistanceToTurn(0.6_m));
+        currentPosition = 2;
+    // }
+}
 
 units::turn_t SubClimber::DistanceToTurn(units::meter_t distance) {
     return distance / WheelCir * 1_tr;
