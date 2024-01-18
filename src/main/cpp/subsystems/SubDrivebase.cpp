@@ -17,8 +17,8 @@
 SubDrivebase::SubDrivebase() {
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value());
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value());
-  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAcceleration", MAX_ACCEL);
-  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration", MAX_ANG_ACCEL);
+  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAcceleration", MAX_JOYSTICK_ACCEL);
+  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration", MAX_ANGULAR_JOYSTICK_ACCEL);
   _gyro.Calibrate();
   Rcontroller.EnableContinuousInput(-180_deg, 180_deg);
   frc::SmartDashboard::PutData("field", &_fieldDisplay);
@@ -89,10 +89,10 @@ void SubDrivebase::SimulationPeriodic(){
 frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller) {
   return Run([this, &controller] {
     double deadband = 0.08;
-    auto acceleration = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAcceleration", MAX_ACCEL) / 1_s;
+    auto acceleration = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAcceleration", MAX_JOYSTICK_ACCEL) / 1_s;
     auto velocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) * 1_mps;
     auto angularVelocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value())*1_deg_per_s;
-    auto angularAcceleration =  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration", MAX_ANG_ACCEL) / 1_s;
+    auto angularAcceleration =  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration", MAX_ANGULAR_JOYSTICK_ACCEL) / 1_s;
     static frc::SlewRateLimiter<units::scalar> _xspeedLimiter{acceleration};
     static frc::SlewRateLimiter<units::scalar> _yspeedLimiter{acceleration};
     static frc::SlewRateLimiter<units::scalar> _rotLimiter{angularAcceleration};
