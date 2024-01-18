@@ -5,19 +5,21 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <frc/smartdashboard/Mechanism2d.h>
-#include <frc/smartdashboard/MechanismRoot2d.h>
-#include <frc/smartdashboard/MechanismLigament2d.h>
-#include <frc/simulation/ElevatorSim.h>
-#include <frc/system/plant/DCMotor.h>
-#include <rev/CANSparkMax.h>
+
 #include <Constants.h>
 
 #include "Utilities/ICSparkMax.h"
 
+#include <frc/simulation/ElevatorSim.h>
+#include <frc/system/plant/DCMotor.h>
+#include <rev/CANSparkMax.h>
 #include <frc/simulation/DCMotorSim.h>
 #include <units/angle.h>
 #include <units/moment_of_inertia.h>
+
+#include <frc/smartdashboard/Mechanism2d.h>
+#include <frc/smartdashboard/MechanismRoot2d.h>
+#include <frc/smartdashboard/MechanismLigament2d.h>
 
 class SubClimber : public frc2::SubsystemBase {
  public:
@@ -39,10 +41,13 @@ class SubClimber : public frc2::SubsystemBase {
   units::turn_t DistanceToTurn(units::meter_t distance);
   units::meter_t TurnToDistance(units::turn_t turn);
 
+  //Tools
+  void DriveToDistance(units::meter_t distance);
+
   // Actions
   void Extend();
   void Retract();
-  void UpliftMiddle();
+  void Hold();
 
  private:
   units::meter_t TargetDistance;
@@ -62,6 +67,9 @@ class SubClimber : public frc2::SubsystemBase {
 
   // Unit translation
   static constexpr units::meter_t WheelCir = 0.3_m;
+
+  // Robot info
+  static constexpr units::meter_t BaseHeight = 0.2_m;
   
   // Sim
   static constexpr units::kilogram_square_meter_t Turret_moi = 0.005_kg_sq_m;
