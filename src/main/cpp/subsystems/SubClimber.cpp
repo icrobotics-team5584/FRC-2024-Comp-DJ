@@ -74,7 +74,3 @@ void SubClimber::Retract() {
 void SubClimber::Extend() {
     DriveToDistance(1.3_m);
 }
-
-void SubClimber::Hold() {
-    lClimbMotor.
-}

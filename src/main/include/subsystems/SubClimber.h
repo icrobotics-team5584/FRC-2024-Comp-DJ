@@ -47,7 +47,6 @@ class SubClimber : public frc2::SubsystemBase {
   // Actions
   void Extend();
   void Retract();
-  void Hold();
 
  private:
   units::meter_t TargetDistance;
