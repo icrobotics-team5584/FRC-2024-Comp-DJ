@@ -30,9 +30,9 @@ SubDrivebase::SubDrivebase() {
       [this]() { return GetRobotRelativeSpeeds(); },  // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
       [this](frc::ChassisSpeeds speeds) { Drive(speeds.vx, speeds.vy, speeds.omega, false); },  // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       HolonomicPathFollowerConfig(
-          PIDConstants(5.0, 0.0, 0.0),  // Translation PID constants
-          PIDConstants(5.0, 0.0, 0.0),  // Rotation PID constants
-          4.5_mps,                      // Max module speed, in m/s
+          PIDConstants(0.5, 0.0, 0.0),  // Translation PID constants
+          PIDConstants(0.5, 0.0, 0.0),  // Rotation PID constants
+          0.5_mps,                      // Max module speed, in m/s
           0.4_m,  // Drive base radius in meters. Distance from robot center to furthest module.
                   // NEEDS TO BE CHECKED AND MADE ACCURATE!!
           ReplanningConfig()  // Default path replanning config. See the API for the options here
