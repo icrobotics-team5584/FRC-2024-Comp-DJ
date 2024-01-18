@@ -15,10 +15,16 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Climber/Mech Display": "Mechanism2d",
+      "/SmartDashboard/Climber/Test mech display": "Mechanism2d",
       "/SmartDashboard/Climber/testMech": "Mechanism2d"
     },
     "windows": {
       "/SmartDashboard/Climber/Mech Display": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Climber/Test mech display": {
         "window": {
           "visible": true
         }
@@ -43,6 +49,9 @@
       },
       "SmartDashboard": {
         "Climber": {
+          "Left motor": {
+            "open": true
+          },
           "open": true
         },
         "open": true
