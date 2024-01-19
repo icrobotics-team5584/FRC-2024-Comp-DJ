@@ -81,7 +81,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   SwerveModule _frontRight{canivore::DriveBaseFrontRightDrive, canivore::DriveBaseFrontRightTurn,
                            canivore::DriveBaseFrontRightEncoder, FRONT_RIGHT_MAG_OFFSET};
   SwerveModule _backLeft{canivore::DriveBaseBackLeftDrive, canivore::DriveBaseBackLeftTurn,
-                         canivore::DriveBaseBackLeftEncoder, BACK_LEFT_MAG_OFFSET}; 
+                         canivore::DriveBaseBackLeftEncoder, BACK_LEFT_MAG_OFFSET};
   SwerveModule _backRight{canivore::DriveBaseBackRightDrive, canivore::DriveBaseBackRightTurn,
                           canivore::DriveBaseBackRightEncoder, BACK_RIGHT_MAG_OFFSET};
 
@@ -107,30 +107,29 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::Pose2d _prevPose;  // Used for velocity calculations
 
   // Sysid
-  frc2::CommandPtr ArcadeDriveCommand(std::function<double()> fwd, std::function<double()> rot);
-  frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction);
-  frc2::CommandPtr SysIdDynamic(frc2::sysid::Direction direction);
+  frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction){
+      return _sysIdRoutine.Quasistatic(direction)};
+  frc2::CommandPtr SysIdDynamic(frc2::sysid::Direction direction){
+      return _sysIdRoutine.Dynamic(direction)};
 
   frc2::sysid::SysIdRoutine _sysIdRoutine{
       frc2::sysid::Config{std::nullopt, std::nullopt, std::nullopt, std::nullopt},
       frc2::sysid::Mechanism{
           [this](units::volt_t driveVoltage) {
-            _frontLeft.SetVoltage(driveVoltage);
-            _backLeft.SetVoltage(driveVoltage);
-            _frontRight.SetVoltage(driveVoltage);
-            _backRight.SetVoltage(driveVoltage);
+            _frontLeft.DriveStraightVolts(driveVoltage);
+            _backLeft.DriveStraightVolts(driveVoltage);
+            _frontRight.DriveStraightVolts(driveVoltage);
+            _backRight.DriveStraightVolts(driveVoltage);
           },
           [this](frc::sysid::SysIdRoutineLog* log) {
             log->Motor("drive-left")
                 .voltage(_frontLeft.GetDriveVoltage())
                 .position(_frontLeft.GetPosition().distance)
-                // .velocity(units::meters_per_second_t{m_leftEncoder.GetRate()})
-                ;
-            // log->Motor("drive-right")
-            //     .voltage(m_rightMotor.Get() *
-            //              frc::RobotController::GetBatteryVoltage())
-            //     .position(units::meter_t{m_rightEncoder.GetDistance()})
-            //     .velocity(units::meters_per_second_t{m_rightEncoder.GetRate()});
+                .velocity(_frontLeft.GetSpeed());
+            log->Motor("drive-right")
+                .voltage(_frontRight.GetDriveVoltage())
+                .position(_frontRight.GetPosition().distance)
+                .velocity(_frontRight.GetSpeed());
           },
           this}};
 
