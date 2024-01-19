@@ -36,6 +36,7 @@ class SwerveModule {
   void SendSensorsToDash();
   void SetDesiredAngle(units::degree_t angle);
   void SetDesiredVelocity(units::meters_per_second_t velocity);
+  void DriveStraightVolts(units::volt_t volts);
   void StopMotors();
   void UpdateSim(units::second_t deltaTime);
   void SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode);
@@ -43,13 +44,13 @@ class SwerveModule {
   frc::Rotation2d GetAngle();
   units::meters_per_second_t GetSpeed();
   frc::SwerveModuleState GetState();
+  units::volt_t GetDriveVoltage();
 
  private:
   const int TICS_PER_MOTOR_REVOLUTION = 2048;
   const double TURNING_GEAR_RATIO = 150.0/7.0;
   const double DRIVE_GEAR_RATIO = 6.75; // L2 - Fast kit
-  const double TICS_PER_TURNING_WHEEL_REVOLUTION =
-      TICS_PER_MOTOR_REVOLUTION * TURNING_GEAR_RATIO;
+  const double TICS_PER_TURNING_WHEEL_REVOLUTION = TICS_PER_MOTOR_REVOLUTION * TURNING_GEAR_RATIO;
   const units::meter_t WHEEL_RADIUS = 0.0508_m;
   const units::meter_t WHEEL_CIRCUMFERENCE = 2 * std::numbers::pi * WHEEL_RADIUS;
 
@@ -60,9 +61,7 @@ class SwerveModule {
   const double DRIVE_I = 0.0;
   const double DRIVE_D = 0.0;
   const double DRIVE_F = 0;
-  const int PID_SLOT_INDEX = 0;
-  //tuned at 12.38V battery
-  // frc::SimpleMotorFeedforward<units::meters> _feedFoward{0.62004_V, 2.2731_V/1_mps, 0.23244_V/1_mps_sq};
+
   ctre::phoenix6::hardware::TalonFX _canDriveMotor;
   ICSparkMax _canTurnMotor;
   ctre::phoenix6::hardware::CANcoder _canTurnEncoder;
@@ -70,8 +69,6 @@ class SwerveModule {
   ctre::phoenix6::configs::TalonFXConfiguration _configCanDriveMotor{};
   ctre::phoenix6::configs::TalonFXConfiguration _configCanTurnMotor{};
   ctre::phoenix6::configs::CANcoderConfiguration _configTurnEncoder{};
-
-  units::meter_t _simulatorDistanceTravelled = 0_m;
 
   frc::sim::DCMotorSim _driveMotorSim{frc::DCMotor::Falcon500(), DRIVE_GEAR_RATIO, 0.000001_kg_sq_m};
   frc::sim::DCMotorSim _turnMotorSim{frc::DCMotor::NEO(), TURNING_GEAR_RATIO, 0.000000001_kg_sq_m};

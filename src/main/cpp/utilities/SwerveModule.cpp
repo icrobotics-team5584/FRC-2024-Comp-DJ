@@ -102,6 +102,10 @@ frc::SwerveModuleState SwerveModule::GetState() {
   return {GetSpeed(), GetAngle()};
 }
 
+units::volt_t SwerveModule::GetDriveVoltage() {
+  _canDriveMotor.GetMotorVoltage().GetValue();
+}
+
 void SwerveModule::SetDesiredAngle(units::degree_t angle) {
   _canTurnMotor.SetPositionTarget(angle);
 }
@@ -111,6 +115,11 @@ void SwerveModule::SetDesiredVelocity(units::meters_per_second_t velocity) {
 
   _canDriveMotor.SetControl(ctre::phoenix6::controls::VelocityVoltage{
       (TurnsPerSec)});
+}
+
+void SwerveModule::DriveStraightVolts(units::volt_t volts) {
+  SetDesiredAngle(0_deg);
+  _canDriveMotor.SetControl(ctre::phoenix6::controls::VoltageOut{volts});
 }
 
 void SwerveModule::StopMotors() {

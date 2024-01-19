@@ -17,6 +17,7 @@
 #include "Constants.h"
 #include "utilities/SwerveModule.h"
 #include <frc2/command/button/CommandXboxController.h>
+#include <frc2/command/sysid/SysIdRoutine.h>
 
 class SubDrivebase : public frc2::SubsystemBase {
  public:
@@ -104,4 +105,33 @@ class SubDrivebase : public frc2::SubsystemBase {
 
   frc::Field2d _fieldDisplay;
   frc::Pose2d _prevPose;  // Used for velocity calculations
+
+  // Sysid
+  frc2::CommandPtr ArcadeDriveCommand(std::function<double()> fwd, std::function<double()> rot);
+  frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction);
+  frc2::CommandPtr SysIdDynamic(frc2::sysid::Direction direction);
+
+  frc2::sysid::SysIdRoutine _sysIdRoutine{
+      frc2::sysid::Config{std::nullopt, std::nullopt, std::nullopt, std::nullopt},
+      frc2::sysid::Mechanism{
+          [this](units::volt_t driveVoltage) {
+            _frontLeft.SetVoltage(driveVoltage);
+            _backLeft.SetVoltage(driveVoltage);
+            _frontRight.SetVoltage(driveVoltage);
+            _backRight.SetVoltage(driveVoltage);
+          },
+          [this](frc::sysid::SysIdRoutineLog* log) {
+            log->Motor("drive-left")
+                .voltage(_frontLeft.GetDriveVoltage())
+                .position(_frontLeft.GetPosition().distance)
+                // .velocity(units::meters_per_second_t{m_leftEncoder.GetRate()})
+                ;
+            // log->Motor("drive-right")
+            //     .voltage(m_rightMotor.Get() *
+            //              frc::RobotController::GetBatteryVoltage())
+            //     .position(units::meter_t{m_rightEncoder.GetDistance()})
+            //     .velocity(units::meters_per_second_t{m_rightEncoder.GetRate()});
+          },
+          this}};
+
 };
