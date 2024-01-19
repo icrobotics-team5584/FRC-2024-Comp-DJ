@@ -103,7 +103,7 @@ frc::SwerveModuleState SwerveModule::GetState() {
 }
 
 units::volt_t SwerveModule::GetDriveVoltage() {
-  _canDriveMotor.GetMotorVoltage().GetValue();
+  return _canDriveMotor.GetMotorVoltage().GetValue();
 }
 
 void SwerveModule::SetDesiredAngle(units::degree_t angle) {

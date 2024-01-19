@@ -14,6 +14,7 @@
 #include <frc/controller/HolonomicDriveController.h>
 #include <numbers>
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/Commands.h>
 #include "Constants.h"
 #include "utilities/SwerveModule.h"
 #include <frc2/command/button/CommandXboxController.h>
@@ -62,6 +63,12 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc2::CommandPtr JoystickDrive(frc2::CommandXboxController& controller);
   frc2::CommandPtr SyncSensorBut();
   frc2::CommandPtr ResetGyroCmd();
+  frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction){
+    return _sysIdRoutine.Quasistatic(direction);
+  }
+  frc2::CommandPtr SysIdDynamic(frc2::sysid::Direction direction){
+    return _sysIdRoutine.Dynamic(direction);
+  }
 
  private:
   AHRS _gyro{frc::SerialPort::kMXP};
@@ -107,11 +114,6 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::Pose2d _prevPose;  // Used for velocity calculations
 
   // Sysid
-  frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction){
-      return _sysIdRoutine.Quasistatic(direction)};
-  frc2::CommandPtr SysIdDynamic(frc2::sysid::Direction direction){
-      return _sysIdRoutine.Dynamic(direction)};
-
   frc2::sysid::SysIdRoutine _sysIdRoutine{
       frc2::sysid::Config{std::nullopt, std::nullopt, std::nullopt, std::nullopt},
       frc2::sysid::Mechanism{

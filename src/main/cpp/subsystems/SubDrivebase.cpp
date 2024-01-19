@@ -89,13 +89,13 @@ void SubDrivebase::SimulationPeriodic(){
 frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller) {
   return Run([this, &controller] {
     double deadband = 0.08;
-    auto acceleration = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAcceleration", MAX_JOYSTICK_ACCEL) / 1_s;
+    auto acceleration = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAcceleration", MAX_JOYSTICK_ACCEL);
     auto velocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) * 1_mps;
-    auto angularVelocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value())*1_deg_per_s;
-    auto angularAcceleration =  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration", MAX_ANGULAR_JOYSTICK_ACCEL) / 1_s;
-    static frc::SlewRateLimiter<units::scalar> _xspeedLimiter{acceleration};
-    static frc::SlewRateLimiter<units::scalar> _yspeedLimiter{acceleration};
-    static frc::SlewRateLimiter<units::scalar> _rotLimiter{angularAcceleration};
+    auto angularVelocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value()) * 1_deg_per_s;
+    auto angularAcceleration =  frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularAcceleration", MAX_ANGULAR_JOYSTICK_ACCEL);
+    static frc::SlewRateLimiter<units::scalar> _xspeedLimiter{acceleration / 1_s};
+    static frc::SlewRateLimiter<units::scalar> _yspeedLimiter{acceleration / 1_s};
+    static frc::SlewRateLimiter<units::scalar> _rotLimiter{angularAcceleration / 1_s};
     auto forwardSpeed =
         _yspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftY(), deadband)) * velocity;
     auto rotationSpeed =
