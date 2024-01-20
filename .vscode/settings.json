@@ -94,6 +94,14 @@
     "cinttypes": "cpp",
     "typeindex": "cpp",
     "valarray": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "ios": "cpp",
+    "xfacet": "cpp",
+    "xiosbase": "cpp",
+    "xlocale": "cpp",
+    "xlocinfo": "cpp",
+    "xlocnum": "cpp",
+    "xstddef": "cpp",
+    "xstring": "cpp"
   }
 }
