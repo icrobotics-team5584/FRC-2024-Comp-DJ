@@ -46,9 +46,9 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _configCanDriveMotor.CurrentLimits.SupplyCurrentLimit = 20.0;
   _configCanDriveMotor.CurrentLimits.SupplyCurrentThreshold = 40.0;
   _configCanDriveMotor.CurrentLimits.SupplyTimeThreshold = 0.5;
-  _configCanDriveMotor.Slot0.kS = 0.25;       //0.62004; // Units is V
-  _configCanDriveMotor.Slot0.kV = 0;       //2.2731; // Units is V/1m/s      //MAKE SURE TO TUNE ABOVE 12.5 VOLTS
-  _configCanDriveMotor.Slot0.kA = 0;        //0.23244; // Units is V/1m/s^2
+  _configCanDriveMotor.Slot0.kS = 0.070059;       //0.62004; // Units is V
+  _configCanDriveMotor.Slot0.kV = 2.2435;       //2.2731; // Units is V/1m/s      //MAKE SURE TO TUNE ABOVE 12.5 VOLTS
+  _configCanDriveMotor.Slot0.kA = 0.30496;        //0.23244; // Units is V/1m/s^2
   _configCanDriveMotor.MotorOutput.NeutralMode = NeutralModeValue::Brake;
   _canDriveMotor.GetConfigurator().Apply(_configCanDriveMotor);
 }
