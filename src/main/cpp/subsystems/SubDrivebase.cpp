@@ -88,8 +88,6 @@ void SubDrivebase::SimulationPeriodic(){
 
 frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller) {
   return Run([this, &controller] {
-    static double accelerationOld;
-    static double angularAccelerationOld;
     double deadband = 0.08;
     auto velocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) * 1_mps;
     auto angularVelocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value()) * 1_deg_per_s;
