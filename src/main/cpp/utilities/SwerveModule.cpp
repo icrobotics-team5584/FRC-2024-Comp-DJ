@@ -29,7 +29,7 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _canTurnMotor.SetConversionFactor(1.0/TURNING_GEAR_RATIO);
   _canTurnMotor.EnableClosedLoopWrapping(0_tr, 1_tr);
   _canTurnMotor.SetPIDFF(TURN_P, TURN_I, TURN_D);
-  //_canTurnMotor.SetInverted(true);
+  _canTurnMotor.SetInverted(false);
   _canTurnMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
   _canTurnMotor.BurnFlash();
   _canTurnMotor.SetCANTimeout(10);
@@ -38,6 +38,7 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _canDriveMotor.GetConfigurator().Apply(TalonFXConfiguration{});
   _configCanDriveMotor.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue::RotorSensor;
   _configCanDriveMotor.ClosedLoopGeneral.ContinuousWrap = false;
+  _configCanDriveMotor.Feedback.SensorToMechanismRatio = DRIVE_GEAR_RATIO;
   _configCanDriveMotor.Slot0.kP = DRIVE_P;
   _configCanDriveMotor.Slot0.kI = DRIVE_I;
   _configCanDriveMotor.Slot0.kD = DRIVE_D;
@@ -140,3 +141,25 @@ void SwerveModule::SyncSensors() {
   currentAttempts = 0;
   _canTurnMotor.SetCANTimeout(10);
 }
+
+void SwerveModule::UpdateSim(units::second_t deltaTime) {
+  // Drive Motor
+  auto& driveState = _canDriveMotor.GetSimState();
+  _driveMotorSim.SetInputVoltage(driveState.GetMotorVoltage());
+  _driveMotorSim.Update(deltaTime);
+  driveState.SetRawRotorPosition(_driveMotorSim.GetAngularPosition() * DRIVE_GEAR_RATIO);
+  driveState.SetRotorVelocity(_driveMotorSim.GetAngularVelocity() * DRIVE_GEAR_RATIO);
+  // Turn Motor
+  auto turnVolts = _canTurnMotor.GetSimVoltage();
+  _turnMotorSim.SetInputVoltage(turnVolts);
+  _turnMotorSim.Update(deltaTime);
+  auto turnAngle =_turnMotorSim.GetAngularPosition();
+  auto turnVelocity = _turnMotorSim.GetAngularVelocity();
+  _canTurnMotor.UpdateSimEncoder(turnAngle, turnVelocity);
+
+  // CANcoders are attached directly to the mechanism, so don't account for the steer gearing
+  auto& cancoderState = _canTurnEncoder.GetSimState();
+  cancoderState.SetRawPosition(_turnMotorSim.GetAngularPosition());
+  cancoderState.SetVelocity(_turnMotorSim.GetAngularVelocity());
+  }
+

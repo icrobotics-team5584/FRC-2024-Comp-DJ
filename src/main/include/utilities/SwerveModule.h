@@ -24,6 +24,8 @@
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <numbers>
 #include <utilities/ICSparkMax.h>
+#include <frc/controller/SimpleMotorFeedforward.h>
+#include <frc/simulation/DCMotorSim.h>
 
 
 class SwerveModule {
@@ -35,6 +37,7 @@ class SwerveModule {
   void SetDesiredAngle(units::degree_t angle);
   void SetDesiredVelocity(units::meters_per_second_t velocity);
   void StopMotors();
+  void UpdateSim(units::second_t deltaTime);
   void SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode);
   frc::SwerveModulePosition GetPosition();
   frc::Rotation2d GetAngle();
@@ -69,4 +72,7 @@ class SwerveModule {
   ctre::phoenix6::configs::CANcoderConfiguration _configTurnEncoder{};
 
   units::meter_t _simulatorDistanceTravelled = 0_m;
+
+  frc::sim::DCMotorSim _driveMotorSim{frc::DCMotor::Falcon500(), DRIVE_GEAR_RATIO, 0.000001_kg_sq_m};
+  frc::sim::DCMotorSim _turnMotorSim{frc::DCMotor::NEO(), TURNING_GEAR_RATIO, 0.000000001_kg_sq_m};
 };

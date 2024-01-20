@@ -17,8 +17,8 @@
 SubDrivebase::SubDrivebase() {
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value());
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value());
-  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAcceleration", MAX_ACCEL);
-  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration", MAX_ANG_ACCEL);
+  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAcceleration", MAX_JOYSTICK_ACCEL);
+  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration", MAX_ANGULAR_JOYSTICK_ACCEL);
   _gyro.Calibrate();
   Rcontroller.EnableContinuousInput(-180_deg, 180_deg);
   frc::SmartDashboard::PutData("field", &_fieldDisplay);
@@ -79,24 +79,51 @@ void SubDrivebase::Periodic() {
   frc::SmartDashboard::PutNumber("drivebase/loop time (sec)", (frc::GetTime() - loopStart).value());
 }
 
+void SubDrivebase::SimulationPeriodic(){
+  _frontLeft.UpdateSim(20_ms);
+  _frontRight.UpdateSim(20_ms);
+  _backLeft.UpdateSim(20_ms);
+  _backRight.UpdateSim(20_ms);
+}
+
 frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller) {
   return Run([this, &controller] {
     double deadband = 0.08;
-   static frc::SlewRateLimiter<units::scalar> _xspeedLimiter{frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAcceleration", MAX_ACCEL)/1_s};
-   static frc::SlewRateLimiter<units::scalar> _yspeedLimiter{frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAcceleration", MAX_ACCEL)/1_s};
-   static frc::SlewRateLimiter<units::scalar> _rotLimiter{frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAnglularAcceleration", MAX_ACCEL)/1_s};
-    auto forwardSpeed = _yspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftY(), deadband)) * -frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value())*1_mps;
-    auto rotationSpeed =_rotLimiter.Calculate(frc::ApplyDeadband(controller.GetRightX(), deadband)) * frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value())*1_deg_per_s;
-    auto sidewaysSpeed = _xspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftX(), deadband)) * frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value())*1_mps;
-    Drive(forwardSpeed, sidewaysSpeed, rotationSpeed, true);
+    auto acceleration = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAcceleration", MAX_JOYSTICK_ACCEL) / 1_s;
+    auto velocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) * 1_mps;
+    auto angularVelocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value())*1_deg_per_s;
+    auto angularAcceleration =  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration", MAX_ANGULAR_JOYSTICK_ACCEL) / 1_s;
+    static frc::SlewRateLimiter<units::scalar> _xspeedLimiter{acceleration};
+    static frc::SlewRateLimiter<units::scalar> _yspeedLimiter{acceleration};
+    static frc::SlewRateLimiter<units::scalar> _rotLimiter{angularAcceleration};
+    auto forwardSpeed =
+        _yspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftY(), deadband)) * velocity;
+    auto rotationSpeed =
+        _rotLimiter.Calculate(frc::ApplyDeadband(controller.GetRightX(), deadband)) * angularVelocity;
+    auto sidewaysSpeed =
+        _xspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftX(), deadband)) * velocity;
+    if(frc::RobotBase::IsSimulation()){
+      Drive(-forwardSpeed, -sidewaysSpeed, -rotationSpeed, true);
+    }
+    else {
+      Drive(-forwardSpeed, sidewaysSpeed, rotationSpeed, true);
+    }
   });
-}
+  }
 
 void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
                          units::degrees_per_second_t rot, bool fieldRelative) {
   // Get states of all swerve modules
+
+  auto invert = 1;
+    if(frc::RobotBase::IsSimulation()){
+      invert = -1;  
+    }
+    else{
+      invert = 1;
+    }
   auto states = _kinematics.ToSwerveModuleStates(
-      fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, -GetHeading())
+      fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, -GetHeading() * invert)
                     : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
 
   // Set speed limit and apply speed limit to all modules
@@ -263,3 +290,5 @@ void SubDrivebase::SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode
 units::degree_t SubDrivebase::GetPitch() {
   return _gyro.GetPitch() * 1_deg;
 }
+
+
