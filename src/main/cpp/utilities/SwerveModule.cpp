@@ -57,11 +57,6 @@ void SwerveModule::SetDesiredState(const frc::SwerveModuleState& referenceState)
   // Optimize the reference state to avoid spinning further than 90 degrees
   auto targetState = frc::SwerveModuleState::Optimize(referenceState, GetAngle());
 
-  // Move target angle so we can cross over the 180 degree line without going the long way round
-  // auto difference = targetState.angle.Degrees() - GetAngle().Degrees();
-  // difference = frc::InputModulus(difference, -180_deg, 180_deg);
-  // auto targetAngle = GetAngle().Degrees() + difference;
-
   // Drive! These functions do some conversions and send targets to falcons
   SetDesiredAngle(targetState.angle.Degrees());
   SetDesiredVelocity(targetState.speed);

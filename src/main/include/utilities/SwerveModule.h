@@ -47,10 +47,8 @@ class SwerveModule {
   units::volt_t GetDriveVoltage();
 
  private:
-  const int TICS_PER_MOTOR_REVOLUTION = 2048;
   const double TURNING_GEAR_RATIO = 150.0/7.0;
   const double DRIVE_GEAR_RATIO = 6.75; // L2 - Fast kit
-  const double TICS_PER_TURNING_WHEEL_REVOLUTION = TICS_PER_MOTOR_REVOLUTION * TURNING_GEAR_RATIO;
   const units::meter_t WHEEL_RADIUS = 0.0508_m;
   const units::meter_t WHEEL_CIRCUMFERENCE = 2 * std::numbers::pi * WHEEL_RADIUS;
 
@@ -70,6 +68,6 @@ class SwerveModule {
   ctre::phoenix6::configs::TalonFXConfiguration _configCanTurnMotor{};
   ctre::phoenix6::configs::CANcoderConfiguration _configTurnEncoder{};
 
-  frc::sim::DCMotorSim _driveMotorSim{frc::DCMotor::Falcon500(), DRIVE_GEAR_RATIO, 0.000001_kg_sq_m};
+  frc::sim::DCMotorSim _driveMotorSim{frc::DCMotor::Falcon500(), DRIVE_GEAR_RATIO, 0.05_kg_sq_m};
   frc::sim::DCMotorSim _turnMotorSim{frc::DCMotor::NEO(), TURNING_GEAR_RATIO, 0.000000001_kg_sq_m};
 };
