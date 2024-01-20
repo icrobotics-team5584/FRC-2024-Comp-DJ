@@ -57,7 +57,7 @@ class SubDrivebase : public frc2::SubsystemBase {
       std::numbers::pi};
 
  double MAX_JOYSTICK_ACCEL = 3;
- double MAX_ANGULAR_JOYSTICK_ACCEL = 1.5;
+ double MAX_ANGULAR_JOYSTICK_ACCEL = 3;
 
   // Commands
   frc2::CommandPtr JoystickDrive(frc2::CommandXboxController& controller);
