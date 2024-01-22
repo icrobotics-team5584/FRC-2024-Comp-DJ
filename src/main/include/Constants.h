@@ -35,7 +35,8 @@ namespace pcm0 {
 
 
 namespace dio {
-
+  constexpr int IntakeRetractedReed = 100;
+  constexpr int IntakeExtendedReed = 101;
 }
 
 namespace pwm {

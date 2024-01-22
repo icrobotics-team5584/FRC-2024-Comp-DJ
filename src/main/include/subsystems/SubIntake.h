@@ -8,6 +8,7 @@
 #include <rev/CANSparkMax.h>
 #include <frc2/command/commands.h>
 #include <frc/DoubleSolenoid.h>
+#include <frc/DigitalInput.h>
 
 #include "Constants.h"
 
@@ -26,6 +27,7 @@ class SubIntake : public frc2::SubsystemBase {
   frc2::CommandPtr IntakeNote();
   frc2::CommandPtr ExtendIntake();
   frc2::CommandPtr SpinIntake();
+  bool GetIntakeState();
   void StopSpinningIntake();
   void RetractIntake();
 
@@ -35,6 +37,9 @@ class SubIntake : public frc2::SubsystemBase {
      canid::IntakeMotor, rev::CANSparkMax::MotorType::kBrushless
   };
  frc::DoubleSolenoid solIntake{pcm0::Pcm0Id, frc::PneumaticsModuleType::CTREPCM, pcm0::IntakeExtend, pcm0::IntakeRetract};
+
+ frc::DigitalInput _intakeRetractedReed{dio::IntakeRetractedReed};
+ frc::DigitalInput _intakeExtendededReed{dio::IntakeExtendedReed};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };

@@ -42,3 +42,9 @@ void SubIntake::RetractIntake(){
 void SubIntake::StopSpinningIntake(){
     _intakeMotorSpin.Set(0);
 }
+
+bool SubIntake::GetIntakeState(){
+    if(_intakeExtendededReed.Get() == true|| _intakeRetractedReed.Get() == true){
+        return true;
+    } else {return false;}
+} //LOCK ARM IF RETURN FALSE
