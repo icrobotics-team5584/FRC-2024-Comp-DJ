@@ -35,8 +35,13 @@ void RobotContainer::ConfigureBindings() {
   // _driverController.Y().WhileTrue(SubAmp::GetInstance().ClawTiltUp());
 
   //Climber
-  _driverController.A().OnTrue(cmd::ClimberUp());
-  _driverController.B().OnTrue(cmd::ClimberDown());
+  _driverController.A().OnTrue(cmd::ClimberExtend());
+  _driverController.B().OnTrue(cmd::ClimberRetract());
+
+  //Use below if above don't work
+  // _driverController.A().OnTrue(cmd::ClimberExtendManual());
+  // _driverController.B().OnTrue(cmd::ClimberRetractManual());
+  _driverController.X().OnTrue(cmd::ClimberStop());
   }
   
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
