@@ -181,4 +181,3 @@ ctre_sim/
 simgui-ds.json
 simgui.json
 networktables.json
-.wpilib/wpilib_preferences.json
