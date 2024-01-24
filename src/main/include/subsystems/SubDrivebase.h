@@ -69,6 +69,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc2::CommandPtr SysIdDynamic(frc2::sysid::Direction direction){
     return _sysIdRoutine.Dynamic(direction);
   }
+  frc2::CommandPtr AlignWheels(units::radian_t angle);
 
  private:
   AHRS _gyro{frc::SerialPort::kMXP};
@@ -126,12 +127,12 @@ class SubDrivebase : public frc2::SubsystemBase {
           [this](frc::sysid::SysIdRoutineLog* log) {
             log->Motor("drive-left")
                 .voltage(_frontLeft.GetDriveVoltage())
-                .position(_frontLeft.GetPosition().distance)
-                .velocity(_frontLeft.GetSpeed());
+                .position(_frontLeft.GetDriveRotations())
+                .velocity(_frontLeft.GetDriveAngularVelocity());
             log->Motor("drive-right")
                 .voltage(_frontRight.GetDriveVoltage())
-                .position(_frontRight.GetPosition().distance)
-                .velocity(_frontRight.GetSpeed());
+                .position(_frontRight.GetDriveRotations())
+                .velocity(_frontRight.GetDriveAngularVelocity());
           },
           this}};
 
