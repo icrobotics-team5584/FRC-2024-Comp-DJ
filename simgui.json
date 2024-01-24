@@ -14,12 +14,22 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/amp/Arm Mechanism Display": "Mechanism2d",
-      "/SmartDashboard/amp/Claw Mechanism Display": "Mechanism2d",
-      "/SmartDashboard/amp/Mechanism Display": "Mechanism2d"
+      "/SmartDashboard/Climber/Mech Display": "Mechanism2d",
+      "/SmartDashboard/Climber/Test mech display": "Mechanism2d",
+      "/SmartDashboard/Climber/testMech": "Mechanism2d"
     },
     "windows": {
-      "/SmartDashboard/amp/Arm Mechanism Display": {
+      "/SmartDashboard/Climber/Mech Display": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Climber/Test mech display": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Climber/testMech": {
         "window": {
           "visible": true
         }
@@ -48,6 +58,10 @@
           "open": true
         },
         "arm": {
+        "Climber": {
+          "Left motor": {
+            "open": true
+          },
           "open": true
         },
         "open": true
@@ -59,9 +73,6 @@
       "open": true
     },
     "Server": {
-      "Publishers": {
-        "open": true
-      },
       "Subscribers": {
         "open": true
       }
@@ -142,5 +153,9 @@
         "visible": false
       }
     }
+      },
+      "open": true
+    },
+    "visible": true
   }
-}
+

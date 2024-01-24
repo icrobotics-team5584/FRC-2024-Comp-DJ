@@ -11,6 +11,9 @@
 
 #include "RobotContainer.h"
 #include "subsystems/SubAmp.h"
+#include "subsystems/SubClimber.h"
+#include "commands/ClimberCommands.h"
+#include <frc2/command/Commands.h>
 
 RobotContainer::RobotContainer() {
   SubAmp::GetInstance();
@@ -47,6 +50,13 @@ void RobotContainer::ConfigureBindings() {
     _driverController.RightBumper().OnTrue(SubShooter::GetInstance().ChangeAngle());
     _driverController.RightTrigger().OnTrue(SubShooter::GetInstance().StartShooter());
     _driverController.LeftBumper().OnTrue(SubShooter::GetInstance().ShootSequence());
+    _driverController.A().OnTrue(cmd::ClimberExtend());
+    _driverController.B().OnTrue(cmd::ClimberRetract());
+
+  //Use below if above don't work
+  // _driverController.A().OnTrue(cmd::ClimberExtendManual());
+  // _driverController.B().OnTrue(cmd::ClimberRetractManual());
+  _driverController.X().OnTrue(cmd::ClimberStop());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
