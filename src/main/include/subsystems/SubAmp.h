@@ -19,6 +19,7 @@
 #include <frc/controller/ArmFeedforward.h>
 #include <wpi/interpolating_map.h>
 #include <networktables/NetworkTableEntry.h>
+#include <frc/DigitalInput.h>
 #include <optional>
 
 #include "Constants.h"
@@ -41,9 +42,13 @@ class SubAmp : public frc2::SubsystemBase {
   // shooter amp
   frc2::CommandPtr AmpShooter();
   frc2::CommandPtr ReverseAmpShooter();
+  frc2::CommandPtr StoreNote();
+  double GetArmPos();
+  frc2::CommandPtr SpinAmpStorage();
 
   // amp
   frc2::CommandPtr TiltArmToAngle(units::degree_t targetAngle);
+  frc2::CommandPtr CheckArmPos();
 
  private:
   // motors
@@ -89,5 +94,8 @@ class SubAmp : public frc2::SubsystemBase {
 
   nt::GenericEntry* _armXOffset;
   nt::GenericEntry* _armYOffset;
+
+  frc::DigitalInput _fdLineBreak{dio::FDLineBreak};
+  frc::DigitalInput _sdLineBreak{dio::SDLineBreak};
 
 };

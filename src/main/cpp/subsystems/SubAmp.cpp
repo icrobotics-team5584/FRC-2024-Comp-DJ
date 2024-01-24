@@ -74,6 +74,21 @@ frc2::CommandPtr SubAmp::ReverseAmpShooter(){
 }
 
 // arm
-frc2::CommandPtr SubAmp::TiltArmToAngle(units::degree_t targetAngle){ 
-    return Run([this, targetAngle]{_armMotor.SetSmartMotionTarget(targetAngle);}); 
+frc2::CommandPtr SubAmp::TiltArmToAngle(units::degree_t targetAngle){
+  return Run([this, targetAngle] { _armMotor.SetSmartMotionTarget(targetAngle);})
+      .Until([this] {return units::math::abs(_armMotor.GetPosError()) < 5_deg ; });
+}
+
+
+
+double SubAmp::GetArmPos() {
+  return _armEncoder.GetPosition();
+}
+
+frc2::CommandPtr SubAmp::StoreNote() {
+ return TiltArmToAngle(ARM_TOLERANCE).AndThen(SubAmp::SpinAmpStorage());
+}
+
+frc2::CommandPtr SubAmp::SpinAmpStorage() {
+  return Run([this] { _ampMotorSpin.Set(0.3);}).Until([this]{return _sdLineBreak.Get();});
 }
