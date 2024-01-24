@@ -5,6 +5,7 @@
 #include "RobotContainer.h"
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <frc2/command/Commands.h>
+#include "subsystems/SubShooter.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <subsystems/SubDrivebase.h>
 
@@ -41,16 +42,12 @@ void RobotContainer::ConfigureBindings() {
     _driverController.B().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(180_deg));
     _driverController.X().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(20_deg)); 
     _driverController.Y().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(40_deg));
+    _driverController.X().OnTrue(SubDrivebase::GetInstance().SyncSensorBut());
+    _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
+    _driverController.RightBumper().OnTrue(SubShooter::GetInstance().ChangeAngle());
+    _driverController.RightTrigger().OnTrue(SubShooter::GetInstance().StartShooter());
+    _driverController.LeftBumper().OnTrue(SubShooter::GetInstance().ShootSequence());
 }
-using namespace frc2::cmd;
-
-  //Main Controller
- // _driverController.Start().OnTrue(frc2::cmd::RunOnce([]{SubDriveBase::GetInstance().ResetGyroHeading();}));
- // _driverController.leftJoystick().WhileTrue(frc2::cmd::RunEnd([]{SubDrivebase::GetInstance().Drive();}));
-
-
-
-
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     _autoSelected = _autoChooser.GetSelected();

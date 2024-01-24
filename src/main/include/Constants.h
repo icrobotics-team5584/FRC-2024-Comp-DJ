@@ -20,13 +20,41 @@ constexpr int DriveBaseFrontRightDrive = 7;
 }
 
 namespace canid {
-    // shooter amp
+    //amp
+    constexpr int clawMotorJoint = 100;
+    constexpr int elevatorMotor = 101;
+    constexpr int ShooterMotorMain = 22; // top motor
+    constexpr int SecondaryShooterMotor = 4; // bottom motor
+    constexpr int ShooterFeederMotor = 102; //Shooter feeder
+        // shooter amp
     constexpr int AmpMotorSpin = 13;
     
     // arm   
     constexpr int ArmMotor = 102;
     constexpr int ArmMotorFollow = 103;
+    
 }
+
+namespace pcm0 {
+    constexpr int IntakeExtend = 2;
+    constexpr int IntakeRetract = 3;
+    constexpr int ShootClose = 4;
+    constexpr int ShootFar = 5;
+    constexpr int Pcm0Id = 0;
+}
+
+namespace dio {
+
+}
+
+namespace pwm {
+
+}
+
+
+namespace OperatorConstants {}
+
+constexpr int kDriverControllerPort = 0;
 
 namespace dio {
   constexpr int FDLineBreak = 100;
