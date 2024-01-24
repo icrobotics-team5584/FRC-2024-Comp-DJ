@@ -39,7 +39,7 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _configCanDriveMotor.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue::RotorSensor;
   _configCanDriveMotor.ClosedLoopGeneral.ContinuousWrap = false;
   _configCanDriveMotor.Feedback.SensorToMechanismRatio = DRIVE_GEAR_RATIO;
-  _configCanDriveMotor.Slot0.kP = 0; //DRIVE_P;
+  _configCanDriveMotor.Slot0.kP = 0.7; //DRIVE_P;
   _configCanDriveMotor.Slot0.kI = 0; //DRIVE_I;
   _configCanDriveMotor.Slot0.kD = 0; //DRIVE_D;
   _configCanDriveMotor.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -47,8 +47,8 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _configCanDriveMotor.CurrentLimits.SupplyCurrentThreshold = 40.0;
   _configCanDriveMotor.CurrentLimits.SupplyTimeThreshold = 0.5;
   _configCanDriveMotor.Slot0.kS = 0.070059;       //0.62004; // Units is V
-  _configCanDriveMotor.Slot0.kV = 2.2435;       //2.2731; // Units is V/1m/s      //MAKE SURE TO TUNE ABOVE 12.5 VOLTS
-  _configCanDriveMotor.Slot0.kA = 0.30496;        //0.23244; // Units is V/1m/s^2
+  _configCanDriveMotor.Slot0.kV = 0.7;       //2.2731; // Units is V/1m/s      //MAKE SURE TO TUNE ABOVE 12.5 VOLTS
+  _configCanDriveMotor.Slot0.kA = 0;        //0.23244; // Units is V/1m/s^2
   _configCanDriveMotor.MotorOutput.NeutralMode = NeutralModeValue::Brake;
   _canDriveMotor.GetConfigurator().Apply(_configCanDriveMotor);
 }
