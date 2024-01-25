@@ -7,11 +7,11 @@
 #include <rev/SparkMaxAbsoluteEncoder.h>
 
 SubClimber::SubClimber() {
-    lClimbMotor.SetConversionFactor(1 / GearRatio);
+    lClimbMotor.SetConversionFactor(1 / 30);
     lClimbMotor.SetPIDFF(lP,lI,lD,lF);
     lClimbMotor.SetInverted(true);
-    lClimbMotor.ConfigSmartMotion(MaxVelocity,MaxAcceleration,Tolerance);
-    rClimbMotor.SetConversionFactor(1 / GearRatio);
+    lClimbMotor.ConfigSmartMotion(500_deg_per_s,2500_deg_per_s_sq,Tolerance);
+    rClimbMotor.SetConversionFactor(1 / gearRatio);
     rClimbMotor.SetPIDFF(rP,rI,rD,rF);
     rClimbMotor.ConfigSmartMotion(MaxVelocity,MaxAcceleration,Tolerance);
     rClimbMotor.SetInverted(false);
@@ -82,16 +82,18 @@ units::meter_t SubClimber::TurnToDistance(units::turn_t turn) {
 
 void SubClimber::DriveToDistance(units::meter_t distance) {
     SetTarget(distance);
-    lClimbMotor.SetSmartMotionTarget(DistanceToTurn(distance-BaseHeight));
+    lClimbMotor.SetPositionTarget(DistanceToTurn(distance-BaseHeight));
     rClimbMotor.SetSmartMotionTarget(DistanceToTurn(distance-BaseHeight));
 }
 
 void SubClimber::Retract() {
     DriveToDistance(BaseHeight);
+    // Start(-1);
 }
 
 void SubClimber::Extend() {
     DriveToDistance(1.3_m);
+    // Start(1);
 }
 
 void SubClimber::Start(double power) {
