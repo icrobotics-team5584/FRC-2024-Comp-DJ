@@ -29,7 +29,7 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _canTurnMotor.SetConversionFactor(1.0/TURNING_GEAR_RATIO);
   _canTurnMotor.EnableClosedLoopWrapping(0_tr, 1_tr);
   _canTurnMotor.SetPIDFF(TURN_P, TURN_I, TURN_D);
-  //_canTurnMotor.SetInverted(true);
+  _canTurnMotor.SetInverted(false);
   _canTurnMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
   _canTurnMotor.BurnFlash();
   _canTurnMotor.SetCANTimeout(10);
@@ -38,16 +38,17 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _canDriveMotor.GetConfigurator().Apply(TalonFXConfiguration{});
   _configCanDriveMotor.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue::RotorSensor;
   _configCanDriveMotor.ClosedLoopGeneral.ContinuousWrap = false;
-  _configCanDriveMotor.Slot0.kP = DRIVE_P;
-  _configCanDriveMotor.Slot0.kI = DRIVE_I;
-  _configCanDriveMotor.Slot0.kD = DRIVE_D;
+  _configCanDriveMotor.Feedback.SensorToMechanismRatio = DRIVE_GEAR_RATIO;
+  _configCanDriveMotor.Slot0.kP = 0.7; //DRIVE_P;
+  _configCanDriveMotor.Slot0.kI = 0; //DRIVE_I;
+  _configCanDriveMotor.Slot0.kD = 0; //DRIVE_D;
   _configCanDriveMotor.CurrentLimits.SupplyCurrentLimitEnable = true;
   _configCanDriveMotor.CurrentLimits.SupplyCurrentLimit = 20.0;
   _configCanDriveMotor.CurrentLimits.SupplyCurrentThreshold = 40.0;
   _configCanDriveMotor.CurrentLimits.SupplyTimeThreshold = 0.5;
-  _configCanDriveMotor.Slot0.kS = 0.62004; // Units is V
-  _configCanDriveMotor.Slot0.kV = 2.2731; // Units is V/1m/s
-  _configCanDriveMotor.Slot0.kA = 0.23244; // Units is V/1m/s^2
+  _configCanDriveMotor.Slot0.kS = 0.070059;       //0.62004; // Units is V
+  _configCanDriveMotor.Slot0.kV = 0.7;       //2.2731; // Units is V/1m/s      //MAKE SURE TO TUNE ABOVE 12.5 VOLTS
+  _configCanDriveMotor.Slot0.kA = 0;        //0.23244; // Units is V/1m/s^2
   _configCanDriveMotor.MotorOutput.NeutralMode = NeutralModeValue::Brake;
   _canDriveMotor.GetConfigurator().Apply(_configCanDriveMotor);
 }
@@ -55,11 +56,6 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
 void SwerveModule::SetDesiredState(const frc::SwerveModuleState& referenceState) {
   // Optimize the reference state to avoid spinning further than 90 degrees
   auto targetState = frc::SwerveModuleState::Optimize(referenceState, GetAngle());
-
-  // Move target angle so we can cross over the 180 degree line without going the long way round
-  // auto difference = targetState.angle.Degrees() - GetAngle().Degrees();
-  // difference = frc::InputModulus(difference, -180_deg, 180_deg);
-  // auto targetAngle = GetAngle().Degrees() + difference;
 
   // Drive! These functions do some conversions and send targets to falcons
   SetDesiredAngle(targetState.angle.Degrees());
@@ -101,16 +97,24 @@ frc::SwerveModuleState SwerveModule::GetState() {
   return {GetSpeed(), GetAngle()};
 }
 
+units::volt_t SwerveModule::GetDriveVoltage() {
+  return _canDriveMotor.GetMotorVoltage().GetValue();
+}
+
 void SwerveModule::SetDesiredAngle(units::degree_t angle) {
   _canTurnMotor.SetPositionTarget(angle);
 }
 
 void SwerveModule::SetDesiredVelocity(units::meters_per_second_t velocity) {
   units::turns_per_second_t TurnsPerSec = (velocity.value() / WHEEL_CIRCUMFERENCE.value())*1_tps;
-   units::volt_t ffvolts = _feedFoward.Calculate(velocity);
 
   _canDriveMotor.SetControl(ctre::phoenix6::controls::VelocityVoltage{
-      (TurnsPerSec)}.WithFeedForward(ffvolts));
+      (TurnsPerSec)});
+}
+
+void SwerveModule::DriveStraightVolts(units::volt_t volts) {
+  SetDesiredAngle(0_deg);
+  _canDriveMotor.SetControl(ctre::phoenix6::controls::VoltageOut{volts});
 }
 
 void SwerveModule::StopMotors() {
@@ -140,3 +144,25 @@ void SwerveModule::SyncSensors() {
   currentAttempts = 0;
   _canTurnMotor.SetCANTimeout(10);
 }
+
+void SwerveModule::UpdateSim(units::second_t deltaTime) {
+  // Drive Motor
+  auto& driveState = _canDriveMotor.GetSimState();
+  _driveMotorSim.SetInputVoltage(driveState.GetMotorVoltage());
+  _driveMotorSim.Update(deltaTime);
+  driveState.SetRawRotorPosition(_driveMotorSim.GetAngularPosition() * DRIVE_GEAR_RATIO);
+  driveState.SetRotorVelocity(_driveMotorSim.GetAngularVelocity() * DRIVE_GEAR_RATIO);
+  // Turn Motor
+  auto turnVolts = _canTurnMotor.GetSimVoltage();
+  _turnMotorSim.SetInputVoltage(turnVolts);
+  _turnMotorSim.Update(deltaTime);
+  auto turnAngle =_turnMotorSim.GetAngularPosition();
+  auto turnVelocity = _turnMotorSim.GetAngularVelocity();
+  _canTurnMotor.UpdateSimEncoder(turnAngle, turnVelocity);
+
+  // CANcoders are attached directly to the mechanism, so don't account for the steer gearing
+  auto& cancoderState = _canTurnEncoder.GetSimState();
+  cancoderState.SetRawPosition(_turnMotorSim.GetAngularPosition());
+  cancoderState.SetVelocity(_turnMotorSim.GetAngularVelocity());
+  }
+

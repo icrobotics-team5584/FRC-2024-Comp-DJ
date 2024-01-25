@@ -127,7 +127,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Attack Centre",
+  "folder": null,
   "previewStartingState": null,
   "useDefaultConstraints": false
 }
