@@ -116,14 +116,6 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
   units::volt_t GetSimVoltage();
 
   /**
-   * Due to REVLib archetecture, we need to calculate our own power output when in simulation using
-   * a stored copy of the PID configuration. Call this after changing PID configuration to keep the
-   * simulation in sync with the Spark Max's internal values. This is called automatically when
-   * Set...Target() and SetPIDFF() is called.
-   */
-  void SyncSimPID();
-
-  /**
    * It is the user's responsibility to update the encoder position and
    * velocity when in simulation. To do this, use WPILib's physics simulation
    * classes at
@@ -145,7 +137,7 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
   /**
    * Get the position of the motor.
    */
-  units::turn_t GetPosition() { return units::turn_t{_encoder->GetPosition()}; };
+  units::turn_t GetPosition() { return units::turn_t{_encoder.GetPosition()}; };
 
   /**
    * Common interface to stop the motor until Set is called again or closed loop control is started.
@@ -201,6 +193,10 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
    * by the target before being added to the final output power.
    */
   void SetPIDFF(double P, double I, double D, double FF = 0.0);
+  void SetP(double P);
+  void SetI(double I);
+  void SetD(double D);
+  void SetFF(double FF);
 
   /**
    * Set the min amd max output for the closed loop mode.
@@ -242,17 +238,7 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
    * @param max The maximum input value
    * @param min The minimum input value
    */
-  void EnableSensorWrapping(double min, double max);
-
-  /**
-   * Set the control type before giving the controller any targets. Run this before setting PIDF
-   * gain so the ICSparkMax can convert your PIDF gains into the correct position or velocity units.
-   *
-   * @param controlType The control type. Options include position, velocity, smartmotion, etc.
-   */
-  void SetClosedLoopControlType(rev::CANSparkMax::ControlType controlType) {
-    SetInternalControlType(controlType);
-  }
+  void EnableClosedLoopWrapping(units::turn_t min, units::turn_t max);
 
   /**
    * Check whether the motor is on its position target, within a given tolerance.
@@ -283,28 +269,27 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
 
   // Conversion helpers
   units::turn_t SparkRevsToPos(double revs) {
-    return units::turn_t{revs * _encoder->GetPositionConversionFactor()};
+    return units::turn_t{revs * _encoder.GetPositionConversionFactor()};
   }
   units::turns_per_second_t SparkRPMToVel(double rpm) {
-    return units::turns_per_second_t{rpm * _encoder->GetVelocityConversionFactor()};
+    return units::turns_per_second_t{rpm * _encoder.GetVelocityConversionFactor()};
   }
   units::turns_per_second_squared_t SparkRPMpsToAccel(double accel) {
-    return units::turns_per_second_squared_t{accel * _encoder->GetVelocityConversionFactor()};
+    return units::turns_per_second_squared_t{accel * _encoder.GetVelocityConversionFactor()};
   }
   double PosToSparkRevs(units::turn_t pos) {
-    return pos.value() / _encoder->GetPositionConversionFactor();
+    return pos.value() / _encoder.GetPositionConversionFactor();
   }
   double VelToSparkRPM(units::turns_per_second_t vel) {
-    return vel.value() / _encoder->GetVelocityConversionFactor();
+    return vel.value() / _encoder.GetVelocityConversionFactor();
   }
   double AccelToSparkRPMps(units::turns_per_second_squared_t accel) {
-    return accel.value() / _encoder->GetVelocityConversionFactor();
+    return accel.value() / _encoder.GetVelocityConversionFactor();
   }
 
   // Related REVLib objects
   rev::SparkPIDController _pidController{CANSparkMax::GetPIDController()};
-  std::unique_ptr<rev::RelativeEncoder> _encoder = std::make_unique<rev::SparkRelativeEncoder>(
-      CANSparkBase::GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor));
+  rev::SparkRelativeEncoder _encoder{CANSparkBase::GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)};
 
   // PID simulation configuration
   bool _updatingTargetFromSendable = false;
@@ -313,7 +298,7 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
   units::volt_t _voltageTarget{0};
   units::volt_t _arbFeedForward = 0.0_V;
   frc::PIDController _simController{0, 0, 0};
-  double _FF{0};
+  double _simFF{0};
   frc::TrapezoidProfile<units::turns> _simSmartMotionProfile{
       {units::turns_per_second_t{0},
        units::turns_per_second_squared_t{0}}  // constraints updated by Smart motion config

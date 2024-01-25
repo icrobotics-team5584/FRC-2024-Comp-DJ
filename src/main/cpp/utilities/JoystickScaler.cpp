@@ -20,7 +20,7 @@ double JoystickScaler::GetScaledX(Hand hand) {
         controllerValue = XboxController::GetRightX();
     }
     
-    //std::cout << "xS " << pow(Joystick::GetX(hand), _scale) << "xR " << Joystick::GetX(hand);
+
 
     if (controllerValue < 0) {
         return pow(abs(controllerValue), _scale);
@@ -42,7 +42,6 @@ double JoystickScaler::GetScaledY(Hand hand) {
         controllerValue = XboxController::GetRightY();
     }
 
-    //std::cout << "yS " << pow(Joystick::GetY(hand), _scale) << "yR " << Joystick::GetY(hand) << "\n";
 
     if (controllerValue < 0) {
         return -1 * pow(abs(controllerValue), _scale);
