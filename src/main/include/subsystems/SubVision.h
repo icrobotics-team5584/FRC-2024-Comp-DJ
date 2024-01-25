@@ -13,14 +13,14 @@ class SubVision : public frc2::SubsystemBase {
   SubVision();
 
   //Will be called periodically whenever the CommandScheduler runs.
-  void Periodic() override;  
+  void Periodic() override;
+  bool VisionHasTargets();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  photon::PhotonCamera camera{"photonvision_5584"};
-  photon::PhotonPipelineResult result = camera.GetLatestResult();
-
+  photon::PhotonCamera _camera{"photonvision_5584"};
+  photon::PhotonPipelineResult _result;
+  photon::PhotonTrackedTarget _bestTarget;
   
-
 };
