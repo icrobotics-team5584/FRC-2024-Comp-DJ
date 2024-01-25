@@ -8,6 +8,7 @@
 #include "subsystems/SubShooter.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <subsystems/SubDrivebase.h>
+#include "subsystems/SubIntake.h"
 
 #include "RobotContainer.h"
 #include "subsystems/SubAmp.h"

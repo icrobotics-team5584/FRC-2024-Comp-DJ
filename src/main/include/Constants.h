@@ -32,6 +32,8 @@ namespace canid {
     // arm   
     constexpr int ArmMotor = 102;
     constexpr int ArmMotorFollow = 103;
+    constexpr int AmpMotorSpin = 102;
+    constexpr int IntakeMotor = 13;
     
 }
 
@@ -41,7 +43,11 @@ namespace pcm0 {
     constexpr int ShootClose = 4;
     constexpr int ShootFar = 5;
     constexpr int Pcm0Id = 0;
+      constexpr int IntakeRetractedReed = 100;
+  constexpr int IntakeExtendedReed = 101;
 }
+
+
 
 namespace dio {
 
