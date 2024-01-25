@@ -7,24 +7,30 @@
 #include <frc2/command/Commands.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <subsystems/SubDrivebase.h>
+#include "subsystems/SubVision.h"
 
 RobotContainer::RobotContainer() {
-SubDrivebase::GetInstance();
-SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
-  ConfigureBindings();
-  _delayChooser.AddOption("0 Seconds", 0);
-  _delayChooser.AddOption("1 Seconds", 1);
-  _delayChooser.AddOption("2 Seconds", 2);
-  frc::SmartDashboard::PutData("Delay By", &_delayChooser);
+  SubDrivebase::GetInstance();
+  SubVision::GetInstance();
+  
+  SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
+    ConfigureBindings();
+    _delayChooser.AddOption("0 Seconds", 0);
+    _delayChooser.AddOption("1 Seconds", 1);
+    _delayChooser.AddOption("2 Seconds", 2);
+    frc::SmartDashboard::PutData("Delay By", &_delayChooser);
 
-  _autoChooser.AddOption("Middle Path", "Middle Path");
-  _autoChooser.AddOption("Amp Path", "Amp Path");
-  _autoChooser.AddOption("Podium Path", "Podium Path");
-  _autoChooser.AddOption("Mid Path-Break Podium", "Mid Path-Break Podium");
-  _autoChooser.AddOption("Mid Path-Break Amp", "Mid Path-Break Amp");
-  _autoChooser.AddOption("Test Path", "Test Path");
-frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
-  }
+    _autoChooser.AddOption("Middle Path", "Middle Path");
+    _autoChooser.AddOption("Amp Path", "Amp Path");
+    _autoChooser.AddOption("Podium Path", "Podium Path");
+    _autoChooser.AddOption("Mid Path-Break Podium", "Mid Path-Break Podium");
+    _autoChooser.AddOption("Mid Path-Break Amp", "Mid Path-Break Amp");
+    _autoChooser.AddOption("Test Path", "Test Path");
+  frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
+
+}
+
+
 
 void RobotContainer::ConfigureBindings() {
     _driverController.X().OnTrue(SubDrivebase::GetInstance().SyncSensorBut());

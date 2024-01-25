@@ -12,6 +12,12 @@ class SubVision : public frc2::SubsystemBase {
  public:
   SubVision();
 
+  static SubVision &GetInstance(){
+    static SubVision inst;
+    return inst;
+  }
+  
+
   //Will be called periodically whenever the CommandScheduler runs.
   void Periodic() override;
   bool VisionHasTargets();

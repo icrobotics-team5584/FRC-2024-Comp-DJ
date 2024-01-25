@@ -5,7 +5,7 @@
 #include "subsystems/SubVision.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 
-SubVision::SubVision() = default;
+SubVision::SubVision(){}
 
 // This method will be called once per scheduler run
 void SubVision::Periodic(){
@@ -17,10 +17,10 @@ void SubVision::Periodic(){
     double area = _bestTarget.GetArea();
     double skew = _bestTarget.GetSkew();
 
-    frc::SmartDashboard::PutNumber("Vision/target: ", yaw); 
-    frc::SmartDashboard::PutNumber("Vision/target: ", pitch); 
-    frc::SmartDashboard::PutNumber("Vision/target: ", area); 
-    frc::SmartDashboard::PutNumber("Vision/target: ", skew);
+    frc::SmartDashboard::PutNumber("Vision/bestTarget yaw: ", yaw); 
+    frc::SmartDashboard::PutNumber("Vision/bestTarget pitch: ", pitch); 
+    frc::SmartDashboard::PutNumber("Vision/bestTarget area: ", area); 
+    frc::SmartDashboard::PutNumber("Vision/bestTarget skew: ", skew);
 
 }
 
