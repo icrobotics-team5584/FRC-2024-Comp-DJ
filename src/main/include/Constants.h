@@ -14,7 +14,7 @@
  * they are needed.
  */
  // 2 4 6 8
-namespace canivore {
+namespace canid {
   constexpr int DriveBaseFrontRightDrive = 7;
   constexpr int DriveBaseFrontRightTurn = 8;
   constexpr int DriveBaseFrontRightEncoder = 10;
