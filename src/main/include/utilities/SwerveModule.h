@@ -33,9 +33,10 @@ class SwerveModule {
   void SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode);
   frc::SwerveModulePosition GetPosition();
   frc::Rotation2d GetAngle();
+  frc::Rotation2d GetCanCoderAngle();
   units::meters_per_second_t GetSpeed();
-  frc::SwerveModuleState GetState();
   units::volt_t GetDriveVoltage();
+  frc::SwerveModuleState GetState();
 
  private:
   const double TURNING_GEAR_RATIO = 150.0/7.0;
