@@ -41,10 +41,9 @@ void RobotContainer::ConfigureBindings() {
     _driverController.RightTrigger().WhileTrue(SubAmp::GetInstance().ReverseAmpShooter());
 
   // Arm
-    _driverController.A().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(0_deg));
-    _driverController.B().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(180_deg));
-    _driverController.X().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(20_deg)); 
-    _driverController.Y().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(40_deg));
+    _driverController.A().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(SubAmp::HOME_ANGLE));
+    _driverController.X().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(SubAmp::AMP_ANGLE)); 
+    _driverController.Y().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(SubAmp::TRAP_ANGLE));
     _driverController.X().OnTrue(SubDrivebase::GetInstance().SyncSensorBut());
     _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
     _driverController.RightBumper().OnTrue(SubShooter::GetInstance().ChangeAngle());
@@ -57,6 +56,27 @@ void RobotContainer::ConfigureBindings() {
   // _driverController.A().OnTrue(cmd::ClimberExtendManual());
   // _driverController.B().OnTrue(cmd::ClimberRetractManual());
   _driverController.X().OnTrue(cmd::ClimberStop());
+
+  /*Ideal driver controls
+    Main controller
+    LT - Auto aim and shoot speaker
+    RT - Intake sequence (drop intake and intake wheels)
+    LB - Amp pos sequence (drop intake, check intake is dropped, check arm is at home, check arm has game piece, move arm to amp pos, put to shuffleboard green box)
+    RB- LED indicate amp
+    A - Trap sequence (same as )
+    Start - Reset swerve heading
+
+    Second controller
+    LT - Outtake amp/trap
+    LB - Tilt shooter for close shot (shooter piston extended)
+    RB - Tilt shooter for far shot (shooter piston retracted)
+    RT - Start shooter wheels
+    Right Joy - Right climb hook control
+    Left Joy - Left climb hook control
+    Y - Both hooks up
+    A - Both hooks down
+    B - LED indicate source
+    */
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

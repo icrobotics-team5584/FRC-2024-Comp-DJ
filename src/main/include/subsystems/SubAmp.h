@@ -29,6 +29,11 @@ class SubAmp : public frc2::SubsystemBase {
  public:
   SubAmp();
 
+  // variables
+  static constexpr units::degree_t HOME_ANGLE = 0_deg;
+  static constexpr units::degree_t AMP_ANGLE = 20_deg;
+  static constexpr units::degree_t TRAP_ANGLE = 40_deg;
+  
   //Instance
   static SubAmp &GetInstance(){
     static SubAmp inst;

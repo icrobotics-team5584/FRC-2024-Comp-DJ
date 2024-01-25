@@ -102,6 +102,7 @@
     "xlocinfo": "cpp",
     "xlocnum": "cpp",
     "xstddef": "cpp",
-    "xstring": "cpp"
+    "xstring": "cpp",
+    "*.inc": "cpp"
   }
 }
