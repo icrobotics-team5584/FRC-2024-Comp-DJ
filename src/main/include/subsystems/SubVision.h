@@ -21,6 +21,7 @@ class SubVision : public frc2::SubsystemBase {
   //Will be called periodically whenever the CommandScheduler runs.
   void Periodic() override;
   bool VisionHasTargets();
+  double BestTargetYaw();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -28,5 +29,10 @@ class SubVision : public frc2::SubsystemBase {
   photon::PhotonCamera _camera{"photonvision_5584"};
   photon::PhotonPipelineResult _result;
   photon::PhotonTrackedTarget _bestTarget;
+
+  double _bestYaw;
+  double _bestPitch;
+  double _bestArea;
+  double _bestSkew;
   
 };

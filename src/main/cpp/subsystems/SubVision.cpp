@@ -12,16 +12,15 @@ void SubVision::Periodic(){
     _result = _camera.GetLatestResult();
     _bestTarget = _result.GetBestTarget();
 
-    double yaw = _bestTarget.GetYaw();
-    double pitch = _bestTarget.GetPitch();
-    double area = _bestTarget.GetArea();
-    double skew = _bestTarget.GetSkew();
+    _bestYaw = _bestTarget.GetYaw();
+    _bestPitch = _bestTarget.GetPitch();
+    _bestArea = _bestTarget.GetArea();
+    _bestSkew = _bestTarget.GetSkew();
 
-    frc::SmartDashboard::PutNumber("Vision/bestTarget yaw: ", yaw); 
-    frc::SmartDashboard::PutNumber("Vision/bestTarget pitch: ", pitch); 
-    frc::SmartDashboard::PutNumber("Vision/bestTarget area: ", area); 
-    frc::SmartDashboard::PutNumber("Vision/bestTarget skew: ", skew);
-
+    frc::SmartDashboard::PutNumber("Vision/best target yaw: ", _bestYaw); 
+    frc::SmartDashboard::PutNumber("Vision/best target pitch: ", _bestPitch); 
+    frc::SmartDashboard::PutNumber("Vision/best target area: ", _bestArea); 
+    frc::SmartDashboard::PutNumber("Vision/best target skew: ", _bestSkew); 
 }
 
 bool SubVision::VisionHasTargets(){ 
@@ -29,3 +28,6 @@ bool SubVision::VisionHasTargets(){
     return targets;
 }
 
+double SubVision::BestTargetYaw(){
+    return _bestYaw;
+}
