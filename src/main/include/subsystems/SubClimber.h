@@ -68,15 +68,10 @@ class SubClimber : public frc2::SubsystemBase {
   ICSparkMax rClimbMotor{42};
 
   // Motor Setup
-  static constexpr double gearRatio = 100;  
-  static constexpr double lP = 0.1, lI = 0.0, lD = 0.1, lF = 10,
+  static constexpr double gearRatio = 30.0;
+  static constexpr double lP = 0.1, lI = 0.0, lD = 0.0, lF = 0,
   
-                          rP = 0.1, rI = 0.0, rD = 0.1, rF = 12.5;
-  
-  static constexpr units::degrees_per_second_t MaxVelocity = 360_deg_per_s;
-  static constexpr units::degrees_per_second_squared_t MaxAcceleration = 180_deg_per_s_sq;
-  static constexpr units::degree_t Tolerance = 0.0_deg;
-
+                          rP = 0.1, rI = 0.0, rD = 0.0, rF = 0;
   // Unit translation
   static constexpr units::meter_t WheelCir = 0.3_m;
 
@@ -84,12 +79,9 @@ class SubClimber : public frc2::SubsystemBase {
   static constexpr units::meter_t BaseHeight = 0.2_m;
   
   // Sim
-  static constexpr units::kilogram_square_meter_t Turret_moi = 0.005_kg_sq_m;
-  frc::sim::DCMotorSim lSim{frc::DCMotor::NEO(), 30, Turret_moi};
-  frc::sim::DCMotorSim rSim{frc::DCMotor::NEO(), gearRatio, Turret_moi};
 
-  frc::sim::ElevatorSim lElvSim{frc::DCMotor::NEO(), 30, 2_kg, (WheelCir/std::numbers::pi)/2, 0_m, 1.5_m, false, 0_m};
-  frc::sim::ElevatorSim rElvSim{frc::DCMotor::NEO(), gearRatio, 2_kg, (WheelCir/std::numbers::pi)/2, 0_m, 1.5_m, false, 0_m};
+  frc::sim::ElevatorSim lElvSim{frc::DCMotor::NEO(), gearRatio, 26_kg, (WheelCir/std::numbers::pi)/2, BaseHeight, 1.5_m, false, BaseHeight};
+  frc::sim::ElevatorSim rElvSim{frc::DCMotor::NEO(), gearRatio, 26_kg, (WheelCir/std::numbers::pi)/2, BaseHeight, 1.5_m, false, BaseHeight};
 
   frc::Mechanism2d mech{4,4};
   frc::MechanismRoot2d* mechRootL = mech.GetRoot("ClimberL", 1, 1);
