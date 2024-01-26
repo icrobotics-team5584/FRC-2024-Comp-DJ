@@ -47,43 +47,15 @@ void RobotContainer::ConfigureBindings() {
  // _driverController.B().WhileTrue(SubDrivebase::GetInstance().SysIdDynamic(frc2::sysid::Direction::kReverse));
  // _driverController.X().WhileTrue(SubDrivebase::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kForward));
  // _driverController.Y().WhileTrue(SubDrivebase::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kReverse));
-}
-using namespace frc2::cmd;
 
-  //Main Controller
- // _driverController.Start().OnTrue(frc2::cmd::RunOnce([]{SubDriveBase::GetInstance().ResetGyroHeading();}));
- // _driverController.leftJoystick().WhileTrue(frc2::cmd::RunEnd([]{SubDrivebase::GetInstance().Drive();}));
-
-
-
-
-void RobotContainer::ConfigureBindings() {
-  using namespace frc2::cmd;
-
-  // // Amp Shooter
-  // _driverController.Start().WhileTrue(SubAmp::GetInstance().AmpShooter());
-  // _driverController.Back().WhileTrue(SubAmp::GetInstance().ReverseAmpShooter());
-
-  // _driverController.LeftBumper().WhileTrue(SubAmp::GetInstance().ExtraMotor());
-  // _driverController.RightBumper().WhileTrue(SubAmp::GetInstance().ReverseExtraMotor());
-
-
-  // // Dizzy Amp
-  // _driverController.A().WhileTrue(SubAmp::GetInstance().ClawOpen());
-  // _driverController.B().WhileTrue(SubAmp::GetInstance().ClawClose());
-
-  // _driverController.X().WhileTrue(SubAmp::GetInstance().ClawTiltDown());
-  // _driverController.Y().WhileTrue(SubAmp::GetInstance().ClawTiltUp());
-
-  //Climber
   _driverController.A().OnTrue(cmd::ClimberExtend());
   _driverController.B().OnTrue(cmd::ClimberRetract());
+  _driverController.X().OnTrue(cmd::ClimberStop());
 
   //Use below if above don't work
   // _driverController.A().OnTrue(cmd::ClimberExtendManual());
   // _driverController.B().OnTrue(cmd::ClimberRetractManual());
-  _driverController.X().OnTrue(cmd::ClimberStop());
-  }
+}
   
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     _autoSelected = _autoChooser.GetSelected();
