@@ -30,11 +30,16 @@ namespace canid {
   constexpr int DriveBaseBackLeftDrive = 1;
   constexpr int DriveBaseBackLeftTurn = 4;
   constexpr int DriveBaseBackLeftEncoder = 11;
+
+  // shooter amp
+    constexpr int AmpMotorSpin = 13;
+    
+    // arm   
+    constexpr int ArmMotor = 102;
+    constexpr int ArmMotorFollow = 103;
 }
 
 namespace OperatorConstants {
-
-constexpr int kDriverControllerPort = 0;
-
+  constexpr int kDriverControllerPort = 0;
 }  // namespace OperatorConstants
 
