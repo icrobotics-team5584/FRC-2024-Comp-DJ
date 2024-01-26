@@ -37,9 +37,6 @@ class SubClimber : public frc2::SubsystemBase {
   void Periodic() override;
   void SimulationPeriodic() override;
 
-  //Sim
-  void SetTarget(units::meter_t);
-
   //Units translation
   units::turn_t DistanceToTurn(units::meter_t distance);
   units::radians_per_second_t DistanceToTurn(units::meters_per_second_t distance);
@@ -57,8 +54,6 @@ class SubClimber : public frc2::SubsystemBase {
   frc2::CommandPtr ClimberExtend();
   frc2::CommandPtr ClimberRetract();
   frc2::CommandPtr ClimberStop();
-  frc2::CommandPtr ClimberExtendManual();
-  frc2::CommandPtr ClimberRetractManual();
 
  private:
   units::meter_t TargetDistance;
@@ -72,6 +67,7 @@ class SubClimber : public frc2::SubsystemBase {
   static constexpr double lP = 0.1, lI = 0.0, lD = 0.0, lF = 0,
   
                           rP = 0.1, rI = 0.0, rD = 0.0, rF = 0;
+
   // Unit translation
   static constexpr units::meter_t WheelCir = 0.3_m;
 
