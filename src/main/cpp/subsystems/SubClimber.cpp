@@ -7,7 +7,7 @@
 #include <rev/SparkMaxAbsoluteEncoder.h>
 
 SubClimber::SubClimber() {
-    lClimbMotor.SetConversionFactor(1 / 30);
+    lClimbMotor.SetConversionFactor(1.0 / 30.0);
     lClimbMotor.SetPIDFF(lP,lI,lD,lF);
     lClimbMotor.SetInverted(true);
     lClimbMotor.ConfigSmartMotion(500_deg_per_s,2500_deg_per_s_sq,Tolerance);
@@ -82,7 +82,7 @@ units::meter_t SubClimber::TurnToDistance(units::turn_t turn) {
 
 void SubClimber::DriveToDistance(units::meter_t distance) {
     SetTarget(distance);
-    lClimbMotor.SetPositionTarget(DistanceToTurn(distance-BaseHeight));
+    lClimbMotor.SetSmartMotionTarget(DistanceToTurn(distance-BaseHeight));
     rClimbMotor.SetSmartMotionTarget(DistanceToTurn(distance-BaseHeight));
 }
 
@@ -104,4 +104,26 @@ void SubClimber::Start(double power) {
 void SubClimber::Stop() {
     lClimbMotor.Set(0);
     rClimbMotor.Set(0);
+}
+
+using namespace frc2::cmd;
+
+frc2::CommandPtr SubClimber::ClimberExtend() {
+    return RunOnce([] {SubClimber::GetInstance().Extend();});
+}
+
+frc2::CommandPtr SubClimber::ClimberRetract() {
+    return RunOnce([] {SubClimber::GetInstance().Retract();});
+}
+
+frc2::CommandPtr SubClimber::ClimberExtendManual() {
+    return RunOnce([] {SubClimber::GetInstance().Start(0.5);});
+}
+
+frc2::CommandPtr SubClimber::ClimberRetractManual() {
+    return RunOnce([] {SubClimber::GetInstance().Start(-0.5);});
+}
+
+frc2::CommandPtr SubClimber::ClimberStop() {
+    return RunOnce([] {SubClimber::GetInstance().Stop();});
 }

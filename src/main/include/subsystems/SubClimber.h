@@ -22,6 +22,8 @@
 #include <frc/smartdashboard/MechanismRoot2d.h>
 #include <frc/smartdashboard/MechanismLigament2d.h>
 
+#include <frc2/command/commands.h>
+
 class SubClimber : public frc2::SubsystemBase {
  public:
   SubClimber();
@@ -51,6 +53,12 @@ class SubClimber : public frc2::SubsystemBase {
   void Retract();
   void Start(double power);
   void Stop();
+
+  frc2::CommandPtr ClimberExtend();
+  frc2::CommandPtr ClimberRetract();
+  frc2::CommandPtr ClimberStop();
+  frc2::CommandPtr ClimberExtendManual();
+  frc2::CommandPtr ClimberRetractManual();
 
  private:
   units::meter_t TargetDistance;

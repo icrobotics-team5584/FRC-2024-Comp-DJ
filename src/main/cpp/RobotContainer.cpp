@@ -7,7 +7,6 @@
 #include "RobotContainer.h"
 #include "subsystems/SubAmp.h"
 #include "subsystems/SubClimber.h"
-#include "commands/ClimberCommands.h"
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <frc2/command/Commands.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -48,13 +47,13 @@ void RobotContainer::ConfigureBindings() {
  // _driverController.X().WhileTrue(SubDrivebase::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kForward));
  // _driverController.Y().WhileTrue(SubDrivebase::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 
-  _driverController.A().OnTrue(cmd::ClimberExtend());
-  _driverController.B().OnTrue(cmd::ClimberRetract());
-  _driverController.X().OnTrue(cmd::ClimberStop());
+  _driverController.A().OnTrue(SubClimber::GetInstance().ClimberExtend());
+  _driverController.B().OnTrue(SubClimber::GetInstance().ClimberRetract());
+  _driverController.X().OnTrue(SubClimber::GetInstance().ClimberStop());
 
   //Use below if above don't work
-  // _driverController.A().OnTrue(cmd::ClimberExtendManual());
-  // _driverController.B().OnTrue(cmd::ClimberRetractManual());
+  // _driverController.A().OnTrue(SubClimber::GetInstance().ClimberExtendManual());
+  // _driverController.B().OnTrue(SubClimber::GetInstance().ClimberRetractManual());
 }
   
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
