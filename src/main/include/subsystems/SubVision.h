@@ -22,6 +22,7 @@ class SubVision : public frc2::SubsystemBase {
   void Periodic() override;
   bool VisionHasTargets();
   units::degree_t BestTargetYaw();
+  bool IsOnTarget();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -34,5 +35,7 @@ class SubVision : public frc2::SubsystemBase {
   double _bestPitch;
   double _bestArea;
   double _bestSkew;
+
+  double _yawTolerance;
   
 };

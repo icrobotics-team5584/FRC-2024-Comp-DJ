@@ -29,5 +29,23 @@ bool SubVision::VisionHasTargets(){
 }
 
 units::degree_t SubVision::BestTargetYaw(){
-    return _bestYaw * 1_deg;
+    return _bestYaw * 1_deg; 
 }
+
+bool SubVision::IsOnTarget(){
+    if(_bestYaw > -0.5 && _bestYaw < 0.5){ return true; }
+    else{ return false;}
+}
+
+/*
+if(robotPitchAngle > 7_deg) {
+      SubDriveBase::GetInstance().Drive(speed, 0_mps, rotSpeed, false); // 
+    }
+    else if (robotPitchAngle < -7_deg) {
+      SubDriveBase::GetInstance().Drive(-speed, 0_mps, rotSpeed, false);
+    }
+    else{
+      SubDriveBase::GetInstance().Drive(0_mps, 0_mps, rotSpeed, false);
+    }
+    });
+*/
