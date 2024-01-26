@@ -16,6 +16,7 @@ SubClimber::SubClimber() {
 
     frc::SmartDashboard::PutData("Climber/Left motor", (wpi::Sendable*)&lClimbMotor);
     frc::SmartDashboard::PutData("Climber/Right motor", (wpi::Sendable*)&rClimbMotor);
+    frc::SmartDashboard::PutData("Climber/Lock Cylinder", (wpi::Sendable*)&LockCylinder);
 };
 
 void SubClimber::Periodic() {
@@ -55,9 +56,11 @@ units::meter_t SubClimber::TurnToDistance(units::turn_t turn) {
 };
 
 void SubClimber::DriveToDistance(units::meter_t distance) {
-    TargetDistance = distance;
-    lClimbMotor.SetPositionTarget(DistanceToTurn(distance));
-    rClimbMotor.SetPositionTarget(DistanceToTurn(distance));
+    if (LockCylinder.Get() = 1) {
+        TargetDistance = distance;
+        lClimbMotor.SetPositionTarget(DistanceToTurn(distance));
+        rClimbMotor.SetPositionTarget(DistanceToTurn(distance));
+    }
 }
 
 //Secondary move commands
@@ -80,6 +83,15 @@ void SubClimber::Stop() {
     rClimbMotor.Set(0);
 }
 
+void SubClimber::Lock() {
+    Stop();
+    LockCylinder.Set(frc::DoubleSolenoid::Value::kForward);
+}
+
+void SubClimber::Unlock() {
+    LockCylinder.Set(frc::DoubleSolenoid::Value::kReverse);
+}
+
 //Pointer Commands
 
 frc2::CommandPtr SubClimber::ClimberExtend() {
@@ -92,4 +104,12 @@ frc2::CommandPtr SubClimber::ClimberRetract() {
 
 frc2::CommandPtr SubClimber::ClimberStop() {
     return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Stop();});
+}
+
+frc2::CommandPtr SubClimber::ClimberLock() {
+    return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Lock();});
+}
+
+frc2::CommandPtr SubClimber::ClimberUnlock() {
+    return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Unlock();});
 }

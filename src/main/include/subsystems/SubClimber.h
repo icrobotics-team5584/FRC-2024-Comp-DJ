@@ -13,10 +13,10 @@
 
 #include <frc/simulation/ElevatorSim.h>
 #include <frc/system/plant/DCMotor.h>
-#include <rev/CANSparkMax.h>
-#include <frc/simulation/DCMotorSim.h>
+
+#include <frc/DoubleSolenoid.h>
+
 #include <units/angle.h>
-#include <units/moment_of_inertia.h>
 
 #include <frc/smartdashboard/Mechanism2d.h>
 #include <frc/smartdashboard/MechanismRoot2d.h>
@@ -50,10 +50,15 @@ class SubClimber : public frc2::SubsystemBase {
   void Retract();
   void Start(double power);
   void Stop();
+  void Lock();
+  void Unlock();
 
   frc2::CommandPtr ClimberExtend();
   frc2::CommandPtr ClimberRetract();
   frc2::CommandPtr ClimberStop();
+  frc2::CommandPtr ClimberLock();
+  frc2::CommandPtr ClimberUnlock();
+
 
  private:
   units::meter_t TargetDistance;
@@ -87,5 +92,8 @@ class SubClimber : public frc2::SubsystemBase {
   frc::MechanismLigament2d* mechRightElevator = mechRootR->Append<frc::MechanismLigament2d>("Right elevator", 3, 90_deg);
   frc::MechanismLigament2d* mechTar = mechRootT->Append<frc::MechanismLigament2d>("Target", 2, 90_deg);
 
-  int currentPosition = 0;
+  // Double solenoid
+
+  frc::DoubleSolenoid LockCylinder {1, frc::PneumaticsModuleType::CTREPCM,
+                                    pcm::LockCylinderForward, pcm::LockCylinderReverse};
 };
