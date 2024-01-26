@@ -301,4 +301,11 @@ units::degree_t SubDrivebase::GetPitch() {
   return _gyro.GetPitch() * 1_deg;
 }
 
-
+frc2::CommandPtr SubDrivebase::AlignWheels(units::radian_t angle) {
+  return Run([this, angle] {
+    _frontLeft.SetDesiredAngle(angle);
+    _frontRight.SetDesiredAngle(angle);
+    _backLeft.SetDesiredAngle(angle);
+    _backRight.SetDesiredAngle(angle);
+  });
+}
