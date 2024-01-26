@@ -2,7 +2,7 @@
 
 namespace canivore {
   // 1-12 inclusive
-constexpr int DriveBaseFrontRightDrive = 7; 
+  constexpr int DriveBaseFrontRightDrive = 7; 
   constexpr int DriveBaseFrontRightTurn = 8; 
   constexpr int DriveBaseFrontRightEncoder = 10; 
 
@@ -25,14 +25,14 @@ namespace canid {
     constexpr int elevatorMotor = 101;
     constexpr int ShooterMotorMain = 22; // top motor
     constexpr int SecondaryShooterMotor = 4; // bottom motor
-    constexpr int ShooterFeederMotor = 102; //Shooter feeder
-        // shooter amp
+    
+    // shooter amp
     constexpr int AmpMotorSpin = 13;
+    constexpr int ShooterFeederMotor = 102; //Shooter feeder
     
     // arm   
     constexpr int ArmMotor = 102;
     constexpr int ArmMotorFollow = 103;
-    constexpr int AmpMotorSpin = 102;
     constexpr int IntakeMotor = 13;
     
 }
@@ -43,14 +43,6 @@ namespace pcm0 {
     constexpr int ShootClose = 4;
     constexpr int ShootFar = 5;
     constexpr int Pcm0Id = 0;
-      constexpr int IntakeRetractedReed = 100;
-  constexpr int IntakeExtendedReed = 101;
-}
-
-
-
-namespace dio {
-
 }
 
 namespace pwm {
@@ -65,8 +57,6 @@ constexpr int kDriverControllerPort = 0;
 namespace dio {
   constexpr int FDLineBreak = 100;
   constexpr int SDLineBreak = 101;
-}
-
-namespace pwm {
-
+  constexpr int IntakeRetractedReed = 100;
+  constexpr int IntakeExtendedReed = 101;
 }

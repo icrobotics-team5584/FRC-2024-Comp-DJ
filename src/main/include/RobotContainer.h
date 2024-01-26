@@ -32,6 +32,7 @@ class RobotContainer {
  private:
   void ConfigureBindings();
   frc2::CommandXboxController _driverController{0};
+  frc2::CommandXboxController _operatorController{1};
 
   frc::SendableChooser<std::string> _autoChooser;
   frc::SendableChooser<int> _delayChooser;

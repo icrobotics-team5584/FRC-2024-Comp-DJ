@@ -36,46 +36,30 @@ frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
   }
 
 void RobotContainer::ConfigureBindings() {
-    _driverController.Start().OnTrue(SubDrivebase::GetInstance().SyncSensorBut());
-    _driverController.Back().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
-    _driverController.LeftTrigger().WhileTrue(SubAmp::GetInstance().AmpShooter());
-    _driverController.RightTrigger().WhileTrue(SubAmp::GetInstance().ReverseAmpShooter());
 
-  // Arm
-    _driverController.A().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(SubAmp::HOME_ANGLE));
-    _driverController.X().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(SubAmp::AMP_ANGLE)); 
-    _driverController.Y().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(SubAmp::TRAP_ANGLE));
-    _driverController.X().OnTrue(SubDrivebase::GetInstance().SyncSensorBut());
-    _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
-    _driverController.RightBumper().OnTrue(SubShooter::GetInstance().ChangeAngle());
-    _driverController.RightTrigger().OnTrue(SubShooter::GetInstance().StartShooter());
-    _driverController.LeftBumper().OnTrue(SubShooter::GetInstance().ShootSequence());
-    _driverController.A().OnTrue(cmd::ClimberExtend());
-    _driverController.B().OnTrue(cmd::ClimberRetract());
+    // extend intake, get intake state, check arm is at home, check arm has game piece, move arm to amp pos, put to shuffleboard green box
 
-  //Use below if above don't work
-  // _driverController.A().OnTrue(cmd::ClimberExtendManual());
-  // _driverController.B().OnTrue(cmd::ClimberRetractManual());
-  _driverController.X().OnTrue(cmd::ClimberStop());
+  _operatorController.Y().OnTrue(cmd::ClimberExtend());
+  _operatorController.A().OnTrue(cmd::ClimberRetract());
 
   /*Ideal driver controls
     Main controller
-    LT - Auto aim and shoot speaker
-    RT - Intake sequence (drop intake and intake wheels)
-    LB - Amp pos sequence (drop intake, check intake is dropped, check arm is at home, check arm has game piece, move arm to amp pos, put to shuffleboard green box)
+    Gaston - LT - Auto aim and shoot speaker (auto aim, lock wheels in X, shoot)
+    Gaston - RT - Intake sequence (extend intake and intake wheels)
+    Helen - LB - Amp pos sequence (extend intake, check intake is dropped, check arm is at home, check arm has game piece, move arm to amp pos, put to shuffleboard green box)
+    Helen - A - Trap sequence (same as Amp pos sequence but Trap Pos)
     RB- LED indicate amp
-    A - Trap sequence (same as )
     Start - Reset swerve heading
 
-    Second controller
-    LT - Outtake amp/trap
-    LB - Tilt shooter for close shot (shooter piston extended)
-    RB - Tilt shooter for far shot (shooter piston retracted)
-    RT - Start shooter wheels
+    Operator controller
+    Gaston - LT - Outtake amp/trap (check arm pos, outtake amp wheels)
+    Gaston - LB - Tilt shooter for close shot (shooter piston extended)
+    Gaston - RB - Tilt shooter for far shot (shooter piston retracted)
+    Gaston -  RT - Start shooter wheels
     Right Joy - Right climb hook control
     Left Joy - Left climb hook control
-    Y - Both hooks up
-    A - Both hooks down
+    Y - Both hooks up [DONE]
+    A - Both hooks down [DONE]
     B - LED indicate source
     */
 }
