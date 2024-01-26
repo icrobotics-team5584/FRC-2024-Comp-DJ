@@ -35,6 +35,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   void ResetGyroHeading(units::degree_t startingAngle = 0_deg);
   void UpdatePosition(frc::Pose2d robotPosition);
   void DriveToPose(frc::Pose2d targetPose);
+  void RotateToZero(double rotationError);
   bool IsAtPose(frc::Pose2d pose);
   void DisplayTrajectory(std::string name, frc::Trajectory trajectory);
   void SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode);
@@ -42,7 +43,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   void DisplayPose(std::string label, frc::Pose2d pose);
   void UpdateOdometry();
   void SyncSensors();
-
+  
   units::degree_t GetPitch();
   frc::Pose2d GetPose();
   frc::Rotation2d GetHeading();

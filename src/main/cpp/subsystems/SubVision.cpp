@@ -28,6 +28,6 @@ bool SubVision::VisionHasTargets(){
     return targets;
 }
 
-double SubVision::BestTargetYaw(){
-    return _bestYaw;
+units::degree_t SubVision::BestTargetYaw(){
+    return _bestYaw * 1_deg;
 }
