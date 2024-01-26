@@ -8,6 +8,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <subsystems/SubDrivebase.h>
 #include "subsystems/SubVision.h"
+#include "commands/VisionCommands.h"
 
 RobotContainer::RobotContainer() {
   SubDrivebase::GetInstance();
@@ -29,11 +30,14 @@ RobotContainer::RobotContainer() {
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
 }
 
-void RobotContainer::ConfigureBindings() {
+void RobotContainer::ConfigureBindings(){
+  using namespace frc2::cmd;
+
   _driverController.X().OnTrue(SubDrivebase::GetInstance().SyncSensorBut());
   _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
+
+  _driverController.A().WhileTrue(cmd::ShootSequence());
 }
-using namespace frc2::cmd;
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   _autoSelected = _autoChooser.GetSelected();

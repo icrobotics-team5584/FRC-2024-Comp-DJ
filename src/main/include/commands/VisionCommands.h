@@ -4,4 +4,5 @@
 
 namespace cmd{
     frc2::CommandPtr VisionRotateToZero();
+    frc2::CommandPtr ShootSequence();
 } //namespace cmd
