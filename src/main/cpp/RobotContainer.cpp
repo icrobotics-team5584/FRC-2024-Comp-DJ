@@ -36,9 +36,6 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureBindings() {
-  // extend intake, get intake state, check arm is at home, check arm has game piece, move arm to
-  // amp pos, put to shuffleboard green box
-
   _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
 
   _driverController.LeftTrigger().WhileTrue(cmd::ShootSequence());
@@ -54,26 +51,6 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar());
   _operatorController.LeftTrigger().WhileTrue(SubAmp::GetInstance().AmpShooter());
 
-  /*Ideal driver controls
-    Main controller
-    Gaston - LT - Auto aim and shoot speaker (auto aim, lock wheels in X, shoot) [DONE]
-    Gaston - RT - Intake sequence (extend intake and intake wheels) [DONE]
-    Helen - LB - Amp pos sequence (extend intake, check intake is dropped, check arm is at home,
-   check arm has game piece, move arm to amp pos, put to shuffleboard green box) [DONE] Helen - A -
-   Trap sequence (same as Amp pos sequence but Trap Pos) [DONE] RB- LED indicate amp Gaston - Start
-   - Reset swerve heading [DONE]
-
-    Operator controller
-    Gaston - LT - Outtake amp/trap (check arm pos, outtake amp wheels) [DONE]
-    Gaston - LB - Tilt shooter for close shot (shooter piston extended) [DONE]
-    Gaston - RB - Tilt shooter for far shot (shooter piston retracted) [DONE]
-    Gaston -  RT - Start shooter wheels [DONE]
-    Right Joy - Right climb hook control
-    Left Joy - Left climb hook control
-    Y - Both hooks up [DONE]
-    A - Both hooks down [DONE]
-    B - LED indicate source
-    */
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
