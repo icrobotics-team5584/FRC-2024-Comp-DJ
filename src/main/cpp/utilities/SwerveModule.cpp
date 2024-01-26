@@ -11,15 +11,15 @@
 
 SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnEncoderID,
                            double cancoderMagOffset)
-    : _canDriveMotor(canDriveMotorID, "Canivore"),
+    : _canDriveMotor(canDriveMotorID),
       _canTurnMotor(canTurnMotorID, 40_A),
-      _canTurnEncoder(canTurnEncoderID, "Canivore") {
+      _canTurnEncoder(canTurnEncoderID) {
   using namespace ctre::phoenix6::signals;
   using namespace ctre::phoenix6::configs;
 
   // Config CANCoder
   _configTurnEncoder.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue::Unsigned_0To1;
-  _configTurnEncoder.MagnetSensor.SensorDirection = SensorDirectionValue::Clockwise_Positive;
+  _configTurnEncoder.MagnetSensor.SensorDirection = SensorDirectionValue::CounterClockwise_Positive;
   _configTurnEncoder.MagnetSensor.MagnetOffset = cancoderMagOffset;
   _canTurnEncoder.GetConfigurator().Apply(_configTurnEncoder);
 
@@ -29,7 +29,7 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _canTurnMotor.SetConversionFactor(1.0/TURNING_GEAR_RATIO);
   _canTurnMotor.EnableClosedLoopWrapping(0_tr, 1_tr);
   _canTurnMotor.SetPIDFF(TURN_P, TURN_I, TURN_D);
-  _canTurnMotor.SetInverted(false);
+  _canTurnMotor.SetInverted(true);
   _canTurnMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
   _canTurnMotor.BurnFlash();
   _canTurnMotor.SetCANTimeout(10);
@@ -39,7 +39,7 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _configCanDriveMotor.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue::RotorSensor;
   _configCanDriveMotor.ClosedLoopGeneral.ContinuousWrap = false;
   _configCanDriveMotor.Feedback.SensorToMechanismRatio = DRIVE_GEAR_RATIO;
-  _configCanDriveMotor.Slot0.kP = 0; //DRIVE_P;
+  _configCanDriveMotor.Slot0.kP = 0.7; //DRIVE_P;
   _configCanDriveMotor.Slot0.kI = 0; //DRIVE_I;
   _configCanDriveMotor.Slot0.kD = 0; //DRIVE_D;
   _configCanDriveMotor.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -47,8 +47,8 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _configCanDriveMotor.CurrentLimits.SupplyCurrentThreshold = 40.0;
   _configCanDriveMotor.CurrentLimits.SupplyTimeThreshold = 0.5;
   _configCanDriveMotor.Slot0.kS = 0.070059;       //0.62004; // Units is V
-  _configCanDriveMotor.Slot0.kV = 2.2435;       //2.2731; // Units is V/1m/s      //MAKE SURE TO TUNE ABOVE 12.5 VOLTS
-  _configCanDriveMotor.Slot0.kA = 0.30496;        //0.23244; // Units is V/1m/s^2
+  _configCanDriveMotor.Slot0.kV = 0.7;       //2.2731; // Units is V/1m/s      //MAKE SURE TO TUNE ABOVE 12.5 VOLTS
+  _configCanDriveMotor.Slot0.kA = 0;        //0.23244; // Units is V/1m/s^2
   _configCanDriveMotor.MotorOutput.NeutralMode = NeutralModeValue::Brake;
   _canDriveMotor.GetConfigurator().Apply(_configCanDriveMotor);
 }
@@ -87,6 +87,11 @@ void SwerveModule::SendSensorsToDash() {
 frc::Rotation2d SwerveModule::GetAngle() {
   units::radian_t turnAngle = _canTurnMotor.GetPosition();
   return turnAngle;
+}
+
+frc::Rotation2d SwerveModule::GetCanCoderAngle() {
+  units::radian_t tAngle = _canTurnEncoder.GetAbsolutePosition().GetValue();
+  return tAngle;
 }
 
 units::meters_per_second_t SwerveModule::GetSpeed() {

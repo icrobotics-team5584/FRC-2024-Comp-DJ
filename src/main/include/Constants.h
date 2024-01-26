@@ -13,8 +13,8 @@
  * command-specific namespaces within this header, which can then be used where
  * they are needed.
  */
-
-namespace canivore {
+ // 2 4 6 8
+namespace canid {
   constexpr int DriveBaseFrontRightDrive = 7;
   constexpr int DriveBaseFrontRightTurn = 8;
   constexpr int DriveBaseFrontRightEncoder = 10;

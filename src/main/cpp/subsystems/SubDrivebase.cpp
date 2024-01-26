@@ -35,7 +35,7 @@ SubDrivebase::SubDrivebase() {
           0.5_mps,                      // Max module speed, in m/s
           0.4_m,  // Drive base radius in meters. Distance from robot center to furthest module.
                   // NEEDS TO BE CHECKED AND MADE ACCURATE!!
-          ReplanningConfig()  // Default path replanning config. See the API for the options here
+          ReplanningConfig(false,false,1_m,0.25_m)  // Default path replanning config. See the API for the options here
           ),
       []() {
         // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -70,6 +70,18 @@ void SubDrivebase::Periodic() {
                                           _backRight.GetSpeed().value(),
                                       });
 
+  frc::SmartDashboard::PutNumberArray("drivebase/can coders swerve states",
+                                      std::array{
+                                        _frontLeft.GetCanCoderAngle().Degrees().value(),
+                                          _frontLeft.GetSpeed().value(),
+                                          _frontRight.GetCanCoderAngle().Degrees().value(),
+                                          _frontRight.GetSpeed().value(),
+                                          _backLeft.GetCanCoderAngle().Degrees().value(),
+                                          _backLeft.GetSpeed().value(),
+                                          _backRight.GetCanCoderAngle().Degrees().value(),
+                                          _backRight.GetSpeed().value(),
+                                      });
+
   _frontLeft.SendSensorsToDash();
   _frontRight.SendSensorsToDash();
   _backLeft.SendSensorsToDash();
@@ -89,13 +101,11 @@ void SubDrivebase::SimulationPeriodic(){
 frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller) {
   return Run([this, &controller] {
     double deadband = 0.08;
-    auto acceleration = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAcceleration", MAX_JOYSTICK_ACCEL);
     auto velocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) * 1_mps;
     auto angularVelocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value()) * 1_deg_per_s;
-    auto angularAcceleration =  frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularAcceleration", MAX_ANGULAR_JOYSTICK_ACCEL);
-    static frc::SlewRateLimiter<units::scalar> _xspeedLimiter{acceleration / 1_s};
-    static frc::SlewRateLimiter<units::scalar> _yspeedLimiter{acceleration / 1_s};
-    static frc::SlewRateLimiter<units::scalar> _rotLimiter{angularAcceleration / 1_s};
+    static frc::SlewRateLimiter<units::scalar> _xspeedLimiter{MAX_JOYSTICK_ACCEL / 1_s};
+    static frc::SlewRateLimiter<units::scalar> _yspeedLimiter{MAX_JOYSTICK_ACCEL / 1_s};
+    static frc::SlewRateLimiter<units::scalar> _rotLimiter{MAX_ANGULAR_JOYSTICK_ACCEL / 1_s};
     auto forwardSpeed =
         _yspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftY(), deadband)) * velocity;
     auto rotationSpeed =
@@ -106,7 +116,7 @@ frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& contro
       Drive(-forwardSpeed, -sidewaysSpeed, -rotationSpeed, true);
     }
     else {
-      Drive(-forwardSpeed, sidewaysSpeed, rotationSpeed, true);
+      Drive(forwardSpeed, sidewaysSpeed, rotationSpeed, true);
     }
   });
   }
