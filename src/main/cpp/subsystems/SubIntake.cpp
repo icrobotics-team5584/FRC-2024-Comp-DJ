@@ -7,44 +7,45 @@
 
 using namespace frc2::cmd;
 
-SubIntake::SubIntake(){
-    frc::SmartDashboard::PutString("Intake/Intake Deploy State: ", "Intake retracted");
-    _intakeMotorSpin.RestoreFactoryDefaults();
-    _intakeMotorSpin.SetSmartCurrentLimit(30);
+SubIntake::SubIntake() {
+  frc::SmartDashboard::PutString("Intake/Intake Deploy State: ", "Intake retracted");
+  _intakeMotorSpin.RestoreFactoryDefaults();
+  _intakeMotorSpin.SetSmartCurrentLimit(30);
 }
 // This method will be called once per scheduler run
 void SubIntake::Periodic() {
-    if (solIntake.Get() == 1){
-       frc::SmartDashboard::PutString("Intake/Intake Deploy State: ", "Intake deployed");
-    } else if (solIntake.Get() == 2){
-       frc::SmartDashboard::PutString("Intake/Intake Deploy State: ", "Intake retracted");
-    }
-    frc::SmartDashboard::PutNumber("Intake/Intake Shooter Motor: ", _intakeMotorSpin.Get());
+  if (solIntake.Get() == 1) {
+    frc::SmartDashboard::PutString("Intake/Intake Deploy State: ", "Intake deployed");
+  } else if (solIntake.Get() == 2) {
+    frc::SmartDashboard::PutString("Intake/Intake Deploy State: ", "Intake retracted");
+  }
+  frc::SmartDashboard::PutNumber("Intake/Intake Shooter Motor: ", _intakeMotorSpin.Get());
 }
 
-frc2::CommandPtr SubIntake::IntakeNote(){
- return ExtendIntake().AndThen(SpinIntake()).FinallyDo([this]{StopSpinningIntake(), RetractIntake();});
+frc2::CommandPtr SubIntake::ExtendIntake() {
+  return Run([this] { solIntake.Set(frc::DoubleSolenoid::kForward); }).Until([this] {
+    return GetIntakeState();
+  });
 }
 
-frc2::CommandPtr SubIntake::ExtendIntake(){
- return RunOnce([this]{solIntake.Set(frc::DoubleSolenoid::kForward);}).AndThen(Wait(0.3_s));
+frc2::CommandPtr SubIntake::RetractIntake() {
+  return Run([this] { solIntake.Set(frc::DoubleSolenoid::kReverse); }).Until([this] {
+    return GetIntakeState();
+  });
 }
 
-frc2::CommandPtr SubIntake::SpinIntake(){
-    return StartEnd([this]{_intakeMotorSpin.Set(1);},
-                    [this]{_intakeMotorSpin.Set(0);});
+frc2::CommandPtr SubIntake::StopSpinningIntake() {
+  return RunOnce([this] { _intakeMotorSpin.Set(0); });
 }
 
-void SubIntake::RetractIntake(){
-    solIntake.Set(frc::DoubleSolenoid::kReverse);
+frc2::CommandPtr SubIntake::StartSpinningIntake() {
+  return RunOnce([this] { _intakeMotorSpin.Set(0.5); });
 }
 
-void SubIntake::StopSpinningIntake(){
-    _intakeMotorSpin.Set(0);
-}
-
-bool SubIntake::GetIntakeState(){
-    if(_intakeExtendededReed.Get() == true|| _intakeRetractedReed.Get() == true){
-        return true;
-    } else {return false;}
-} //LOCK ARM IF RETURN FALSE
+bool SubIntake::GetIntakeState() {
+  if (_intakeExtendededReed.Get() == true || _intakeRetractedReed.Get() == true) {
+    return true;
+  } else {
+    return false;
+  }
+}  // LOCK ARM IF RETURN FALSE

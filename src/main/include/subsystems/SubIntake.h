@@ -16,7 +16,7 @@ class SubIntake : public frc2::SubsystemBase {
  public:
   SubIntake();
 
-  static SubIntake &GetInstance(){
+  static SubIntake& GetInstance() {
     static SubIntake inst;
     return inst;
   }
@@ -24,22 +24,19 @@ class SubIntake : public frc2::SubsystemBase {
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
-  frc2::CommandPtr IntakeNote();
   frc2::CommandPtr ExtendIntake();
-  frc2::CommandPtr SpinIntake();
   bool GetIntakeState();
-  void StopSpinningIntake();
-  void RetractIntake();
+  frc2::CommandPtr StopSpinningIntake();
+  frc2::CommandPtr StartSpinningIntake();
+  frc2::CommandPtr RetractIntake();
 
  private:
+  rev::CANSparkMax _intakeMotorSpin{canid::IntakeMotor, rev::CANSparkMax::MotorType::kBrushless};
+  frc::DoubleSolenoid solIntake{pcm0::Pcm0Id, frc::PneumaticsModuleType::CTREPCM,
+                                pcm0::IntakeExtend, pcm0::IntakeRetract};
 
- rev::CANSparkMax _intakeMotorSpin{
-     canid::IntakeMotor, rev::CANSparkMax::MotorType::kBrushless
-  };
- frc::DoubleSolenoid solIntake{pcm0::Pcm0Id, frc::PneumaticsModuleType::CTREPCM, pcm0::IntakeExtend, pcm0::IntakeRetract};
-
- frc::DigitalInput _intakeRetractedReed{dio::IntakeRetractedReed};
- frc::DigitalInput _intakeExtendededReed{dio::IntakeExtendedReed};
+  frc::DigitalInput _intakeRetractedReed{dio::IntakeRetractedReed};
+  frc::DigitalInput _intakeExtendededReed{dio::IntakeExtendedReed};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };

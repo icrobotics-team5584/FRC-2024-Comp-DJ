@@ -13,13 +13,13 @@
 #include "RobotContainer.h"
 #include "subsystems/SubAmp.h"
 #include "subsystems/SubClimber.h"
-#include "commands/ClimberCommands.h"
 #include <frc2/command/Commands.h>
+#include "commands/UniversalCommands.h"
 
 RobotContainer::RobotContainer() {
   SubAmp::GetInstance();
-SubDrivebase::GetInstance();
-SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
+  SubDrivebase::GetInstance();
+  SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
   _delayChooser.AddOption("1 Seconds", 1);
@@ -32,30 +32,42 @@ SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().Joysti
   _autoChooser.AddOption("Mid Path-Break Podium", "Mid Path-Break Podium");
   _autoChooser.AddOption("Mid Path-Break Amp", "Mid Path-Break Amp");
   _autoChooser.AddOption("Test Path", "Test Path");
-frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
-  }
+  frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
+}
 
 void RobotContainer::ConfigureBindings() {
+  // extend intake, get intake state, check arm is at home, check arm has game piece, move arm to
+  // amp pos, put to shuffleboard green box
 
-    // extend intake, get intake state, check arm is at home, check arm has game piece, move arm to amp pos, put to shuffleboard green box
+  _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
 
-  _operatorController.Y().OnTrue(cmd::ClimberExtend());
-  _operatorController.A().OnTrue(cmd::ClimberRetract());
+  _driverController.LeftTrigger().WhileTrue(cmd::ShootSequence());
+  _driverController.RightTrigger().WhileTrue(cmd::IntakeSequence());
+
+  _driverController.LeftBumper().WhileTrue(cmd::SequenceArmToAmpPos());
+  _driverController.A().WhileTrue(cmd::SequenceArmToTrapPos());
+
+  _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberExtend());
+  _operatorController.A().OnTrue(SubClimber::GetInstance().ClimberRetract());
+  _operatorController.RightTrigger().WhileTrue(SubShooter::GetInstance().StartShooter());
+  _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose());
+  _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar());
+  _operatorController.LeftTrigger().WhileTrue(SubAmp::GetInstance().AmpShooter());
 
   /*Ideal driver controls
     Main controller
-    Gaston - LT - Auto aim and shoot speaker (auto aim, lock wheels in X, shoot)
-    Gaston - RT - Intake sequence (extend intake and intake wheels)
-    Helen - LB - Amp pos sequence (extend intake, check intake is dropped, check arm is at home, check arm has game piece, move arm to amp pos, put to shuffleboard green box)
-    Helen - A - Trap sequence (same as Amp pos sequence but Trap Pos)
-    RB- LED indicate amp
-    Start - Reset swerve heading
+    Gaston - LT - Auto aim and shoot speaker (auto aim, lock wheels in X, shoot) [DONE]
+    Gaston - RT - Intake sequence (extend intake and intake wheels) [DONE]
+    Helen - LB - Amp pos sequence (extend intake, check intake is dropped, check arm is at home,
+   check arm has game piece, move arm to amp pos, put to shuffleboard green box) [DONE] Helen - A -
+   Trap sequence (same as Amp pos sequence but Trap Pos) [DONE] RB- LED indicate amp Gaston - Start
+   - Reset swerve heading [DONE]
 
     Operator controller
-    Gaston - LT - Outtake amp/trap (check arm pos, outtake amp wheels)
-    Gaston - LB - Tilt shooter for close shot (shooter piston extended)
-    Gaston - RB - Tilt shooter for far shot (shooter piston retracted)
-    Gaston -  RT - Start shooter wheels
+    Gaston - LT - Outtake amp/trap (check arm pos, outtake amp wheels) [DONE]
+    Gaston - LB - Tilt shooter for close shot (shooter piston extended) [DONE]
+    Gaston - RB - Tilt shooter for far shot (shooter piston retracted) [DONE]
+    Gaston -  RT - Start shooter wheels [DONE]
     Right Joy - Right climb hook control
     Left Joy - Left climb hook control
     Y - Both hooks up [DONE]
@@ -65,7 +77,7 @@ void RobotContainer::ConfigureBindings() {
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-    _autoSelected = _autoChooser.GetSelected();
-    units::second_t delay = _delayChooser.GetSelected() *1_s;
+  _autoSelected = _autoChooser.GetSelected();
+  units::second_t delay = _delayChooser.GetSelected() * 1_s;
   return frc2::cmd::Wait(delay).AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr());
 }
