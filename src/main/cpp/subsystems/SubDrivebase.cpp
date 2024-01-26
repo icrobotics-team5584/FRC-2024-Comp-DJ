@@ -35,7 +35,7 @@ SubDrivebase::SubDrivebase() {
           0.5_mps,                      // Max module speed, in m/s
           0.4_m,  // Drive base radius in meters. Distance from robot center to furthest module.
                   // NEEDS TO BE CHECKED AND MADE ACCURATE!!
-          ReplanningConfig()  // Default path replanning config. See the API for the options here
+          ReplanningConfig(false,false,1_m,0.25_m)  // Default path replanning config. See the API for the options here
           ),
       []() {
         // Boolean supplier that controls when the path will be mirrored for the red alliance
