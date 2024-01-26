@@ -11,15 +11,15 @@
 
 SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnEncoderID,
                            double cancoderMagOffset)
-    : _canDriveMotor(canDriveMotorID, "Canivore"),
+    : _canDriveMotor(canDriveMotorID),
       _canTurnMotor(canTurnMotorID, 40_A),
-      _canTurnEncoder(canTurnEncoderID, "Canivore") {
+      _canTurnEncoder(canTurnEncoderID) {
   using namespace ctre::phoenix6::signals;
   using namespace ctre::phoenix6::configs;
 
   // Config CANCoder
   _configTurnEncoder.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue::Unsigned_0To1;
-  _configTurnEncoder.MagnetSensor.SensorDirection = SensorDirectionValue::Clockwise_Positive;
+  _configTurnEncoder.MagnetSensor.SensorDirection = SensorDirectionValue::CounterClockwise_Positive;
   _configTurnEncoder.MagnetSensor.MagnetOffset = cancoderMagOffset;
   _canTurnEncoder.GetConfigurator().Apply(_configTurnEncoder);
 
@@ -29,7 +29,7 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _canTurnMotor.SetConversionFactor(1.0/TURNING_GEAR_RATIO);
   _canTurnMotor.EnableClosedLoopWrapping(0_tr, 1_tr);
   _canTurnMotor.SetPIDFF(TURN_P, TURN_I, TURN_D);
-  _canTurnMotor.SetInverted(false);
+  _canTurnMotor.SetInverted(true);
   _canTurnMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
   _canTurnMotor.BurnFlash();
   _canTurnMotor.SetCANTimeout(10);
@@ -87,6 +87,11 @@ void SwerveModule::SendSensorsToDash() {
 frc::Rotation2d SwerveModule::GetAngle() {
   units::radian_t turnAngle = _canTurnMotor.GetPosition();
   return turnAngle;
+}
+
+frc::Rotation2d SwerveModule::GetCanCoderAngle() {
+  units::radian_t tAngle = _canTurnEncoder.GetAbsolutePosition().GetValue();
+  return tAngle;
 }
 
 units::meters_per_second_t SwerveModule::GetSpeed() {
