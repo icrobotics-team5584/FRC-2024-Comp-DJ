@@ -244,18 +244,10 @@ void SubDrivebase::DriveToPose(frc::Pose2d targetPose) {
 }
 
 void SubDrivebase::RotateToZero(units::degree_t rotationError){
-  frc::Pose2d currentPosition = _poseEstimator.GetEstimatedPosition();
   double speedRot = Rcontroller.Calculate(rotationError, 0_deg);
-
   speedRot = std::clamp(speedRot, -2.0, 2.0);
 
-  // Drive speeds are relative to your alliance wall. Flip if we are on red,
-  // since we are using global coordinates (blue alliance at 0,0)
-  if (frc::DriverStation::GetAlliance() == frc::DriverStation::kRed && frc::RobotBase::IsReal()) {
-    Drive(0 * 1_mps, 0 * 1_mps, speedRot * 1_rad_per_s, true);
-  } else {
-    Drive(0 * 1_mps, 0 * 1_mps, speedRot * 1_rad_per_s, true);
-  }
+  Drive(0_mps, 0_mps, speedRot * 1_rad_per_s, false);
 }
 
 bool SubDrivebase::IsAtPose(frc::Pose2d pose) {
