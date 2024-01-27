@@ -32,10 +32,4 @@ class SubVision : public frc2::SubsystemBase {
   photon::PhotonTrackedTarget _bestTarget;
 
   double _bestYaw;
-  double _bestPitch;
-  double _bestArea;
-  double _bestSkew;
-
-  double _yawTolerance;
-  
 };

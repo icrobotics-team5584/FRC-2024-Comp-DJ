@@ -20,6 +20,9 @@ SubDrivebase::SubDrivebase() {
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value());
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAcceleration", MAX_JOYSTICK_ACCEL);
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration", MAX_ANGULAR_JOYSTICK_ACCEL);
+
+  frc::SmartDashboard::PutData("Drivebase/Vision/Rotation Controller: ", &Rcontroller);
+
   _gyro.Calibrate();
   Rcontroller.EnableContinuousInput(-180_deg, 180_deg);
   frc::SmartDashboard::PutData("field", &_fieldDisplay);
