@@ -4,30 +4,36 @@
 
 #include "subsystems/SubVision.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <algorithm>
 
-SubVision::SubVision(){}
+SubVision::SubVision() {}
 
 // This method will be called once per scheduler run
-void SubVision::Periodic(){
-    _result = _camera.GetLatestResult();
-    _bestTarget = _result.GetBestTarget();
-
-    _bestYaw = _bestTarget.GetYaw();
-    frc::SmartDashboard::PutNumber("Vision/best target yaw: ", _bestYaw); 
-    frc::SmartDashboard::PutBoolean("Vision/best target has targets: ", VisionHasTargets()); 
-
+void SubVision::Periodic() {
+  frc::SmartDashboard::PutNumber("Vision/best target yaw: ", BestTargetYaw(0).value());
+  frc::SmartDashboard::PutBoolean("Vision/best target has targets: ", VisionHasTargets());
 }
 
-bool SubVision::VisionHasTargets(){ 
-    bool targets = _result.HasTargets();
-    return targets;
+bool SubVision::VisionHasTargets() {
+  auto result = _camera.GetLatestResult();
+  bool targets = result.HasTargets();
+  return targets;
 }
 
-units::degree_t SubVision::BestTargetYaw(){
-    return _bestYaw * 1_deg; 
+units::degree_t SubVision::BestTargetYaw(int correctApriltagID) {
+  auto result = _camera.GetLatestResult();
+  auto targets = result.GetTargets();
+
+  auto checkRightApriltag = [correctApriltagID](photon::PhotonTrackedTarget apriltag){return apriltag.GetFiducialId() == correctApriltagID;};
+  auto tagResult = std::ranges::find_if(targets, checkRightApriltag);
+
+  if(tagResult != targets.end()){
+    return tagResult->GetYaw()*1_deg;
+  }
+
+  else{return 0_deg;}
 }
 
-bool SubVision::IsOnTarget(){
-  if(_bestYaw > -0.4 && _bestYaw < 0.4){ return true; }
-  else{ return false;}
+bool SubVision::IsOnTarget() {
+  return BestTargetYaw(0) > -0.4_deg && BestTargetYaw(0) < 0.4_deg;
 }

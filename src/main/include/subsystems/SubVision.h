@@ -16,20 +16,16 @@ class SubVision : public frc2::SubsystemBase {
     static SubVision inst;
     return inst;
   }
-  
 
   //Will be called periodically whenever the CommandScheduler runs.
   void Periodic() override;
   bool VisionHasTargets();
-  units::degree_t BestTargetYaw();
+  units::degree_t BestTargetYaw(int correctApriltagID);
   bool IsOnTarget();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   photon::PhotonCamera _camera{"photonvision_5584"};
-  photon::PhotonPipelineResult _result;
-  photon::PhotonTrackedTarget _bestTarget;
-
   double _bestYaw;
 };
