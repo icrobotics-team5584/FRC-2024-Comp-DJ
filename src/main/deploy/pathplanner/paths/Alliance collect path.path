@@ -48,28 +48,44 @@
     },
     {
       "anchor": {
-        "x": 2.4875022447048227,
-        "y": 4.178080009878111
+        "x": 2.379705757984981,
+        "y": 4.251033666118688
       },
       "prevControl": {
-        "x": 0.44059080349015345,
-        "y": 4.995008791349437
+        "x": 0.24949112015446984,
+        "y": 4.816192651665559
       },
       "nextControl": {
-        "x": 3.48023630318495,
-        "y": 3.7818767309331274
+        "x": 2.8294755365478457,
+        "y": 4.131706990173438
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.379895958460065,
-        "y": 0.7910382080475593
+        "x": 2.83630329746786,
+        "y": 2.705203242075528
       },
       "prevControl": {
-        "x": 7.774591886586662,
-        "y": 0.3596263796301187
+        "x": 2.0400914981573175,
+        "y": 2.2719022898816124
+      },
+      "nextControl": {
+        "x": 3.543751701592809,
+        "y": 3.090198876906417
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.684714713224005,
+        "y": 4.063660281386183
+      },
+      "prevControl": {
+        "x": 7.684714713224005,
+        "y": 4.054481306313473
       },
       "nextControl": null,
       "isLocked": false,
@@ -78,17 +94,17 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
+      "waypointRelativePos": 1.0,
       "rotationDegrees": 11.040940180323672,
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 2,
+      "waypointRelativePos": 2.0,
       "rotationDegrees": 3.1798301198643353,
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 3,
+      "waypointRelativePos": 3.0,
       "rotationDegrees": -25.083594006190918,
       "rotateFast": false
     }
@@ -105,13 +121,31 @@
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
+                "name": "ShootNote"
               }
             },
             {
               "type": "named",
               "data": {
-                "name": "Intake"
+                "name": "ExtendIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartSpinningIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "CheckStorage"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StopSpinningIntake"
               }
             }
           ]
@@ -151,7 +185,19 @@
             {
               "type": "named",
               "data": {
-                "name": "Intake"
+                "name": "StartSpinningIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "CheckStorage"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StopSpinningIntake"
               }
             }
           ]
@@ -174,13 +220,31 @@
             {
               "type": "named",
               "data": {
-                "name": "Intake"
+                "name": "StartSpinningIntake"
               }
             },
             {
               "type": "named",
               "data": {
                 "name": "Shoot"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StopSpinningIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RetractIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StopShooter"
               }
             }
           ]
