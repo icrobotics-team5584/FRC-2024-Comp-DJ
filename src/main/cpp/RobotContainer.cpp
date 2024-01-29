@@ -9,6 +9,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <subsystems/SubDrivebase.h>
 #include "subsystems/SubIntake.h"
+#include "subsystems/SubLED.h"
 
 #include "RobotContainer.h"
 #include "subsystems/SubAmp.h"
@@ -39,9 +40,10 @@ void RobotContainer::ConfigureBindings() {
   _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
 
   _driverController.LeftTrigger().WhileTrue(cmd::ShootSequence());
-  _driverController.RightTrigger().WhileTrue(cmd::IntakeSequence());
+  _driverController.RightTrigger().WhileTrue(cmd::IntakeSequence().AndThen([this]{_driverController.SetRumble(frc::GenericHID::kBothRumble, 1); _operatorController.SetRumble(frc::GenericHID::kBothRumble, 1);}));
 
   _driverController.LeftBumper().WhileTrue(cmd::SequenceArmToAmpPos());
+  _driverController.RightBumper().OnTrue(SubLED::GetInstance().IndicateAmp());
   _driverController.A().WhileTrue(cmd::SequenceArmToTrapPos());
 
   _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberExtend());
