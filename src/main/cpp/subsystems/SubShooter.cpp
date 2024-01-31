@@ -35,11 +35,11 @@ frc2::CommandPtr SubShooter::StartShooter() {
   return StartEnd(
       [this] {
         if (solShooter.Get() == frc::DoubleSolenoid::kReverse) {
-          _shooterMotorMainSpin.SetVelocityTarget(3405_rpm),
-              _secondaryShooterMotorSpin.SetVelocityTarget(3405_rpm);
+          _shooterMotorMainSpin.SetVelocityTarget(ShootFarTargetRPM*1_rpm);
+              _secondaryShooterMotorSpin.SetVelocityTarget(ShootFarTargetRPM*1_rpm);
         } else {
-          _shooterMotorMainSpin.SetVelocityTarget(2270_rpm),
-              _secondaryShooterMotorSpin.SetVelocityTarget(2270_rpm);
+          _shooterMotorMainSpin.SetVelocityTarget(ShootCloseTargetRPM*1_rpm);
+              _secondaryShooterMotorSpin.SetVelocityTarget(ShootCloseTargetRPM*1_rpm);
         }
       },
       [this] { _shooterMotorMainSpin.Set(0), _secondaryShooterMotorSpin.Set(0); });

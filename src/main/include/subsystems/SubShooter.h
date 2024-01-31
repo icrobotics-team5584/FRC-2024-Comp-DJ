@@ -38,6 +38,9 @@ class SubShooter : public frc2::SubsystemBase {
   static constexpr double ShooterD = 0;
   static constexpr double ShooterFF = 0.1;
 
+  int ShootFarTargetRPM = 3405;
+  int ShootCloseTargetRPM = 2270;
+
   ICSparkMax _shooterMotorMainSpin{canid::ShooterMotorMain};
   ICSparkMax _secondaryShooterMotorSpin{canid::SecondaryShooterMotor};
 
