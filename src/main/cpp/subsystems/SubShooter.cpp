@@ -8,6 +8,8 @@
 SubShooter::SubShooter() {
   _secondaryShooterMotorSpin.RestoreFactoryDefaults();
   _shooterMotorMainSpin.RestoreFactoryDefaults();
+  
+  solShooter.Set(frc::DoubleSolenoid::kReverse);
 
   _secondaryShooterMotorSpin.SetInverted(true);
   _shooterMotorMainSpin.SetPIDFF(ShooterP, ShooterI, ShooterD, ShooterFF);
