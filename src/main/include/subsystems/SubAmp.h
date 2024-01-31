@@ -62,7 +62,7 @@ class SubAmp : public frc2::SubsystemBase {
 
  private:
   // motors
-  ICSparkMax _ampMotorSpin{canid::AmpMotorSpin};      // Amp shooter
+  ICSparkMax _ampMotor{canid::AmpMotor};      // Amp shooter
   ICSparkMax _armMotor{canid::ArmMotor};              // arm
   ICSparkMax _armMotorFollow{canid::ArmMotorFollow};  // arm
 

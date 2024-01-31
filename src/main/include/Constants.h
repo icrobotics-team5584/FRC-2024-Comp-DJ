@@ -13,7 +13,7 @@ namespace canid {
   constexpr int SecondaryShooterMotor = 24;  // bottom motor
 
   // shooter amp
-  constexpr int AmpMotorSpin = 25;
+  constexpr int AmpMotor = 25;
   constexpr int ShooterFeederMotor = 26;  // Shooter feeder
 
   // arm

@@ -23,7 +23,7 @@ using namespace frc2::cmd;
 
 SubAmp::SubAmp() {
   // amp shooter
-  _ampMotorSpin.RestoreFactoryDefaults();
+  _ampMotor.RestoreFactoryDefaults();
 
   // arm
   _armMotor.SetInverted(true);
@@ -41,7 +41,7 @@ SubAmp::SubAmp() {
 // This method will be called once per scheduler run
 void SubAmp::Periodic() {
   frc::SmartDashboard::PutData("amp/Arm Mechanism Display: ", &_doubleJointedArmMech);
-  frc::SmartDashboard::PutNumber("amp/Amp Shooter Motor: ", _ampMotorSpin.Get());
+  frc::SmartDashboard::PutNumber("amp/Amp Shooter Motor: ", _ampMotor.Get());
   frc::SmartDashboard::PutNumber("amp/ Arm Position Degrees: ", _armEncoder.GetPosition());
 
   // angle of motor
@@ -60,11 +60,11 @@ void SubAmp::SimulationPeriodic() {
 
 // Shooter Amp
 frc2::CommandPtr SubAmp::AmpShooter() {
-  return StartEnd([this] { _ampMotorSpin.Set(0.7); }, [this] { _ampMotorSpin.Set(0); });
+  return StartEnd([this] { _ampMotor.Set(0.7); }, [this] { _ampMotor.Set(0); });
 }
 
 frc2::CommandPtr SubAmp::ReverseAmpShooter() {
-  return StartEnd([this] { _ampMotorSpin.Set(-0.7); }, [this] { _ampMotorSpin.Set(0); });
+  return StartEnd([this] { _ampMotor.Set(-0.7); }, [this] { _ampMotor.Set(0); });
 }
 
 // arm
@@ -83,7 +83,7 @@ frc2::CommandPtr SubAmp::StoreNote() {
 }
 
 frc2::CommandPtr SubAmp::SpinAmpStorage() {
-  return Run([this] { _ampMotorSpin.Set(0.3); }).Until([this] { return _sdLineBreak.Get(); });
+  return Run([this] { _ampMotor.Set(0.3); }).Until([this] { return _sdLineBreak.Get(); });
 }
 
 // booleans
