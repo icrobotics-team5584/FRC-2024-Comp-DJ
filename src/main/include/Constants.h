@@ -7,19 +7,19 @@ namespace canivore {
 
 namespace canid {
 // amp
-  constexpr int clawMotorJoint = 100;
-  constexpr int elevatorMotor = 101;
-  constexpr int ShooterMotorMain = 22;        // top motor
-  constexpr int SecondaryShooterMotor = 105;  // bottom motor
+  constexpr int clawMotorJoint = 21;
+  constexpr int elevatorMotor = 22;
+  constexpr int ShooterMotorMain = 23;        // top motor
+  constexpr int SecondaryShooterMotor = 24;  // bottom motor
 
   // shooter amp
-  constexpr int AmpMotorSpin = 106;
-  constexpr int ShooterFeederMotor = 102;  // Shooter feeder
+  constexpr int AmpMotorSpin = 25;
+  constexpr int ShooterFeederMotor = 26;  // Shooter feeder
 
   // arm
-  constexpr int ArmMotor = 102;
-  constexpr int ArmMotorFollow = 103;
-  constexpr int IntakeMotor = 104;
+  constexpr int ArmMotor = 27;
+  constexpr int ArmMotorFollow = 28;
+  constexpr int IntakeMotor = 29;
 
   constexpr int DriveBaseFrontRightDrive = 7;
   constexpr int DriveBaseFrontRightTurn = 8;
@@ -56,9 +56,9 @@ namespace OperatorConstants {}
 constexpr int kDriverControllerPort = 0;
 
 namespace dio {
-  constexpr int FDLineBreak = 200;
-  constexpr int SDLineBreak = 201;
-  constexpr int IntakeRetractedReed = 202;
-  constexpr int IntakeExtendedReed = 203;
-  constexpr int ArmHomeSwitch = 204;
+  constexpr int FDLineBreak = 0;
+  constexpr int SDLineBreak = 1;
+  constexpr int IntakeRetractedReed = 2;
+  constexpr int IntakeExtendedReed = 3;
+  constexpr int ArmHomeSwitch = 4;
 }
