@@ -136,9 +136,9 @@ void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_se
     else{
       invert = 1;
     }
-  auto states = _kinematics.ToSwerveModuleStates(
+  auto states = _kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
       fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, GetHeading() * invert)
-                    : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
+                    : frc::ChassisSpeeds{xSpeed, ySpeed, rot}, -200_ms));
 
   // Set speed limit and apply speed limit to all modules
   _kinematics.DesaturateWheelSpeeds(&states, MAX_VELOCITY);
