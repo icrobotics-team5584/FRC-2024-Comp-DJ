@@ -29,6 +29,9 @@ class SubIntake : public frc2::SubsystemBase {
   frc2::CommandPtr StopSpinningIntake();
   frc2::CommandPtr StartSpinningIntake();
   frc2::CommandPtr RetractIntake();
+  frc2::CommandPtr BeginIntake();
+  frc2::CommandPtr EndIntake();
+  frc2::CommandPtr IntakeSequence();
 
  private:
   rev::CANSparkMax _intakeMotorSpin{canid::IntakeMotor, rev::CANSparkMax::MotorType::kBrushless};

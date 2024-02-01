@@ -40,16 +40,4 @@ frc2::CommandPtr ShootSequence() {
       .Until(/*AUTO VISION CHECKER = true*/ {})
       .AndThen({SubShooter::GetInstance().ShootNote()});
 }
-
-frc2::CommandPtr IntakeSequence() {
-  return StartEnd(
-      [] {
-        SubIntake::GetInstance().ExtendIntake().AndThen(
-            {SubIntake::GetInstance().StartSpinningIntake()});
-      },
-      [] {
-        SubIntake::GetInstance().StopSpinningIntake().AndThen(
-            [] { SubIntake::GetInstance().RetractIntake(); });
-      });
-}
 }  // namespace cmd

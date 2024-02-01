@@ -42,6 +42,18 @@ frc2::CommandPtr SubIntake::StartSpinningIntake() {
   return RunOnce([this] { _intakeMotorSpin.Set(0.5); });
 }
 
+frc2::CommandPtr SubIntake::BeginIntake(){
+  return RunOnce([this] {ExtendIntake();}).AndThen([this]{StartSpinningIntake();});
+}
+
+frc2::CommandPtr SubIntake::EndIntake(){
+  return RunOnce([this]{StopSpinningIntake();}).AndThen([this]{RetractIntake();});
+}
+
+frc2::CommandPtr SubIntake::IntakeSequence(){
+  return Sequence(BeginIntake(), EndIntake());
+}
+
 bool SubIntake::GetIntakeState() {
   if (_intakeExtendededReed.Get() == true || _intakeRetractedReed.Get() == true) {
     return true;
