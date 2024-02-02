@@ -42,31 +42,35 @@ units::degree_t SubVision::GetSpecificTagYaw(int correctApriltagID) {
 
 bool SubVision::IsOnTarget(){ return GetSpecificTagYaw(0) > -0.4_deg && GetSpecificTagYaw(0) < 0.4_deg; }
 
-int SubVision::FindID(enum FieldElement){
+int SubVision::FindID(FieldElement chosenFieldElement){
 
   map<FieldElement, int> blueFieldElement{
     // change numbers later
     {SPEAKER, 7},
-    {LEFT_SPEAKER, 8},
+    {SPEAKER_SIDE, 8},
     {AMP, 6},
+    {SOURCE_LEFT, 2},
+    {SOURCE_RIGHT, 1}
   };
 
   map<FieldElement, int> redFieldElement{
     // change numbers later
     {SPEAKER, 4},
-    {RIGHT_SPEAKER, 3},
+    {SPEAKER_SIDE, 3},
     {AMP, 5},
+    {SOURCE_LEFT, 10},
+    {SOURCE_RIGHT, 9}
   };
 
   map<FieldElement, int>::iterator i;
 
   if(auto ally = frc::DriverStation::GetAlliance()){  
     if (ally.value() == frc::DriverStation::Alliance::kBlue) {
-      return blueFieldElement[SPEAKER];
+      return blueFieldElement[chosenFieldElement];
     }
 
     if(ally.value() == frc::DriverStation::Alliance::kRed){
-      return redFieldElement[SPEAKER];
+      return redFieldElement[chosenFieldElement];
     }
   }
 

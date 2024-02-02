@@ -24,19 +24,13 @@ class SubVision : public frc2::SubsystemBase {
   bool VisionHasTargets();
   bool IsOnTarget();
 
-  enum FieldElement{SPEAKER, AMP, LEFT_SPEAKER, RIGHT_SPEAKER};
-  int FindID(enum FieldElement);
+  enum FieldElement{SPEAKER, AMP, SPEAKER_SIDE, SOURCE_LEFT, SOURCE_RIGHT};
+  int FindID(FieldElement chosenFieldElement);
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   photon::PhotonCamera _camera{"photonvision_5584"};
   double _bestYaw;
-
-  static constexpr int BLUE_SPEAKER = 7;
-  static constexpr int BLUE_AMP = 6;
-
-  static constexpr int RED_SPEAKER = 4;
-  static constexpr int RED_AMP = 5;
 
 };
