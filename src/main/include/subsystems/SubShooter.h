@@ -10,6 +10,9 @@
 #include <frc/DoubleSolenoid.h>
 #include "utilities/ICSparkMax.h"
 
+#include <frc/simulation/DCMotorSim.h>
+#include <units/moment_of_inertia.h>
+
 #include "Constants.h"
 
 class SubShooter : public frc2::SubsystemBase {
@@ -24,20 +27,23 @@ class SubShooter : public frc2::SubsystemBase {
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
+  void SimulationPeriodic() override;
   frc2::CommandPtr StartShooter();
   frc2::CommandPtr ShooterChangePosFar();
   frc2::CommandPtr ShooterChangePosClose();
   frc2::CommandPtr ShootNote();
   frc2::CommandPtr ShootSequence();
+  frc2::CommandPtr StopShooterCommand();
+  void StopShooterFunc();
   bool CheckShooterSpeed();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  static constexpr double ShooterP = 0.1;
+  static constexpr double ShooterP = 0.002;
   static constexpr double ShooterI = 0;
   static constexpr double ShooterD = 0;
-  static constexpr double ShooterFF = 0.1;
+  static constexpr double ShooterFF = 0.002;
 
   int ShootFarTargetRPM = 3405;
   int ShootCloseTargetRPM = 2270;
@@ -51,4 +57,9 @@ class SubShooter : public frc2::SubsystemBase {
 
   double mainMotorPower = 0.3;
   double secondaryMotorPower = 0.3;
+
+  //Sim configs
+  frc::sim::DCMotorSim _topShooterSim{frc::DCMotor::NEO(), 1, 0.001_kg_sq_m};
+  frc::sim::DCMotorSim _bottomShooterSim{frc::DCMotor::NEO(), 1, 0.001_kg_sq_m};
+  frc::sim::DCMotorSim _feederSim{frc::DCMotor::NEO550(), 1, 0.00001_kg_sq_m};
 };

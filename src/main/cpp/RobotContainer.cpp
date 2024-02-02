@@ -39,8 +39,8 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
 
-  _driverController.LeftTrigger().WhileTrue(cmd::ShootSequence());
-  _driverController.RightTrigger().WhileTrue(SubIntake::GetInstance().IntakeSequence().AndThen([this]{_driverController.SetRumble(frc::GenericHID::kBothRumble, 1); _operatorController.SetRumble(frc::GenericHID::kBothRumble, 1);}));
+  _driverController.LeftTrigger().WhileTrue(cmd::ShootFullSequence());
+  //_driverController.RightTrigger().WhileTrue(SubIntake::GetInstance().IntakeSequence().AndThen([this]{_driverController.SetRumble(frc::GenericHID::kBothRumble, 1); _operatorController.SetRumble(frc::GenericHID::kBothRumble, 1);}));
 
   _driverController.LeftBumper().WhileTrue(cmd::SequenceArmToAmpPos());
   _driverController.RightBumper().OnTrue(SubLED::GetInstance().IndicateAmp());

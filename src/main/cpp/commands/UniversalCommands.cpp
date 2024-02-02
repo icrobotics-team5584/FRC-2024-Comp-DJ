@@ -35,9 +35,9 @@ frc2::CommandPtr SequenceArmToTrapPos() {
   return StartEnd([] { ArmToTrapPos(); }, [] { ArmToStow(); });
 }
 
-frc2::CommandPtr ShootSequence() {
+frc2::CommandPtr ShootFullSequence() {
   return Run([] { /*AUTO VISION AIM COMMAND*/ })
-      .Until(/*AUTO VISION CHECKER = true*/ {})
-      .AndThen({SubShooter::GetInstance().ShootNote()});
+      .Until([] {return true;})
+      .AndThen({SubShooter::GetInstance().ShootSequence()});
 }
 }  // namespace cmd
