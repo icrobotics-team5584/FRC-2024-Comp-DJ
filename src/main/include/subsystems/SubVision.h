@@ -24,7 +24,8 @@ class SubVision : public frc2::SubsystemBase {
   bool VisionHasTargets();
   bool IsOnTarget();
 
-  int FindID();
+  enum FieldElement{SPEAKER, AMP, LEFT_SPEAKER, RIGHT_SPEAKER};
+  int FindID(enum FieldElement);
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be

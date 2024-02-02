@@ -4,9 +4,15 @@
 
 #include "subsystems/SubVision.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DriverStation.h>
 #include <algorithm>
+#include <iostream>
+#include <bits/stdc++.h>
+#include <map>
 
 SubVision::SubVision() {}
+
+using namespace std;
 
 // This method will be called once per scheduler run
 void SubVision::Periodic() {
@@ -36,8 +42,33 @@ units::degree_t SubVision::GetSpecificTagYaw(int correctApriltagID) {
 
 bool SubVision::IsOnTarget(){ return GetSpecificTagYaw(0) > -0.4_deg && GetSpecificTagYaw(0) < 0.4_deg; }
 
-int SubVision::FindID(){
-  enum FieldElement {SPEAKER, AMP, TRAP, PODIM};
+int SubVision::FindID(enum FieldElement){
 
-  int FieldID
+  map<FieldElement, int> blueFieldElement{
+    // change numbers later
+    {SPEAKER, 7},
+    {LEFT_SPEAKER, 8},
+    {AMP, 6},
+  };
+
+  map<FieldElement, int> redFieldElement{
+    // change numbers later
+    {SPEAKER, 4},
+    {RIGHT_SPEAKER, 3},
+    {AMP, 5},
+  };
+
+  map<FieldElement, int>::iterator i;
+
+  if(auto ally = frc::DriverStation::GetAlliance()){  
+    if (ally.value() == frc::DriverStation::Alliance::kBlue) {
+      return blueFieldElement[SPEAKER];
+    }
+
+    if(ally.value() == frc::DriverStation::Alliance::kRed){
+      return redFieldElement[SPEAKER];
+    }
+  }
+
+  return 0;
 }
