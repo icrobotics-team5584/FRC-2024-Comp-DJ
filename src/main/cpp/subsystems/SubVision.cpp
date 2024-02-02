@@ -41,7 +41,7 @@ units::degree_t SubVision::GetSpecificTagYaw(FieldElement chosenFieldElement) {
   else{return 0_deg;}
 }
 
-bool SubVision::IsOnTarget(){ return GetSpecificTagYaw(FindID(SubVision::SPEAKER)) > -0.4_deg && GetSpecificTagYaw(FindID(SubVision::SPEAKER)) < 0.4_deg; }
+bool SubVision::IsOnTarget(FieldElement chosenFieldElement){ return GetSpecificTagYaw(chosenFieldElement) > -0.4_deg && GetSpecificTagYaw(chosenFieldElement) < 0.4_deg; }
 
 int SubVision::FindID(FieldElement chosenFieldElement){
   
@@ -55,5 +55,5 @@ int SubVision::FindID(FieldElement chosenFieldElement){
     }
   }
 
-  return 0;
+  return redFieldElement[chosenFieldElement];
 }
