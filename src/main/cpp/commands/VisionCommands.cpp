@@ -7,12 +7,12 @@ namespace cmd{
 
     frc2::CommandPtr VisionRotateToZero(){
         return Run(
-            []{SubDrivebase::GetInstance().RotateToZero(-SubVision::GetInstance().GetSpecificTagYaw(0));},
+            []{SubDrivebase::GetInstance().RotateToZero(-SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER));},
             {&SubDrivebase::GetInstance()}
         );}
         
     frc2::CommandPtr ShootSequence(){
-        return VisionRotateToZero().Until([]{return SubVision::GetInstance().IsOnTarget();});
+        return VisionRotateToZero().Until([]{return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);});
     }
 
 } // namespace cmd

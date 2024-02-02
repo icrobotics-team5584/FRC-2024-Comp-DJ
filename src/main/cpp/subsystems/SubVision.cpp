@@ -15,7 +15,7 @@ using namespace std;
 
 // This method will be called once per scheduler run
 void SubVision::Periodic() {
-  frc::SmartDashboard::PutNumber("Vision/best target yaw: ", GetSpecificTagYaw(0).value());
+  //frc::SmartDashboard::PutNumber("Vision/best target yaw: ", GetSpecificTagYaw(SPEAKER));
   frc::SmartDashboard::PutBoolean("Vision/best target has targets: ", VisionHasTargets());
 }
 
@@ -25,11 +25,13 @@ bool SubVision::VisionHasTargets() {
   return targets;
 }
 
-units::degree_t SubVision::GetSpecificTagYaw(int correctApriltagID) {
+units::degree_t SubVision::GetSpecificTagYaw(FieldElement chosenFieldElement) {
   auto result = _camera.GetLatestResult();
   auto targets = result.GetTargets();
 
-  auto checkRightApriltag = [correctApriltagID](photon::PhotonTrackedTarget apriltag){return apriltag.GetFiducialId() == correctApriltagID;};
+  int AprilTagID = FindID(chosenFieldElement);
+
+  auto checkRightApriltag = [AprilTagID](photon::PhotonTrackedTarget apriltag){return apriltag.GetFiducialId() == AprilTagID;};
   auto tagResult = std::ranges::find_if(targets, checkRightApriltag);
 
   if(tagResult != targets.end()){
@@ -39,12 +41,10 @@ units::degree_t SubVision::GetSpecificTagYaw(int correctApriltagID) {
   else{return 0_deg;}
 }
 
-bool SubVision::IsOnTarget(){ return GetSpecificTagYaw(0) > -0.4_deg && GetSpecificTagYaw(0) < 0.4_deg; }
+bool SubVision::IsOnTarget(){ return GetSpecificTagYaw(FindID(SubVision::SPEAKER)) > -0.4_deg && GetSpecificTagYaw(FindID(SubVision::SPEAKER)) < 0.4_deg; }
 
 int SubVision::FindID(FieldElement chosenFieldElement){
   
-  map<FieldElement, int>::iterator i;
-
   if(auto ally = frc::DriverStation::GetAlliance()){  
     if (ally.value() == frc::DriverStation::Alliance::kBlue) {
       return blueFieldElement[chosenFieldElement];
