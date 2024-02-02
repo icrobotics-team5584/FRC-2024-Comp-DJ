@@ -7,6 +7,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include <photon/PhotonCamera.h>
 #include <frc/apriltag/AprilTagFieldLayout.h>
+#include <map>
 
 class SubVision : public frc2::SubsystemBase {
  public:
@@ -32,5 +33,21 @@ class SubVision : public frc2::SubsystemBase {
   // declared private and exposed only through public methods.
   photon::PhotonCamera _camera{"photonvision_5584"};
   double _bestYaw;
+
+  std::map<FieldElement, int> blueFieldElement = {
+    {SPEAKER, 7},
+    {SPEAKER_SIDE, 8},
+    {AMP, 6},
+    {SOURCE_LEFT, 2},
+    {SOURCE_RIGHT, 1}
+  };
+
+  std::map<FieldElement, int> redFieldElement = {
+    {SPEAKER, 4},
+    {SPEAKER_SIDE, 3},
+    {AMP, 5},
+    {SOURCE_LEFT, 10},
+    {SOURCE_RIGHT, 9}
+  };
 
 };

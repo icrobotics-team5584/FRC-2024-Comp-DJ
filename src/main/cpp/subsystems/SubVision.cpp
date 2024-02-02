@@ -8,7 +8,6 @@
 #include <algorithm>
 #include <iostream>
 #include <bits/stdc++.h>
-#include <map>
 
 SubVision::SubVision() {}
 
@@ -43,25 +42,7 @@ units::degree_t SubVision::GetSpecificTagYaw(int correctApriltagID) {
 bool SubVision::IsOnTarget(){ return GetSpecificTagYaw(0) > -0.4_deg && GetSpecificTagYaw(0) < 0.4_deg; }
 
 int SubVision::FindID(FieldElement chosenFieldElement){
-
-  map<FieldElement, int> blueFieldElement{
-    // change numbers later
-    {SPEAKER, 7},
-    {SPEAKER_SIDE, 8},
-    {AMP, 6},
-    {SOURCE_LEFT, 2},
-    {SOURCE_RIGHT, 1}
-  };
-
-  map<FieldElement, int> redFieldElement{
-    // change numbers later
-    {SPEAKER, 4},
-    {SPEAKER_SIDE, 3},
-    {AMP, 5},
-    {SOURCE_LEFT, 10},
-    {SOURCE_RIGHT, 9}
-  };
-
+  
   map<FieldElement, int>::iterator i;
 
   if(auto ally = frc::DriverStation::GetAlliance()){  
