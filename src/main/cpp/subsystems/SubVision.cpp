@@ -10,7 +10,7 @@ SubVision::SubVision() {}
 
 // This method will be called once per scheduler run
 void SubVision::Periodic() {
-  frc::SmartDashboard::PutNumber("Vision/best target yaw: ", BestTargetYaw(0).value());
+  frc::SmartDashboard::PutNumber("Vision/best target yaw: ", GetSpecificTagYaw(0).value());
   frc::SmartDashboard::PutBoolean("Vision/best target has targets: ", VisionHasTargets());
 }
 
@@ -20,7 +20,7 @@ bool SubVision::VisionHasTargets() {
   return targets;
 }
 
-units::degree_t SubVision::BestTargetYaw(int correctApriltagID) {
+units::degree_t SubVision::GetSpecificTagYaw(int correctApriltagID) {
   auto result = _camera.GetLatestResult();
   auto targets = result.GetTargets();
 
@@ -34,6 +34,10 @@ units::degree_t SubVision::BestTargetYaw(int correctApriltagID) {
   else{return 0_deg;}
 }
 
-bool SubVision::IsOnTarget() {
-  return BestTargetYaw(0) > -0.4_deg && BestTargetYaw(0) < 0.4_deg;
+bool SubVision::IsOnTarget(){ return GetSpecificTagYaw(0) > -0.4_deg && GetSpecificTagYaw(0) < 0.4_deg; }
+
+int SubVision::FindID(){
+  enum FieldElement {SPEAKER, AMP, TRAP, PODIM};
+
+  int FieldID
 }
