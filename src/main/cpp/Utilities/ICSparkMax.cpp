@@ -203,9 +203,9 @@ units::volt_t ICSparkMax::GetSimVoltage() {
       break;
 
     case Mode::kSmartMotion:
-      output = units::volt_t{_simController.Calculate(
-          GetVelocity().value(),
-          EstimateSMVelocity().value() + _simFF * EstimateSMVelocity().value())};
+      output = units::volt_t{
+          _simController.Calculate(GetVelocity().value(), EstimateSMVelocity().value()) +
+          _simFF * EstimateSMVelocity().value()};
       break;
 
     case Mode::kCurrent:
