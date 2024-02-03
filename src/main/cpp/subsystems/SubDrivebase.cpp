@@ -70,6 +70,18 @@ void SubDrivebase::Periodic() {
                                           _backRight.GetSpeed().value(),
                                       });
 
+  frc::SmartDashboard::PutNumberArray("drivebase/can coders swerve states",
+                                      std::array{
+                                        _frontLeft.GetCanCoderAngle().Degrees().value(),
+                                          _frontLeft.GetSpeed().value(),
+                                          _frontRight.GetCanCoderAngle().Degrees().value(),
+                                          _frontRight.GetSpeed().value(),
+                                          _backLeft.GetCanCoderAngle().Degrees().value(),
+                                          _backLeft.GetSpeed().value(),
+                                          _backRight.GetCanCoderAngle().Degrees().value(),
+                                          _backRight.GetSpeed().value(),
+                                      });
+
   _frontLeft.SendSensorsToDash();
   _frontRight.SendSensorsToDash();
   _backLeft.SendSensorsToDash();
@@ -104,7 +116,7 @@ frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& contro
       Drive(-forwardSpeed, -sidewaysSpeed, -rotationSpeed, true);
     }
     else {
-      Drive(-forwardSpeed, sidewaysSpeed, rotationSpeed, true);
+      Drive(forwardSpeed, sidewaysSpeed, rotationSpeed, true);
     }
   });
   }
