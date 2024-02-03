@@ -15,13 +15,13 @@
 #include <frc/MathUtil.h>
 #include <frc/shuffleboard/Shuffleboard.h>
 
-#include "subsystems/SubAmp.h"
+#include "subsystems/SubArm.h"
 #include "utilities/ICSparkMax.h"
 #include "RobotContainer.h"
 
 using namespace frc2::cmd;
 
-SubAmp::SubAmp(){ 
+SubArm::SubArm(){ 
     // amp shooter
     _ampMotorSpin.RestoreFactoryDefaults(); 
 
@@ -39,7 +39,7 @@ SubAmp::SubAmp(){
 }
 
 // This method will be called once per scheduler run
-void SubAmp::Periodic(){
+void SubArm::Periodic(){
 
     frc::SmartDashboard::PutData("amp/Arm Mechanism Display", &_doubleJointedArmMech);
     frc::SmartDashboard::PutNumber("amp/Amp Shooter Motor: ", _ampMotorSpin.Get());
@@ -49,7 +49,7 @@ void SubAmp::Periodic(){
     _arm1Ligament->SetAngle(_armMotor.GetPosition());
 }
 
-void SubAmp::SimulationPeriodic(){
+void SubArm::SimulationPeriodic(){
     _armSim.SetInputVoltage(_armMotor.GetSimVoltage());
     _armSim.Update(20_ms);
     
@@ -59,14 +59,14 @@ void SubAmp::SimulationPeriodic(){
 }
 
 // Shooter Amp
-frc2::CommandPtr SubAmp::AmpShooter(){
+frc2::CommandPtr SubArm::AmpShooter(){
    return StartEnd(
     [this]{_ampMotorSpin.Set(0.7);},
     [this]{_ampMotorSpin.Set(0);}
    );
 }
 
-frc2::CommandPtr SubAmp::ReverseAmpShooter(){
+frc2::CommandPtr SubArm::ReverseAmpShooter(){
     return StartEnd(
         [this]{_ampMotorSpin.Set(-0.7);},
         [this]{_ampMotorSpin.Set(0);}
@@ -74,6 +74,6 @@ frc2::CommandPtr SubAmp::ReverseAmpShooter(){
 }
 
 // arm
-frc2::CommandPtr SubAmp::TiltArmToAngle(units::degree_t targetAngle){ 
+frc2::CommandPtr SubArm::TiltArmToAngle(units::degree_t targetAngle){ 
     return Run([this, targetAngle]{_armMotor.SetSmartMotionTarget(targetAngle);}); 
 }

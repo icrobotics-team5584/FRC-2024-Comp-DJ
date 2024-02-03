@@ -24,13 +24,13 @@
 #include "Constants.h"
 #include "utilities/ICSparkMax.h"
 
-class SubAmp : public frc2::SubsystemBase {
+class SubArm : public frc2::SubsystemBase {
  public:
-  SubAmp();
+  SubArm();
 
   //Instance
-  static SubAmp &GetInstance(){
-    static SubAmp inst;
+  static SubArm &GetInstance(){
+    static SubArm inst;
     return inst;
   }
 

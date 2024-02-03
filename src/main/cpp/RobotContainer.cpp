@@ -5,10 +5,10 @@
 #include <frc2/command/Commands.h>
 
 #include "RobotContainer.h"
-#include "subsystems/SubAmp.h"
+#include "subsystems/SubArm.h"
 
 RobotContainer::RobotContainer() {
-  SubAmp::GetInstance();
+  SubArm::GetInstance();
   ConfigureBindings();
 }
 
@@ -16,14 +16,14 @@ void RobotContainer::ConfigureBindings() {
   using namespace frc2::cmd;
 
   // Amp Shooter
-  _driverController.LeftTrigger().WhileTrue(SubAmp::GetInstance().AmpShooter());
-  _driverController.RightTrigger().WhileTrue(SubAmp::GetInstance().ReverseAmpShooter());
+  _driverController.LeftTrigger().WhileTrue(SubArm::GetInstance().AmpShooter());
+  _driverController.RightTrigger().WhileTrue(SubArm::GetInstance().ReverseAmpShooter());
 
   // Arm
-  _driverController.A().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(0_deg));
-  _driverController.B().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(180_deg));
-  _driverController.X().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(20_deg)); 
-  _driverController.Y().WhileTrue(SubAmp::GetInstance().TiltArmToAngle(40_deg));
+  _driverController.A().WhileTrue(SubArm::GetInstance().TiltArmToAngle(0_deg));
+  _driverController.B().WhileTrue(SubArm::GetInstance().TiltArmToAngle(180_deg));
+  _driverController.X().WhileTrue(SubArm::GetInstance().TiltArmToAngle(20_deg)); 
+  _driverController.Y().WhileTrue(SubArm::GetInstance().TiltArmToAngle(40_deg));
   }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
