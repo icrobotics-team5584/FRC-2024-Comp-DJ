@@ -49,8 +49,6 @@ class SubAmp : public frc2::SubsystemBase {
   frc2::CommandPtr ReverseAmpShooter();
   frc2::CommandPtr StoreNote();
 
-  double GetArmEncoderPos();
-
   // amp
   frc2::CommandPtr TiltArmToAngle(units::degree_t targetAngle);
   frc2::CommandPtr CheckArmPos();
@@ -64,10 +62,6 @@ class SubAmp : public frc2::SubsystemBase {
   ICSparkMax _ampMotor{canid::AmpMotor};      // Amp shooter
   ICSparkMax _armMotor{canid::ArmMotor};              // arm
   ICSparkMax _armMotorFollow{canid::ArmMotorFollow};  // arm
-
-  // encoders
-  rev::SparkAbsoluteEncoder _armEncoder{
-      _armMotor.GetAbsoluteEncoder(rev::SparkAbsoluteEncoder::Type::kDutyCycle)};
 
   // arm (tune values for robot)
   static constexpr double ARM_P = 0.0;
