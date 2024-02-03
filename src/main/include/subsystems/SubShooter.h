@@ -40,10 +40,10 @@ class SubShooter : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  static constexpr double ShooterP = 0.002;
+  static constexpr double ShooterP = 1;
   static constexpr double ShooterI = 0;
   static constexpr double ShooterD = 0;
-  static constexpr double ShooterFF = 0.002;
+  static constexpr double ShooterFF = 0.125;
 
   int ShootFarTargetRPM = 3405;
   int ShootCloseTargetRPM = 2270;

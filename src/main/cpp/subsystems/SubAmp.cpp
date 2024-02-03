@@ -42,7 +42,6 @@ SubAmp::SubAmp() {
 void SubAmp::Periodic() {
   frc::SmartDashboard::PutData("amp/Arm Mechanism Display: ", &_doubleJointedArmMech);
   frc::SmartDashboard::PutNumber("amp/Amp Shooter Motor: ", _ampMotor.Get());
-  frc::SmartDashboard::PutNumber("amp/ Arm Position Degrees: ", _armEncoder.GetPosition());
 
   // angle of motor
   frc::SmartDashboard::PutData("amp/Dizzy Arm tilt motor: ", (wpi::Sendable*)&_armMotor);
@@ -72,10 +71,6 @@ frc2::CommandPtr SubAmp::TiltArmToAngle(units::degree_t targetAngle) {
   return Run([this, targetAngle] { _armMotor.SetSmartMotionTarget(targetAngle); }).Until([this] {
     return units::math::abs(_armMotor.GetPosError()) < 5_deg;
   });
-}
-
-double SubAmp::GetArmEncoderPos() {
-  return _armEncoder.GetPosition();
 }
 
 frc2::CommandPtr SubAmp::StoreNote() {
