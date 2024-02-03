@@ -48,7 +48,6 @@ class SubAmp : public frc2::SubsystemBase {
   frc2::CommandPtr AmpShooter();
   frc2::CommandPtr ReverseAmpShooter();
   frc2::CommandPtr StoreNote();
-  frc2::CommandPtr SpinAmpStorage();
 
   double GetArmEncoderPos();
 

@@ -40,4 +40,11 @@ frc2::CommandPtr ShootFullSequence() {
       .Until([] {return true;})
       .AndThen({SubShooter::GetInstance().ShootSequence()});
 }
+
+frc2::CommandPtr IntakefullSequence(){
+  return SubIntake::GetInstance()
+      .Intake()
+      .AlongWith(SubAmp::GetInstance().StoreNote())
+      .FinallyDo([] { SubIntake::GetInstance().RetractIntake(); });
+}
 }  // namespace cmd

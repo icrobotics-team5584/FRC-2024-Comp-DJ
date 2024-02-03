@@ -79,11 +79,11 @@ double SubAmp::GetArmEncoderPos() {
 }
 
 frc2::CommandPtr SubAmp::StoreNote() {
-  return TiltArmToAngle(ARM_TOLERANCE).AndThen(SubAmp::SpinAmpStorage());
-}
-
-frc2::CommandPtr SubAmp::SpinAmpStorage() {
-  return Run([this] { _ampMotor.Set(0.3); }).Until([this] { return _sdLineBreak.Get(); });
+  return TiltArmToAngle(HOME_ANGLE).AndThen(Run([this] {
+                                              _ampMotor.Set(0.3);
+                                            }).Until([this] {
+                                                return _sdLineBreak.Get();
+                                              }).AndThen([this] { _ampMotor.Set(0); }));
 }
 
 // booleans

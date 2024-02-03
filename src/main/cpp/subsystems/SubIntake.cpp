@@ -29,12 +29,6 @@ frc2::CommandPtr SubIntake::ExtendIntake() {
   });
 }
 
-frc2::CommandPtr SubIntake::RetractIntake() {
-  return Run([this] { solIntake.Set(frc::DoubleSolenoid::kReverse); }).Until([this] {
-    return IsIntakeAt(frc::DoubleSolenoid::Value::kReverse);
-  });
-}
-
 frc2::CommandPtr SubIntake::StopSpinningIntake() {
   return RunOnce([this] { _intakeMotorSpin.Set(0); });
 }
@@ -43,16 +37,16 @@ frc2::CommandPtr SubIntake::StartSpinningIntake() {
   return Run([this] { _intakeMotorSpin.Set(0.5); }).FinallyDo([this]{_intakeMotorSpin.Set(0);});
 }
 
-frc2::CommandPtr SubIntake::BeginIntake(){
+frc2::CommandPtr SubIntake::Intake(){
   return ExtendIntake().AndThen(StartSpinningIntake());
 }
 
 frc2::CommandPtr SubIntake::EndIntake(){
-  return StopSpinningIntake().AndThen(RetractIntake());
+  return StopSpinningIntake();
 }
 
 frc2::CommandPtr SubIntake::IntakeSequence(){
-  return BeginIntake()
+  return Intake()
       .FinallyDo([this] {
         solIntake.Set(frc::DoubleSolenoid::Value::kReverse);
       });
@@ -74,3 +68,7 @@ bool SubIntake::IsIntakeAt(frc::DoubleSolenoid::Value target){
 
   return false;
 }  // LOCK ARM IF RETURN FALSE
+
+ void SubIntake::RetractIntake(){
+  solIntake.Set(frc::DoubleSolenoid::kReverse);
+ }
