@@ -10,9 +10,12 @@ SubClimber::SubClimber() {
     lClimbMotor.SetConversionFactor(1.0 / gearRatio);
     lClimbMotor.SetPIDFF(lP,lI,lD,lF);
     lClimbMotor.SetInverted(true);
+    lClimbMotor.UseAbsoluteEncoder(leftEncoder);
+
     rClimbMotor.SetConversionFactor(1.0 / gearRatio);
     rClimbMotor.SetPIDFF(rP,rI,rD,rF);
     rClimbMotor.SetInverted(false);
+    rClimbMotor.UseAbsoluteEncoder(rightEncoder);
 
     frc::SmartDashboard::PutData("Climber/Left motor", (wpi::Sendable*)&lClimbMotor);
     frc::SmartDashboard::PutData("Climber/Right motor", (wpi::Sendable*)&rClimbMotor);
@@ -20,8 +23,8 @@ SubClimber::SubClimber() {
 };
 
 void SubClimber::Periodic() {
-    frc::SmartDashboard::PutNumber("Climber/Left distance", TurnToDistance(lClimbMotor.GetPosition()).value());
-    frc::SmartDashboard::PutNumber("Climber/Right distance", TurnToDistance(rClimbMotor.GetPosition()).value());
+    frc::SmartDashboard::PutNumber("Climber/Left distance", TurnToDistance(leftEncoder.GetPosition()*1_tr).value());
+    frc::SmartDashboard::PutNumber("Climber/Right distance", TurnToDistance(rightEncoder.GetPosition()*1_tr).value());
     frc::SmartDashboard::PutNumber("Climber/Target distance", TargetDistance.value());
 }
 
@@ -56,7 +59,7 @@ units::meter_t SubClimber::TurnToDistance(units::turn_t turn) {
 };
 
 void SubClimber::DriveToDistance(units::meter_t distance) {
-    if (LockCylinder.Get() = 1) {
+    if (LockCylinder.Get() != frc::DoubleSolenoid::Value::kForward) {
         TargetDistance = distance;
         lClimbMotor.SetPositionTarget(DistanceToTurn(distance));
         rClimbMotor.SetPositionTarget(DistanceToTurn(distance));

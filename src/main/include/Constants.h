@@ -42,3 +42,7 @@ namespace OperatorConstants {
   constexpr int kDriverControllerPort = 0;
 }  // namespace OperatorConstants
 
+namespace pcm {
+  constexpr int LockCylinderForward = 1;
+  constexpr int LockCylinderReverse = 2;
+}
