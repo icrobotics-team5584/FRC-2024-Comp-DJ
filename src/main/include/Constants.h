@@ -44,6 +44,8 @@ namespace pcm0 {
     constexpr int ShootClose = 4;
     constexpr int ShootFar = 5;
     constexpr int Pcm0Id = 0;
+    constexpr int LockCylinderForward = 1;
+    constexpr int LockCylinderReverse = 6;
 }
 
 namespace pwm {

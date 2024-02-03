@@ -57,7 +57,7 @@ units::meter_t SubClimber::TurnToDistance(units::turn_t turn) {
 };
 
 void SubClimber::DriveToDistance(units::meter_t distance) {
-    if (LockCylinder.Get() = 1) {
+    if (LockCylinder.Get() == 1) {
         TargetDistance = distance;
         lClimbMotor.SetPositionTarget(DistanceToTurn(distance));
         rClimbMotor.SetPositionTarget(DistanceToTurn(distance));

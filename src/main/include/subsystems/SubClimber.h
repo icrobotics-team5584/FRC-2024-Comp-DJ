@@ -97,6 +97,6 @@ class SubClimber : public frc2::SubsystemBase {
 
   // Double solenoid
 
-  frc::DoubleSolenoid LockCylinder {1, frc::PneumaticsModuleType::CTREPCM,
-                                    pcm::LockCylinderForward, pcm::LockCylinderReverse};
+  frc::DoubleSolenoid LockCylinder{pcm0::Pcm0Id, frc::PneumaticsModuleType::CTREPCM,
+                                    pcm0::LockCylinderForward, pcm0::LockCylinderReverse};
 };

@@ -14,23 +14,24 @@ SubIntake::SubIntake() {
 }
 // This method will be called once per scheduler run
 void SubIntake::Periodic() {
-  if (solIntake.Get() == 1) {
-    frc::SmartDashboard::PutString("Intake/Intake Deploy State: ", "Intake deployed");
-  } else if (solIntake.Get() == 2) {
-    frc::SmartDashboard::PutString("Intake/Intake Deploy State: ", "Intake retracted");
-  }
-  frc::SmartDashboard::PutNumber("Intake/Intake Shooter Motor: ", _intakeMotorSpin.Get());
+  frc::SmartDashboard::PutNumber("Intake/Intake piston state", solIntake.Get());
+  frc::SmartDashboard::PutNumber("Intake/Intake Motor: ", _intakeMotorSpin.Get());
+}
+
+void SubIntake::SimulationPeriodic(){
+  _simIntakeRetractedReed.SetValue(solIntake.Get() == frc::DoubleSolenoid::Value::kReverse);
+  _simIntakeExtendedReed.SetValue(solIntake.Get() == frc::DoubleSolenoid::Value::kForward);
 }
 
 frc2::CommandPtr SubIntake::ExtendIntake() {
   return Run([this] { solIntake.Set(frc::DoubleSolenoid::kForward); }).Until([this] {
-    return GetIntakeState();
+    return IsIntakeAt(frc::DoubleSolenoid::Value::kForward);
   });
 }
 
 frc2::CommandPtr SubIntake::RetractIntake() {
   return Run([this] { solIntake.Set(frc::DoubleSolenoid::kReverse); }).Until([this] {
-    return GetIntakeState();
+    return IsIntakeAt(frc::DoubleSolenoid::Value::kReverse);
   });
 }
 
@@ -39,25 +40,37 @@ frc2::CommandPtr SubIntake::StopSpinningIntake() {
 }
 
 frc2::CommandPtr SubIntake::StartSpinningIntake() {
-  return RunOnce([this] { _intakeMotorSpin.Set(0.5); });
+  return Run([this] { _intakeMotorSpin.Set(0.5); }).FinallyDo([this]{_intakeMotorSpin.Set(0);});
 }
 
 frc2::CommandPtr SubIntake::BeginIntake(){
-  return RunOnce([this] {ExtendIntake();}).AndThen([this]{StartSpinningIntake();});
+  return ExtendIntake().AndThen(StartSpinningIntake());
 }
 
 frc2::CommandPtr SubIntake::EndIntake(){
-  return RunOnce([this]{StopSpinningIntake();}).AndThen([this]{RetractIntake();});
+  return StopSpinningIntake().AndThen(RetractIntake());
 }
 
 frc2::CommandPtr SubIntake::IntakeSequence(){
-  return Sequence(BeginIntake(), EndIntake());
+  return BeginIntake()
+      .FinallyDo([this] {
+        solIntake.Set(frc::DoubleSolenoid::Value::kReverse);
+      });
+   //   .Until([this] { return IsIntakeAt(frc::DoubleSolenoid::Value::kReverse); });
 }
 
-bool SubIntake::GetIntakeState() {
-  if (_intakeExtendededReed.Get() == true || _intakeRetractedReed.Get() == true) {
-    return true;
-  } else {
-    return false;
+bool SubIntake::IsIntakeAt(frc::DoubleSolenoid::Value target){
+  if (target == frc::DoubleSolenoid::Value::kReverse){
+    if(_intakeRetractedReed.Get() == true){
+      return true;
+    } else {return false;}
   }
+
+  if (target == frc::DoubleSolenoid::Value::kForward){
+    if(_intakeExtendedReed.Get() == true){
+      return true;
+    } else {return false;}
+  }
+
+  return false;
 }  // LOCK ARM IF RETURN FALSE
