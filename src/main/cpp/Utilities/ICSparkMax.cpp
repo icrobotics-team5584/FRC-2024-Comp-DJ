@@ -20,23 +20,25 @@ void ICSparkMax::InitSendable(wpi::SendableBuilder& builder) {
   // clang-format off
   builder.AddDoubleProperty("Position", [&] { return GetPosition().value(); }, nullptr);  // setter is null, cannot set position directly
   builder.AddDoubleProperty("Velocity", [&] { return GetVelocity().value(); }, nullptr);
-  builder.AddDoubleProperty("Position Target", [&] { return GetPositionTarget().value(); }, nullptr);
-  builder.AddDoubleProperty("Velocity Target", [&] { return GetVelocityTarget().value(); }, nullptr);
+  builder.AddDoubleProperty("Position Target", [&] { return GetPositionTarget().value(); }, [&](double targ) { SetPositionTarget(targ*1_tr); });
+  builder.AddDoubleProperty("Velocity Target", [&] { return GetVelocityTarget().value(); }, [&](double targ) { SetVelocityTarget(targ*1_tps); });
 
   builder.AddDoubleProperty("Voltage", [&] { 
-        if (frc::RobotBase::IsSimulation()){return GetSimVoltage().value();}
-        else {return CANSparkMax::GetAppliedOutput() * 12;}
+        return (frc::RobotBase::IsSimulation()) 
+          ? GetSimVoltage().value() 
+          : CANSparkMax::GetAppliedOutput() * 12;
       }, nullptr);
 
-  builder.AddDoubleProperty("P Gain", [&] { return _simController.GetP(); }, [&](double P) { _simController.SetP(P); SyncSimPID();});
-  builder.AddDoubleProperty("I Gain", [&] { return _simController.GetI(); }, [&](double I) { _simController.SetI(I); SyncSimPID();});
-  builder.AddDoubleProperty("D Gain", [&] { return _simController.GetD(); }, [&](double D) { _simController.SetD(D); SyncSimPID();});
-  builder.AddDoubleProperty("F Gain", [&] { return _FF; }, [&](double F) { _FF = F; SyncSimPID();});
+  builder.AddDoubleProperty("P Gain", [&] { return _simController.GetP(); }, [&](double P) { SetP(P); });
+  builder.AddDoubleProperty("I Gain", [&] { return _simController.GetI(); }, [&](double I) { SetI(I); });
+  builder.AddDoubleProperty("D Gain", [&] { return _simController.GetD(); }, [&](double D) { SetD(D); });
+  builder.AddDoubleProperty("FF Gain", [&] { return _simFF; }, [&](double FF) { SetFF(FF); });
   // clang-format on
 }
 
 void ICSparkMax::SetPosition(units::turn_t position) {
-  _encoder->SetPosition(position.value());
+  _encoder.SetPosition(position.value());
+  auto err = GetLastError();
 }
 
 void ICSparkMax::SetPositionTarget(units::turn_t target, units::volt_t arbFeedForward) {
@@ -115,38 +117,57 @@ void ICSparkMax::ConfigSmartMotion(units::turns_per_second_t maxVelocity,
 }
 
 void ICSparkMax::SetConversionFactor(double rotationsToDesired) {
-  _encoder->SetPositionConversionFactor(rotationsToDesired);
+  _encoder.SetPositionConversionFactor(rotationsToDesired);
   // Need to divide vel by 60 because Spark Max uses Revs per minute not Revs per second
-  _encoder->SetVelocityConversionFactor(rotationsToDesired / 60);
+  _encoder.SetVelocityConversionFactor(rotationsToDesired / 60);
 }
 
 void ICSparkMax::UseAlternateEncoder(int countsPerRev) {
-  const double posConversion = _encoder->GetPositionConversionFactor();
+  // const double posConversion = _encoder->GetPositionConversionFactor();
 
-  _encoder = std::make_unique<rev::SparkMaxAlternateEncoder>(
-      CANSparkMax::GetAlternateEncoder(countsPerRev));
-  _pidController.SetFeedbackDevice(*_encoder);
+  // _encoder = std::make_unique<rev::SparkMaxAlternateEncoder>(
+  //     CANSparkMax::GetAlternateEncoder(countsPerRev));
+  // _pidController.SetFeedbackDevice(*_encoder);
 
-  SetConversionFactor(posConversion);
+  // SetConversionFactor(posConversion);
 }
 
 void ICSparkMax::UseAbsoluteEncoder(rev::SparkAbsoluteEncoder& encoder) {
   _pidController.SetFeedbackDevice(encoder);
 }
 
-void ICSparkMax::EnableSensorWrapping(double min, double max) {
-  _pidController.SetPositionPIDWrappingMaxInput(max);
-  _pidController.SetPositionPIDWrappingMinInput(min);
+void ICSparkMax::EnableClosedLoopWrapping(units::turn_t min, units::turn_t max) {
+  _pidController.SetPositionPIDWrappingMinInput(min.value());
+  _pidController.SetPositionPIDWrappingMaxInput(max.value());
   _pidController.SetPositionPIDWrappingEnabled(true);
-  _simController.EnableContinuousInput(min, max);
+  _simController.EnableContinuousInput(PosToSparkRevs(min), PosToSparkRevs(max));
 }
 
 void ICSparkMax::SetPIDFF(double P, double I, double D, double FF) {
+  SetP(P);
+  SetI(I);
+  SetD(D);
+  SetFF(FF);
+}
+
+void ICSparkMax::SetP(double P) {
+  _pidController.SetP(P);
   _simController.SetP(P);
+}
+
+void ICSparkMax::SetI(double I) {
+  _pidController.SetI(I);
   _simController.SetI(I);
+}
+
+void ICSparkMax::SetD(double D) {
+  _pidController.SetD(D);
   _simController.SetD(D);
-  _FF = FF;
-  SyncSimPID();
+}
+
+void ICSparkMax::SetFF(double FF) {
+  _pidController.SetFF(FF);
+  _simFF = FF;
 }
 
 void ICSparkMax::SetClosedLoopOutputRange(double minOutputPercent, double maxOutputPercent) {
@@ -159,7 +180,7 @@ units::turns_per_second_t ICSparkMax::GetVelocity() {
   if (frc::RobotBase::IsSimulation()) {
     return _simVelocity;
   } else {
-    return units::turns_per_second_t{_encoder->GetVelocity()};
+    return units::turns_per_second_t{_encoder.GetVelocity()};
   }
 }
 
@@ -172,15 +193,15 @@ units::volt_t ICSparkMax::GetSimVoltage() {
       break;
 
     case Mode::kVelocity:
-      output =
-          units::volt_t{_simController.Calculate(GetVelocity().value(), _velocityTarget.value()) +
-                        _FF * _velocityTarget.value()};
+      output = units::volt_t{
+          _simController.Calculate(VelToSparkRPM(GetVelocity()), VelToSparkRPM(_velocityTarget)) +
+          _simFF * VelToSparkRPM(_velocityTarget)};
       break;
 
     case Mode::kPosition:
-      output =
-          units::volt_t{_simController.Calculate(GetPosition().value(), _positionTarget.value()) +
-                        _FF * _positionTarget.value()};
+      output = units::volt_t{
+          _simController.Calculate(PosToSparkRevs(GetPosition()), PosToSparkRevs(_positionTarget)) +
+          _simFF * PosToSparkRevs(_positionTarget)};
       break;
 
     case Mode::kVoltage:
@@ -188,18 +209,15 @@ units::volt_t ICSparkMax::GetSimVoltage() {
       break;
 
     case Mode::kSmartMotion:
-      output = units::volt_t{
-          _simController.Calculate(GetVelocity().value(), EstimateSMVelocity().value()) +
-          _FF * EstimateSMVelocity().value()};
+      output = units::volt_t{_simController.Calculate(
+          VelToSparkRPM(GetVelocity()),
+          VelToSparkRPM(EstimateSMVelocity()) + _simFF * VelToSparkRPM(EstimateSMVelocity()))};
       break;
 
     case Mode::kCurrent:
-      std::cout << "Warning: closed loop Current control not supported by ICSparkMax in "
-                   "Simulation\n";
       break;
 
     case Mode::kSmartVelocity:
-      std::cout << "Warning: smart velocity control not supported by ICSparkMax in Simulation\n";
       break;
   }
   output += _arbFeedForward;
@@ -207,20 +225,8 @@ units::volt_t ICSparkMax::GetSimVoltage() {
 }
 
 void ICSparkMax::UpdateSimEncoder(units::turn_t position, units::turns_per_second_t velocity) {
-  _encoder->SetPosition(position.value());
+  _encoder.SetPosition(position.value());
   _simVelocity = velocity;
-}
-
-void ICSparkMax::SyncSimPID() {
-  double conversion = (GetControlType() == Mode::kPosition)
-                          ? _encoder->GetPositionConversionFactor()
-                          : _encoder->GetVelocityConversionFactor();
-
-  _pidController.SetP(_simController.GetP() * conversion);
-  _pidController.SetI(_simController.GetI() * conversion);
-  _pidController.SetD(_simController.GetD() * conversion);
-  _pidController.SetFF(_FF * conversion);
-  _simController.SetIntegratorRange(-_pidController.GetIMaxAccum(), _pidController.GetIMaxAccum());
 }
 
 units::turns_per_second_t ICSparkMax::EstimateSMVelocity() {

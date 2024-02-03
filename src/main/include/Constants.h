@@ -2,21 +2,21 @@
 
 namespace canivore {
   // 1-12 inclusive
-  constexpr int DriveBaseFrontLeftDrive = 7;
-  constexpr int DriveBaseFrontLeftTurn = 8;
-  constexpr int DriveBaseFrontLeftEncoder = 10;
+constexpr int DriveBaseFrontRightDrive = 7; 
+  constexpr int DriveBaseFrontRightTurn = 8; 
+  constexpr int DriveBaseFrontRightEncoder = 10; 
 
-  constexpr int DriveBaseFrontRightDrive = 5;
-  constexpr int DriveBaseFrontRightTurn = 6;
-  constexpr int DriveBaseFrontRightEncoder = 12;
+  constexpr int DriveBaseFrontLeftDrive = 3;
+  constexpr int DriveBaseFrontLeftTurn = 6; 
+  constexpr int DriveBaseFrontLeftEncoder = 9;
+
+  constexpr int DriveBaseBackRightDrive = 5;
+  constexpr int DriveBaseBackRightTurn = 2; 
+  constexpr int DriveBaseBackRightEncoder = 12;
 
   constexpr int DriveBaseBackLeftDrive = 1;
-  constexpr int DriveBaseBackLeftTurn = 2;
+  constexpr int DriveBaseBackLeftTurn = 4; 
   constexpr int DriveBaseBackLeftEncoder = 11;
-
-  constexpr int DriveBaseBackRightDrive = 3;
-  constexpr int DriveBaseBackRightTurn = 4;
-  constexpr int DriveBaseBackRightEncoder = 9;
 }
 
 namespace canid {
@@ -29,7 +29,8 @@ namespace canid {
 }
 
 namespace dio {
-
+  constexpr int FDLineBreak = 100;
+  constexpr int SDLineBreak = 101;
 }
 
 namespace pwm {
