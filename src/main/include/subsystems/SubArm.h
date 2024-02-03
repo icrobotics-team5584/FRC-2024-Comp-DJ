@@ -48,22 +48,20 @@ class SubArm : public frc2::SubsystemBase {
 
   // amp
   frc2::CommandPtr TiltArmToAngle(units::degree_t targetAngle);
-  frc2::CommandPtr CheckArmPos();
 
  private:
   // motors
   ICSparkMax _ampMotorSpin{canid::AmpMotorSpin}; // Amp shooter
   ICSparkMax _armMotor{canid::ArmMotor}; // arm
-  ICSparkMax _armMotorFollow{canid::ArmMotorFollow}; //arm
 
   // encoders
   rev::SparkAbsoluteEncoder _armEncoder{_armMotor.GetAbsoluteEncoder(
       rev::SparkAbsoluteEncoder::Type::kDutyCycle)};
 
   // arm (tune values for robot)
-  static constexpr double ARM_P = 0.0;
+  static constexpr double ARM_P = 8.0;
   static constexpr double ARM_I = 0.0;
-  static constexpr double ARM_D = 0.0;
+  static constexpr double ARM_D = 3.0;
   static constexpr double ARM_F = 100.0; 
   
   static constexpr double ARM_GEAR_RATIO = 218.27;
@@ -77,7 +75,7 @@ class SubArm : public frc2::SubsystemBase {
 
   // simulating arm in smartdashboard
   frc::sim::SingleJointedArmSim _armSim{
-    frc::DCMotor::NEO(2),
+    frc::DCMotor::NEO(1),
     ARM_GEAR_RATIO, 
     frc::sim::SingleJointedArmSim::EstimateMOI(ARM_LENGTH, ARM_MASS),
     ARM_LENGTH,

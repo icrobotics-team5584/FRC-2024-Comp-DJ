@@ -26,20 +26,17 @@ namespace canid {
   constexpr int DriveBaseBackLeftDrive = 1;
   constexpr int DriveBaseBackLeftTurn = 4; 
   constexpr int DriveBaseBackLeftEncoder = 11;
-}
 
-namespace canid {
-    // shooter amp
-    constexpr int AmpMotorSpin = 13;
+  // shooter amp
+  constexpr int AmpMotorSpin = 13;
     
-    // arm   
-    constexpr int ArmMotor = 102;
-    constexpr int ArmMotorFollow = 103;
+  // arm   
+  constexpr int ArmMotor = 14;
 }
 
 namespace dio {
-  constexpr int FDLineBreak = 100;
-  constexpr int SDLineBreak = 101;
+  constexpr int FDLineBreak = 0;
+  constexpr int SDLineBreak = 1;
 }
 
 namespace pwm {
