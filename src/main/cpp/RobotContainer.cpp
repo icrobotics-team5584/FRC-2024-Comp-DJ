@@ -42,16 +42,10 @@ void RobotContainer::ConfigureBindings() {
   _driverController.LeftTrigger().WhileTrue(cmd::ShootSequence());
   _driverController.RightTrigger().WhileTrue(cmd::IntakeSequence().AndThen([this]{_driverController.SetRumble(frc::GenericHID::kBothRumble, 1); _operatorController.SetRumble(frc::GenericHID::kBothRumble, 1);}));
 
-  _driverController.LeftBumper().WhileTrue(cmd::SequenceArmToAmpPos());
-  _driverController.RightBumper().OnTrue(SubLED::GetInstance().IndicateAmp());
-  _driverController.A().WhileTrue(cmd::SequenceArmToTrapPos());
-
-  _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberExtend());
-  _operatorController.A().OnTrue(SubClimber::GetInstance().ClimberRetract());
-  _operatorController.RightTrigger().WhileTrue(SubShooter::GetInstance().StartShooter());
-  _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose());
-  _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar());
-  _operatorController.LeftTrigger().WhileTrue(SubAmp::GetInstance().AmpShooter());
+  _driverController.A().OnTrue(SubClimber::GetInstance().ClimberExtend());
+  _driverController.B().OnTrue(SubClimber::GetInstance().ClimberRetract());
+  _driverController.X().OnTrue(SubClimber::GetInstance().ClimberLock());
+  _driverController.Y().OnTrue(SubClimber::GetInstance().ClimberUnlock());
 
 }
 

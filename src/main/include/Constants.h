@@ -50,7 +50,6 @@ namespace pwm {
   constexpr int LEDS = 1;
 }
 
-
 namespace OperatorConstants {}
 
 constexpr int kDriverControllerPort = 0;
@@ -61,4 +60,9 @@ namespace dio {
   constexpr int IntakeRetractedReed = 2;
   constexpr int IntakeExtendedReed = 3;
   constexpr int ArmHomeSwitch = 4;
+}
+
+namespace pcm {
+  constexpr int LockCylinderForward = 1;
+  constexpr int LockCylinderReverse = 2;
 }
