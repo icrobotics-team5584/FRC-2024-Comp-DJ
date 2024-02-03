@@ -17,6 +17,8 @@ SubClimber::SubClimber() {
     rClimbMotor.SetInverted(false);
     rClimbMotor.UseAbsoluteEncoder(rightEncoder);
 
+    LockCylinder.Set(frc::DoubleSolenoid::Value::kReverse);
+
     frc::SmartDashboard::PutData("Climber/Left motor", (wpi::Sendable*)&lClimbMotor);
     frc::SmartDashboard::PutData("Climber/Right motor", (wpi::Sendable*)&rClimbMotor);
     frc::SmartDashboard::PutData("Climber/Lock Cylinder", (wpi::Sendable*)&LockCylinder);

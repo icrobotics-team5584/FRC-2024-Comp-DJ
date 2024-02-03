@@ -49,7 +49,8 @@ void RobotContainer::ConfigureBindings() {
 
   _driverController.A().OnTrue(SubClimber::GetInstance().ClimberExtend());
   _driverController.B().OnTrue(SubClimber::GetInstance().ClimberRetract());
-  _driverController.X().OnTrue(SubClimber::GetInstance().ClimberStop());
+  _driverController.X().OnTrue(SubClimber::GetInstance().ClimberLock());
+  _driverController.Y().OnTrue(SubClimber::GetInstance().ClimberUnlock());
 
   //Use below if above don't work
   // _driverController.A().OnTrue(SubClimber::GetInstance().ClimberExtendManual());
