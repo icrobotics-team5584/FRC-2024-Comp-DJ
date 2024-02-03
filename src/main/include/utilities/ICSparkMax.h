@@ -17,7 +17,7 @@
 #include <units/velocity.h>
 #include <wpi/sendable/Sendable.h>
 #include <wpi/sendable/SendableBuilder.h>
-#include <Utilities/ICSparkEncoder.h>
+#include <utilities/ICSparkEncoder.h>
 
 /**
  * Wrapper around the Rev CANSparkMax class with some convenience features.
