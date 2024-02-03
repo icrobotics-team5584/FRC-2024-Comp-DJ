@@ -25,7 +25,17 @@ void SubLED::Periodic() {
   frc::SmartDashboard::PutNumber("led/loop time (sec)", (frc::GetTime()-loopStart).value());
 }
 
-frc2::CommandPtr SubLED::IndicateAmp(){
-  return RunOnce([this]{m_ledBuffer[kLength].SetRGB(255, 0, 0);});
+frc2::CommandPtr SubLED::IndicateAmp() {
+  return RunOnce([this] {
+           for (auto& LED : m_ledBuffer) {
+             LED.SetRGB(255, 0, 0);
+           }
+           _led.SetData(m_ledBuffer);
+         })
+      .AndThen(Wait(10_s).FinallyDo([this] {
+        for (auto& LED : m_ledBuffer) {
+          LED.SetRGB(0, 0, 0);
+        }
+        _led.SetData(m_ledBuffer);
+      }));
 }
-
