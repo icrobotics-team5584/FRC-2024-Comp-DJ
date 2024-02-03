@@ -241,7 +241,7 @@ units::turns_per_second_t ICSparkMax::EstimateSMVelocity() {
   }
 
   return _simSmartMotionProfile
-      .Calculate(20_ms, {_positionTarget, units::turns_per_second_t{0}},
-                 {GetPosition(), GetVelocity()})
+      .Calculate(20_ms, {GetPosition(), GetVelocity()},
+                        {_positionTarget, units::turns_per_second_t{0}})
       .velocity;
 }

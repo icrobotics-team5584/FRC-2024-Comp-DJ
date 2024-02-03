@@ -15,8 +15,8 @@
     "**/*~": true
   },
   "C_Cpp.default.configurationProvider": "vscode-wpilib",
-  "C_Cpp.errorSquiggles": "disabled",
   "files.associations": {
+
     "numbers": "cpp",
     "atomic": "cpp",
     "compare": "cpp",
@@ -102,6 +102,7 @@
     "xlocinfo": "cpp",
     "xlocnum": "cpp",
     "xstddef": "cpp",
-    "xstring": "cpp"
-  }
-}
+    "xstring": "cpp",
+    "*.inc": "cpp"
+  }}
+
