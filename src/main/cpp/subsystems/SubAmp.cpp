@@ -54,7 +54,7 @@ void SubAmp::SimulationPeriodic() {
 
   auto armAngle = _armSim.GetAngle();
   auto armVel = _armSim.GetVelocity();
-  _armMotor.UpdateSimEncoder(-armAngle, -armVel);
+  _armMotor.UpdateSimEncoder(armAngle, armVel);
 }
 
 // Shooter Amp

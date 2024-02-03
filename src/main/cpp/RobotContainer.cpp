@@ -44,7 +44,8 @@ void RobotContainer::ConfigureBindings() {
 
   _driverController.LeftBumper().WhileTrue(cmd::SequenceArmToAmpPos());
   _driverController.RightBumper().OnTrue(SubLED::GetInstance().IndicateAmp());
-  _driverController.A().WhileTrue(cmd::SequenceArmToTrapPos());
+  _driverController.A().OnTrue(cmd::ArmToAmpPos());
+  _driverController.A().OnFalse(cmd::ArmToStow());
 
   _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberExtend());
   _operatorController.A().OnTrue(SubClimber::GetInstance().ClimberRetract());

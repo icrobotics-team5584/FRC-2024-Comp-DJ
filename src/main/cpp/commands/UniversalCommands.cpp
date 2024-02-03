@@ -9,9 +9,8 @@ namespace cmd {
 using namespace frc2::cmd;
 
 frc2::CommandPtr ArmToAmpPos() {
-  return RunOnce([]() { SubIntake::GetInstance().ExtendIntake(); }, {&SubAmp::GetInstance()})
-      .AndThen([]() { return SubAmp::GetInstance().CheckIfArmIsHome(); }, {&SubAmp::GetInstance()})
-      .AndThen([]() { return SubAmp::GetInstance().TiltArmToAngle(SubAmp::AMP_ANGLE); });
+  return SubIntake::GetInstance().ExtendIntake()
+      .AndThen(SubAmp::GetInstance().TiltArmToAngle(SubAmp::AMP_ANGLE));
 }
 
 frc2::CommandPtr ArmToTrapPos() {
@@ -21,10 +20,10 @@ frc2::CommandPtr ArmToTrapPos() {
 }
 
 frc2::CommandPtr ArmToStow() {
-  return RunOnce([]() { SubIntake::GetInstance().RetractIntake(); }, {&SubAmp::GetInstance()})
-      .AndThen([]() { return SubAmp::GetInstance().TiltArmToAngle(SubAmp::HOME_ANGLE); },
-               {&SubAmp::GetInstance()})
-      .AndThen([]() { return SubAmp::GetInstance().CheckIfArmIsHome(); });
+  return SubAmp::GetInstance()
+      .TiltArmToAngle(SubAmp::HOME_ANGLE)
+      .Until([] { return SubAmp::GetInstance().CheckIfArmIsHome(); })
+      .AndThen([] { SubIntake::GetInstance().RetractIntake(); });
 }
 
 frc2::CommandPtr SequenceArmToAmpPos() {
