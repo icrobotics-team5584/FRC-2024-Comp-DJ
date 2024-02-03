@@ -44,7 +44,7 @@ class SubVision : public frc2::SubsystemBase {
   };
 
   std::map<FieldElement, int> redFieldElement = {
-    {SPEAKER, 4},
+    {SPEAKER, 0}, //change later to 4
     {SPEAKER_SIDE, 3},
     {AMP, 5},
     {SOURCE_LEFT, 10},

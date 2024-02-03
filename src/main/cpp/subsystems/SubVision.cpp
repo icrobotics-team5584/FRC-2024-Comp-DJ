@@ -7,6 +7,7 @@
 #include <frc/DriverStation.h>
 #include <algorithm>
 #include <iostream>
+#include <map>
 #include <bits/stdc++.h>
 
 SubVision::SubVision() {}
