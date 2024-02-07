@@ -30,13 +30,9 @@ SubAmp::SubAmp() {
   _armMotor.SetConversionFactor(1 / ARM_GEAR_RATIO);
   _armMotor.SetPIDFF(ARM_P, ARM_I, ARM_D, ARM_F);
   _armMotor.ConfigSmartMotion(ARM_MAX_VEL, ARM_MAX_ACCEL, ARM_TOLERANCE);
-
-  _armMotorFollow.Follow(_armMotor);
   _armMotor.SetInverted(true);
-  _armMotorFollow.SetInverted(true);
   _armMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-  _armMotorFollow.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-}
+  }
 
 // This method will be called once per scheduler run
 void SubAmp::Periodic() {
@@ -78,9 +74,12 @@ frc2::CommandPtr SubAmp::StoreNote() {
                                               _ampMotor.Set(0.3);
                                             }).Until([this] {
                                                 return _sdLineBreak.Get();
-                                              }).AndThen([this] { _ampMotor.Set(0); }));
+                                              }).FinallyDo([this] { _ampMotor.Set(0); }));
 }
 
+frc2::CommandPtr SubAmp::FeedNote(){
+  return Run([this]{_ampMotor.Set(0.3);}).FinallyDo([this]{return  _ampMotor.Set(0);});
+}
 // booleans
 
 bool SubAmp::CheckIfArmIsHome() {

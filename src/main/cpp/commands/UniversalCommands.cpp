@@ -36,8 +36,11 @@ frc2::CommandPtr SequenceArmToTrapPos() {
 
 frc2::CommandPtr ShootFullSequence() {
   return Run([] { /*AUTO VISION AIM COMMAND*/ })
-      .Until([] {return true;})
-      .AndThen({SubShooter::GetInstance().ShootSequence()});
+      .Until([] { return true; })
+      .AndThen({SubShooter::GetInstance().ShootSequence()})
+      .AlongWith(WaitUntil([] {
+                   return SubShooter::GetInstance().CheckShooterSpeed();
+                 }).AndThen({SubAmp::GetInstance().FeedNote()}));
 }
 
 frc2::CommandPtr IntakefullSequence(){

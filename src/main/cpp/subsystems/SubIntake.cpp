@@ -49,8 +49,8 @@ frc2::CommandPtr SubIntake::IntakeSequence(){
   return Intake()
       .FinallyDo([this] {
         solIntake.Set(frc::DoubleSolenoid::Value::kReverse);
+        _intakeMotorSpin.Set(0);
       });
-   //   .Until([this] { return IsIntakeAt(frc::DoubleSolenoid::Value::kReverse); });
 }
 
 bool SubIntake::IsIntakeAt(frc::DoubleSolenoid::Value target){

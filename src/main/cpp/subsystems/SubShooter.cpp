@@ -63,27 +63,23 @@ frc2::CommandPtr SubShooter::StartShooter() {
 void SubShooter::StopShooterFunc(){
  _shooterMotorMain.Set(0); 
  _secondaryShooterMotor.Set(0);
+ _shooterFeederMotor.Set(0);
 }
 
-frc2::CommandPtr SubShooter::StopShooterCommand(){
-  return RunOnce([this]{StopShooterFunc();});
-}
-
-frc2::CommandPtr SubShooter::ShootNote() {
-  return RunOnce([this] { _shooterFeederMotor.Set(0.5); })
-      .AndThen(Wait(2_s))
-      .FinallyDo([this] { _shooterFeederMotor.Set(0); })
-      .OnlyIf([this] { return CheckShooterSpeed(); });
+frc2::CommandPtr SubShooter::StartFeeder() {
+  return RunOnce([this] { _shooterFeederMotor.Set(0.5); });
 }
 
 frc2::CommandPtr SubShooter::ShootSequence() {
-  return Sequence(StartShooter(), ShootNote(), StopShooterCommand()).FinallyDo([this] {StopShooterFunc();});
+  return Sequence(StartShooter(), StartFeeder(), Idle())
+      .FinallyDo([this] {StopShooterFunc();});
 }
 
 bool SubShooter::CheckShooterSpeed(){
  if(units::math::abs(_secondaryShooterMotor.GetVelError()) < 150_rpm && units::math::abs(_shooterMotorMain.GetVelError()) < 150_rpm){
   return true;
- }
+ } 
+ return false;
 }
 
 frc2::CommandPtr SubShooter::ShooterChangePosFar() {

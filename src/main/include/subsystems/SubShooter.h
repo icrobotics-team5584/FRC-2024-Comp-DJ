@@ -31,9 +31,8 @@ class SubShooter : public frc2::SubsystemBase {
   frc2::CommandPtr StartShooter();
   frc2::CommandPtr ShooterChangePosFar();
   frc2::CommandPtr ShooterChangePosClose();
-  frc2::CommandPtr ShootNote();
+  frc2::CommandPtr StartFeeder();
   frc2::CommandPtr ShootSequence();
-  frc2::CommandPtr StopShooterCommand();
   void StopShooterFunc();
   bool CheckShooterSpeed();
 

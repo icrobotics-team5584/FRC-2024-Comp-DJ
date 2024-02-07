@@ -30,7 +30,7 @@ class SubAmp : public frc2::SubsystemBase {
   SubAmp();
 
   // variables
-  static constexpr units::degree_t HOME_ANGLE = 235_deg;
+  static constexpr units::degree_t HOME_ANGLE = 235_deg; //working test was 50_deg
   static constexpr units::degree_t AMP_ANGLE = 41_deg;
   static constexpr units::degree_t TRAP_ANGLE = 41_deg;
 
@@ -54,24 +54,25 @@ class SubAmp : public frc2::SubsystemBase {
   frc2::CommandPtr CheckArmPos();
   frc2::CommandPtr Check();
 
+  frc2::CommandPtr FeedNote();
+
   bool CheckIfArmIsHome();
   bool CheckIfArmHasGamePiece();
 
  private:
   // motors
   ICSparkMax _ampMotor{canid::AmpMotor};      // Amp shooter
-  ICSparkMax _armMotor{canid::ArmMotor};              // arm
-  ICSparkMax _armMotorFollow{canid::ArmMotorFollow};  // arm
+  ICSparkMax _armMotor{canid::ArmMotor};              // arm  // arm
 
   // arm (tune values for robot)
   static constexpr double ARM_P = 0.0;
   static constexpr double ARM_I = 0.0;
   static constexpr double ARM_D = 0.0;
-  static constexpr double ARM_F = 100.0;
+  static constexpr double ARM_F = 28.0;
 
   static constexpr double ARM_GEAR_RATIO = 218.27;
-  static constexpr units::degrees_per_second_t ARM_MAX_VEL = 18_deg_per_s;
-  static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 90_deg_per_s_sq;
+  static constexpr units::degrees_per_second_t ARM_MAX_VEL = 180_deg_per_s;
+  static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 360_deg_per_s_sq;
   static constexpr units::degree_t ARM_TOLERANCE = 0.5_deg;
   static constexpr units::meter_t ARM_LENGTH = 0.9_m;
   static constexpr units::kilogram_t ARM_MASS = 1_kg;         // only sim
