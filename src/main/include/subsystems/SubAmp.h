@@ -61,8 +61,8 @@ class SubAmp : public frc2::SubsystemBase {
 
  private:
   // motors
-  ICSparkMax _ampMotor{canid::AmpMotor};      // Amp shooter
-  ICSparkMax _armMotor{canid::ArmMotor};              // arm  // arm
+  ICSparkMax _ampMotor{canid::AmpMotor, 40_A};      // Amp shooter
+  ICSparkMax _armMotor{canid::ArmMotor, 40_A};              // arm  // arm
 
   // arm (tune values for robot)
   static constexpr double ARM_P = 0.0;
