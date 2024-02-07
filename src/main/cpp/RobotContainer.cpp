@@ -52,6 +52,10 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose()); //working
   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar()); //working
   _operatorController.LeftTrigger().WhileTrue(SubAmp::GetInstance().AmpShooter()); //working
+  _driverController.A().OnTrue(SubClimber::GetInstance().ClimberExtend());
+  _driverController.B().OnTrue(SubClimber::GetInstance().ClimberRetract());
+  _driverController.X().OnTrue(SubClimber::GetInstance().ClimberLock());
+  _driverController.Y().OnTrue(SubClimber::GetInstance().ClimberUnlock());
 
 }
 

@@ -15,6 +15,7 @@
 #include <frc/system/plant/DCMotor.h>
 
 #include <frc/DoubleSolenoid.h>
+#include <rev/SparkAbsoluteEncoder.h>
 
 #include <units/angle.h>
 
@@ -66,6 +67,9 @@ class SubClimber : public frc2::SubsystemBase {
   // Motor
   ICSparkMax _lClimbMotor{canid::lClimbMotor};
   ICSparkMax _rClimbMotor{canid::rClimbMotor};
+
+  rev::SparkAbsoluteEncoder leftEncoder{lClimbMotor.GetAbsoluteEncoder(rev::SparkAbsoluteEncoder::Type::kDutyCycle)};
+  rev::SparkAbsoluteEncoder rightEncoder{rClimbMotor.GetAbsoluteEncoder(rev::SparkAbsoluteEncoder::Type::kDutyCycle)};
 
   // Motor Setup
   static constexpr double gearRatio = 30.0;
