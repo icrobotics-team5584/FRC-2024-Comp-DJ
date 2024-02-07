@@ -7,15 +7,15 @@
 #include <rev/SparkMaxAbsoluteEncoder.h>
 
 SubClimber::SubClimber() {
-    lClimbMotor.SetConversionFactor(1.0 / gearRatio);
-    lClimbMotor.SetPIDFF(lP,lI,lD,lF);
-    lClimbMotor.SetInverted(true);
-    lClimbMotor.UseAbsoluteEncoder(leftEncoder);
+    _lClimbMotor.SetConversionFactor(1.0 / gearRatio);
+    _lClimbMotor.SetPIDFF(lP,lI,lD,lF);
+    _lClimbMotor.SetInverted(true);
+    _lClimbMotor.UseAbsoluteEncoder();
 
-    rClimbMotor.SetConversionFactor(1.0 / gearRatio);
-    rClimbMotor.SetPIDFF(rP,rI,rD,rF);
-    rClimbMotor.SetInverted(false);
-    rClimbMotor.UseAbsoluteEncoder(rightEncoder);
+    _rClimbMotor.SetConversionFactor(1.0 / gearRatio);
+    _rClimbMotor.SetPIDFF(rP,rI,rD,rF);
+    _rClimbMotor.SetInverted(false);
+    _rClimbMotor.UseAbsoluteEncoder();
 
     LockCylinder.Set(frc::DoubleSolenoid::Value::kReverse);
 
@@ -25,8 +25,6 @@ SubClimber::SubClimber() {
 };
 
 void SubClimber::Periodic() {
-    frc::SmartDashboard::PutNumber("Climber/Left distance", TurnToDistance(leftEncoder.GetPosition()*1_tr).value());
-    frc::SmartDashboard::PutNumber("Climber/Right distance", TurnToDistance(rightEncoder.GetPosition()*1_tr).value());
     frc::SmartDashboard::PutNumber("Climber/Target distance", TargetDistance.value());
 }
 
