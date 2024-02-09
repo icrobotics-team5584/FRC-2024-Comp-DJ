@@ -29,10 +29,11 @@ class SubIntake : public frc2::SubsystemBase {
   bool IsIntakeAt(frc::DoubleSolenoid::Value target);
   frc2::CommandPtr StopSpinningIntake();
   frc2::CommandPtr StartSpinningIntake();
-  void RetractIntake();
+  void FuncRetractIntake();
   frc2::CommandPtr Intake();
   frc2::CommandPtr EndIntake();
   frc2::CommandPtr IntakeSequence();
+  frc2::CommandPtr CommandRetractIntake();
 
   void SimulationPeriodic() override;
 

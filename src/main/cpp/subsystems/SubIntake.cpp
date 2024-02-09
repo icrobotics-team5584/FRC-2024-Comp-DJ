@@ -69,6 +69,10 @@ bool SubIntake::IsIntakeAt(frc::DoubleSolenoid::Value target){
   return false;
 }  // LOCK ARM IF RETURN FALSE
 
- void SubIntake::RetractIntake(){
+ void SubIntake::FuncRetractIntake(){
+  solIntake.Set(frc::DoubleSolenoid::kReverse);
+ }
+
+ frc2::CommandPtr SubIntake::CommandRetractIntake(){
   solIntake.Set(frc::DoubleSolenoid::kReverse);
  }

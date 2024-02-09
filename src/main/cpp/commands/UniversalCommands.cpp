@@ -23,7 +23,7 @@ frc2::CommandPtr ArmToStow() {
   return SubAmp::GetInstance()
       .TiltArmToAngle(SubAmp::HOME_ANGLE)
       .Until([] { return SubAmp::GetInstance().CheckIfArmIsHome(); })
-      .AndThen([] { SubIntake::GetInstance().RetractIntake(); });
+      .AndThen([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }
 
 frc2::CommandPtr SequenceArmToAmpPos() {
@@ -47,6 +47,6 @@ frc2::CommandPtr IntakefullSequence(){
   return SubIntake::GetInstance()
       .Intake()
       .AlongWith(SubAmp::GetInstance().StoreNote())
-      .FinallyDo([] { SubIntake::GetInstance().RetractIntake(); });
+      .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }
 }  // namespace cmd

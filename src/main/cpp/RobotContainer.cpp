@@ -18,6 +18,14 @@
 #include "commands/UniversalCommands.h"
 
 RobotContainer::RobotContainer() {
+  pathplanner::NamedCommands::registerCommand("ExtendIntake", SubIntake::GetInstance().ExtendIntake());
+  pathplanner::NamedCommands::registerCommand("StartIntakeSpinning", SubIntake::GetInstance().StartSpinningIntake());
+  pathplanner::NamedCommands::registerCommand("StopIntakeSpinning", SubIntake::GetInstance().StopSpinningIntake());
+  pathplanner::NamedCommands::registerCommand("StartShooter", SubShooter::GetInstance().StartShooter());
+  pathplanner::NamedCommands::registerCommand("RetractIntake", SubIntake::GetInstance().CommandRetractIntake());
+  pathplanner::NamedCommands::registerCommand("ShootNote", SubShooter::GetInstance().ShootSequence());
+
+  
   SubAmp::GetInstance();
   SubDrivebase::GetInstance();
   SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
@@ -35,11 +43,6 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("Test Path", "Test Path");
   _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
-
-  pathplanner::NamedCommands::registerCommand("ExtendIntake", SubIntake::GetInstance().ExtendIntake());
-  pathplanner::NamedCommands::registerCommand("StartIntakeSpinning", SubIntake::GetInstance().StartSpinningIntake());
-  pathplanner::NamedCommands::registerCommand("StopIntakeSpinning", SubIntake::GetInstance().StopSpinningIntake());
-
 }
 
 void RobotContainer::ConfigureBindings() {
