@@ -248,7 +248,7 @@ void SubDrivebase::DriveToPose(frc::Pose2d targetPose) {
 
 void SubDrivebase::RotateToZero(units::degree_t rotationError){
   double speedRot = Rcontroller.Calculate(rotationError, 0_deg);
-  speedRot = std::clamp(speedRot, -1.5, 1.5);
+  speedRot = std::clamp(speedRot, -2.0, 2.0);
 
   Drive(0_mps, 0_mps, speedRot * 1_rad_per_s, false);
 }
