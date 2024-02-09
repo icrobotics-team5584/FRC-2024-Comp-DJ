@@ -117,6 +117,13 @@
     "shared_mutex": "cpp",
     "spanstream": "cpp",
     "stacktrace": "cpp",
-    "syncstream": "cpp"
+    "syncstream": "cpp",
+    "format": "cpp",
+    "locale": "cpp",
+    "xlocbuf": "cpp",
+    "xlocmes": "cpp",
+    "xlocmon": "cpp",
+    "xloctime": "cpp",
+    "xtree": "cpp"
   }
 }

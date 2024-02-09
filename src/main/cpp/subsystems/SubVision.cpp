@@ -8,7 +8,6 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
-#include <bits/stdc++.h>
 
 SubVision::SubVision() {}
 
@@ -16,7 +15,6 @@ using namespace std;
 
 // This method will be called once per scheduler run
 void SubVision::Periodic() {
-  //frc::SmartDashboard::PutNumber("Vision/best target yaw: ", GetSpecificTagYaw(SPEAKER));
   frc::SmartDashboard::PutBoolean("Vision/best target has targets: ", VisionHasTargets());
 }
 
@@ -32,26 +30,30 @@ units::degree_t SubVision::GetSpecificTagYaw(FieldElement chosenFieldElement) {
 
   int AprilTagID = FindID(chosenFieldElement);
 
-  auto checkRightApriltag = [AprilTagID](photon::PhotonTrackedTarget apriltag){return apriltag.GetFiducialId() == AprilTagID;};
+  auto checkRightApriltag = [AprilTagID](photon::PhotonTrackedTarget apriltag) {
+    return apriltag.GetFiducialId() == AprilTagID;
+  };
   auto tagResult = std::ranges::find_if(targets, checkRightApriltag);
 
-  if(tagResult != targets.end()){
-    return tagResult->GetYaw()*1_deg;
+  if (tagResult != targets.end()) {
+    return tagResult->GetYaw() * -(1_deg);
+  } else {
+    return {};
   }
-
-  else{return 0_deg;}
 }
 
-bool SubVision::IsOnTarget(FieldElement chosenFieldElement){ return GetSpecificTagYaw(chosenFieldElement) > -0.4_deg && GetSpecificTagYaw(chosenFieldElement) < 0.4_deg; }
+bool SubVision::IsOnTarget(FieldElement chosenFieldElement) {
+  return GetSpecificTagYaw(chosenFieldElement) > -0.4_deg &&
+         GetSpecificTagYaw(chosenFieldElement) < 0.4_deg;
+}
 
-int SubVision::FindID(FieldElement chosenFieldElement){
-  
-  if(auto ally = frc::DriverStation::GetAlliance()){  
+int SubVision::FindID(FieldElement chosenFieldElement) {
+  if (auto ally = frc::DriverStation::GetAlliance()) {
     if (ally.value() == frc::DriverStation::Alliance::kBlue) {
       return blueFieldElement[chosenFieldElement];
     }
 
-    if(ally.value() == frc::DriverStation::Alliance::kRed){
+    if (ally.value() == frc::DriverStation::Alliance::kRed) {
       return redFieldElement[chosenFieldElement];
     }
   }

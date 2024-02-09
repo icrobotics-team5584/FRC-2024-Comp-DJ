@@ -13,14 +13,14 @@ class SubVision : public frc2::SubsystemBase {
  public:
   SubVision();
 
-  static SubVision &GetInstance(){
+  static SubVision& GetInstance() {
     static SubVision inst;
     return inst;
   }
 
-  //Will be called periodically whenever the CommandScheduler runs.
+  // Will be called periodically whenever the CommandScheduler runs.
 
-  enum FieldElement{SPEAKER, AMP, SPEAKER_SIDE, SOURCE_LEFT, SOURCE_RIGHT};
+  enum FieldElement { SPEAKER, AMP, SPEAKER_SIDE, SOURCE_LEFT, SOURCE_RIGHT };
 
   void Periodic() override;
   bool VisionHasTargets();
@@ -36,19 +36,11 @@ class SubVision : public frc2::SubsystemBase {
   double _bestYaw;
 
   std::map<FieldElement, int> blueFieldElement = {
-    {SPEAKER, 7},
-    {SPEAKER_SIDE, 8},
-    {AMP, 6},
-    {SOURCE_LEFT, 2},
-    {SOURCE_RIGHT, 1}
-  };
+      {SPEAKER, 7}, {SPEAKER_SIDE, 8}, {AMP, 6}, {SOURCE_LEFT, 2}, {SOURCE_RIGHT, 1}};
 
-  std::map<FieldElement, int> redFieldElement = {
-    {SPEAKER, 0}, //change later to 4
-    {SPEAKER_SIDE, 3},
-    {AMP, 5},
-    {SOURCE_LEFT, 10},
-    {SOURCE_RIGHT, 9}
-  };
-
+  std::map<FieldElement, int> redFieldElement = {{SPEAKER, 0},  // change later to 4
+                                                 {SPEAKER_SIDE, 3},
+                                                 {AMP, 5},
+                                                 {SOURCE_LEFT, 10},
+                                                 {SOURCE_RIGHT, 9}};
 };
