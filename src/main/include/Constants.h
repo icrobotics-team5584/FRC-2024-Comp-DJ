@@ -9,7 +9,7 @@ namespace canid {
 
   //drivebase IDS used: 1-12
  constexpr int DriveBaseFrontRightDrive = 7; //done
- constexpr int DriveBaseFrontRightTurn = 8; //5 robot
+ constexpr int DriveBaseFrontRightTurn = 8; //done
  constexpr int DriveBaseFrontRightEncoder = 10; //done
 
  constexpr int DriveBaseFrontLeftDrive = 3; //done
@@ -21,7 +21,7 @@ namespace canid {
  constexpr int DriveBaseBackRightEncoder = 12; //done
 
  constexpr int DriveBaseBackLeftDrive = 1; //done 
- constexpr int DriveBaseBackLeftTurn = 4; //8 robot
+ constexpr int DriveBaseBackLeftTurn = 4; //done
  constexpr int DriveBaseBackLeftEncoder = 11; //done
 
 
