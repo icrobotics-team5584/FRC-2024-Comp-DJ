@@ -10,7 +10,7 @@
 #include <subsystems/SubDrivebase.h>
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubLED.h"
-
+#include <pathplanner/lib/auto/NamedCommands.h>
 #include "RobotContainer.h"
 #include "subsystems/SubAmp.h"
 #include "subsystems/SubClimber.h"
@@ -34,6 +34,11 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("Mid Path-Break Amp", "Mid Path-Break Amp");
   _autoChooser.AddOption("Test Path", "Test Path");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
+
+  pathplanner::NamedCommands::registerCommand("ExtendIntake", SubIntake::GetInstance().ExtendIntake());
+  pathplanner::NamedCommands::registerCommand("StartIntakeSpinning", SubIntake::GetInstance().StartSpinningIntake());
+  pathplanner::NamedCommands::registerCommand("StopIntakeSpinning", SubIntake::GetInstance().StopSpinningIntake());
+
 }
 
 void RobotContainer::ConfigureBindings() {
