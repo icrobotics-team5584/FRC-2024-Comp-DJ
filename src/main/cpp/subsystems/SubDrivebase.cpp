@@ -13,6 +13,7 @@
 #include <frc2/command/Commands.h>
 #include "subsystems/SubDrivebase.h"
 #include <frc/filter/SlewRateLimiter.h>
+#include <iostream>
 
 SubDrivebase::SubDrivebase() {
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value());
@@ -28,22 +29,18 @@ SubDrivebase::SubDrivebase() {
   using namespace pathplanner;
   AutoBuilder::configureHolonomic(
       [this]() { return GetPose(); },  // Robot pose supplier
-      [this](frc::Pose2d pose) {
-        SetPose(pose);
-      },  // Method to reset odometry (will be called if your auto has a starting pose)
-      [this]() {
-        return GetRobotRelativeSpeeds();
-      },  // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-      [this](frc::ChassisSpeeds speeds) {
-        Drive(speeds.vx, speeds.vy, speeds.omega, false);
+      [this](frc::Pose2d pose) { SetPose(pose); },  // Method to reset odometry (will be called if your auto has a starting pose)
+      [this]() { return GetRobotRelativeSpeeds(); },  // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+      [this](frc::ChassisSpeeds speeds) { 
+        Drive(speeds.vx, speeds.vy, -speeds.omega, false); 
       },  // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       HolonomicPathFollowerConfig(
-          PIDConstants(0.5, 0.0, 0.0),  // Translation PID constants
+          PIDConstants(0.7, 0.0, 0.1),  // Translation PID constants
           PIDConstants(0.5, 0.0, 0.0),  // Rotation PID constants
           0.5_mps,                      // Max module speed, in m/s
-          0.4_m,  // Drive base radius in meters. Distance from robot center to furthest module.
+          432_mm,  // Drive base radius in meters. Distance from robot center to furthest module.
                   // NEEDS TO BE CHECKED AND MADE ACCURATE!!
-          ReplanningConfig()  // Default path replanning config. See the API for the options here
+          ReplanningConfig(false,false,1_m,0.25_m)  // Default path replanning config. See the API for the options here
           ),
       []() {
         // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -53,6 +50,7 @@ SubDrivebase::SubDrivebase() {
         if (alliance) {
           return alliance.value() == frc::DriverStation::Alliance::kRed;
         }
+        std::cout << "Failed to detect alliance\n";
         return false;
       },
       this  // Reference to this subsystem to set requirements
@@ -144,9 +142,8 @@ void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_se
     invert = 1;
   }
   auto states = _kinematics.ToSwerveModuleStates(
-      fieldRelative
-          ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, -GetHeading() * invert)
-          : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
+      fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, GetHeading() * invert)
+                    : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
 
   // Set speed limit and apply speed limit to all modules
   _kinematics.DesaturateWheelSpeeds(&states, MAX_VELOCITY);
@@ -203,7 +200,7 @@ frc2::CommandPtr SubDrivebase::SyncSensorBut() {
 }
 
 frc::Rotation2d SubDrivebase::GetHeading() {
-  return _gyro.GetRotation2d();
+  return -_gyro.GetRotation2d();
 }
 
 // Calculate robot's velocity over past time step (20 ms)
