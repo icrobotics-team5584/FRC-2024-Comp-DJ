@@ -33,24 +33,25 @@ class SubShooter : public frc2::SubsystemBase {
   frc2::CommandPtr ShooterChangePosClose();
   frc2::CommandPtr StartFeeder();
   frc2::CommandPtr ShootSequence();
+  frc2::CommandPtr StopShooterCommand();
   void StopShooterFunc();
   bool CheckShooterSpeed();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  static constexpr double ShooterP = 1;
+  static constexpr double ShooterP = 0.008;
   static constexpr double ShooterI = 0;
   static constexpr double ShooterD = 0;
-  static constexpr double ShooterFF = 0.125;
+  static constexpr double ShooterFF = 0.012;
 
-  int ShootFarTargetRPM = 3405;
-  int ShootCloseTargetRPM = 2270;
+  int ShootFarTargetRPM = 3500;
+  int ShootCloseTargetRPM = 3500;
 
-  ICSparkMax _shooterMotorMain{canid::ShooterMotorMain, 40_A};
-  ICSparkMax _secondaryShooterMotor{canid::SecondaryShooterMotor, 40_A};
+  ICSparkMax _shooterMotorMain{canid::ShooterMotorMain, 30_A};
+  ICSparkMax _secondaryShooterMotor{canid::SecondaryShooterMotor, 30_A};
 
-  ICSparkMax _shooterFeederMotor{canid::ShooterFeederMotor};
+  ICSparkMax _shooterFeederMotor{canid::ShooterFeederMotor, 10_A};
   frc::DoubleSolenoid solShooter{pcm0::Pcm0Id, frc::PneumaticsModuleType::CTREPCM, pcm0::ShootFar,
                                  pcm0::ShootClose};
 

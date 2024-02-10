@@ -120,10 +120,10 @@ void ICSparkMax::SetConversionFactor(double rotationsToDesired) {
   _encoder.SetConversionFactor(rotationsToDesired);
 }
 
-void ICSparkMax::UseAlternateEncoder() {
+/* void ICSparkMax::UseAlternateEncoder() {
   _encoder.selected = ICSparkEncoder::ALTERNATE;
   _pidController.SetFeedbackDevice(_encoder.GetAlternate());
-}
+} */ /*BRING ME BACK*/
 
 void ICSparkMax::UseAbsoluteEncoder() {
   _encoder.selected = ICSparkEncoder::ABSOLUTE;

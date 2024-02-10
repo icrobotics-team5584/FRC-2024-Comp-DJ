@@ -6,8 +6,6 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 SubShooter::SubShooter() {
-  _secondaryShooterMotor.RestoreFactoryDefaults();
-  _shooterMotorMain.RestoreFactoryDefaults();
   
   solShooter.Set(frc::DoubleSolenoid::kReverse);
 
@@ -50,10 +48,10 @@ frc2::CommandPtr SubShooter::StartShooter() {
   return RunOnce(
       [this] {
         if (solShooter.Get() == frc::DoubleSolenoid::kReverse) {
-          _shooterMotorMain.SetVelocityTarget(ShootFarTargetRPM*1_rpm);
+          _shooterMotorMain.SetVelocityTarget(ShootFarTargetRPM*-1_rpm);
               _secondaryShooterMotor.SetVelocityTarget(ShootFarTargetRPM*1_rpm);
         } else {
-          _shooterMotorMain.SetVelocityTarget(ShootCloseTargetRPM*1_rpm);
+          _shooterMotorMain.SetVelocityTarget(ShootCloseTargetRPM*-1_rpm);
               _secondaryShooterMotor.SetVelocityTarget(ShootCloseTargetRPM*1_rpm);
         }
       })
@@ -66,8 +64,12 @@ void SubShooter::StopShooterFunc(){
  _shooterFeederMotor.Set(0);
 }
 
+frc2::CommandPtr SubShooter::StopShooterCommand(){
+ return RunOnce([this]{ _shooterMotorMain.Set(0);}).AndThen(RunOnce([this] {_secondaryShooterMotor.Set(0);}));
+}
+
 frc2::CommandPtr SubShooter::StartFeeder() {
-  return RunOnce([this] { _shooterFeederMotor.Set(0.5); });
+  return RunOnce([this] { _shooterFeederMotor.Set(1); });
 }
 
 frc2::CommandPtr SubShooter::ShootSequence() {
@@ -76,7 +78,7 @@ frc2::CommandPtr SubShooter::ShootSequence() {
 }
 
 bool SubShooter::CheckShooterSpeed(){
- if(units::math::abs(_secondaryShooterMotor.GetVelError()) < 150_rpm && units::math::abs(_shooterMotorMain.GetVelError()) < 150_rpm){
+if(units::math::abs(_secondaryShooterMotor.GetVelError()) < 150_rpm && units::math::abs(_shooterMotorMain.GetVelError()) < 150_rpm){
   return true;
  } 
  return false;

@@ -261,8 +261,8 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
   // Related REVLib objects
   rev::SparkPIDController _pidController{CANSparkMax::GetPIDController()};
   ICSparkEncoder _encoder{GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor),
-                          GetAbsoluteEncoder(rev::SparkAbsoluteEncoder::Type::kDutyCycle),
-                          GetAlternateEncoder(8192)};  // 8192 counts per rev on throughbore
+                          GetAbsoluteEncoder(rev::SparkAbsoluteEncoder::Type::kDutyCycle)};
+                    //      GetAlternateEncoder(8192)};  // 8192 counts per rev on throughbore /*BRING ME BACK*/
 
   // PID simulation configuration
   bool _updatingTargetFromSendable = false;

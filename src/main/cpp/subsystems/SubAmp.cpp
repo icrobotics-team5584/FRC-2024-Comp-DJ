@@ -36,7 +36,7 @@ SubAmp::SubAmp() {
 
 // This method will be called once per scheduler run
 void SubAmp::Periodic() {
-  frc::SmartDashboard::PutData("amp/Arm Mechanism Display: ", &_doubleJointedArmMech);
+  frc::SmartDashboard::PutData("amp/Arm Mechanism Display: ", &_doubleJointedArmMech  );
   frc::SmartDashboard::PutNumber("amp/Amp Shooter Motor: ", _ampMotor.Get());
 
   // angle of motor
@@ -55,43 +55,45 @@ void SubAmp::SimulationPeriodic() {
 
 // Shooter Amp
 frc2::CommandPtr SubAmp::AmpShooter() {
-  return StartEnd([this] { _ampMotor.Set(0.7); }, [this] { _ampMotor.Set(0); });
+  return StartEnd([this] { _ampMotor.Set(-0.6); }, [this] { _ampMotor.Set(0); });
 }
 
 frc2::CommandPtr SubAmp::ReverseAmpShooter() {
-  return StartEnd([this] { _ampMotor.Set(-0.7); }, [this] { _ampMotor.Set(0); });
+  return StartEnd([this] { _ampMotor.Set(0.6); }, [this] { _ampMotor.Set(0); });
 }
 
 // arm
 frc2::CommandPtr SubAmp::TiltArmToAngle(units::degree_t targetAngle) {
-  return Run([this, targetAngle] { _armMotor.SetSmartMotionTarget(targetAngle); }).Until([this] {
-    return units::math::abs(_armMotor.GetPosError()) < 5_deg;
+  return Run([this, targetAngle] { _armMotor.SetSmartMotionTarget(targetAngle); }).Until([this] { return true;
+    //return units::math::abs(_armMotor.GetPosError()) < 5_deg; /*BRING ME BACK*/
   });
 }
 
 frc2::CommandPtr SubAmp::StoreNote() {
   return TiltArmToAngle(HOME_ANGLE).AndThen(Run([this] {
-                                              _ampMotor.Set(0.3);
+                                              _ampMotor.Set(-1);
                                             }).Until([this] {
-                                                return _sdLineBreak.Get();
+                                                return CheckIfArmHasGamePiece();
                                               }).FinallyDo([this] { _ampMotor.Set(0); }));
 }
 
 frc2::CommandPtr SubAmp::FeedNote(){
-  return Run([this]{_ampMotor.Set(0.3);}).FinallyDo([this]{return  _ampMotor.Set(0);});
+  return Run([this]{_ampMotor.Set(-1);}).FinallyDo([this]{return  _ampMotor.Set(0);});
 }
 // booleans
 
 bool SubAmp::CheckIfArmIsHome() {
-  if (_armHomeSwitch.Get() == true) {
+  /*if (_armHomeSwitch.Get() == true) {
     return true;
   } else {
     return false;
-  }
+  } */ /*BRING ME BACK*/
+  return true;
 }
 
 bool SubAmp::CheckIfArmHasGamePiece() {
-  if (_sdLineBreak.Get() == true) {
+  frc2::CommandXboxController lineBreakController{2};
+  if (  lineBreakController.GetAButton()) { /*BRING ME BACK*/
     return true;
   } else {
     return false;

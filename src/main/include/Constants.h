@@ -8,40 +8,40 @@ namespace canivore {
 namespace canid {
 
   //drivebase IDS used: 1-12
- constexpr int DriveBaseFrontRightDrive = 7; //done
- constexpr int DriveBaseFrontRightTurn = 8; //done
- constexpr int DriveBaseFrontRightEncoder = 10; //done
+ constexpr int DriveBaseFrontRightDrive = 7;
+ constexpr int DriveBaseFrontRightTurn = 8;
+ constexpr int DriveBaseFrontRightEncoder = 10;
 
- constexpr int DriveBaseFrontLeftDrive = 3; //done
- constexpr int DriveBaseFrontLeftTurn = 6; //done
- constexpr int DriveBaseFrontLeftEncoder = 9; //done
+ constexpr int DriveBaseFrontLeftDrive = 3;
+ constexpr int DriveBaseFrontLeftTurn = 6;
+ constexpr int DriveBaseFrontLeftEncoder = 9;
       
- constexpr int DriveBaseBackRightDrive = 5; //done
- constexpr int DriveBaseBackRightTurn = 2; //done
- constexpr int DriveBaseBackRightEncoder = 12; //done
+ constexpr int DriveBaseBackRightDrive = 5;
+ constexpr int DriveBaseBackRightTurn = 2;
+ constexpr int DriveBaseBackRightEncoder = 12;
 
- constexpr int DriveBaseBackLeftDrive = 1; //done 
- constexpr int DriveBaseBackLeftTurn = 4; //done
- constexpr int DriveBaseBackLeftEncoder = 11; //done
+ constexpr int DriveBaseBackLeftDrive = 1; 
+ constexpr int DriveBaseBackLeftTurn = 4;
+ constexpr int DriveBaseBackLeftEncoder = 11;
 
 
 //Intake IDS used: 13
-  constexpr int IntakeMotor = 13; //17 robot
+  constexpr int IntakeMotor = 17;
 
 //Shooter IDS used: 14-16
-  constexpr int ShooterMotorMain = 14; //18 robot
-  constexpr int SecondaryShooterMotor = 15; //16 robot
-  constexpr int ShooterFeederMotor = 16; //14 robot
+  constexpr int ShooterMotorMain = 18;
+  constexpr int SecondaryShooterMotor = 16;
+  constexpr int ShooterFeederMotor = 14;
 
 //Arm IDS used: 17-18
-  constexpr int ArmMotor = 17; //19
+  constexpr int ArmMotor = 55; //19 /*BRING ME BACK*/
 
 //Amp/Trap IDS used: 19
-  constexpr int AmpMotor = 19; //20 robot
+  constexpr int AmpMotor = 20;
 
 //Climber IDS used: 20-21
-  constexpr int lClimbMotor = 20; //15 robot
-  constexpr int rClimbMotor = 21; //13 robot
+  constexpr int lClimbMotor = 15;
+  constexpr int rClimbMotor = 13;
 
 }
 

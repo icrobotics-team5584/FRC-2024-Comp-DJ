@@ -65,14 +65,14 @@ class SubClimber : public frc2::SubsystemBase {
   units::meter_t TargetDistance;
 
   // Motor
-  ICSparkMax _lClimbMotor{canid::lClimbMotor, 40_A};
-  ICSparkMax _rClimbMotor{canid::rClimbMotor, 40_A};
+  ICSparkMax _lClimbMotor{canid::lClimbMotor, 30_A};
+  ICSparkMax _rClimbMotor{canid::rClimbMotor, 30_A};
 
   // Motor Setup
   static constexpr double gearRatio = 30.0;
-  static constexpr double lP = 0.1, lI = 0.0, lD = 0.0, lF = 0,
+  static constexpr double lP = 0.0, lI = 0.0, lD = 0.0, lF = 0,
   
-                          rP = 0.1, rI = 0.0, rD = 0.0, rF = 0;
+                          rP = 0.0, rI = 0.0, rD = 0.0, rF = 0;
 
   // Unit translation
   static constexpr units::meter_t WheelCir = 0.3_m;

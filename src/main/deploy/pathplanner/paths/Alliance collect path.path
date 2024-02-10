@@ -133,13 +133,7 @@
             {
               "type": "named",
               "data": {
-                "name": "StartSpinningIntake"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "CheckStorage"
+                "name": "StartIntakeSpinning"
               }
             },
             {
@@ -179,25 +173,19 @@
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
+                "name": "ShootNote"
               }
             },
             {
               "type": "named",
               "data": {
-                "name": "StartSpinningIntake"
+                "name": "StartIntakeSpinning"
               }
             },
             {
               "type": "named",
               "data": {
-                "name": "CheckStorage"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "StopSpinningIntake"
+                "name": "StopIntakeSpinning"
               }
             }
           ]
@@ -214,25 +202,25 @@
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
+                "name": "ShootNote"
               }
             },
             {
               "type": "named",
               "data": {
-                "name": "StartSpinningIntake"
+                "name": "StartIntakeSpinning"
               }
             },
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
+                "name": "ShootNote"
               }
             },
             {
               "type": "named",
               "data": {
-                "name": "StopSpinningIntake"
+                "name": "StopIntakeSpinning"
               }
             },
             {
