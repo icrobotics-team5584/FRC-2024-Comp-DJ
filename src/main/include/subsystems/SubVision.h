@@ -27,7 +27,7 @@ class SubVision : public frc2::SubsystemBase {
   bool IsOnTarget(FieldElement chosenFieldElement);
 
   int FindID(FieldElement chosenFieldElement);
-  units::degree_t GetSpecificTagYaw(FieldElement chosenFieldElement);
+  std::optional<units::degree_t> GetSpecificTagYaw(FieldElement chosenFieldElement);
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be

@@ -7,7 +7,7 @@ namespace cmd{
 
     frc2::CommandPtr VisionRotateToZero(){
         return Run(
-            []{SubDrivebase::GetInstance().RotateToZero(-SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER));},
+            []{SubDrivebase::GetInstance().RotateToZero(SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER).value());},
             {&SubDrivebase::GetInstance()}
         );}
         

@@ -24,7 +24,7 @@ bool SubVision::VisionHasTargets() {
   return targets;
 }
 
-units::degree_t SubVision::GetSpecificTagYaw(FieldElement chosenFieldElement) {
+std::optional<units::degree_t> SubVision::GetSpecificTagYaw(FieldElement chosenFieldElement) {
   auto result = _camera.GetLatestResult();
   auto targets = result.GetTargets();
 
@@ -35,16 +35,29 @@ units::degree_t SubVision::GetSpecificTagYaw(FieldElement chosenFieldElement) {
   };
   auto tagResult = std::ranges::find_if(targets, checkRightApriltag);
 
+  // returns yaw as degree value
   if (tagResult != targets.end()) {
     return tagResult->GetYaw() * -(1_deg);
-  } else {
+  } 
+
+  // return 0 when looses target
+  else {
     return {};
   }
 }
 
+// exists out when the range of yaw is between [-0.4, 0.4]
 bool SubVision::IsOnTarget(FieldElement chosenFieldElement) {
-  return GetSpecificTagYaw(chosenFieldElement) > -0.4_deg &&
-         GetSpecificTagYaw(chosenFieldElement) < 0.4_deg;
+
+  auto yaw = GetSpecificTagYaw(chosenFieldElement);
+
+  if(yaw.has_value()){
+    return yaw.value() > -0.4_deg && yaw.value() < 0.4_deg;
+  }
+  else{
+    return false;
+  }
+  
 }
 
 int SubVision::FindID(FieldElement chosenFieldElement) {
