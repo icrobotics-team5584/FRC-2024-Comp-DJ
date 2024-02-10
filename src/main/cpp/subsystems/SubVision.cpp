@@ -3,19 +3,37 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "subsystems/SubVision.h"
+#include "subsystems/SubDriveBase.h"
+
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DriverStation.h>
 #include <algorithm>
 #include <iostream>
 #include <map>
+#include <photon/simulation/SimVisionTarget.h>
+#include <fmt/format.h>
 
-SubVision::SubVision() {}
+SubVision::SubVision() {
+  for (int i = 0; i <= 8; i++) {
+    auto pose = _tagLayout.GetTagPose(i);
+    if (pose.has_value()){
+      photon::SimVisionTarget simTag{pose.value(), 8_in, 8_in, i};
+      _visionSim.AddSimVisionTarget(simTag);
+      SubDrivebase::GetInstance().DisplayPose(fmt::format("tag{}", i),
+                                              pose.value().ToPose2d());
+    }
+  }
+}
 
 using namespace std;
 
 // This method will be called once per scheduler run
 void SubVision::Periodic() {
   frc::SmartDashboard::PutBoolean("Vision/best target has targets: ", VisionHasTargets());
+}
+
+void SubVision::SimulationPeriodic() {
+  _visionSim.ProcessFrame(SubDrivebase::GetInstance().GetPose());
 }
 
 bool SubVision::VisionHasTargets() {

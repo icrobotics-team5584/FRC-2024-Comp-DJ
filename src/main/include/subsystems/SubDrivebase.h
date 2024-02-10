@@ -22,7 +22,7 @@
 
 class SubDrivebase : public frc2::SubsystemBase {
  public:
-  static SubDrivebase& GetInstance() {
+  static SubDrivebase &GetInstance() {
     static SubDrivebase inst;
     return inst;
   }

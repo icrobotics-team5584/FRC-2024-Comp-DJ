@@ -131,16 +131,9 @@ frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& contro
 void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
                          units::degrees_per_second_t rot, bool fieldRelative) {
   // Get states of all swerve modules
-
-  auto invert = 1;
-    if(frc::RobotBase::IsSimulation()){
-      invert = -1;  
-    }
-    else{
-      invert = 1;
-    }
+  
   auto states = _kinematics.ToSwerveModuleStates(
-      fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, GetHeading() * invert)
+      fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, GetHeading() )
                     : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
 
   // Set speed limit and apply speed limit to all modules
