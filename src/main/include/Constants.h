@@ -36,6 +36,10 @@ namespace canid {
   constexpr int DriveBaseBackLeftDrive = 1;
   constexpr int DriveBaseBackLeftTurn = 4;
   constexpr int DriveBaseBackLeftEncoder = 11;
+
+  //Climber
+  constexpr int ClimberLeftMotor = 31;  // Not set up yet
+  constexpr int ClimberRightMotor = 32; // Not set up yet
 }
 
 namespace pcm0 {

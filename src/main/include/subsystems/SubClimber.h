@@ -67,11 +67,8 @@ class SubClimber : public frc2::SubsystemBase {
   units::meter_t TargetDistance;
 
   // Motor
-  ICSparkMax lClimbMotor{41};
-  ICSparkMax rClimbMotor{42};
-
-  rev::SparkAbsoluteEncoder leftEncoder{lClimbMotor.GetAbsoluteEncoder(rev::SparkAbsoluteEncoder::Type::kDutyCycle)};
-  rev::SparkAbsoluteEncoder rightEncoder{rClimbMotor.GetAbsoluteEncoder(rev::SparkAbsoluteEncoder::Type::kDutyCycle)};
+  ICSparkMax lClimbMotor{canid::ClimberLeftMotor};
+  ICSparkMax rClimbMotor{canid::ClimberRightMotor};
 
   // Motor Setup
   static constexpr double gearRatio = 30.0;
