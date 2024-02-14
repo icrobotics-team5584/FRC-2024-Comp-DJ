@@ -32,10 +32,13 @@ void SubClimber::Periodic() {
 
 void SubClimber::SimulationPeriodic() {
     frc::SmartDashboard::PutData("Climber/Mech Display", &mech);
+    frc::SmartDashboard::PutNumber("Climber/Left sim distance", TurnToDistance(lClimbMotor.GetPosition()).value());
+    frc::SmartDashboard::PutNumber("Climber/Right sim distance", TurnToDistance(rClimbMotor.GetPosition()).value());
 
-    lElvSim.SetInputVoltage(lClimbMotor.GetSimVoltage());
-    lElvSim.Update(20_ms);
-    lClimbMotor.UpdateSimEncoder(DistanceToTurn(lElvSim.GetPosition()), DistanceToTurn(lElvSim.GetVelocity()));
+  lElvSim.SetInputVoltage(lClimbMotor.GetSimVoltage());
+  lElvSim.Update(20_ms);
+  lClimbMotor.UpdateSimEncoder(DistanceToTurn(lElvSim.GetPosition()),
+                               DistanceToTurn(lElvSim.GetVelocity()));
 
     rElvSim.SetInputVoltage(rClimbMotor.GetSimVoltage());
     rElvSim.Update(20_ms);
@@ -49,7 +52,7 @@ void SubClimber::SimulationPeriodic() {
 // Units translation
 
 units::turn_t SubClimber::DistanceToTurn(units::meter_t distance) {
-    return distance / WheelCir * 1_tr;
+  return distance / WheelCir * 1_tr;
 }
 
 units::radians_per_second_t SubClimber::DistanceToTurn(units::meters_per_second_t distance) {
@@ -57,7 +60,7 @@ units::radians_per_second_t SubClimber::DistanceToTurn(units::meters_per_second_
 }
 
 units::meter_t SubClimber::TurnToDistance(units::turn_t turn) {
-    return turn.value() * WheelCir;
+  return turn.value() * WheelCir;
 };
 
 void SubClimber::DriveToDistance(units::meter_t distance) {
@@ -79,13 +82,13 @@ void SubClimber::Extend() {
 }
 
 void SubClimber::Start(double power) {
-    lClimbMotor.Set(power);
-    rClimbMotor.Set(power);
+  lClimbMotor.Set(power);
+  rClimbMotor.Set(power);
 }
 
 void SubClimber::Stop() {
-    lClimbMotor.Set(0);
-    rClimbMotor.Set(0);
+  lClimbMotor.Set(0);
+  rClimbMotor.Set(0);
 }
 
 void SubClimber::Lock() {
@@ -105,6 +108,15 @@ frc2::CommandPtr SubClimber::ClimberExtend() {
 
 frc2::CommandPtr SubClimber::ClimberRetract() {
     return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Retract();});
+}
+
+frc2::CommandPtr SubClimber::ClimberPosition(units::meter_t distance) {
+    return frc2::cmd::RunOnce([distance] {SubClimber::GetInstance().DriveToDistance(distance);});
+}
+
+frc2::CommandPtr SubClimber::ClimberManualDrive(float power) {
+    power = std::clamp(power, -1.0f, 1.0f);
+    return frc2::cmd::RunOnce([power] {SubClimber::GetInstance().Start(power);});
 }
 
 frc2::CommandPtr SubClimber::ClimberStop() {

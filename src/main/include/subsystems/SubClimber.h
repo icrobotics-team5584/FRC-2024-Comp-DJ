@@ -29,12 +29,12 @@ class SubClimber : public frc2::SubsystemBase {
  public:
   SubClimber();
 
-  static SubClimber &GetInstance(){
+  static SubClimber& GetInstance() {
     static SubClimber inst;
     return inst;
   }
 
-  //Periodic
+  // Periodic
   void Periodic() override;
   void SimulationPeriodic() override;
 
@@ -43,7 +43,7 @@ class SubClimber : public frc2::SubsystemBase {
   units::radians_per_second_t DistanceToTurn(units::meters_per_second_t distance);
   units::meter_t TurnToDistance(units::turn_t turn);
 
-  //Tools
+  // Tools
   void DriveToDistance(units::meter_t distance);
 
   // Actions
@@ -56,6 +56,8 @@ class SubClimber : public frc2::SubsystemBase {
 
   frc2::CommandPtr ClimberExtend();
   frc2::CommandPtr ClimberRetract();
+  frc2::CommandPtr ClimberPosition(units::meter_t distance);
+  frc2::CommandPtr ClimberManualDrive(float power);
   frc2::CommandPtr ClimberStop();
   frc2::CommandPtr ClimberLock();
   frc2::CommandPtr ClimberUnlock();
@@ -82,19 +84,22 @@ class SubClimber : public frc2::SubsystemBase {
 
   // Robot info
   static constexpr units::meter_t BaseHeight = 0.2_m;
-  
+
   // Sim
 
   frc::sim::ElevatorSim lElvSim{frc::DCMotor::NEO(), gearRatio, 26_kg, (WheelCir/std::numbers::pi)/2, BaseHeight, 1.5_m, false, BaseHeight};
   frc::sim::ElevatorSim rElvSim{frc::DCMotor::NEO(), gearRatio, 26_kg, (WheelCir/std::numbers::pi)/2, BaseHeight, 1.5_m, false, BaseHeight};
 
-  frc::Mechanism2d mech{4,4};
+  frc::Mechanism2d mech{4, 4};
   frc::MechanismRoot2d* mechRootL = mech.GetRoot("ClimberL", 1, 1);
   frc::MechanismRoot2d* mechRootR = mech.GetRoot("ClimberR", 3, 1);
   frc::MechanismRoot2d* mechRootT = mech.GetRoot("ClimberT", 2, 1);
-  frc::MechanismLigament2d* mechLeftElevator = mechRootL->Append<frc::MechanismLigament2d>("Left elevator", 1, 90_deg);
-  frc::MechanismLigament2d* mechRightElevator = mechRootR->Append<frc::MechanismLigament2d>("Right elevator", 3, 90_deg);
-  frc::MechanismLigament2d* mechTar = mechRootT->Append<frc::MechanismLigament2d>("Target", 2, 90_deg);
+  frc::MechanismLigament2d* mechLeftElevator =
+      mechRootL->Append<frc::MechanismLigament2d>("Left elevator", 1, 90_deg);
+  frc::MechanismLigament2d* mechRightElevator =
+      mechRootR->Append<frc::MechanismLigament2d>("Right elevator", 3, 90_deg);
+  frc::MechanismLigament2d* mechTar =
+      mechRootT->Append<frc::MechanismLigament2d>("Target", 2, 90_deg);
 
   // Double solenoid
 

@@ -2,19 +2,24 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+#include "RobotContainer.h"
+#include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <frc2/command/Commands.h>
+#include "subsystems/SubShooter.h"
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <subsystems/SubDrivebase.h>
+#include "subsystems/SubIntake.h"
+#include "subsystems/SubLED.h"
 
 #include "RobotContainer.h"
 #include "subsystems/SubAmp.h"
 #include "subsystems/SubClimber.h"
-#include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <frc2/command/Commands.h>
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <subsystems/SubDrivebase.h>
+#include "commands/UniversalCommands.h"
 
 RobotContainer::RobotContainer() {
   SubAmp::GetInstance();
-  SubClimber::GetInstance();
+  SubDrivebase::GetInstance();
   SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
@@ -28,37 +33,27 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("Mid Path-Break Podium", "Mid Path-Break Podium");
   _autoChooser.AddOption("Mid Path-Break Amp", "Mid Path-Break Amp");
   _autoChooser.AddOption("Test Path", "Test Path");
+  _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
 frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
   }
 
 void RobotContainer::ConfigureBindings() {
-    _driverController.X().OnTrue(SubDrivebase::GetInstance().SyncSensorBut());
-    _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
-    //_driverController.A().WhileTrue(
-     //  frc2::cmd::Run(
-     //      []{ 
-      //         SubDrivebase::GetInstance().Drive(0_mps, 1_mps, 0_deg_per_s, true); 
-      //       }
-       //  )
-   //  );
+  _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
 
- // _driverController.A().WhileTrue(SubDrivebase::GetInstance().SysIdDynamic(frc2::sysid::Direction::kForward));
- // _driverController.B().WhileTrue(SubDrivebase::GetInstance().SysIdDynamic(frc2::sysid::Direction::kReverse));
- // _driverController.X().WhileTrue(SubDrivebase::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kForward));
- // _driverController.Y().WhileTrue(SubDrivebase::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+  // _driverController.LeftTrigger().WhileTrue(cmd::ShootSequence());
+  // _driverController.RightTrigger().WhileTrue(cmd::IntakeSequence().AndThen([this]{_driverController.SetRumble(frc::GenericHID::kBothRumble, 1); _operatorController.SetRumble(frc::GenericHID::kBothRumble, 1);}));
 
-  _driverController.A().OnTrue(SubClimber::GetInstance().ClimberExtend());
-  _driverController.B().OnTrue(SubClimber::GetInstance().ClimberRetract());
-  _driverController.X().OnTrue(SubClimber::GetInstance().ClimberLock());
-  _driverController.Y().OnTrue(SubClimber::GetInstance().ClimberUnlock());
+  // _driverController.A().OnTrue(SubClimber::GetInstance().ClimberExtend());
+  // _driverController.B().OnTrue(SubClimber::GetInstance().ClimberRetract());
+  // _driverController.X().OnTrue(SubClimber::GetInstance().ClimberLock());
+  // _driverController.Y().OnTrue(SubClimber::GetInstance().ClimberUnlock());
 
-  //Use below if above don't work
-  // _driverController.A().OnTrue(SubClimber::GetInstance().ClimberExtendManual());
-  // _driverController.B().OnTrue(SubClimber::GetInstance().ClimberRetractManual());
+  _driverController.Y().OnTrue(frc2::cmd::RunOnce( [] { SubDrivebase::GetInstance().ResetGyroHeading(); } ));
+
 }
-  
+
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-    _autoSelected = _autoChooser.GetSelected();
-    units::second_t delay = _delayChooser.GetSelected() *1_s;
+  _autoSelected = _autoChooser.GetSelected();
+  units::second_t delay = _delayChooser.GetSelected() * 1_s;
   return frc2::cmd::Wait(delay).AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr());
 }

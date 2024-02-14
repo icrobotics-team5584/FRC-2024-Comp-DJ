@@ -14,7 +14,6 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-<<<<<<< HEAD
       "/SmartDashboard/Climber/Mech Display": "Mechanism2d",
       "/SmartDashboard/Climber/Test mech display": "Mechanism2d",
       "/SmartDashboard/Climber/testMech": "Mechanism2d"
@@ -31,14 +30,6 @@
         }
       },
       "/SmartDashboard/Climber/testMech": {
-=======
-      "/SmartDashboard/amp/Arm Mechanism Display": "Mechanism2d",
-      "/SmartDashboard/amp/Claw Mechanism Display": "Mechanism2d",
-      "/SmartDashboard/amp/Mechanism Display": "Mechanism2d"
-    },
-    "windows": {
-      "/SmartDashboard/amp/Arm Mechanism Display": {
->>>>>>> origin/Amp
         "window": {
           "visible": true
         }
@@ -51,12 +42,6 @@
     },
     "transitory": {
       "SmartDashboard": {
-<<<<<<< HEAD
-        "Climber": {
-          "Left motor": {
-            "open": true
-          },
-=======
         "amp": {
           "Dizzy Arm tilt motor: ": {
             "open": true
@@ -73,7 +58,10 @@
           "open": true
         },
         "arm": {
->>>>>>> origin/Amp
+        "Climber": {
+          "Left motor": {
+            "open": true
+          },
           "open": true
         },
         "open": true
@@ -87,12 +75,6 @@
     "Server": {
       "Subscribers": {
         "open": true
-<<<<<<< HEAD
-      },
-      "open": true
-    },
-    "visible": true
-=======
       }
     }
   },
@@ -171,6 +153,9 @@
         "visible": false
       }
     }
->>>>>>> origin/Amp
+      },
+      "open": true
+    },
+    "visible": true
   }
-}
+

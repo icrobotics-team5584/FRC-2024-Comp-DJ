@@ -19,6 +19,7 @@
 #include <frc/controller/ArmFeedforward.h>
 #include <wpi/interpolating_map.h>
 #include <networktables/NetworkTableEntry.h>
+#include <frc/DigitalInput.h>
 #include <optional>
 
 #include "Constants.h"
@@ -28,66 +29,84 @@ class SubAmp : public frc2::SubsystemBase {
  public:
   SubAmp();
 
-  //Instance
-  static SubAmp &GetInstance(){
+  // variables
+  static constexpr units::degree_t HOME_ANGLE = 235_deg;
+  static constexpr units::degree_t AMP_ANGLE = 41_deg;
+  static constexpr units::degree_t TRAP_ANGLE = 41_deg;
+
+  // Instance
+  static SubAmp& GetInstance() {
     static SubAmp inst;
     return inst;
   }
 
-  //Will be called periodically whenever the CommandScheduler runs.
+  // Will be called periodically whenever the CommandScheduler runs.
   void Periodic() override;
   void SimulationPeriodic() override;
 
   // shooter amp
   frc2::CommandPtr AmpShooter();
   frc2::CommandPtr ReverseAmpShooter();
+  frc2::CommandPtr StoreNote();
+  frc2::CommandPtr SpinAmpStorage();
+
+  double GetArmEncoderPos();
 
   // amp
   frc2::CommandPtr TiltArmToAngle(units::degree_t targetAngle);
+  frc2::CommandPtr CheckArmPos();
+  frc2::CommandPtr Check();
+
+  bool CheckIfArmIsHome();
+  bool CheckIfArmHasGamePiece();
 
  private:
   // motors
-  ICSparkMax _ampMotorSpin{canid::AmpMotorSpin}; // Amp shooter
-  ICSparkMax _armMotor{canid::ArmMotor}; // arm
-  ICSparkMax _armMotorFollow{canid::ArmMotorFollow}; //arm
+  ICSparkMax _ampMotor{canid::AmpMotor};      // Amp shooter
+  ICSparkMax _armMotor{canid::ArmMotor};              // arm
+  ICSparkMax _armMotorFollow{canid::ArmMotorFollow};  // arm
 
   // encoders
-  rev::SparkAbsoluteEncoder _armEncoder{_armMotor.GetAbsoluteEncoder(
-      rev::SparkAbsoluteEncoder::Type::kDutyCycle)};
+  rev::SparkAbsoluteEncoder _armEncoder{
+      _armMotor.GetAbsoluteEncoder(rev::SparkAbsoluteEncoder::Type::kDutyCycle)};
 
   // arm (tune values for robot)
   static constexpr double ARM_P = 0.0;
   static constexpr double ARM_I = 0.0;
   static constexpr double ARM_D = 0.0;
-  static constexpr double ARM_F = 100.0; 
-  
+  static constexpr double ARM_F = 100.0;
+
   static constexpr double ARM_GEAR_RATIO = 218.27;
   static constexpr units::degrees_per_second_t ARM_MAX_VEL = 18_deg_per_s;
   static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 90_deg_per_s_sq;
-  static constexpr units::degree_t ARM_TOLERANCE = 0.5_deg; 
+  static constexpr units::degree_t ARM_TOLERANCE = 0.5_deg;
   static constexpr units::meter_t ARM_LENGTH = 0.9_m;
-  static constexpr units::kilogram_t ARM_MASS = 1_kg; // only sim
-  static constexpr units::degree_t ARM_MIN_ANGLE = -180_deg; // only sim
-  static constexpr units::degree_t ARM_MAX_ANGLE = 180_deg; // only sim
+  static constexpr units::kilogram_t ARM_MASS = 1_kg;         // only sim
+  static constexpr units::degree_t ARM_MIN_ANGLE = -180_deg;  // only sim
+  static constexpr units::degree_t ARM_MAX_ANGLE = 180_deg;   // only sim
 
   // simulating arm in smartdashboard
   frc::sim::SingleJointedArmSim _armSim{
-    frc::DCMotor::NEO(2),
-    ARM_GEAR_RATIO, 
-    frc::sim::SingleJointedArmSim::EstimateMOI(ARM_LENGTH, ARM_MASS),
-    ARM_LENGTH,
-    ARM_MIN_ANGLE,
-    ARM_MAX_ANGLE,
-    false,
-    0_deg
-  };
+      frc::DCMotor::NEO(2),
+      ARM_GEAR_RATIO,
+      frc::sim::SingleJointedArmSim::EstimateMOI(ARM_LENGTH, ARM_MASS),
+      ARM_LENGTH,
+      ARM_MIN_ANGLE,
+      ARM_MAX_ANGLE,
+      false,
+      0_deg};
 
   // displaying arm in smartdashboard
-  frc::Mechanism2d _doubleJointedArmMech{3, 3}; //canvas width and height
-  frc::MechanismRoot2d* _armRoot = _doubleJointedArmMech.GetRoot("armRoot", 1, 1); //root x and y
-  frc::MechanismLigament2d* _arm1Ligament = _armRoot->Append<frc::MechanismLigament2d>("ligament2", ARM_LENGTH.value(), 0_deg);
+  frc::Mechanism2d _doubleJointedArmMech{3, 3};  // canvas width and height
+  frc::MechanismRoot2d* _armRoot = _doubleJointedArmMech.GetRoot("armRoot", 1, 1);  // root x and y
+  frc::MechanismLigament2d* _arm1Ligament =
+      _armRoot->Append<frc::MechanismLigament2d>("ligament2", ARM_LENGTH.value(), 0_deg);
 
   nt::GenericEntry* _armXOffset;
   nt::GenericEntry* _armYOffset;
 
+  frc::DigitalInput _fdLineBreak{dio::FDLineBreak};
+  frc::DigitalInput _sdLineBreak{dio::SDLineBreak};
+
+  frc::DigitalInput _armHomeSwitch{dio::ArmHomeSwitch};
 };
