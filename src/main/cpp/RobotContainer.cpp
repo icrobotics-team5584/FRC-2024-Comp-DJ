@@ -43,12 +43,12 @@ void RobotContainer::ConfigureBindings() {
   // _driverController.LeftTrigger().WhileTrue(cmd::ShootSequence());
   // _driverController.RightTrigger().WhileTrue(cmd::IntakeSequence().AndThen([this]{_driverController.SetRumble(frc::GenericHID::kBothRumble, 1); _operatorController.SetRumble(frc::GenericHID::kBothRumble, 1);}));
 
-  // _driverController.A().OnTrue(SubClimber::GetInstance().ClimberExtend());
-  // _driverController.B().OnTrue(SubClimber::GetInstance().ClimberRetract());
-  // _driverController.X().OnTrue(SubClimber::GetInstance().ClimberLock());
-  // _driverController.Y().OnTrue(SubClimber::GetInstance().ClimberUnlock());
+  _driverController.A().OnTrue(SubClimber::GetInstance().ClimberExtend());
+  _driverController.B().OnTrue(SubClimber::GetInstance().ClimberRetract());
+  _driverController.X().OnTrue(SubClimber::GetInstance().ClimberLock());
+  _driverController.Y().OnTrue(SubClimber::GetInstance().ClimberUnlock());
 
-  _driverController.Y().OnTrue(frc2::cmd::RunOnce( [] { SubDrivebase::GetInstance().ResetGyroHeading(); } ));
+  // _driverController.Y().OnTrue(frc2::cmd::RunOnce( [] { SubDrivebase::GetInstance().ResetGyroHeading(); } ));
 
 }
 
