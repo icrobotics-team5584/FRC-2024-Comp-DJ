@@ -4,19 +4,23 @@
 
 class ICSparkEncoder {
  public:
-  ICSparkEncoder(rev::SparkRelativeEncoder&& inbuilt, rev::SparkAbsoluteEncoder&& absolute /*, rev::SparkMaxAlternateEncoder&& alternate*/ /*BRING ME BACK*/);
-  double _absoluteSimPos = 0;
+  ICSparkEncoder(rev::SparkRelativeEncoder&& inbuilt);
   enum EncoderType { INBUILT, ABSOLUTE, ALTERNATE };
-  EncoderType selected = INBUILT;
-  rev::SparkRelativeEncoder _inbuilt;
-  rev::SparkAbsoluteEncoder _absolute;
-  /*rev::SparkMaxAlternateEncoder _alternate; */ /*BRING ME BACK*/
 
   double GetPosition();
   double GetVelocity();
   void SetPosition(double pos);
   void SetConversionFactor(double rotationsToDesired);
+  void UseAlternate(rev::SparkMaxAlternateEncoder&& encoder);
+  void UseAbsolute(rev::SparkAbsoluteEncoder&& encoder);
   rev::SparkRelativeEncoder& GetInbuilt();
   rev::SparkAbsoluteEncoder& GetAbsolute();
-  /* rev::SparkMaxAlternateEncoder& GetAlternate(); */ /*BRING ME BACK*/
+  rev::SparkMaxAlternateEncoder& GetAlternate();
+
+ private:
+  rev::SparkRelativeEncoder _inbuilt;
+  std::unique_ptr<rev::SparkAbsoluteEncoder> _absolute;
+  std::unique_ptr<rev::SparkMaxAlternateEncoder> _alternate;
+  double _absoluteSimPos = 0;
+  EncoderType _selected = INBUILT;
 };

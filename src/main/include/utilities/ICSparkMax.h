@@ -224,8 +224,12 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
 
   /**
    * Switch to using an external absolute encoder connected to the data port on the SPARK MAX.
+   *
+   * @param zeroOffset the position that is reported as zero. It is influenced by the absolute
+   * encoder's position conversion factor, and whether it is inverted. So set those parameters
+   * before calling this.
    */
-  void UseAbsoluteEncoder();
+  void UseAbsoluteEncoder(units::turn_t zeroOffset = 0_tr);
 
   /**
    * Set the minimum and maximum input value for PID Wrapping with position closed loop
@@ -260,9 +264,7 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
 
   // Related REVLib objects
   rev::SparkPIDController _pidController{CANSparkMax::GetPIDController()};
-  ICSparkEncoder _encoder{GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor),
-                          GetAbsoluteEncoder(rev::SparkAbsoluteEncoder::Type::kDutyCycle)};
-                    //      GetAlternateEncoder(8192)};  // 8192 counts per rev on throughbore /*BRING ME BACK*/
+  ICSparkEncoder _encoder{GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)};
 
   // PID simulation configuration
   bool _updatingTargetFromSendable = false;
