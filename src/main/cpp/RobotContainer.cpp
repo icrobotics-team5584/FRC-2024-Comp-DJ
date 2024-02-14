@@ -16,6 +16,7 @@
 #include "subsystems/SubClimber.h"
 #include <frc2/command/Commands.h>
 #include "commands/UniversalCommands.h"
+#include "utilities/BotVars.h"
 
 RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("ExtendIntake", SubIntake::GetInstance().ExtendIntake());

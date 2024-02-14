@@ -24,6 +24,7 @@
 
 #include "Constants.h"
 #include "utilities/ICSparkMax.h"
+#include "utilities/BotVars.h"
 
 class SubAmp : public frc2::SubsystemBase {
  public:
@@ -31,8 +32,8 @@ class SubAmp : public frc2::SubsystemBase {
 
   // variables
   static constexpr units::degree_t HOME_ANGLE = 235_deg; //working test was 50_deg
-  static constexpr units::degree_t AMP_ANGLE = 41_deg;
-  static constexpr units::degree_t TRAP_ANGLE = 41_deg;
+  static inline const units::degree_t AMP_ANGLE = BotVars::Choose(41_deg, 41_deg);
+  static inline const units::degree_t TRAP_ANGLE = BotVars::Choose(41_deg, 41_deg);
 
   // Instance
   static SubAmp& GetInstance() {

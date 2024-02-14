@@ -19,6 +19,7 @@
 #include "utilities/SwerveModule.h"
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/sysid/SysIdRoutine.h>
+#include "utilities/BotVars.h"
 
 class SubDrivebase : public frc2::SubsystemBase {
  public:
@@ -76,10 +77,10 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::Translation2d _backLeftLocation{-0.281_m, +0.281_m};
   frc::Translation2d _backRightLocation{-0.281_m, -0.281_m};
 
-  const double FRONT_RIGHT_MAG_OFFSET =  -0.875732; // <- Low Modules | Raised modules -> -0.01904296875;  
-  const double FRONT_LEFT_MAG_OFFSET =   -0.443359; // <- Low Modules | Raised modules -> -0.670898;        
-  const double BACK_RIGHT_MAG_OFFSET =   -0.959473; // <- Low Modules | Raised modules -> -0.900146484375;  
-  const double BACK_LEFT_MAG_OFFSET =    -0.825928; // <- Low Modules | Raised modules -> -0.453125;         
+  const double FRONT_RIGHT_MAG_OFFSET = BotVars::Choose(-0.875732, -0.01904296875); //-0.875732 <- Low Modules | Raised modules -> -0.01904296875;  
+  const double FRONT_LEFT_MAG_OFFSET = BotVars::Choose(-0.443359, -0.670898);       //-0.443359 <- Low Modules | Raised modules -> -0.670898;        
+  const double BACK_RIGHT_MAG_OFFSET = BotVars::Choose(-0.959473, -0.900146484375); //-0.959473 <- Low Modules | Raised modules -> -0.900146484375;  
+  const double BACK_LEFT_MAG_OFFSET = BotVars::Choose(-0.825928, -0.453125);        //-0.825928 <- Low Modules | Raised modules -> -0.453125;         
 
   SwerveModule _frontLeft{canid::DriveBaseFrontLeftDrive, canid::DriveBaseFrontLeftTurn,
                           canid::DriveBaseFrontLeftEncoder, FRONT_LEFT_MAG_OFFSET};
