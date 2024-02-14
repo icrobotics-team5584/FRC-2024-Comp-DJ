@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "subsystems/SubClimber.h"
+#include <frc/RobotBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
 SubClimber::SubClimber() {
@@ -25,6 +26,18 @@ void SubClimber::Periodic() {
     frc::SmartDashboard::PutNumber("Climber/Left distance", TurnToDistance(lClimbMotor.GetPosition()).value());
     frc::SmartDashboard::PutNumber("Climber/Right distance", TurnToDistance(rClimbMotor.GetPosition()).value());
     frc::SmartDashboard::PutNumber("Climber/Target distance", TargetDistance.value());
+
+    if (!frc::RobotBase::IsSimulation()) {
+        if (TopLimitSwitch.Get()) {
+            if (IsMoving()) { Stop(); }
+            ZeroClimber();
+        }
+        
+        if (BottomLimitSwitch.Get()) {
+            if (IsMoving()) { Stop(); }
+            SetClimberTop();
+        }
+    }
 }
 
 void SubClimber::SimulationPeriodic() {
@@ -95,6 +108,21 @@ void SubClimber::Lock() {
 
 void SubClimber::Unlock() {
     LockCylinder.Set(frc::DoubleSolenoid::Value::kReverse);
+}
+
+bool SubClimber::IsMoving() {
+    return std::abs(lClimbMotor.GetVelocity().value()) > 0 || std::abs(rClimbMotor.GetVelocity().value()) > 0;
+}
+
+void SubClimber::ZeroClimber() {
+    lClimbMotor.SetPosition(0_tr);
+    rClimbMotor.SetPosition(0_tr);
+}
+
+void SubClimber::SetClimberTop() {
+    auto turns = DistanceToTurn(TopSwitchHeight);
+    lClimbMotor.SetPosition(turns);
+    rClimbMotor.SetPosition(turns);
 }
 
 //Pointer Commands

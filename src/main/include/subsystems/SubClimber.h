@@ -15,7 +15,7 @@
 #include <frc/system/plant/DCMotor.h>
 
 #include <frc/DoubleSolenoid.h>
-#include <rev/SparkAbsoluteEncoder.h>
+#include <frc/DigitalInput.h>
 
 #include <units/angle.h>
 
@@ -53,6 +53,10 @@ class SubClimber : public frc2::SubsystemBase {
   void Stop();
   void Lock();
   void Unlock();
+  bool IsMoving();
+
+  void ZeroClimber();
+  void SetClimberTop();
 
   frc2::CommandPtr ClimberExtend();
   frc2::CommandPtr ClimberRetract();
@@ -76,11 +80,16 @@ class SubClimber : public frc2::SubsystemBase {
   
                           rP = 0.1, rI = 0.0, rD = 0.0, rF = 0;
 
+  // Limit switches
+  frc::DigitalInput TopLimitSwitch{5};
+  frc::DigitalInput BottomLimitSwitch{6};
+
   // Unit translation
   static constexpr units::meter_t WheelCir = 0.3_m;
 
   // Robot info
   static constexpr units::meter_t BaseHeight = 0.2_m;
+  static constexpr units::meter_t TopSwitchHeight = 1.5_m;
 
   // Sim
 
