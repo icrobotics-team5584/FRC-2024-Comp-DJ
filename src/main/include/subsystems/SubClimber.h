@@ -56,6 +56,8 @@ class SubClimber : public frc2::SubsystemBase {
 
   frc2::CommandPtr ClimberExtend();
   frc2::CommandPtr ClimberRetract();
+  frc2::CommandPtr ClimberPosition(units::meter_t distance);
+  frc2::CommandPtr ClimberManualDrive(float power);
   frc2::CommandPtr ClimberStop();
   frc2::CommandPtr ClimberLock();
   frc2::CommandPtr ClimberUnlock();

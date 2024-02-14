@@ -110,6 +110,15 @@ frc2::CommandPtr SubClimber::ClimberRetract() {
     return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Retract();});
 }
 
+frc2::CommandPtr SubClimber::ClimberPosition(units::meter_t distance) {
+    return frc2::cmd::RunOnce([distance] {SubClimber::GetInstance().DriveToDistance(distance);});
+}
+
+frc2::CommandPtr SubClimber::ClimberManualDrive(float power) {
+    power = std::clamp(power, -1.0f, 1.0f);
+    return frc2::cmd::RunOnce([power] {SubClimber::GetInstance().Start(power);});
+}
+
 frc2::CommandPtr SubClimber::ClimberStop() {
     return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Stop();});
 }
