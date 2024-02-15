@@ -1,7 +1,9 @@
 #include "utilities/BotVars.h"
+#include <iostream>
 
-Robot BotVars::DetermineRobot() {
+BotVars::Robot BotVars::DetermineRobot() {
   std::string filePath = "/sys/class/net/eth0/address";
+  std::cout << "Running DetermineRobot()\n";
   if (std::filesystem::exists(filePath)) {
     std::ifstream file(filePath);
     std::string macAddress;
@@ -18,9 +20,4 @@ Robot BotVars::DetermineRobot() {
   frc::SmartDashboard::PutString("active robot",
                                  "ERROR! Could not match MAC address. Defaulting to COMP Bot.");
   return Robot::COMP;
-}
-
-template <typename T>
-T BotVars::Choose(T compBotValue, T practiceBotValue) {
-  return activeRobot == COMP ? compBotValue : practiceBotValue;
 }
