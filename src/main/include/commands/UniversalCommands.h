@@ -10,4 +10,5 @@ frc2::CommandPtr ArmToStow();
 
 frc2::CommandPtr ShootSequence();
 frc2::CommandPtr IntakeSequence();
+frc2::CommandPtr TrapSequence();
 }  // namespace cmd

@@ -52,4 +52,9 @@ frc2::CommandPtr IntakeSequence() {
             [] { SubIntake::GetInstance().RetractIntake(); });
       });
 }
+
+
+frc2::CommandPtr TrapSequence() {
+}
+
 }  // namespace cmd
