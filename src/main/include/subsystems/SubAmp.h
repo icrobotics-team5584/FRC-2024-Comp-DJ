@@ -101,6 +101,4 @@ class SubAmp : public frc2::SubsystemBase {
 
   frc::DigitalInput _fdLineBreak{dio::FDLineBreak};
   frc::DigitalInput _sdLineBreak{dio::SDLineBreak};
-
-  frc::DigitalInput _armHomeSwitch{dio::ArmHomeSwitch};
 };

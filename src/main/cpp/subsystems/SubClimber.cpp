@@ -8,14 +8,20 @@
 
 SubClimber::SubClimber() {
     _lClimbMotor.SetConversionFactor(1.0 / gearRatio);
+    _lClimbMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
     _lClimbMotor.SetPIDFF(lP,lI,lD,lF);
-    _lClimbMotor.SetInverted(true);
+    _lClimbMotor.SetInverted(false);
 
     _rClimbMotor.SetConversionFactor(1.0 / gearRatio);
+    _rClimbMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
     _rClimbMotor.SetPIDFF(rP,rI,rD,rF);
-    _rClimbMotor.SetInverted(false);
+    _rClimbMotor.SetInverted(true);
 
     LockCylinder.Set(frc::DoubleSolenoid::Value::kReverse);
+
+    // lc = new grpl::LaserCan(canid::ClimberLeftLaserCAN);
+    // lc->set_ranging_mode(grpl::LaserCanRangingMode::Long);
+    // lc->set_timing_budget(grpl::LaserCanTimingBudget::TB50ms);
 
     frc::SmartDashboard::PutData("Climber/Left motor", (wpi::Sendable*)&_lClimbMotor);
     frc::SmartDashboard::PutData("Climber/Right motor", (wpi::Sendable*)&_rClimbMotor);
@@ -27,17 +33,20 @@ void SubClimber::Periodic() {
     frc::SmartDashboard::PutNumber("Climber/Right distance", TurnToDistance(_rClimbMotor.GetPosition()).value());
     frc::SmartDashboard::PutNumber("Climber/Target distance", TargetDistance.value());
 
-    if (!frc::RobotBase::IsSimulation()) {
-        if (TopLimitSwitch.Get()) {
-            if (IsMoving()) { Stop(); }
-            ZeroClimber();
-        }
+    // if (!frc::RobotBase::IsSimulation()) {
+    //     if (TopLimitSwitch.Get()) {
+    //         ZeroClimber();
+    //     }
         
-        if (BottomLimitSwitch.Get()) {
-            if (IsMoving()) { Stop(); }
-            SetClimberTop();
-        }
-    }
+    //     if (BottomLimitSwitch.Get()) {
+    //         SetClimberTop();
+    //     }
+    // }
+
+    // std::optional<grpl::LaserCanMeasurement> measurement = lc->get_measurement();
+    // if (measurement.has_value() && measurement.value().status == grpl::LASERCAN_STATUS_VALID_MEASUREMENT) {
+    //     units::millimeter_t distance = measurement.value().distance_mm * 1_mm;
+    // }
 }
 
 void SubClimber::SimulationPeriodic() {
@@ -154,4 +163,8 @@ frc2::CommandPtr SubClimber::ClimberLock() {
 
 frc2::CommandPtr SubClimber::ClimberUnlock() {
     return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Unlock();});
+}
+
+frc2::CommandPtr SubClimber::ClimberReset() {
+    return frc2::cmd::RunOnce([] {SubClimber::GetInstance().SetClimberTop();});
 }

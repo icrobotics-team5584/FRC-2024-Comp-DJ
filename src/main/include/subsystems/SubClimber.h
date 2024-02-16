@@ -16,6 +16,7 @@
 
 #include <frc/DoubleSolenoid.h>
 #include <frc/DigitalInput.h>
+#include <grpl/LaserCan.h>
 
 #include <units/angle.h>
 
@@ -65,7 +66,7 @@ class SubClimber : public frc2::SubsystemBase {
   frc2::CommandPtr ClimberStop();
   frc2::CommandPtr ClimberLock();
   frc2::CommandPtr ClimberUnlock();
-
+  frc2::CommandPtr ClimberReset();
 
  private:
   units::meter_t TargetDistance;
@@ -75,21 +76,21 @@ class SubClimber : public frc2::SubsystemBase {
   ICSparkMax _rClimbMotor{canid::rClimbMotor, 30_A};
 
   // Motor Setup
-  static constexpr double gearRatio = 30.0;
-  static constexpr double lP = 0.0, lI = 0.0, lD = 0.0, lF = 0,
+  static constexpr double gearRatio = 26.44444444;
+  static constexpr double lP = 20, lI = 0.0, lD = 0.0, lF = 0,
   
-                          rP = 0.1, rI = 0.0, rD = 0.0, rF = 0;
+                          rP = 20, rI = 0.0, rD = 0.0, rF = 0;
 
   // Limit switches
   frc::DigitalInput TopLimitSwitch{5};
   frc::DigitalInput BottomLimitSwitch{6};
 
   // Unit translation
-  static constexpr units::meter_t WheelCir = 0.3_m;
+  static constexpr units::meter_t WheelCir = 0.12538_m;
 
   // Robot info
   static constexpr units::meter_t BaseHeight = 0.2_m;
-  static constexpr units::meter_t TopSwitchHeight = 1.5_m;
+  static constexpr units::meter_t TopSwitchHeight = 0.617_m;
 
   // Sim
 
@@ -111,4 +112,6 @@ class SubClimber : public frc2::SubsystemBase {
 
   frc::DoubleSolenoid LockCylinder{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH,
                                     pcm1::LockCylinderForward, pcm1::LockCylinderReverse};
+
+    grpl::LaserCan *lc;                                    
 };

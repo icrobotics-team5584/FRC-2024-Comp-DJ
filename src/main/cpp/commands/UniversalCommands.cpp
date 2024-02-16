@@ -52,6 +52,8 @@ frc2::CommandPtr IntakefullSequence(){
 
 
 frc2::CommandPtr TrapSequence() {
+  return ArmToTrapPos()
+        .AndThen(SubAmp::GetInstance().AmpShooter().WithTimeout(1_s));
 }
 
 }  // namespace cmd

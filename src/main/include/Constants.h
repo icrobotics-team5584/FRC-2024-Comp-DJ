@@ -46,13 +46,6 @@ namespace canid {
   constexpr int ClimberLeftLaserCAN = 21;
   constexpr int ClimberRightLaserCAN = 22;
 
-  constexpr int DriveBaseBackLeftDrive = 1;
-  constexpr int DriveBaseBackLeftTurn = 4;
-  constexpr int DriveBaseBackLeftEncoder = 11;
-
-  //Climber
-  constexpr int ClimberLeftMotor = 31;  // Not set up yet
-  constexpr int ClimberRightMotor = 32; // Not set up yet
 }
 
 namespace pcm1 {
@@ -64,6 +57,10 @@ namespace pcm1 {
     constexpr int ShootClose = 3;
     constexpr int ShootFar = 2;
 
+    //Climber
+    constexpr int LockCylinderForward = 4;
+    constexpr int LockCylinderReverse = 5;
+
     constexpr int Pcm1Id = 22;
 
 }
@@ -71,6 +68,7 @@ namespace pcm1 {
 namespace pwm {
   constexpr int LEDS = 1;
 }
+
 
 namespace OperatorConstants {}
 
@@ -81,12 +79,6 @@ namespace dio {
   constexpr int SDLineBreak = 1;
   constexpr int IntakeRetractedReed = 2;
   constexpr int IntakeExtendedReed = 3;
-  constexpr int ArmHomeSwitch = 4;
-}
-
-namespace pcm {
-  constexpr int LockCylinderForward = 1; // Not set up yet
-  constexpr int LockCylinderReverse = 2; // Not set up yet
   constexpr int ShooterEncoderChannelA = 7;
   constexpr int ShooterEncoderChannelB = 8;
 }
