@@ -29,6 +29,7 @@ RobotContainer::RobotContainer() {
   
   SubAmp::GetInstance();
   SubDrivebase::GetInstance();
+  SubIntake::GetInstance();
   SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
@@ -44,6 +45,8 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("Test Path", "Test Path");
   _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
+
+ // _compressor.EnableAnalog(70_psi, 120_psi);
 }
 
 void RobotContainer::ConfigureBindings() {

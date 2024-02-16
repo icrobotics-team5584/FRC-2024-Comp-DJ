@@ -39,8 +39,8 @@ class SubIntake : public frc2::SubsystemBase {
 
  private:
   rev::CANSparkMax _intakeMotorSpin{canid::IntakeMotor, rev::CANSparkMax::MotorType::kBrushless};
-  frc::DoubleSolenoid solIntake{pcm0::Pcm0Id, frc::PneumaticsModuleType::CTREPCM,
-                                pcm0::IntakeExtend, pcm0::IntakeRetract};
+  frc::DoubleSolenoid solIntake{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH,
+                                pcm1::IntakeExtend, pcm1::IntakeRetract};
 
   frc::DigitalInput _intakeRetractedReed{dio::IntakeRetractedReed};
   frc::DigitalInput _intakeExtendedReed{dio::IntakeExtendedReed};

@@ -38,6 +38,7 @@ SubAmp::SubAmp() {
 void SubAmp::Periodic() {
   frc::SmartDashboard::PutData("amp/Arm Mechanism Display: ", &_doubleJointedArmMech  );
   frc::SmartDashboard::PutNumber("amp/Amp Shooter Motor: ", _ampMotor.Get());
+  frc::SmartDashboard::PutBoolean("amp/Storage Line Break", _sdLineBreak.Get());
 
   // angle of motor
   frc::SmartDashboard::PutData("amp/Dizzy Arm tilt motor: ", (wpi::Sendable*)&_armMotor);

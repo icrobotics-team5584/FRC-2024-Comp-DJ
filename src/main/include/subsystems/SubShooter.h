@@ -48,12 +48,14 @@ class SubShooter : public frc2::SubsystemBase {
   int ShootFarTargetRPM = 3500;
   int ShootCloseTargetRPM = 3500;
 
+  
+
   ICSparkMax _shooterMotorMain{canid::ShooterMotorMain, 30_A};
   ICSparkMax _secondaryShooterMotor{canid::SecondaryShooterMotor, 30_A};
 
   ICSparkMax _shooterFeederMotor{canid::ShooterFeederMotor, 10_A};
-  frc::DoubleSolenoid solShooter{pcm0::Pcm0Id, frc::PneumaticsModuleType::CTREPCM, pcm0::ShootFar,
-                                 pcm0::ShootClose};
+  frc::DoubleSolenoid solShooter{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH, pcm1::ShootFar,
+                                 pcm1::ShootClose};
 
   double mainMotorPower = 0.3;
   double secondaryMotorPower = 0.3;

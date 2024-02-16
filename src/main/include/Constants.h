@@ -43,9 +43,12 @@ namespace canid {
   constexpr int lClimbMotor = 15;
   constexpr int rClimbMotor = 13;
 
+  constexpr int ClimberLeftLaserCAN = 21;
+  constexpr int ClimberRightLaserCAN = 22;
+
 }
 
-namespace pcm0 {
+namespace pcm1 {
      //Intake
     constexpr int IntakeExtend = 0;
     constexpr int IntakeRetract = 1;
@@ -58,7 +61,7 @@ namespace pcm0 {
     constexpr int LockCylinderForward = 4;
     constexpr int LockCylinderReverse = 5;
 
-    constexpr int Pcm0Id = 0;
+    constexpr int Pcm1Id = 22;
 
 }
 
@@ -76,5 +79,6 @@ namespace dio {
   constexpr int SDLineBreak = 1;
   constexpr int IntakeRetractedReed = 2;
   constexpr int IntakeExtendedReed = 3;
-  constexpr int ArmHomeSwitch = 4;
+  constexpr int ShooterEncoderChannelA = 7;
+  constexpr int ShooterEncoderChannelB = 8;
 }
