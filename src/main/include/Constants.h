@@ -1,44 +1,83 @@
 #pragma once
 
-/**
- * The Constants header provides a convenient place for teams to hold robot-wide
- * numerical or boolean constants.  This should not be used for any other
- * purpose.
- *
- * It is generally a good idea to place constants into subsystem- or
- * command-specific namespaces within this header, which can then be used where
- * they are needed.
- */
- // 2 4 6 8
-namespace canid {
-  constexpr int DriveBaseFrontRightDrive = 7;
-  constexpr int DriveBaseFrontRightTurn = 8;
-  constexpr int DriveBaseFrontRightEncoder = 10;
+namespace canivore {
+  // 1-12 inclusive
 
-  constexpr int DriveBaseFrontLeftDrive = 3;
-  constexpr int DriveBaseFrontLeftTurn = 6; 
-  constexpr int DriveBaseFrontLeftEncoder = 9;
-
-  constexpr int DriveBaseBackRightDrive = 5;
-  constexpr int DriveBaseBackRightTurn = 2; 
-  constexpr int DriveBaseBackRightEncoder = 12;
-
-  constexpr int DriveBaseBackLeftDrive = 1;
-  constexpr int DriveBaseBackLeftTurn = 4; 
-  constexpr int DriveBaseBackLeftEncoder = 11;
-
-  // shooter amp
-  constexpr int AmpMotorSpin = 13;
-    
-  // arm   
-  constexpr int ArmMotor = 14;
 }
+
+namespace canid {
+
+  //drivebase IDS used: 1-12
+ constexpr int DriveBaseFrontRightDrive = 7;
+ constexpr int DriveBaseFrontRightTurn = 8;
+ constexpr int DriveBaseFrontRightEncoder = 10;
+
+ constexpr int DriveBaseFrontLeftDrive = 3;
+ constexpr int DriveBaseFrontLeftTurn = 6;
+ constexpr int DriveBaseFrontLeftEncoder = 9;
+      
+ constexpr int DriveBaseBackRightDrive = 5;
+ constexpr int DriveBaseBackRightTurn = 2;
+ constexpr int DriveBaseBackRightEncoder = 12;
+
+ constexpr int DriveBaseBackLeftDrive = 1; 
+ constexpr int DriveBaseBackLeftTurn = 4;
+ constexpr int DriveBaseBackLeftEncoder = 11;
+
+
+//Intake IDS used: 13
+  constexpr int IntakeMotor = 17;
+
+//Shooter IDS used: 14-16
+  constexpr int ShooterMotorMain = 18;
+  constexpr int SecondaryShooterMotor = 16;
+  constexpr int ShooterFeederMotor = 14;
+
+//Arm IDS used: 17-18
+  constexpr int ArmMotor = 55; //19 /*BRING ME BACK*/
+
+//Amp/Trap IDS used: 19
+  constexpr int AmpMotor = 20;
+
+//Climber IDS used: 20-21
+  constexpr int lClimbMotor = 15;
+  constexpr int rClimbMotor = 13;
+
+  constexpr int ClimberLeftLaserCAN = 21;
+  constexpr int ClimberRightLaserCAN = 22;
+
+}
+
+namespace pcm1 {
+     //Intake
+    constexpr int IntakeExtend = 0;
+    constexpr int IntakeRetract = 1;
+
+    //Shooter
+    constexpr int ShootClose = 3;
+    constexpr int ShootFar = 2;
+
+    //Climber
+    constexpr int LockCylinderForward = 4;
+    constexpr int LockCylinderReverse = 5;
+
+    constexpr int Pcm1Id = 22;
+
+}
+
+namespace pwm {
+  constexpr int LEDS = 1;
+}
+
+namespace OperatorConstants {}
+
+constexpr int kDriverControllerPort = 0;
 
 namespace dio {
   constexpr int FDLineBreak = 0;
   constexpr int SDLineBreak = 1;
-}
-
-namespace pwm {
-
+  constexpr int IntakeRetractedReed = 2;
+  constexpr int IntakeExtendedReed = 3;
+  constexpr int ShooterEncoderChannelA = 7;
+  constexpr int ShooterEncoderChannelB = 8;
 }

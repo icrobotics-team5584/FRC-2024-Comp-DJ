@@ -6,11 +6,13 @@
 
 #include <frc2/command/CommandScheduler.h>
 #include "subsystems/SubDrivebase.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
 void Robot::RobotInit() {}
 
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();
+  //frc::SmartDashboard::PutNumber("Compressor PSI", m_container._compressor.GetPressure().value());
 }
 
 void Robot::DisabledInit() {}

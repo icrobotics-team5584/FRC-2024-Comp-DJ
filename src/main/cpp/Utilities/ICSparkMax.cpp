@@ -109,38 +109,32 @@ void ICSparkMax::SetInternalControlType(Mode controlType) {
 void ICSparkMax::ConfigSmartMotion(units::turns_per_second_t maxVelocity,
                                    units::turns_per_second_squared_t maxAcceleration,
                                    units::turn_t tolerance) {
-  _pidController.SetSmartMotionMaxAccel(AccelToSparkRPMps(maxAcceleration));
-  _pidController.SetSmartMotionMaxVelocity(VelToSparkRPM(maxVelocity));
+  _pidController.SetSmartMotionMaxAccel(maxAcceleration.value());
+  _pidController.SetSmartMotionMaxVelocity(maxVelocity.value());
   _pidController.SetSmartMotionAllowedClosedLoopError(tolerance.value());
 
   _simSmartMotionProfile = frc::TrapezoidProfile<units::turns>{{maxVelocity, maxAcceleration}};
 }
 
 void ICSparkMax::SetConversionFactor(double rotationsToDesired) {
-  _encoder.SetPositionConversionFactor(rotationsToDesired);
-  // Need to divide vel by 60 because Spark Max uses Revs per minute not Revs per second
-  _encoder.SetVelocityConversionFactor(rotationsToDesired / 60);
+  _encoder.SetConversionFactor(rotationsToDesired);
 }
 
-void ICSparkMax::UseAlternateEncoder(int countsPerRev) {
-  // const double posConversion = _encoder->GetPositionConversionFactor();
+/* void ICSparkMax::UseAlternateEncoder() {
+  _encoder.selected = ICSparkEncoder::ALTERNATE;
+  _pidController.SetFeedbackDevice(_encoder.GetAlternate());
+} */ /*BRING ME BACK*/
 
-  // _encoder = std::make_unique<rev::SparkMaxAlternateEncoder>(
-  //     CANSparkMax::GetAlternateEncoder(countsPerRev));
-  // _pidController.SetFeedbackDevice(*_encoder);
-
-  // SetConversionFactor(posConversion);
-}
-
-void ICSparkMax::UseAbsoluteEncoder(rev::SparkAbsoluteEncoder& encoder) {
-  _pidController.SetFeedbackDevice(encoder);
+void ICSparkMax::UseAbsoluteEncoder() {
+  _encoder.selected = ICSparkEncoder::ABSOLUTE;
+  _pidController.SetFeedbackDevice(_encoder.GetAbsolute());
 }
 
 void ICSparkMax::EnableClosedLoopWrapping(units::turn_t min, units::turn_t max) {
   _pidController.SetPositionPIDWrappingMinInput(min.value());
   _pidController.SetPositionPIDWrappingMaxInput(max.value());
   _pidController.SetPositionPIDWrappingEnabled(true);
-  _simController.EnableContinuousInput(PosToSparkRevs(min), PosToSparkRevs(max));
+  _simController.EnableContinuousInput(min.value(), max.value());
 }
 
 void ICSparkMax::SetPIDFF(double P, double I, double D, double FF) {
@@ -193,15 +187,15 @@ units::volt_t ICSparkMax::GetSimVoltage() {
       break;
 
     case Mode::kVelocity:
-      output = units::volt_t{
-          _simController.Calculate(VelToSparkRPM(GetVelocity()), VelToSparkRPM(_velocityTarget)) +
-          _simFF * VelToSparkRPM(_velocityTarget)};
+      output =
+          units::volt_t{_simController.Calculate(GetVelocity().value(), _velocityTarget.value()) +
+                        _simFF * _velocityTarget.value()};
       break;
 
     case Mode::kPosition:
-      output = units::volt_t{
-          _simController.Calculate(PosToSparkRevs(GetPosition()), PosToSparkRevs(_positionTarget)) +
-          _simFF * PosToSparkRevs(_positionTarget)};
+      output =
+          units::volt_t{_simController.Calculate(GetPosition().value(), _positionTarget.value()) +
+                        _simFF * _positionTarget.value()};
       break;
 
     case Mode::kVoltage:
@@ -209,9 +203,9 @@ units::volt_t ICSparkMax::GetSimVoltage() {
       break;
 
     case Mode::kSmartMotion:
-      output = units::volt_t{_simController.Calculate(
-          VelToSparkRPM(GetVelocity()),
-          VelToSparkRPM(EstimateSMVelocity()) + _simFF * VelToSparkRPM(EstimateSMVelocity()))};
+      output = units::volt_t{
+          _simController.Calculate(GetVelocity().value(), EstimateSMVelocity().value()) +
+          _simFF * EstimateSMVelocity().value()};
       break;
 
     case Mode::kCurrent:
@@ -235,13 +229,13 @@ units::turns_per_second_t ICSparkMax::EstimateSMVelocity() {
   }
 
   units::turn_t error = units::math::abs(_positionTarget - GetPosition());
-  units::turn_t tolerance = SparkRevsToPos(_pidController.GetSmartMotionAllowedClosedLoopError());
+  units::turn_t tolerance = _pidController.GetSmartMotionAllowedClosedLoopError() * 1_tr;
   if (error < tolerance) {
     return units::turns_per_second_t{0};
   }
 
   return _simSmartMotionProfile
-      .Calculate(20_ms, {_positionTarget, units::turns_per_second_t{0}},
-                 {GetPosition(), GetVelocity()})
+      .Calculate(20_ms, {GetPosition(), GetVelocity()},
+                        {_positionTarget, units::turns_per_second_t{0}})
       .velocity;
 }

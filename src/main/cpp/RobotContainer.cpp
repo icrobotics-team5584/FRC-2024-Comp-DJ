@@ -5,19 +5,32 @@
 #include "RobotContainer.h"
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <frc2/command/Commands.h>
+#include "subsystems/SubShooter.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <subsystems/SubDrivebase.h>
-
+#include "subsystems/SubIntake.h"
+#include "subsystems/SubLED.h"
+#include <pathplanner/lib/auto/NamedCommands.h>
 #include "RobotContainer.h"
-#include "subsystems/SubArm.h"
-
-using namespace frc2::cmd;
+#include "subsystems/SubAmp.h"
+#include "subsystems/SubClimber.h"
+#include <frc2/command/Commands.h>
+#include "commands/UniversalCommands.h"
 
 RobotContainer::RobotContainer() {
+  pathplanner::NamedCommands::registerCommand("ExtendIntake", SubIntake::GetInstance().ExtendIntake());
+  pathplanner::NamedCommands::registerCommand("StartIntakeSpinning", SubIntake::GetInstance().StartSpinningIntake());
+  pathplanner::NamedCommands::registerCommand("StopIntakeSpinning", SubIntake::GetInstance().StopSpinningIntake());
+  pathplanner::NamedCommands::registerCommand("StartShooter", SubShooter::GetInstance().StartShooter());
+  pathplanner::NamedCommands::registerCommand("RetractIntake", SubIntake::GetInstance().CommandRetractIntake());
+  pathplanner::NamedCommands::registerCommand("ShootNote", SubShooter::GetInstance().ShootSequence());
+  pathplanner::NamedCommands::registerCommand("StopShooter", SubShooter::GetInstance().StopShooterCommand());
+
+  
   SubArm::GetInstance();
   SubDrivebase::GetInstance();
-  SubDrivebase::GetInstance().SetDefaultCommand(
-      SubDrivebase::GetInstance().JoystickDrive(_driverController));
+  SubIntake::GetInstance();
+  SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
   _delayChooser.AddOption("1 Seconds", 1);
@@ -46,12 +59,33 @@ void RobotContainer::ConfigureBindings() {
   _autoChooser.AddOption("Mid Path-Break Podium", "Mid Path-Break Podium");
   _autoChooser.AddOption("Mid Path-Break Amp", "Mid Path-Break Amp");
   _autoChooser.AddOption("Test Path", "Test Path");
+  _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
+
+ // _compressor.EnableAnalog(70_psi, 120_psi);
 }
 
-// Main Controller
-// _driverController.Start().OnTrue(frc2::cmd::RunOnce([]{SubDriveBase::GetInstance().ResetGyroHeading();}));
-// _driverController.leftJoystick().WhileTrue(frc2::cmd::RunEnd([]{SubDrivebase::GetInstance().Drive();}));
+void RobotContainer::ConfigureBindings() {
+  _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd()); //working
+
+  _driverController.LeftTrigger().WhileTrue(cmd::ShootFullSequence()); //working
+  _driverController.RightTrigger().WhileTrue(cmd::IntakefullSequence());//working     /*.AndThen([this]{_driverController.SetRumble(frc::GenericHID::kBothRumble, 1); _operatorController.SetRumble(frc::GenericHID::kBothRumble, 1);})*/)
+
+  _driverController.LeftBumper().OnTrue(cmd::ArmToAmpPos()); //working
+  _driverController.LeftBumper().OnFalse(cmd::ArmToStow()); //working
+  _driverController.RightBumper().OnTrue(SubLED::GetInstance().IndicateAmp()); //working
+
+  _operatorController.B().OnTrue(SubClimber::GetInstance().ClimberExtend()); //working
+  _operatorController.A().OnTrue(SubClimber::GetInstance().ClimberRetract()); //working
+  _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberLock()); //working
+  _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberUnlock()); //working
+  _operatorController.RightTrigger().WhileTrue(SubShooter::GetInstance().StartShooter()); //working
+  _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose()); //working
+  _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar()); //working
+  _operatorController.LeftTrigger().WhileTrue(SubAmp::GetInstance().AmpShooter()); //working
+
+
+}
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   _autoSelected = _autoChooser.GetSelected();

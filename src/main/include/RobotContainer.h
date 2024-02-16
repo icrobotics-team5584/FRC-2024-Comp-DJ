@@ -12,7 +12,9 @@
 #include <frc2/command/InstantCommand.h>
 #include <frc/XboxController.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <frc/Compressor.h>
 
+// Created classes includes 
 #include "Constants.h"
 #include <frc/XboxController.h>
 #include <frc2/command/button/CommandGenericHID.h>
@@ -27,12 +29,15 @@ class RobotContainer {
   RobotContainer();
 
   frc2::CommandPtr GetAutonomousCommand();
+ // frc::Compressor _compressor{22, frc::PneumaticsModuleType::REVPH};
 
  private:
   void ConfigureBindings();
   frc2::CommandXboxController _driverController{0};
+  frc2::CommandXboxController _operatorController{1};
 
   frc::SendableChooser<std::string> _autoChooser;
   frc::SendableChooser<int> _delayChooser;
   std::string _autoSelected;
+
 };
