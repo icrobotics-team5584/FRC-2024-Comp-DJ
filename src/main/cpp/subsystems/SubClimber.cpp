@@ -7,24 +7,24 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 SubClimber::SubClimber() {
-    lClimbMotor.SetConversionFactor(1.0 / gearRatio);
-    lClimbMotor.SetPIDFF(lP,lI,lD,lF);
-    lClimbMotor.SetInverted(true);
+    _lClimbMotor.SetConversionFactor(1.0 / gearRatio);
+    _lClimbMotor.SetPIDFF(lP,lI,lD,lF);
+    _lClimbMotor.SetInverted(true);
 
-    rClimbMotor.SetConversionFactor(1.0 / gearRatio);
-    rClimbMotor.SetPIDFF(rP,rI,rD,rF);
-    rClimbMotor.SetInverted(false);
+    _rClimbMotor.SetConversionFactor(1.0 / gearRatio);
+    _rClimbMotor.SetPIDFF(rP,rI,rD,rF);
+    _rClimbMotor.SetInverted(false);
 
     LockCylinder.Set(frc::DoubleSolenoid::Value::kReverse);
 
-    frc::SmartDashboard::PutData("Climber/Left motor", (wpi::Sendable*)&lClimbMotor);
-    frc::SmartDashboard::PutData("Climber/Right motor", (wpi::Sendable*)&rClimbMotor);
+    frc::SmartDashboard::PutData("Climber/Left motor", (wpi::Sendable*)&_lClimbMotor);
+    frc::SmartDashboard::PutData("Climber/Right motor", (wpi::Sendable*)&_rClimbMotor);
     frc::SmartDashboard::PutData("Climber/Lock Cylinder", (wpi::Sendable*)&LockCylinder);
 };
 
 void SubClimber::Periodic() {
-    frc::SmartDashboard::PutNumber("Climber/Left distance", TurnToDistance(lClimbMotor.GetPosition()).value());
-    frc::SmartDashboard::PutNumber("Climber/Right distance", TurnToDistance(rClimbMotor.GetPosition()).value());
+    frc::SmartDashboard::PutNumber("Climber/Left distance", TurnToDistance(_lClimbMotor.GetPosition()).value());
+    frc::SmartDashboard::PutNumber("Climber/Right distance", TurnToDistance(_rClimbMotor.GetPosition()).value());
     frc::SmartDashboard::PutNumber("Climber/Target distance", TargetDistance.value());
 
     if (!frc::RobotBase::IsSimulation()) {
@@ -42,20 +42,20 @@ void SubClimber::Periodic() {
 
 void SubClimber::SimulationPeriodic() {
     frc::SmartDashboard::PutData("Climber/Mech Display", &mech);
-    frc::SmartDashboard::PutNumber("Climber/Left sim distance", TurnToDistance(lClimbMotor.GetPosition()).value());
-    frc::SmartDashboard::PutNumber("Climber/Right sim distance", TurnToDistance(rClimbMotor.GetPosition()).value());
+    frc::SmartDashboard::PutNumber("Climber/Left sim distance", TurnToDistance(_lClimbMotor.GetPosition()).value());
+    frc::SmartDashboard::PutNumber("Climber/Right sim distance", TurnToDistance(_rClimbMotor.GetPosition()).value());
 
-  lElvSim.SetInputVoltage(lClimbMotor.GetSimVoltage());
+  lElvSim.SetInputVoltage(_lClimbMotor.GetSimVoltage());
   lElvSim.Update(20_ms);
-  lClimbMotor.UpdateSimEncoder(DistanceToTurn(lElvSim.GetPosition()),
+  _lClimbMotor.UpdateSimEncoder(DistanceToTurn(lElvSim.GetPosition()),
                                DistanceToTurn(lElvSim.GetVelocity()));
 
-    rElvSim.SetInputVoltage(rClimbMotor.GetSimVoltage());
+    rElvSim.SetInputVoltage(_rClimbMotor.GetSimVoltage());
     rElvSim.Update(20_ms);
-    rClimbMotor.UpdateSimEncoder(DistanceToTurn(rElvSim.GetPosition()), DistanceToTurn(rElvSim.GetVelocity()));
+    _rClimbMotor.UpdateSimEncoder(DistanceToTurn(rElvSim.GetPosition()), DistanceToTurn(rElvSim.GetVelocity()));
 
-    mechLeftElevator->SetLength(TurnToDistance(lClimbMotor.GetPosition()).value());
-    mechRightElevator->SetLength(TurnToDistance(rClimbMotor.GetPosition()).value());
+    mechLeftElevator->SetLength(TurnToDistance(_lClimbMotor.GetPosition()).value());
+    mechRightElevator->SetLength(TurnToDistance(_rClimbMotor.GetPosition()).value());
     mechTar->SetLength(TargetDistance.value());
 }
 
@@ -76,8 +76,8 @@ units::meter_t SubClimber::TurnToDistance(units::turn_t turn) {
 void SubClimber::DriveToDistance(units::meter_t distance) {
     if (LockCylinder.Get() != frc::DoubleSolenoid::Value::kForward) {
         TargetDistance = distance;
-        lClimbMotor.SetPositionTarget(DistanceToTurn(distance));
-        rClimbMotor.SetPositionTarget(DistanceToTurn(distance));
+        _lClimbMotor.SetPositionTarget(DistanceToTurn(distance));
+        _rClimbMotor.SetPositionTarget(DistanceToTurn(distance));
     }
 }
 
@@ -92,13 +92,13 @@ void SubClimber::Extend() {
 }
 
 void SubClimber::Start(double power) {
-  lClimbMotor.Set(power);
-  rClimbMotor.Set(power);
+  _lClimbMotor.Set(power);
+  _rClimbMotor.Set(power);
 }
 
 void SubClimber::Stop() {
-  lClimbMotor.Set(0);
-  rClimbMotor.Set(0);
+  _lClimbMotor.Set(0);
+  _rClimbMotor.Set(0);
 }
 
 void SubClimber::Lock() {
@@ -111,18 +111,18 @@ void SubClimber::Unlock() {
 }
 
 bool SubClimber::IsMoving() {
-    return std::abs(lClimbMotor.GetVelocity().value()) > 0 || std::abs(rClimbMotor.GetVelocity().value()) > 0;
+    return std::abs(_lClimbMotor.GetVelocity().value()) > 0 || std::abs(_rClimbMotor.GetVelocity().value()) > 0;
 }
 
 void SubClimber::ZeroClimber() {
-    lClimbMotor.SetPosition(0_tr);
-    rClimbMotor.SetPosition(0_tr);
+    _lClimbMotor.SetPosition(0_tr);
+    _rClimbMotor.SetPosition(0_tr);
 }
 
 void SubClimber::SetClimberTop() {
     auto turns = DistanceToTurn(TopSwitchHeight);
-    lClimbMotor.SetPosition(turns);
-    rClimbMotor.SetPosition(turns);
+    _lClimbMotor.SetPosition(turns);
+    _rClimbMotor.SetPosition(turns);
 }
 
 //Pointer Commands

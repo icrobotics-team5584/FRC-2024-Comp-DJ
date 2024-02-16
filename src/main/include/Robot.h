@@ -8,6 +8,7 @@
 
 #include <frc/TimedRobot.h>
 #include <frc2/command/CommandPtr.h>
+#include <frc/DoubleSolenoid.h>
 
 #include "RobotContainer.h"
 
@@ -32,4 +33,7 @@ class Robot : public frc::TimedRobot {
   std::optional<frc2::CommandPtr> m_autonomousCommand;
 
   RobotContainer m_container;
+
+  frc::DoubleSolenoid _testSol{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH, 11,
+                                 10};
 };

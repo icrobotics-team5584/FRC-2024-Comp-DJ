@@ -10,7 +10,7 @@
 #include <subsystems/SubDrivebase.h>
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubLED.h"
-
+#include <pathplanner/lib/auto/NamedCommands.h>
 #include "RobotContainer.h"
 #include "subsystems/SubAmp.h"
 #include "subsystems/SubClimber.h"
@@ -18,8 +18,18 @@
 #include "commands/UniversalCommands.h"
 
 RobotContainer::RobotContainer() {
+  pathplanner::NamedCommands::registerCommand("ExtendIntake", SubIntake::GetInstance().ExtendIntake());
+  pathplanner::NamedCommands::registerCommand("StartIntakeSpinning", SubIntake::GetInstance().StartSpinningIntake());
+  pathplanner::NamedCommands::registerCommand("StopIntakeSpinning", SubIntake::GetInstance().StopSpinningIntake());
+  pathplanner::NamedCommands::registerCommand("StartShooter", SubShooter::GetInstance().StartShooter());
+  pathplanner::NamedCommands::registerCommand("RetractIntake", SubIntake::GetInstance().CommandRetractIntake());
+  pathplanner::NamedCommands::registerCommand("ShootNote", SubShooter::GetInstance().ShootSequence());
+  pathplanner::NamedCommands::registerCommand("StopShooter", SubShooter::GetInstance().StopShooterCommand());
+
+  
   SubAmp::GetInstance();
   SubDrivebase::GetInstance();
+  SubIntake::GetInstance();
   SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
@@ -38,7 +48,7 @@ frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
   }
 
 void RobotContainer::ConfigureBindings() {
-  _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
+  _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd()); //working
 
   // _driverController.LeftTrigger().WhileTrue(cmd::ShootSequence());
   // _driverController.RightTrigger().WhileTrue(cmd::IntakeSequence().AndThen([this]{_driverController.SetRumble(frc::GenericHID::kBothRumble, 1); _operatorController.SetRumble(frc::GenericHID::kBothRumble, 1);}));

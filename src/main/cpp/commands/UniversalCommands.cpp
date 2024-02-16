@@ -9,9 +9,8 @@ namespace cmd {
 using namespace frc2::cmd;
 
 frc2::CommandPtr ArmToAmpPos() {
-  return RunOnce([]() { SubIntake::GetInstance().ExtendIntake(); }, {&SubAmp::GetInstance()})
-      .AndThen([]() { return SubAmp::GetInstance().CheckIfArmIsHome(); }, {&SubAmp::GetInstance()})
-      .AndThen([]() { return SubAmp::GetInstance().TiltArmToAngle(SubAmp::AMP_ANGLE); });
+  return SubIntake::GetInstance().ExtendIntake()
+      .AndThen(SubAmp::GetInstance().TiltArmToAngle(SubAmp::AMP_ANGLE));
 }
 
 frc2::CommandPtr ArmToTrapPos() {
@@ -21,10 +20,10 @@ frc2::CommandPtr ArmToTrapPos() {
 }
 
 frc2::CommandPtr ArmToStow() {
-  return RunOnce([]() { SubIntake::GetInstance().RetractIntake(); }, {&SubAmp::GetInstance()})
-      .AndThen([]() { return SubAmp::GetInstance().TiltArmToAngle(SubAmp::HOME_ANGLE); },
-               {&SubAmp::GetInstance()})
-      .AndThen([]() { return SubAmp::GetInstance().CheckIfArmIsHome(); });
+  return SubAmp::GetInstance()
+      .TiltArmToAngle(SubAmp::HOME_ANGLE)
+      .Until([] { return SubAmp::GetInstance().CheckIfArmIsHome(); })
+      .AndThen([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }
 
 frc2::CommandPtr SequenceArmToAmpPos() {
@@ -35,22 +34,20 @@ frc2::CommandPtr SequenceArmToTrapPos() {
   return StartEnd([] { ArmToTrapPos(); }, [] { ArmToStow(); });
 }
 
-frc2::CommandPtr ShootSequence() {
+frc2::CommandPtr ShootFullSequence() {
   return Run([] { /*AUTO VISION AIM COMMAND*/ })
-      .Until(/*AUTO VISION CHECKER = true*/ {})
-      .AndThen({SubShooter::GetInstance().ShootNote()});
+      .Until([] { return true; })
+      .AndThen({SubShooter::GetInstance().ShootSequence()})
+      .AlongWith(WaitUntil([] {
+                   return SubShooter::GetInstance().CheckShooterSpeed();
+                 }).AndThen({SubAmp::GetInstance().FeedNote()}));
 }
 
-frc2::CommandPtr IntakeSequence() {
-  return StartEnd(
-      [] {
-        SubIntake::GetInstance().ExtendIntake().AndThen(
-            {SubIntake::GetInstance().StartSpinningIntake()});
-      },
-      [] {
-        SubIntake::GetInstance().StopSpinningIntake().AndThen(
-            [] { SubIntake::GetInstance().RetractIntake(); });
-      });
+frc2::CommandPtr IntakefullSequence(){
+  return SubIntake::GetInstance()
+      .Intake()
+      .AlongWith(SubAmp::GetInstance().StoreNote())
+      .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }
 
 

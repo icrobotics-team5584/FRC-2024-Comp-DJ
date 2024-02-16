@@ -71,12 +71,12 @@ class SubClimber : public frc2::SubsystemBase {
   units::meter_t TargetDistance;
 
   // Motor
-  ICSparkMax lClimbMotor{canid::ClimberLeftMotor};
-  ICSparkMax rClimbMotor{canid::ClimberRightMotor};
+  ICSparkMax _lClimbMotor{canid::lClimbMotor, 30_A};
+  ICSparkMax _rClimbMotor{canid::rClimbMotor, 30_A};
 
   // Motor Setup
   static constexpr double gearRatio = 30.0;
-  static constexpr double lP = 0.1, lI = 0.0, lD = 0.0, lF = 0,
+  static constexpr double lP = 0.0, lI = 0.0, lD = 0.0, lF = 0,
   
                           rP = 0.1, rI = 0.0, rD = 0.0, rF = 0;
 
@@ -109,6 +109,6 @@ class SubClimber : public frc2::SubsystemBase {
 
   // Double solenoid
 
-  frc::DoubleSolenoid LockCylinder {10, frc::PneumaticsModuleType::CTREPCM,
-                                    pcm::LockCylinderForward, pcm::LockCylinderReverse};
+  frc::DoubleSolenoid LockCylinder{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH,
+                                    pcm1::LockCylinderForward, pcm1::LockCylinderReverse};
 };
