@@ -35,8 +35,8 @@ class SubArm : public frc2::SubsystemBase {
   static constexpr units::degree_t TRAP_ANGLE = 41_deg;
 
   // Instance
-  static SubAmp& GetInstance() {
-    static SubAmp inst;
+  static SubArm& GetInstance() {
+    static SubArm inst;
     return inst;
   }
 
@@ -52,16 +52,13 @@ class SubArm : public frc2::SubsystemBase {
   // amp
   frc2::CommandPtr TiltArmToAngle(units::degree_t targetAngle);
 
- private:
-
   frc2::CommandPtr CheckArmPos();
   frc2::CommandPtr Check();
-
   frc2::CommandPtr FeedNote();
-
   bool CheckIfArmIsHome();
   bool CheckIfArmHasGamePiece();
 
+ private:
   // motors
   ICSparkMax _ampMotor{canid::AmpMotor, 10_A}; // Amp shooter
   ICSparkMax _armMotor{canid::ArmMotor, 30_A}; // arm
@@ -107,5 +104,4 @@ class SubArm : public frc2::SubsystemBase {
   frc::DigitalInput _fdLineBreak{dio::FDLineBreak};
   frc::DigitalInput _sdLineBreak{dio::SDLineBreak};
 
-  frc::DigitalInput _armHomeSwitch{dio::ArmHomeSwitch};
 };

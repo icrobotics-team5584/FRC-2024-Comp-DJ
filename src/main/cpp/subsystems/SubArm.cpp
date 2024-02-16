@@ -23,7 +23,7 @@ using namespace frc2::cmd;
 
 SubArm::SubArm() {
   // amp shooter
-  _ampMotorSpin.RestoreFactoryDefaults();
+  _ampMotor.RestoreFactoryDefaults();
 
   // arm
   _armMotor.SetInverted(true);
@@ -36,7 +36,7 @@ SubArm::SubArm() {
 // This method will be called once per scheduler run
 void SubArm::Periodic() {
   frc::SmartDashboard::PutData("arm/Arm Mechanism Display", &_doubleJointedArmMech);
-  frc::SmartDashboard::PutNumber("arm/Amp Shooter Motor: ", _ampMotorSpin.Get());
+  frc::SmartDashboard::PutNumber("arm/Amp Shooter Motor: ", _ampMotor.Get());
 
   // angle of motor
   frc::SmartDashboard::PutData("arm/Arm tilt motor: ", (wpi::Sendable*)&_armMotor);
@@ -56,11 +56,11 @@ void SubArm::SimulationPeriodic() {
 
 // Shooter Amp
 frc2::CommandPtr SubArm::AmpShooter() {
-  return StartEnd([this] { _ampMotorSpin.Set(0.7); }, [this] { _ampMotorSpin.Set(0); });
+  return StartEnd([this] { _ampMotor.Set(0.7); }, [this] { _ampMotor.Set(0); });
 }
 
 frc2::CommandPtr SubArm::ReverseAmpShooter() {
-  return StartEnd([this] { _ampMotorSpin.Set(-0.7); }, [this] { _ampMotorSpin.Set(0); });
+  return StartEnd([this] { _ampMotor.Set(-0.7); }, [this] { _ampMotor.Set(0); });
 }
 
 // arm
@@ -70,14 +70,34 @@ frc2::CommandPtr SubArm::TiltArmToAngle(units::degree_t targetAngle) {
   });
 }
 
-double SubArm::GetArmPos() {
-  return _armEncoder.GetPosition();
-}
 
 frc2::CommandPtr SubArm::StoreNote() {
-  return TiltArmToAngle(ARM_TOLERANCE).AndThen(SubArm::SpinAmpStorage());
+  return TiltArmToAngle(HOME_ANGLE).AndThen(Run([this] {
+                                              _ampMotor.Set(-1);
+                                            }).Until([this] {
+                                                return CheckIfArmHasGamePiece();
+                                              }).FinallyDo([this] { _ampMotor.Set(0); }));
 }
 
-frc2::CommandPtr SubArm::SpinAmpStorage() {
-  return Run([this] { _ampMotorSpin.Set(0.3); }).Until([this] { return _sdLineBreak.Get(); });
+frc2::CommandPtr SubArm::FeedNote(){
+  return Run([this]{_ampMotor.Set(-1);}).FinallyDo([this]{return  _ampMotor.Set(0);});
+}
+// booleans
+
+bool SubArm::CheckIfArmIsHome() {
+  /*if (_armHomeSwitch.Get() == true) {
+    return true;
+  } else {
+    return false;
+  } */ /*BRING ME BACK*/
+  return true;
+}
+
+bool SubArm::CheckIfArmHasGamePiece() {
+  frc2::CommandXboxController lineBreakController{2};
+  if (  lineBreakController.GetAButton()) { /*BRING ME BACK*/
+    return true;
+  } else {
+    return false;
+  }
 }

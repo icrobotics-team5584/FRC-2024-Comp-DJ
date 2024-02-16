@@ -12,10 +12,10 @@
 #include "subsystems/SubLED.h"
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include "RobotContainer.h"
-#include "subsystems/SubAmp.h"
 #include "subsystems/SubClimber.h"
 #include <frc2/command/Commands.h>
 #include "commands/UniversalCommands.h"
+#include "subsystems/SubArm.h"
 
 RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("ExtendIntake", SubIntake::GetInstance().ExtendIntake());
@@ -39,33 +39,6 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureBindings() {
-  using namespace frc2::cmd;
-  
-  _driverController.Start().OnTrue(SubDrivebase::GetInstance().SyncSensorBut());
-  _driverController.Back().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
-
-  // Amp Shooter
-  _driverController.LeftTrigger().WhileTrue(SubArm::GetInstance().AmpShooter());
-  _driverController.RightTrigger().WhileTrue(SubArm::GetInstance().ReverseAmpShooter());
-
-  // Arm
-  _driverController.A().WhileTrue(SubArm::GetInstance().TiltArmToAngle(0_deg));
-  _driverController.B().WhileTrue(SubArm::GetInstance().TiltArmToAngle(180_deg));
-  _driverController.X().WhileTrue(SubArm::GetInstance().TiltArmToAngle(20_deg));
-  _driverController.Y().WhileTrue(SubArm::GetInstance().TiltArmToAngle(40_deg));
-  _autoChooser.AddOption("Middle Path", "Middle Path");
-  _autoChooser.AddOption("Amp Path", "Amp Path");
-  _autoChooser.AddOption("Podium Path", "Podium Path");
-  _autoChooser.AddOption("Mid Path-Break Podium", "Mid Path-Break Podium");
-  _autoChooser.AddOption("Mid Path-Break Amp", "Mid Path-Break Amp");
-  _autoChooser.AddOption("Test Path", "Test Path");
-  _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
-  frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
-
- // _compressor.EnableAnalog(70_psi, 120_psi);
-}
-
-void RobotContainer::ConfigureBindings() {
   _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd()); //working
 
   _driverController.LeftTrigger().WhileTrue(cmd::ShootFullSequence()); //working
@@ -82,7 +55,10 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.RightTrigger().WhileTrue(SubShooter::GetInstance().StartShooter()); //working
   _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose()); //working
   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar()); //working
-  _operatorController.LeftTrigger().WhileTrue(SubAmp::GetInstance().AmpShooter()); //working
+  _operatorController.LeftTrigger().WhileTrue(SubArm::GetInstance().AmpShooter()); //working
+
+  //_driverController.X().WhileTrue(SubArm::GetInstance().TiltArmToAngle(20_deg));
+  //_driverController.Y().WhileTrue(SubArm::GetInstance().TiltArmToAngle(40_deg));
 
 
 }

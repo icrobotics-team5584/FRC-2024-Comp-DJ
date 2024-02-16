@@ -1,28 +1,28 @@
 #include "commands/UniversalCommands.h"
-#include "subsystems/SubAmp.h"
 #include "subsystems/SubClimber.h"
 #include "subsystems/SubDrivebase.h"
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubShooter.h"
+#include "subsystems/SubArm.h"
 
 namespace cmd {
 using namespace frc2::cmd;
 
 frc2::CommandPtr ArmToAmpPos() {
   return SubIntake::GetInstance().ExtendIntake()
-      .AndThen(SubAmp::GetInstance().TiltArmToAngle(SubAmp::AMP_ANGLE));
+      .AndThen(SubArm::GetInstance().TiltArmToAngle(SubArm::AMP_ANGLE));
 }
 
 frc2::CommandPtr ArmToTrapPos() {
-  return RunOnce([]() { SubIntake::GetInstance().ExtendIntake(); }, {&SubAmp::GetInstance()})
-      .AndThen([]() { return SubAmp::GetInstance().CheckIfArmIsHome(); }, {&SubAmp::GetInstance()})
-      .AndThen([]() { return SubAmp::GetInstance().TiltArmToAngle(SubAmp::TRAP_ANGLE); });
+  return RunOnce([]() { SubIntake::GetInstance().ExtendIntake(); }, {&SubArm::GetInstance()})
+      .AndThen([]() { return SubArm::GetInstance().CheckIfArmIsHome(); }, {&SubArm::GetInstance()})
+      .AndThen([]() { return SubArm::GetInstance().TiltArmToAngle(SubArm::TRAP_ANGLE); });
 }
 
 frc2::CommandPtr ArmToStow() {
-  return SubAmp::GetInstance()
-      .TiltArmToAngle(SubAmp::HOME_ANGLE)
-      .Until([] { return SubAmp::GetInstance().CheckIfArmIsHome(); })
+  return SubArm::GetInstance()
+      .TiltArmToAngle(SubArm::HOME_ANGLE)
+      .Until([] { return SubArm::GetInstance().CheckIfArmIsHome(); })
       .AndThen([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }
 
@@ -40,13 +40,13 @@ frc2::CommandPtr ShootFullSequence() {
       .AndThen({SubShooter::GetInstance().ShootSequence()})
       .AlongWith(WaitUntil([] {
                    return SubShooter::GetInstance().CheckShooterSpeed();
-                 }).AndThen({SubAmp::GetInstance().FeedNote()}));
+                 }).AndThen({SubArm::GetInstance().FeedNote()}));
 }
 
 frc2::CommandPtr IntakefullSequence(){
   return SubIntake::GetInstance()
       .Intake()
-      .AlongWith(SubAmp::GetInstance().StoreNote())
+      .AlongWith(SubArm::GetInstance().StoreNote())
       .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }
 }  // namespace cmd
