@@ -103,7 +103,6 @@
     "xlocnum": "cpp",
     "xstddef": "cpp",
     "xstring": "cpp",
-<<<<<<< HEAD
     "*.inc": "cpp",
     "barrier": "cpp",
     "charconv": "cpp",
@@ -128,8 +127,3 @@
     "xtree": "cpp"
   }
 }
-=======
-    "*.inc": "cpp"
-  }}
-
->>>>>>> Drivebase
