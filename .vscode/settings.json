@@ -15,8 +15,8 @@
     "**/*~": true
   },
   "C_Cpp.default.configurationProvider": "vscode-wpilib",
-  "C_Cpp.errorSquiggles": "disabled",
   "files.associations": {
+
     "numbers": "cpp",
     "atomic": "cpp",
     "compare": "cpp",
@@ -103,6 +103,7 @@
     "xlocnum": "cpp",
     "xstddef": "cpp",
     "xstring": "cpp",
+<<<<<<< HEAD
     "*.inc": "cpp",
     "barrier": "cpp",
     "charconv": "cpp",
@@ -127,3 +128,8 @@
     "xtree": "cpp"
   }
 }
+=======
+    "*.inc": "cpp"
+  }}
+
+>>>>>>> Drivebase

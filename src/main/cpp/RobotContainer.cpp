@@ -5,8 +5,14 @@
 #include "RobotContainer.h"
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <frc2/command/Commands.h>
+#include "subsystems/SubShooter.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <subsystems/SubDrivebase.h>
+#include "subsystems/SubClimber.h"
+#include <frc2/command/Commands.h>
+#include "commands/UniversalCommands.h"
+#include "subsystems/SubIntake.h"
+#include "subsystems/SubLED.h"
 #include "subsystems/SubVision.h"
 #include "commands/VisionCommands.h"
 
@@ -27,14 +33,14 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("Mid Path-Break Podium", "Mid Path-Break Podium");
   _autoChooser.AddOption("Mid Path-Break Amp", "Mid Path-Break Amp");
   _autoChooser.AddOption("Test Path", "Test Path");
+  _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
 }
 
 void RobotContainer::ConfigureBindings(){
   using namespace frc2::cmd;
-
-  _driverController.X().OnTrue(SubDrivebase::GetInstance().SyncSensorBut());
-  _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
+  _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
+  _driverController.Y().OnTrue(frc2::cmd::RunOnce( [] { SubDrivebase::GetInstance().ResetGyroHeading(); } ));
 
   _driverController.A().WhileTrue(cmd::ShootSequence());
 }

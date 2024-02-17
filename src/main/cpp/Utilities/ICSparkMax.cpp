@@ -38,7 +38,7 @@ void ICSparkMax::InitSendable(wpi::SendableBuilder& builder) {
 
 void ICSparkMax::SetPosition(units::turn_t position) {
   _encoder.SetPosition(position.value());
-  auto err = GetLastError();
+  // auto err = GetLastError();
 }
 
 void ICSparkMax::SetPositionTarget(units::turn_t target, units::volt_t arbFeedForward) {
@@ -241,7 +241,7 @@ units::turns_per_second_t ICSparkMax::EstimateSMVelocity() {
   }
 
   return _simSmartMotionProfile
-      .Calculate(20_ms, {_positionTarget, units::turns_per_second_t{0}},
-                 {GetPosition(), GetVelocity()})
+      .Calculate(20_ms, {GetPosition(), GetVelocity()},
+                        {_positionTarget, units::turns_per_second_t{0}})
       .velocity;
 }

@@ -17,12 +17,16 @@
 
 SubDrivebase::SubDrivebase() {
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value());
-  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value());
+  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularVelocity",
+                                 MAX_ANGULAR_VELOCITY.value());
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAcceleration", MAX_JOYSTICK_ACCEL);
-  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration", MAX_ANGULAR_JOYSTICK_ACCEL);
+  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration",
+                                 MAX_ANGULAR_JOYSTICK_ACCEL);
 
   frc::SmartDashboard::PutData("Drivebase/Vision/Rotation Controller: ", &Rcontroller);
 
+  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration",
+                                 MAX_ANGULAR_JOYSTICK_ACCEL);
   _gyro.Calibrate();
   Rcontroller.EnableContinuousInput(-180_deg, 180_deg);
   frc::SmartDashboard::PutData("field", &_fieldDisplay);
@@ -30,18 +34,24 @@ SubDrivebase::SubDrivebase() {
   using namespace pathplanner;
   AutoBuilder::configureHolonomic(
       [this]() { return GetPose(); },  // Robot pose supplier
-      [this](frc::Pose2d pose) { SetPose(pose); },  // Method to reset odometry (will be called if your auto has a starting pose)
-      [this]() { return GetRobotRelativeSpeeds(); },  // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-      [this](frc::ChassisSpeeds speeds) { 
-        Drive(speeds.vx, speeds.vy, -speeds.omega, false); 
+      [this](frc::Pose2d pose) {
+        SetPose(pose);
+      },  // Method to reset odometry (will be called if your auto has a starting pose)
+      [this]() {
+        return GetRobotRelativeSpeeds();
+      },  // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+      [this](frc::ChassisSpeeds speeds) {
+        Drive(speeds.vx, speeds.vy, -speeds.omega, false);
       },  // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       HolonomicPathFollowerConfig(
-          PIDConstants(0.7, 0.0, 0.1),  // Translation PID constants
-          PIDConstants(0.5, 0.0, 0.0),  // Rotation PID constants
-          0.5_mps,                      // Max module speed, in m/s
+          PIDConstants(0.7, 0.0, 0.1),    // Translation PID constants
+          PIDConstants(1.173, 0.0, 0.0),  // Rotation PID constants
+          0.5_mps,                        // Max module speed, in m/s
           432_mm,  // Drive base radius in meters. Distance from robot center to furthest module.
-                  // NEEDS TO BE CHECKED AND MADE ACCURATE!!
-          ReplanningConfig(false,false,1_m,0.25_m)  // Default path replanning config. See the API for the options here
+                   // NEEDS TO BE CHECKED AND MADE ACCURATE!!
+          ReplanningConfig(
+              false, false, 1_m,
+              0.25_m)  // Default path replanning config. See the API for the options here
           ),
       []() {
         // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -79,7 +89,7 @@ void SubDrivebase::Periodic() {
 
   frc::SmartDashboard::PutNumberArray("drivebase/can coders swerve states",
                                       std::array{
-                                        _frontLeft.GetCanCoderAngle().Degrees().value(),
+                                          _frontLeft.GetCanCoderAngle().Degrees().value(),
                                           _frontLeft.GetSpeed().value(),
                                           _frontRight.GetCanCoderAngle().Degrees().value(),
                                           _frontRight.GetSpeed().value(),
@@ -98,7 +108,7 @@ void SubDrivebase::Periodic() {
   frc::SmartDashboard::PutNumber("drivebase/loop time (sec)", (frc::GetTime() - loopStart).value());
 }
 
-void SubDrivebase::SimulationPeriodic(){
+void SubDrivebase::SimulationPeriodic() {
   _frontLeft.UpdateSim(20_ms);
   _frontRight.UpdateSim(20_ms);
   _backLeft.UpdateSim(20_ms);
@@ -108,33 +118,45 @@ void SubDrivebase::SimulationPeriodic(){
 frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller) {
   return Run([this, &controller] {
     double deadband = 0.08;
-    auto velocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) * 1_mps;
-    auto angularVelocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity", MAX_ANGULAR_VELOCITY.value()) * 1_deg_per_s;
+    auto velocity =
+        frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) *
+        1_mps;
+    auto angularVelocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity",
+                                                          MAX_ANGULAR_VELOCITY.value()) *
+                           1_deg_per_s;
     static frc::SlewRateLimiter<units::scalar> _xspeedLimiter{MAX_JOYSTICK_ACCEL / 1_s};
     static frc::SlewRateLimiter<units::scalar> _yspeedLimiter{MAX_JOYSTICK_ACCEL / 1_s};
     static frc::SlewRateLimiter<units::scalar> _rotLimiter{MAX_ANGULAR_JOYSTICK_ACCEL / 1_s};
     auto forwardSpeed =
         _yspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftY(), deadband)) * velocity;
     auto rotationSpeed =
-        _rotLimiter.Calculate(frc::ApplyDeadband(controller.GetRightX(), deadband)) * angularVelocity;
+        _rotLimiter.Calculate(frc::ApplyDeadband(controller.GetRightX(), deadband)) *
+        angularVelocity;
     auto sidewaysSpeed =
         _xspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftX(), deadband)) * velocity;
-    if(frc::RobotBase::IsSimulation()){
+    if (frc::RobotBase::IsSimulation()) {
       Drive(-forwardSpeed, -sidewaysSpeed, -rotationSpeed, true);
-    }
-    else {
+    } else {
       Drive(forwardSpeed, sidewaysSpeed, rotationSpeed, true);
     }
   });
-  }
+}
 
 void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
                          units::degrees_per_second_t rot, bool fieldRelative) {
   // Get states of all swerve modules
-  
-  auto states = _kinematics.ToSwerveModuleStates(
-      fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, GetHeading() )
-                    : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
+
+  auto invert = 1;
+  if (frc::RobotBase::IsSimulation()) {
+    invert = -1;
+  } else {
+    invert = 1;
+  }
+  auto states = _kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
+      fieldRelative
+          ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, GetHeading() * invert)
+          : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
+      -200_ms));
 
   // Set speed limit and apply speed limit to all modules
   _kinematics.DesaturateWheelSpeeds(&states, MAX_VELOCITY);
@@ -186,8 +208,8 @@ void SubDrivebase::SyncSensors() {
   _gyro.Calibrate();
 }
 
-frc2::CommandPtr SubDrivebase::SyncSensorBut(){
-  return RunOnce([this]{SyncSensors();});
+frc2::CommandPtr SubDrivebase::SyncSensorBut() {
+  return RunOnce([this] { SyncSensors(); });
 }
 
 frc::Rotation2d SubDrivebase::GetHeading() {
@@ -239,7 +261,7 @@ void SubDrivebase::DriveToPose(frc::Pose2d targetPose) {
   }
 }
 
-void SubDrivebase::RotateToZero(units::degree_t rotationError){
+void SubDrivebase::RotateToZero(units::degree_t rotationError) {
   double speedRot = Rcontroller.Calculate(rotationError, 0_deg);
   speedRot = std::clamp(speedRot, -2.0, 2.0);
 
@@ -263,8 +285,8 @@ void SubDrivebase::ResetGyroHeading(units::degree_t startingAngle) {
   _gyro.SetAngleAdjustment(startingAngle.value());
 }
 
-frc2::CommandPtr SubDrivebase::ResetGyroCmd(){
-  return RunOnce([this]{ResetGyroHeading();});
+frc2::CommandPtr SubDrivebase::ResetGyroCmd() {
+  return RunOnce([this] { ResetGyroHeading(); });
 }
 
 frc::Pose2d SubDrivebase::GetPose() {
@@ -307,5 +329,3 @@ void SubDrivebase::SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode
 units::degree_t SubDrivebase::GetPitch() {
   return _gyro.GetPitch() * 1_deg;
 }
-
-
