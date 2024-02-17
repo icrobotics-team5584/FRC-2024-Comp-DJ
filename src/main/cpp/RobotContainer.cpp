@@ -57,8 +57,8 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar()); //working
   _operatorController.LeftTrigger().WhileTrue(SubArm::GetInstance().AmpShooter()); //working
 
-  //_driverController.X().WhileTrue(SubArm::GetInstance().TiltArmToAngle(20_deg));
-  //_driverController.Y().WhileTrue(SubArm::GetInstance().TiltArmToAngle(40_deg));
+  _driverController.X().WhileTrue(SubArm::GetInstance().TiltArmToAngle(20_deg));
+  _driverController.Y().WhileTrue(SubArm::GetInstance().TiltArmToAngle(40_deg));
 
 
 }

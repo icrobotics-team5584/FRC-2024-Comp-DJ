@@ -44,7 +44,7 @@ namespace canid {
   constexpr int rClimbMotor = 13;
 
   constexpr int ClimberLeftLaserCAN = 21;
-  constexpr int ClimberRightLaserCAN = 22;
+  constexpr int ClimberRightLaserCAN = 22; //same ID as Pcm1D
 
 }
 
@@ -61,7 +61,7 @@ namespace pcm1 {
     constexpr int LockCylinderForward = 4;
     constexpr int LockCylinderReverse = 5;
 
-    constexpr int Pcm1Id = 22;
+    constexpr int Pcm1Id = 22; //same ID as ClimberRightLaserCan
 
 }
 

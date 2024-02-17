@@ -62,8 +62,6 @@ class SubArm : public frc2::SubsystemBase {
   // motors
   ICSparkMax _ampMotor{canid::AmpMotor, 10_A}; // Amp shooter
   ICSparkMax _armMotor{canid::ArmMotor, 30_A}; // arm
-  rev::SparkAbsoluteEncoder _armEncoder{_armMotor.GetAbsoluteEncoder(
-      rev::SparkAbsoluteEncoder::Type::kDutyCycle)};
 
   // arm (tune values for robot)
   static constexpr double ARM_P = 8.0;
