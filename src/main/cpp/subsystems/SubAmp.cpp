@@ -79,7 +79,7 @@ frc2::CommandPtr SubAmp::StoreNote() {
 } //Intake
 
 frc2::CommandPtr SubAmp::FeedNote(){
-  return Run([this]{_ampMotor.Set(-0.25);}).FinallyDo([this]{return  _ampMotor.Set(0);});
+  return Run([this]{_ampMotor.Set(-0.5);}).FinallyDo([this]{return  _ampMotor.Set(0);});
 } //Shooter
 
 // booleans
