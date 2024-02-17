@@ -27,6 +27,7 @@ SubArm::SubArm() {
 
   // arm
   _armMotor.SetInverted(true);
+  _armMotor.UseAbsoluteEncoder(OFFSET_ANGLE);
   _armMotor.SetConversionFactor(1 / ARM_GEAR_RATIO);
   _armMotor.SetPIDFF(ARM_P, ARM_I, ARM_D, ARM_F);
   _armMotor.ConfigSmartMotion(ARM_MAX_VEL, ARM_MAX_ACCEL, ARM_TOLERANCE);

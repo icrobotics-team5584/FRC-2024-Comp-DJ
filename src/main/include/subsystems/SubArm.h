@@ -30,8 +30,8 @@ class SubArm : public frc2::SubsystemBase {
   SubArm();
 
   // variables
-  static constexpr units::degree_t OFFSET_ANGLE = 20_deg;
-  static constexpr units::degree_t HOME_ANGLE = 50_deg; //working test was 50_deg
+  static constexpr units::degree_t OFFSET_ANGLE = 38_deg;
+  static constexpr units::degree_t HOME_ANGLE = 38_deg; //working test was 50_deg
   static constexpr units::degree_t AMP_ANGLE = 110_deg;
   static constexpr units::degree_t TRAP_ANGLE = 110_deg;
 
