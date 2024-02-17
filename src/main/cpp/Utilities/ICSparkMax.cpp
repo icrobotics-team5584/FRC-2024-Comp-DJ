@@ -38,7 +38,7 @@ void ICSparkMax::InitSendable(wpi::SendableBuilder& builder) {
 
 void ICSparkMax::SetPosition(units::turn_t position) {
   _encoder.SetPosition(position.value());
-  auto err = GetLastError();
+  // auto err = GetLastError();
 }
 
 void ICSparkMax::SetPositionTarget(units::turn_t target, units::volt_t arbFeedForward) {

@@ -30,6 +30,8 @@ void SubClimber::Periodic() {
 
 void SubClimber::SimulationPeriodic() {
     frc::SmartDashboard::PutData("Climber/Mech Display", &mech);
+    frc::SmartDashboard::PutNumber("Climber/Left sim distance", TurnToDistance(lClimbMotor.GetPosition()).value());
+    frc::SmartDashboard::PutNumber("Climber/Right sim distance", TurnToDistance(rClimbMotor.GetPosition()).value());
 
   lElvSim.SetInputVoltage(_lClimbMotor.GetSimVoltage());
   lElvSim.Update(20_ms);
