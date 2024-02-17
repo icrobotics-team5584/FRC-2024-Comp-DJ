@@ -52,23 +52,18 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd()); //working
 
-  _driverController.LeftTrigger().WhileTrue(cmd::ShootFullSequence()); //working
-  _driverController.RightTrigger().WhileTrue(cmd::IntakefullSequence());//working     /*.AndThen([this]{_driverController.SetRumble(frc::GenericHID::kBothRumble, 1); _operatorController.SetRumble(frc::GenericHID::kBothRumble, 1);})*/)
 
   _driverController.LeftBumper().OnTrue(cmd::ArmToAmpPos()); //working
   _driverController.LeftBumper().OnFalse(cmd::ArmToStow()); //working
   _driverController.RightBumper().OnTrue(SubLED::GetInstance().IndicateAmp()); //working
 
-  _operatorController.B().OnTrue(SubClimber::GetInstance().ClimberExtend()); //working
-  _operatorController.A().OnTrue(SubClimber::GetInstance().ClimberRetract()); //working
-  _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberLock()); //working
-  _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberUnlock()); //working
-  _operatorController.RightTrigger().WhileTrue(SubShooter::GetInstance().StartShooter()); //working
+  _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberExtend()); //working
+  _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberRetract()); //working
+  _operatorController.A().WhileTrue(SubShooter::GetInstance().StartShooter()); //working
+  _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequence()); //working
   _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose()); //working
   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar()); //working
-  _operatorController.LeftTrigger().WhileTrue(SubAmp::GetInstance().AmpShooter()); //working
-
-
+  _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence()); //working
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
