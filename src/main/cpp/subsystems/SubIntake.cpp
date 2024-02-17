@@ -10,7 +10,7 @@ using namespace frc2::cmd;
 SubIntake::SubIntake() {
   frc::SmartDashboard::PutString("Intake/Intake Deploy State: ", "Intake retracted");
   _intakeMotorSpin.RestoreFactoryDefaults();
-  _intakeMotorSpin.SetSmartCurrentLimit(20);
+  _intakeMotorSpin.SetSmartCurrentLimit(40);
 }
 // This method will be called once per scheduler run
 void SubIntake::Periodic() {
@@ -34,7 +34,7 @@ frc2::CommandPtr SubIntake::StopSpinningIntake() {
 }
 
 frc2::CommandPtr SubIntake::StartSpinningIntake() {
-  return Run([this] { _intakeMotorSpin.Set(0.6); }).FinallyDo([this]{_intakeMotorSpin.Set(0);});
+  return Run([this] { _intakeMotorSpin.Set(1); }).FinallyDo([this]{_intakeMotorSpin.Set(0);});
 }
 
 frc2::CommandPtr SubIntake::Intake(){

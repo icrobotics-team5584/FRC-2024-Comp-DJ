@@ -76,11 +76,12 @@ frc2::CommandPtr SubAmp::StoreNote() {
                                             }).Until([this] {
                                                 return CheckIfArmHasGamePiece();
                                               }).FinallyDo([this] { _ampMotor.Set(0); }));
-}
+} //Intake
 
 frc2::CommandPtr SubAmp::FeedNote(){
-  return Run([this]{_ampMotor.Set(-1);}).FinallyDo([this]{return  _ampMotor.Set(0);});
-}
+  return Run([this]{_ampMotor.Set(-0.25);}).FinallyDo([this]{return  _ampMotor.Set(0);});
+} //Shooter
+
 // booleans
 
 bool SubAmp::CheckIfArmIsHome() {
@@ -93,8 +94,7 @@ bool SubAmp::CheckIfArmIsHome() {
 }
 
 bool SubAmp::CheckIfArmHasGamePiece() {
-  frc2::CommandXboxController lineBreakController{2};
-  if (  lineBreakController.GetAButton()) { /*BRING ME BACK*/
+  if (  _sdLineBreak.Get() == true) {
     return true;
   } else {
     return false;
