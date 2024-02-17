@@ -42,7 +42,7 @@ void SubArm::Periodic() {
   frc::SmartDashboard::PutData("arm/Arm tilt motor: ", (wpi::Sendable*)&_armMotor);
   frc::SmartDashboard::PutNumber("arm/Arm motor sim voltage: ", _armMotor.GetSimVoltage().value());
 
-  _arm1Ligament->SetAngle(_armMotor.GetPosition());
+  _arm1Ligament->SetAngle(_armMotor.GetPosition() - 90_deg);
 }
 
 void SubArm::SimulationPeriodic() {
