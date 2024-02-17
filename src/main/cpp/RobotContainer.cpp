@@ -36,6 +36,8 @@ RobotContainer::RobotContainer() {
   _delayChooser.AddOption("1 Seconds", 1);
   _delayChooser.AddOption("2 Seconds", 2);
   frc::SmartDashboard::PutData("Delay By", &_delayChooser);
+
+  _compressor.EnableAnalog(70_psi, 120_psi);
 }
 
 void RobotContainer::ConfigureBindings() {

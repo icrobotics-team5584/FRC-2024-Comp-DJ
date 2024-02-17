@@ -258,6 +258,8 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
 
   // Sendable setup, called automatically when this is passed into smartDashbaord::PutData()
   void InitSendable(wpi::SendableBuilder& builder) override;
+  
+  units::turns_per_second_t EstimateSMVelocity();
 
  private:
   using Mode = rev::CANSparkMax::ControlType;
@@ -281,7 +283,6 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
   frc::Timer _smartMotionProfileTimer;
   Mode _controlType = Mode::kDutyCycle;
   void SetInternalControlType(Mode controlType);
-  units::turns_per_second_t EstimateSMVelocity();
   units::turns_per_second_t _simVelocity = units::turns_per_second_t{0};
 
   // Sim device values (stuff that shows under Other Devices on Glass)

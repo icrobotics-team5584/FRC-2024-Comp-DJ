@@ -70,6 +70,12 @@ class SubArm : public frc2::SubsystemBase {
   static constexpr double ARM_D = 0.0;
   static constexpr double ARM_F = 0.0;
 
+  static constexpr auto ARM_S = 0.0_V;
+  static constexpr auto ARM_V = 0.0_V/1_tps;
+  static constexpr auto ARM_G = 0.0_V;
+
+  frc::ArmFeedforward _armFF{ARM_S, ARM_G, ARM_V};
+
   static constexpr double ARM_GEAR_RATIO = 85;
   static constexpr units::degrees_per_second_t ARM_MAX_VEL = 180_deg_per_s;
   static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 360_deg_per_s_sq;

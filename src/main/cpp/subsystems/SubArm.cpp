@@ -28,7 +28,6 @@ SubArm::SubArm() {
   // arm
   //_armMotor.SetInverted(true);
   _armMotor.UseAbsoluteEncoder(OFFSET_ANGLE);
-  _armMotor.SetConversionFactor(1 / ARM_GEAR_RATIO);
   _armMotor.SetPIDFF(ARM_P, ARM_I, ARM_D, ARM_F);
   _armMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
   _armMotor.ConfigSmartMotion(ARM_MAX_VEL, ARM_MAX_ACCEL, ARM_TOLERANCE);
@@ -39,6 +38,7 @@ SubArm::SubArm() {
 void SubArm::Periodic() {
   frc::SmartDashboard::PutData("arm/Arm Mechanism Display", &_doubleJointedArmMech);
   frc::SmartDashboard::PutNumber("arm/Amp Shooter Motor: ", _ampMotor.Get());
+  frc::SmartDashboard::PutBoolean("arm/Linebreak", _sdLineBreak.Get());
 
   // angle of motor
   frc::SmartDashboard::PutData("arm/Arm tilt motor: ", (wpi::Sendable*)&_armMotor);
@@ -67,11 +67,12 @@ frc2::CommandPtr SubArm::ReverseAmpShooter() {
 
 // arm
 frc2::CommandPtr SubArm::TiltArmToAngle(units::degree_t targetAngle) {
-  return Run([this, targetAngle] { _armMotor.SetPositionTarget(targetAngle); }).Until([this] {
-    return units::math::abs(_armMotor.GetPosError()) < 5_deg;
-  });
+  return Run([this, targetAngle] {
+           auto ArmFFCalc = _armFF.Calculate(_armMotor.GetPosition(), _armMotor.EstimateSMVelocity());
+           _armMotor.SetSmartMotionTarget(targetAngle, ArmFFCalc);
+         })
+      .Until([this] { return units::math::abs(_armMotor.GetPosError()) < 5_deg; });
 }
-
 
 frc2::CommandPtr SubArm::StoreNote() {
   return TiltArmToAngle(HOME_ANGLE).AndThen(Run([this] {
@@ -96,8 +97,7 @@ bool SubArm::CheckIfArmIsHome() {
 }
 
 bool SubArm::CheckIfArmHasGamePiece() {
-  frc2::CommandXboxController lineBreakController{2};
-  if (  lineBreakController.GetAButton()) { /*BRING ME BACK*/
+  if ( _sdLineBreak.Get() == true) {
     return true;
   } else {
     return false;
