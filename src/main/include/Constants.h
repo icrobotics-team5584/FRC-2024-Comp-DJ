@@ -8,21 +8,21 @@ namespace canivore {
 namespace canid {
 
   //drivebase IDS used: 1-12
- constexpr int DriveBaseFrontRightDrive = 7;
+ constexpr int DriveBaseFrontRightDrive = 7; //done
  constexpr int DriveBaseFrontRightTurn = 8;
- constexpr int DriveBaseFrontRightEncoder = 10;
+ constexpr int DriveBaseFrontRightEncoder = 10; //done
 
- constexpr int DriveBaseFrontLeftDrive = 3;
+ constexpr int DriveBaseFrontLeftDrive = 3; //done
  constexpr int DriveBaseFrontLeftTurn = 6;
- constexpr int DriveBaseFrontLeftEncoder = 9;
+ constexpr int DriveBaseFrontLeftEncoder = 9; //done
       
- constexpr int DriveBaseBackRightDrive = 5;
+ constexpr int DriveBaseBackRightDrive = 5; //done
  constexpr int DriveBaseBackRightTurn = 2;
- constexpr int DriveBaseBackRightEncoder = 12;
+ constexpr int DriveBaseBackRightEncoder = 12; //done
 
- constexpr int DriveBaseBackLeftDrive = 1; 
+ constexpr int DriveBaseBackLeftDrive = 1; //done
  constexpr int DriveBaseBackLeftTurn = 4;
- constexpr int DriveBaseBackLeftEncoder = 11;
+ constexpr int DriveBaseBackLeftEncoder = 11; //done
 
 
 //Intake IDS used: 13
@@ -45,6 +45,9 @@ namespace canid {
 
   constexpr int ClimberLeftLaserCAN = 21;
   constexpr int ClimberRightLaserCAN = 22;
+
+  constexpr int SpareSpark1 = 58;
+  constexpr int SpareSpark2 = 60;
 
 }
 

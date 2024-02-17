@@ -15,7 +15,10 @@ SubShooter::SubShooter() {
   frc::SmartDashboard::PutData("Shooter/Main Motor", (wpi::Sendable*)&_shooterMotorMain);
   frc::SmartDashboard::PutData("Shooter/Second Motor", (wpi::Sendable*)&_secondaryShooterMotor);
   frc::SmartDashboard::PutData("Shooter/Feeder motor", (wpi::Sendable*)&_shooterFeederMotor);
-}
+
+  _shooterThroughbore.SetSamplesToAverage(7);
+  _shooterThroughbore.SetDistancePerPulse(1.00/2048.00);
+ }
 
 using namespace frc2::cmd;
 
@@ -45,17 +48,17 @@ void SubShooter::SimulationPeriodic(){
 }
 
 frc2::CommandPtr SubShooter::StartShooter() {
-  return RunOnce(
+  return Run(
       [this] {
         if (solShooter.Get() == frc::DoubleSolenoid::kReverse) {
-          _shooterMotorMain.SetVelocityTarget(ShootFarTargetRPM*-1_rpm);
-              _secondaryShooterMotor.SetVelocityTarget(ShootFarTargetRPM*1_rpm);
+          _shooterMotorMain.SetVoltage(_shooterPID.Calculate(_shooterThroughbore.GetRate(), ShootFarTargetRPM)*1_V + _shooterFF.Calculate(58_tps, 58.3_tr_per_s_sq));
+              _secondaryShooterMotor.SetVoltage(_shooterPID.Calculate(_shooterThroughbore.GetRate(), ShootFarTargetRPM)*1_V + _shooterFF.Calculate(58_tps, 58.3_tr_per_s_sq));
         } else {
-          _shooterMotorMain.SetVelocityTarget(ShootCloseTargetRPM*-1_rpm);
-              _secondaryShooterMotor.SetVelocityTarget(ShootCloseTargetRPM*1_rpm);
+          _shooterMotorMain.SetVoltage(_shooterPID.Calculate(_shooterThroughbore.GetRate(), ShootCloseTargetRPM)*1_V + _shooterFF.Calculate(58_tps, 58.3_tr_per_s_sq));
+           _secondaryShooterMotor.SetVoltage(_shooterPID.Calculate(_shooterThroughbore.GetRate(), ShootCloseTargetRPM)*1_V + _shooterFF.Calculate(58_tps, 58.3_tr_per_s_sq));
         }
       })
-      .AndThen(WaitUntil([this]{return CheckShooterSpeed();}));
+      .AlongWith(WaitUntil([this]{return CheckShooterSpeed();}));
 }
 
 void SubShooter::StopShooterFunc(){
