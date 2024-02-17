@@ -26,10 +26,11 @@ SubArm::SubArm() {
   _ampMotor.RestoreFactoryDefaults();
 
   // arm
-  _armMotor.SetInverted(true);
+  //_armMotor.SetInverted(true);
   _armMotor.UseAbsoluteEncoder(OFFSET_ANGLE);
   _armMotor.SetConversionFactor(1 / ARM_GEAR_RATIO);
   _armMotor.SetPIDFF(ARM_P, ARM_I, ARM_D, ARM_F);
+  _armMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
   _armMotor.ConfigSmartMotion(ARM_MAX_VEL, ARM_MAX_ACCEL, ARM_TOLERANCE);
 
 }
@@ -66,7 +67,7 @@ frc2::CommandPtr SubArm::ReverseAmpShooter() {
 
 // arm
 frc2::CommandPtr SubArm::TiltArmToAngle(units::degree_t targetAngle) {
-  return Run([this, targetAngle] { _armMotor.SetSmartMotionTarget(targetAngle); }).Until([this] {
+  return Run([this, targetAngle] { _armMotor.SetPositionTarget(targetAngle); }).Until([this] {
     return units::math::abs(_armMotor.GetPosError()) < 5_deg;
   });
 }

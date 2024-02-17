@@ -34,7 +34,7 @@ namespace canid {
   constexpr int ShooterFeederMotor = 14;
 
 //Arm IDS used: 17-18
-  constexpr int ArmMotor = 55; //19 /*BRING ME BACK*/
+  constexpr int ArmMotor = 19;
 
 //Amp/Trap IDS used: 19
   constexpr int AmpMotor = 20;

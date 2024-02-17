@@ -30,8 +30,8 @@ class SubArm : public frc2::SubsystemBase {
   SubArm();
 
   // variables
-  static constexpr units::degree_t OFFSET_ANGLE = 38_deg;
-  static constexpr units::degree_t HOME_ANGLE = 38_deg; //working test was 50_deg
+  static constexpr units::degree_t OFFSET_ANGLE = 0.8291796_tr;
+  static constexpr units::degree_t HOME_ANGLE = 45_deg; //working test was 50_deg
   static constexpr units::degree_t AMP_ANGLE = 110_deg;
   static constexpr units::degree_t TRAP_ANGLE = 110_deg;
 
@@ -65,12 +65,12 @@ class SubArm : public frc2::SubsystemBase {
   ICSparkMax _armMotor{canid::ArmMotor, 30_A}; // arm
 
   // arm (tune values for robot)
-  static constexpr double ARM_P = 8.0;
+  static constexpr double ARM_P = 0.0;
   static constexpr double ARM_I = 0.0;
   static constexpr double ARM_D = 0.0;
   static constexpr double ARM_F = 0.0;
 
-  static constexpr double ARM_GEAR_RATIO = 218.27;
+  static constexpr double ARM_GEAR_RATIO = 85;
   static constexpr units::degrees_per_second_t ARM_MAX_VEL = 180_deg_per_s;
   static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 360_deg_per_s_sq;
   static constexpr units::degree_t ARM_TOLERANCE = 0.5_deg;
