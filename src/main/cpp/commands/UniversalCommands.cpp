@@ -47,6 +47,7 @@ frc2::CommandPtr IntakefullSequence(){
   return SubIntake::GetInstance()
       .Intake()
       .AlongWith(SubAmp::GetInstance().StoreNote())
+      .Until([]{return SubAmp::GetInstance().CheckIfArmHasGamePiece();})
       .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }
 }  // namespace cmd
