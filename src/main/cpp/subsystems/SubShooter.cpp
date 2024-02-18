@@ -94,3 +94,24 @@ frc2::CommandPtr SubShooter::ShooterChangePosFar() {
 frc2::CommandPtr SubShooter::ShooterChangePosClose() {
   return RunOnce([this] { solShooter.Set(frc::DoubleSolenoid::kForward); });
 }
+
+frc2::CommandPtr SubShooter::FeedNoteToArm() {
+  return Run([this] {
+           _shooterFeederMotor.Set(-1);
+           _secondaryShooterMotor.Set(-0.2);
+           _shooterMotorMain.Set(-0.1);
+         })
+      .FinallyDo([this] {
+        _shooterFeederMotor.Set(0);
+        _secondaryShooterMotor.Set(0);
+        _shooterMotorMain.Set(0);
+      });
+}
+
+bool SubShooter::CheckShooterLineBreak() {
+  if (_shooterLineBreak.Get() == true){
+    return true;
+  }
+
+  return false;
+}

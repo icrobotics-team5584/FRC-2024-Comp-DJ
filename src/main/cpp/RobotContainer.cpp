@@ -55,8 +55,7 @@ void RobotContainer::ConfigureBindings() {
   _driverController.LeftTrigger().WhileTrue(cmd::ShootFullSequence()); //working
   _driverController.RightTrigger().WhileTrue(cmd::IntakefullSequence());//working     /*.AndThen([this]{_driverController.SetRumble(frc::GenericHID::kBothRumble, 1); _operatorController.SetRumble(frc::GenericHID::kBothRumble, 1);})*/)
 
-  _driverController.LeftBumper().OnTrue(cmd::ArmToAmpPos()); //working
-  _driverController.LeftBumper().OnFalse(cmd::ArmToStow()); //working
+  _driverController.LeftBumper().OnTrue(cmd::SequenceArmToAmpPos()); //working
   _driverController.RightBumper().OnTrue(SubLED::GetInstance().IndicateAmp()); //working
 
   _operatorController.B().OnTrue(SubClimber::GetInstance().ClimberExtend()); //working

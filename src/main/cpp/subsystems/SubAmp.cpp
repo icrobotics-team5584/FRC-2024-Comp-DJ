@@ -71,15 +71,17 @@ frc2::CommandPtr SubAmp::TiltArmToAngle(units::degree_t targetAngle) {
 }
 
 frc2::CommandPtr SubAmp::StoreNote() {
-  return TiltArmToAngle(HOME_ANGLE).AndThen(Run([this] {
-                                              _ampMotor.Set(-1);
-                                            }).Until([this] {
-                                                return CheckIfArmHasGamePiece();
-                                              }).FinallyDo([this] { _ampMotor.Set(0); }));
+  return TiltArmToAngle(HOME_ANGLE).AndThen(Run([this] { _ampMotor.Set(-1); }).FinallyDo([this] {
+    _ampMotor.Set(0);
+  }));
 }
 
-frc2::CommandPtr SubAmp::FeedNote(){
+frc2::CommandPtr SubAmp::FeedNoteShooter(){
   return Run([this]{_ampMotor.Set(-1);}).FinallyDo([this]{return  _ampMotor.Set(0);});
+}
+
+frc2::CommandPtr SubAmp::FeedNoteArm() {
+  return Run([this]{_ampMotor.Set(1);}).Until([this]{return CheckIfArmHasGamePiece();}).FinallyDo([this]{_ampMotor.Set(0);});
 }
 // booleans
 

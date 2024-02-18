@@ -53,8 +53,9 @@ class SubAmp : public frc2::SubsystemBase {
   frc2::CommandPtr TiltArmToAngle(units::degree_t targetAngle);
   frc2::CommandPtr CheckArmPos();
   frc2::CommandPtr Check();
+  frc2::CommandPtr FeedNoteArm();
 
-  frc2::CommandPtr FeedNote();
+  frc2::CommandPtr FeedNoteShooter();
 
   bool CheckIfArmIsHome();
   bool CheckIfArmHasGamePiece();
@@ -99,6 +100,5 @@ class SubAmp : public frc2::SubsystemBase {
   nt::GenericEntry* _armXOffset;
   nt::GenericEntry* _armYOffset;
 
-  frc::DigitalInput _fdLineBreak{dio::FDLineBreak};
-  frc::DigitalInput _sdLineBreak{dio::SDLineBreak};
+  frc::DigitalInput _sdLineBreak{dio::StorageLineBreak};
 };

@@ -14,6 +14,7 @@
 #include <units/moment_of_inertia.h>
 #include <frc/Encoder.h>
 #include <units/velocity.h>
+#include <frc/DigitalInput.h>
 
 #include "Constants.h"
 
@@ -36,8 +37,10 @@ class SubShooter : public frc2::SubsystemBase {
   frc2::CommandPtr StartFeeder();
   frc2::CommandPtr ShootSequence();
   frc2::CommandPtr StopShooterCommand();
+  frc2::CommandPtr FeedNoteToArm();
   void StopShooterFunc();
   bool CheckShooterSpeed();
+  bool CheckShooterLineBreak();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -74,4 +77,6 @@ class SubShooter : public frc2::SubsystemBase {
   frc::sim::DCMotorSim _topShooterSim{frc::DCMotor::NEO(), 1, 0.001_kg_sq_m};
   frc::sim::DCMotorSim _bottomShooterSim{frc::DCMotor::NEO(), 1, 0.001_kg_sq_m};
   frc::sim::DCMotorSim _feederSim{frc::DCMotor::NEO550(), 1, 0.00001_kg_sq_m};
+  
+  frc::DigitalInput _shooterLineBreak{dio::ShooterLineBreak};
 };
