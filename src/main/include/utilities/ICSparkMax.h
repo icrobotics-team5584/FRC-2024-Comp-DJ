@@ -171,21 +171,9 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
    * @param tolerance When the position of the motor is within tolerance, the control mode will stop
    * applying power (arbitary feedforward can still apply power).
    */
-  void ConfigMotionProfile(units::turns_per_second_t maxVelocity,
+  void ConfigSmartMotion(units::turns_per_second_t maxVelocity,
                          units::turns_per_second_squared_t maxAcceleration,
                          units::turn_t tolerance);
-
-  /**
-   * Calculate the next setpoint state determined by the a position motion profile that uses the
-   * constraints set in ConfigMotionProfile(). Useful if you want to estimate what smart motion
-   * should be doing or run regular position control but using a motion profile computed onboard the
-   * RIO.
-   *
-   * @param lookAhead how far to "look ahead" in the profile. Will calculate where the mechanism
-   * should be after lookAhead seconds have passed. Leave at default to look ahead 1 robot loop.
-   */
-  frc::TrapezoidProfile<units::turns>::State CalcMotionProfileTarget(
-      units::second_t lookAhead = 20_ms);
 
   /**
    * Set the conversion factor for position, velocity and acceleration of the encoder. The native

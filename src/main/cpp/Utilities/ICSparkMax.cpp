@@ -22,7 +22,6 @@ void ICSparkMax::InitSendable(wpi::SendableBuilder& builder) {
   builder.AddDoubleProperty("Velocity", [&] { return GetVelocity().value(); }, nullptr);
   builder.AddDoubleProperty("Position Target", [&] { return GetPositionTarget().value(); }, [&](double targ) { SetPositionTarget(targ*1_tr); });
   builder.AddDoubleProperty("Velocity Target", [&] { return GetVelocityTarget().value(); }, [&](double targ) { SetVelocityTarget(targ*1_tps); });
-  builder.AddDoubleProperty("MP Velocity Target", [&] { return CalcMotionProfileTarget().velocity.value(); }, nullptr); 
 
   builder.AddDoubleProperty("Voltage", [&] { 
         return (frc::RobotBase::IsSimulation()) 
@@ -107,7 +106,7 @@ void ICSparkMax::SetInternalControlType(Mode controlType) {
   _simControlMode.Set((int)_controlType);
 }
 
-void ICSparkMax::ConfigMotionProfile(units::turns_per_second_t maxVelocity,
+void ICSparkMax::ConfigSmartMotion(units::turns_per_second_t maxVelocity,
                                    units::turns_per_second_squared_t maxAcceleration,
                                    units::turn_t tolerance) {
   _pidController.SetSmartMotionMaxAccel(maxAcceleration.value());
@@ -224,11 +223,6 @@ units::volt_t ICSparkMax::GetSimVoltage() {
 void ICSparkMax::UpdateSimEncoder(units::turn_t position, units::turns_per_second_t velocity) {
   _encoder.SetPosition(position.value());
   _simVelocity = velocity;
-}
-
-frc::TrapezoidProfile<units::turns>::State ICSparkMax::CalcMotionProfileTarget(units::second_t lookAhead) {
-  return _motionProfile.Calculate(lookAhead, {GetPosition(), GetVelocity()},
-                                  {_positionTarget, units::turns_per_second_t{0}});
 }
 
 units::turns_per_second_t ICSparkMax::EstimateSMVelocity() {

@@ -30,7 +30,7 @@ SubArm::SubArm() {
   _armMotor.UseAbsoluteEncoder(OFFSET_ANGLE);
   _armMotor.SetPIDFF(ARM_P, ARM_I, ARM_D, ARM_F);
   _armMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
-  _armMotor.ConfigMotionProfile(ARM_MAX_VEL, ARM_MAX_ACCEL, ARM_TOLERANCE);
+  _armMotor.ConfigSmartMotion(ARM_MAX_VEL, ARM_MAX_ACCEL, ARM_TOLERANCE);
 }
 
 // This method will be called once per scheduler run
