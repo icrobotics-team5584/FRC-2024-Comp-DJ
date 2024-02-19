@@ -30,12 +30,24 @@ SubArm::SubArm() {
   _armMotor.UseAbsoluteEncoder(OFFSET_ANGLE);
   _armMotor.SetPIDFF(ARM_P, ARM_I, ARM_D, ARM_F);
   _armMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
-  _armMotor.ConfigSmartMotion(ARM_MAX_VEL, ARM_MAX_ACCEL, ARM_TOLERANCE);
-
+  _armMotor.ConfigMotionProfile(ARM_MAX_VEL, ARM_MAX_ACCEL, ARM_TOLERANCE);
 }
 
 // This method will be called once per scheduler run
 void SubArm::Periodic() {
+  // Update controller
+  auto setpoint = _motionProfile.Calculate(
+      20_ms, {_armMotor.GetPosition(), _armMotor.GetVelocity()}, {_currentTarget, 0_tps});
+  auto nextSetpoint = _motionProfile.Calculate(
+      40_ms, {_armMotor.GetPosition(), _armMotor.GetVelocity()}, {_currentTarget, 0_tps});
+  units::turns_per_second_squared_t accel = (nextSetpoint.velocity - setpoint.velocity) / 20_ms;
+  auto feedForward = _armFF.Calculate(setpoint.position-90_deg, setpoint.velocity, accel);
+  _armMotor.SetPositionTarget(setpoint.position, feedForward);
+
+  // Display info
+  frc::SmartDashboard::PutNumber("arm/final target", _currentTarget.value());
+  frc::SmartDashboard::PutNumber("arm/profile accel", accel.value());
+  frc::SmartDashboard::PutNumber("arm/profile veloc", setpoint.velocity.value());
   frc::SmartDashboard::PutData("arm/Arm Mechanism Display", &_doubleJointedArmMech);
   frc::SmartDashboard::PutNumber("arm/Amp Shooter Motor: ", _ampMotor.Get());
   frc::SmartDashboard::PutBoolean("arm/Linebreak", _sdLineBreak.Get());
@@ -43,15 +55,17 @@ void SubArm::Periodic() {
   // angle of motor
   frc::SmartDashboard::PutData("arm/Arm tilt motor: ", (wpi::Sendable*)&_armMotor);
   frc::SmartDashboard::PutNumber("arm/Arm motor sim voltage: ", _armMotor.GetSimVoltage().value());
-
   _arm1Ligament->SetAngle(_armMotor.GetPosition() - 90_deg);
 }
 
 void SubArm::SimulationPeriodic() {
+  // We have 0 degrees pointing down, physics sim expects it to point to the side
+  _armSim.SetState(_armMotor.GetPosition()-90_deg, _armMotor.GetVelocity());
+
   _armSim.SetInputVoltage(_armMotor.GetSimVoltage());
   _armSim.Update(20_ms);
 
-  auto armAngle = _armSim.GetAngle();
+  auto armAngle = _armSim.GetAngle() + 90_deg; // bring the zero point back to straight down
   auto armVel = _armSim.GetVelocity();
   _armMotor.UpdateSimEncoder(armAngle, armVel);
 }
@@ -67,11 +81,10 @@ frc2::CommandPtr SubArm::ReverseAmpShooter() {
 
 // arm
 frc2::CommandPtr SubArm::TiltArmToAngle(units::degree_t targetAngle) {
-  return Run([this, targetAngle] {
-           auto ArmFFCalc = _armFF.Calculate(_armMotor.GetPosition(), _armMotor.EstimateSMVelocity());
-           _armMotor.SetSmartMotionTarget(targetAngle, ArmFFCalc);
-         })
-      .Until([this] { return units::math::abs(_armMotor.GetPosError()) < 5_deg; });
+  return RunOnce([this, targetAngle] { _currentTarget = targetAngle; })
+      .AndThen(WaitUntil([this, targetAngle] {
+        return units::math::abs(targetAngle - _armMotor.GetPosition()) < 5_deg;
+      }));
 }
 
 frc2::CommandPtr SubArm::StoreNote() {

@@ -59,11 +59,12 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
    * Sets a closed loop position target (aka reference or goal) for the motor to drive to using
    * the Spark Max's Smart Motion control mode.
    * This generates a profiled movement that accelerates and decelerates in a controlled way. This
-   * can reduce ware on components and is often much easier to tune. For anything beyond prototypes
-   * and the simplest of mechanisms, this is preferred over regular position control. In this mode,
-   * you are actually controlling the velocity of the motor to follow a trapezoid (speeding up,
-   * staying constant, then slowing down) and as such the PID values should be tuned to follow a
-   * velocity target. Controlling velocity also allows us to use the WPILib feedforward classes.
+   * can reduce ware on components and is often much easier to tune. In this mode, you are actually
+   * controlling the velocity of the motor to follow a trapezoid (speeding up, staying constant,
+   * then slowing down) and as such the PID values should be tuned to follow a velocity target.
+   * Controlling velocity also allows us to use the WPILib feedforward classes.
+   * Also consider feeding CalcMotionProfileTarget() into SetPositionTarget() to use a profile that
+   * performs feedback control based on position.
    *
    * @param target The target position drive to.
    *
@@ -170,9 +171,21 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
    * @param tolerance When the position of the motor is within tolerance, the control mode will stop
    * applying power (arbitary feedforward can still apply power).
    */
-  void ConfigSmartMotion(units::turns_per_second_t maxVelocity,
+  void ConfigMotionProfile(units::turns_per_second_t maxVelocity,
                          units::turns_per_second_squared_t maxAcceleration,
                          units::turn_t tolerance);
+
+  /**
+   * Calculate the next setpoint state determined by the a position motion profile that uses the
+   * constraints set in ConfigMotionProfile(). Useful if you want to estimate what smart motion
+   * should be doing or run regular position control but using a motion profile computed onboard the
+   * RIO.
+   *
+   * @param lookAhead how far to "look ahead" in the profile. Will calculate where the mechanism
+   * should be after lookAhead seconds have passed. Leave at default to look ahead 1 robot loop.
+   */
+  frc::TrapezoidProfile<units::turns>::State CalcMotionProfileTarget(
+      units::second_t lookAhead = 20_ms);
 
   /**
    * Set the conversion factor for position, velocity and acceleration of the encoder. The native
@@ -259,7 +272,6 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
   // Sendable setup, called automatically when this is passed into smartDashbaord::PutData()
   void InitSendable(wpi::SendableBuilder& builder) override;
   
-  units::turns_per_second_t EstimateSMVelocity();
 
  private:
   using Mode = rev::CANSparkMax::ControlType;
@@ -276,13 +288,14 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
   units::volt_t _arbFeedForward = 0.0_V;
   frc::PIDController _simController{0, 0, 0};
   double _simFF{0};
-  frc::TrapezoidProfile<units::turns> _simSmartMotionProfile{
+  frc::TrapezoidProfile<units::turns> _motionProfile{
       {units::turns_per_second_t{0},
        units::turns_per_second_squared_t{0}}  // constraints updated by Smart motion config
   };
   frc::Timer _smartMotionProfileTimer;
   Mode _controlType = Mode::kDutyCycle;
   void SetInternalControlType(Mode controlType);
+  units::turns_per_second_t EstimateSMVelocity();
   units::turns_per_second_t _simVelocity = units::turns_per_second_t{0};
 
   // Sim device values (stuff that shows under Other Devices on Glass)

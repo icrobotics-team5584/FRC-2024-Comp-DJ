@@ -20,6 +20,7 @@
 #include <wpi/interpolating_map.h>
 #include <networktables/NetworkTableEntry.h>
 #include <frc/DigitalInput.h>
+#include <frc2/command/sysid/SysIdRoutine.h>
 #include <optional>
 
 #include "Constants.h"
@@ -32,7 +33,7 @@ class SubArm : public frc2::SubsystemBase {
   // variables
   static constexpr units::degree_t OFFSET_ANGLE = 0.8291796_tr;
   static constexpr units::degree_t HOME_ANGLE = 45_deg; //working test was 50_deg
-  static constexpr units::degree_t AMP_ANGLE = 110_deg;
+  static constexpr units::degree_t AMP_ANGLE = 225_deg;
   static constexpr units::degree_t TRAP_ANGLE = 110_deg;
 
   // Instance
@@ -59,31 +60,50 @@ class SubArm : public frc2::SubsystemBase {
   bool CheckIfArmIsHome();
   bool CheckIfArmHasGamePiece();
 
+  // Sysid commands
+   frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction) {
+    return _sysIdRoutine.Quasistatic(direction);
+  }
+  frc2::CommandPtr SysIdDynamic(frc2::sysid::Direction direction) {
+    return _sysIdRoutine.Dynamic(direction);
+  }
+
  private:
   // motors
   ICSparkMax _ampMotor{canid::AmpMotor, 10_A}; // Amp shooter
   ICSparkMax _armMotor{canid::ArmMotor, 30_A}; // arm
 
   // arm (tune values for robot)
-  static constexpr double ARM_P = 0.0;
-  static constexpr double ARM_I = 0.0;
-  static constexpr double ARM_D = 0.0;
-  static constexpr double ARM_F = 0.0;
+  static constexpr double ARM_P = 0;//44.597;
+  static constexpr double ARM_I = 0;//0.0;
+  static constexpr double ARM_D = 0;//7.5828;
+  static constexpr double ARM_F = 0;//0.0;
 
-  static constexpr auto ARM_S = 0.0_V;
-  static constexpr auto ARM_V = 0.0_V/1_tps;
-  static constexpr auto ARM_G = 0.0_V;
 
-  frc::ArmFeedforward _armFF{ARM_S, ARM_G, ARM_V};
+  // static constexpr auto ARM_S = 0_V;
+  // static constexpr auto ARM_V = 0_V/1_tps;
+  // static constexpr auto ARM_G = 0.23445_V;
+  // static constexpr auto ARM_A = 0_V/1_tr_per_s_sq;
+
+  static constexpr auto ARM_S = 0.011576_V;
+  static constexpr auto ARM_V = 10.476_V/1_tps;
+  static constexpr auto ARM_G = 0.23445_V;
+  static constexpr auto ARM_A = 0.13573_V/1_tr_per_s_sq;
+
+  frc::ArmFeedforward _armFF{ARM_S, ARM_G, ARM_V, ARM_A};
 
   static constexpr double ARM_GEAR_RATIO = 85;
-  static constexpr units::degrees_per_second_t ARM_MAX_VEL = 180_deg_per_s;
-  static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 360_deg_per_s_sq;
+  static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 3_tr_per_s_sq;
+  static constexpr units::degrees_per_second_t ARM_MAX_VEL = 1_tps;
   static constexpr units::degree_t ARM_TOLERANCE = 0.5_deg;
   static constexpr units::meter_t ARM_LENGTH = 0.9_m;
-  static constexpr units::kilogram_t ARM_MASS = 1_kg;         // only sim
-  static constexpr units::degree_t ARM_MIN_ANGLE = -180_deg;  // only sim
-  static constexpr units::degree_t ARM_MAX_ANGLE = 180_deg;   // only sim
+  static constexpr units::kilogram_t ARM_MASS = 1_kg;
+  static constexpr units::degree_t ARM_MIN_ANGLE = HOME_ANGLE;
+  static constexpr units::degree_t ARM_MAX_ANGLE = 225_deg;
+
+  // Motion
+  frc::TrapezoidProfile<units::turns> _motionProfile{{ARM_MAX_VEL, ARM_MAX_ACCEL}};
+  units::turn_t _currentTarget = HOME_ANGLE;
 
   // simulating arm in smartdashboard
   frc::sim::SingleJointedArmSim _armSim{
@@ -91,10 +111,10 @@ class SubArm : public frc2::SubsystemBase {
     ARM_GEAR_RATIO, 
     frc::sim::SingleJointedArmSim::EstimateMOI(ARM_LENGTH, ARM_MASS),
     ARM_LENGTH,
-    ARM_MIN_ANGLE,
-    ARM_MAX_ANGLE,
-    false,
-    0_deg
+    ARM_MIN_ANGLE-90_deg, // our zero point is down, physics sim expects flat 
+    ARM_MAX_ANGLE-90_deg,
+    true,
+    HOME_ANGLE-90_deg
   };
 
   // displaying arm in smartdashboard
@@ -109,4 +129,15 @@ class SubArm : public frc2::SubsystemBase {
   frc::DigitalInput _fdLineBreak{dio::FDLineBreak};
   frc::DigitalInput _sdLineBreak{dio::SDLineBreak};
 
+  // Sysid
+  frc2::sysid::SysIdRoutine _sysIdRoutine{
+      frc2::sysid::Config{std::nullopt, 3_V, std::nullopt, std::nullopt},
+      frc2::sysid::Mechanism{[this](units::volt_t volts) { _armMotor.SetVoltage(volts); },
+                             [this](frc::sysid::SysIdRoutineLog* log) {
+                               log->Motor("arm")
+                                   .voltage(_armMotor.GetSimVoltage())
+                                   .position(_armMotor.GetPosition())
+                                   .velocity(_armMotor.GetVelocity());
+                             },
+                             this}};
 };
