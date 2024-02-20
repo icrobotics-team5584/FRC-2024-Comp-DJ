@@ -59,6 +59,8 @@ class SubClimber : public frc2::SubsystemBase {
   void ZeroClimber();
   void SetClimberTop();
 
+  double GetCurrent();
+
   frc2::CommandPtr ClimberExtend();
   frc2::CommandPtr ClimberRetract();
   frc2::CommandPtr ClimberPosition(units::meter_t distance);
@@ -66,8 +68,9 @@ class SubClimber : public frc2::SubsystemBase {
   frc2::CommandPtr ClimberStop();
   frc2::CommandPtr ClimberLock();
   frc2::CommandPtr ClimberUnlock();
-  frc2::CommandPtr ClimberReset();
-
+  frc2::CommandPtr ClimberResetTop();
+  frc2::CommandPtr ClimberResetZero();
+  frc2::CommandPtr ClimberAutoReset();
  private:
   units::meter_t TargetDistance;
 
@@ -81,6 +84,9 @@ class SubClimber : public frc2::SubsystemBase {
   
                           rP = 20, rI = 0.0, rD = 0.0, rF = 0;
 
+  //
+  static constexpr double currentLimit = 10;
+
   // Limit switches
   frc::DigitalInput TopLimitSwitch{5};
   frc::DigitalInput BottomLimitSwitch{6};
@@ -90,7 +96,10 @@ class SubClimber : public frc2::SubsystemBase {
 
   // Robot info
   static constexpr units::meter_t BaseHeight = 0.2_m;
-  static constexpr units::meter_t TopSwitchHeight = 0.617_m;
+  static constexpr units::meter_t TopHeight = 0.55_m;
+
+  //reset
+  bool Reseting = false;
 
   // Sim
 

@@ -11,17 +11,15 @@ SubClimber::SubClimber() {
     _lClimbMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
     _lClimbMotor.SetPIDFF(lP,lI,lD,lF);
     _lClimbMotor.SetInverted(false);
+    // _lClimbMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, DistanceToTurn(TopHeight).value());
 
     _rClimbMotor.SetConversionFactor(1.0 / gearRatio);
     _rClimbMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
     _rClimbMotor.SetPIDFF(rP,rI,rD,rF);
     _rClimbMotor.SetInverted(true);
+    // _rClimbMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, DistanceToTurn(TopHeight).value());
 
     LockCylinder.Set(frc::DoubleSolenoid::Value::kReverse);
-
-    // lc = new grpl::LaserCan(canid::ClimberLeftLaserCAN);
-    // lc->set_ranging_mode(grpl::LaserCanRangingMode::Long);
-    // lc->set_timing_budget(grpl::LaserCanTimingBudget::TB50ms);
 
     frc::SmartDashboard::PutData("Climber/Left motor", (wpi::Sendable*)&_lClimbMotor);
     frc::SmartDashboard::PutData("Climber/Right motor", (wpi::Sendable*)&_rClimbMotor);
@@ -32,20 +30,21 @@ void SubClimber::Periodic() {
     frc::SmartDashboard::PutNumber("Climber/Left distance", TurnToDistance(_lClimbMotor.GetPosition()).value());
     frc::SmartDashboard::PutNumber("Climber/Right distance", TurnToDistance(_rClimbMotor.GetPosition()).value());
     frc::SmartDashboard::PutNumber("Climber/Target distance", TargetDistance.value());
+    frc::SmartDashboard::PutNumber("Climber/Left current", _lClimbMotor.GetOutputCurrent());
+    frc::SmartDashboard::PutNumber("Climber/Right current", _rClimbMotor.GetOutputCurrent());
+    // frc::SmartDashboard::PutBoolean("Climber/Reset?", )
 
-    // if (!frc::RobotBase::IsSimulation()) {
-    //     if (TopLimitSwitch.Get()) {
-    //         ZeroClimber();
-    //     }
-        
-    //     if (BottomLimitSwitch.Get()) {
-    //         SetClimberTop();
+    // if (TurnToDistance(_lClimbMotor.GetPosition()) > TopHeight || TurnToDistance(_rClimbMotor.GetPosition()) > TopHeight) {
+    //     if (_lClimbMotor.GetVelocity().value() > 0 || _rClimbMotor.GetVelocity().value() > 0) {
+    //         Stop();
     //     }
     // }
-
-    // std::optional<grpl::LaserCanMeasurement> measurement = lc->get_measurement();
-    // if (measurement.has_value() && measurement.value().status == grpl::LASERCAN_STATUS_VALID_MEASUREMENT) {
-    //     units::millimeter_t distance = measurement.value().distance_mm * 1_mm;
+    // if (!Reseting) {
+    //     if (TurnToDistance(_lClimbMotor.GetPosition()) < 0.1_m || TurnToDistance(_rClimbMotor.GetPosition()) < 0.1_m) {
+    //         if (_lClimbMotor.GetVelocity().value() < 0 || _rClimbMotor.GetVelocity().value() < 0) {
+    //             Stop();
+    //         }
+    //     }
     // }
 }
 
@@ -129,9 +128,14 @@ void SubClimber::ZeroClimber() {
 }
 
 void SubClimber::SetClimberTop() {
-    auto turns = DistanceToTurn(TopSwitchHeight);
+    auto turns = DistanceToTurn(TopHeight);
     _lClimbMotor.SetPosition(turns);
     _rClimbMotor.SetPosition(turns);
+}
+
+double SubClimber::GetCurrent() {
+    // return std::max(_lClimbMotor.GetOutputCurrent(),_rClimbMotor.GetOutputCurrent());
+    return _lClimbMotor.GetOutputCurrent();
 }
 
 //Pointer Commands
@@ -165,6 +169,17 @@ frc2::CommandPtr SubClimber::ClimberUnlock() {
     return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Unlock();});
 }
 
-frc2::CommandPtr SubClimber::ClimberReset() {
+frc2::CommandPtr SubClimber::ClimberResetTop() {
     return frc2::cmd::RunOnce([] {SubClimber::GetInstance().SetClimberTop();});
+}
+
+frc2::CommandPtr SubClimber::ClimberResetZero() {
+    return frc2::cmd::RunOnce([] {SubClimber::GetInstance().ZeroClimber();});
+}
+
+frc2::CommandPtr SubClimber::ClimberAutoReset() {
+    return RunOnce([this] {Reseting = true;}).AndThen(ClimberManualDrive(-0.2)).AndThen(frc2::cmd::Wait(0.5_s))
+    .AndThen(frc2::cmd::WaitUntil([this] { return GetCurrent() > currentLimit;}))
+    .AndThen(ClimberStop()).AndThen(ClimberResetZero()).AndThen(ClimberPosition(0.2_m))
+    .AndThen(RunOnce([this] {Reseting = false;}));
 }
