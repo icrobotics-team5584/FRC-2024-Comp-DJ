@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": -0.32645749502025323,
-        "y": 8.321390853308023
+        "x": 2.496814123442796,
+        "y": 7.026501927468906
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6735425049797477,
-        "y": 8.321390853308023
+        "x": 4.148042076405263,
+        "y": 7.085056110200585
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": -0.32645749502025323,
-        "y": 8.321390853308023
+        "x": 7.848666424866895,
+        "y": 7.5066462258458495
       },
       "prevControl": {
-        "x": -1.3264574950202528,
-        "y": 8.321390853308023
+        "x": 7.784290054120297,
+        "y": 7.983031369324202
+      },
+      "nextControl": {
+        "x": 7.907220607601127,
+        "y": 7.0733452736548035
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.496814123442796,
+        "y": 7.026501927468906
+      },
+      "prevControl": {
+        "x": 4.136331239859482,
+        "y": 7.0733452736548035
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,14 +55,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "A4",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 180.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

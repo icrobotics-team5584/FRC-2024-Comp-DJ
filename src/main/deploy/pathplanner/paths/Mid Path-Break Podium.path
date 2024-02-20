@@ -33,15 +33,15 @@
     {
       "anchor": {
         "x": 2.461681613805452,
-        "y": 4.087081954477746
+        "y": 4.122214464115091
       },
       "prevControl": {
-        "x": 1.8175856037874687,
-        "y": 5.2347439359643335
+        "x": 2.277710613920499,
+        "y": 5.4253423799668425
       },
       "nextControl": {
-        "x": 3.6275536207785435,
-        "y": 2.009710014780238
+        "x": 2.7427416909042077,
+        "y": 2.131372251332233
       },
       "isLocked": false,
       "linkedName": null
@@ -64,12 +64,12 @@
     },
     {
       "anchor": {
-        "x": 2.21575404634404,
-        "y": 3.841154387016335
+        "x": 2.461681613805452,
+        "y": 3.0096849922658473
       },
       "prevControl": {
-        "x": 1.6770555652380907,
-        "y": 3.946551915928368
+        "x": 2.6256333254463926,
+        "y": 3.0096849922658473
       },
       "nextControl": null,
       "isLocked": false,
@@ -80,16 +80,22 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "Wait1.0",
       "waypointRelativePos": 0,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
+              "type": "named",
+              "data": {
+                "name": "Wait1.0"
+              }
+            },
+            {
               "type": "wait",
               "data": {
-                "waitTime": 2.0
+                "waitTime": 1.0
               }
             }
           ]
@@ -97,12 +103,18 @@
       }
     },
     {
-      "name": "New Event Marker",
+      "name": "Wait2.0",
       "waypointRelativePos": 1.1,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Wait2.0"
+              }
+            },
             {
               "type": "wait",
               "data": {
@@ -114,17 +126,7 @@
       }
     },
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 4.0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": []
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
+      "name": "Wait2.0",
       "waypointRelativePos": 2.0,
       "command": {
         "type": "sequential",

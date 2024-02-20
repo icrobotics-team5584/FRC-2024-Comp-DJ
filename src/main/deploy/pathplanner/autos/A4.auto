@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3374413054104268,
+      "y": 5.632912378520905
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker to As"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "As to Ac"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Ac to Aa"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Aa to C1"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
