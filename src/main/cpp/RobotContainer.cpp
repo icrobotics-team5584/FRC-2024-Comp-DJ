@@ -25,6 +25,7 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("RetractIntake", SubIntake::GetInstance().CommandRetractIntake());
   pathplanner::NamedCommands::registerCommand("ShootNote", SubShooter::GetInstance().ShootSequence());
   pathplanner::NamedCommands::registerCommand("StopShooter", SubShooter::GetInstance().StopShooterCommand());
+  pathplanner::NamedCommands::registerCommand("FeedNote", SubAmp::GetInstance().FeedNote());
 
   
   SubAmp::GetInstance();
