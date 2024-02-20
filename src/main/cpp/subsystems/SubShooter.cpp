@@ -78,7 +78,7 @@ frc2::CommandPtr SubShooter::ShootSequence() {
 }
 
 bool SubShooter::CheckShooterSpeed(){
-if(units::math::abs(_secondaryShooterMotor.GetVelError()) < 150_rpm && units::math::abs(_shooterMotorMain.GetVelError()) < 150_rpm){
+if(units::math::abs(_secondaryShooterMotor.GetVelError()) < 200_rpm && units::math::abs(_shooterMotorMain.GetVelError()) < 200_rpm){
   return true;
  } 
  return false;

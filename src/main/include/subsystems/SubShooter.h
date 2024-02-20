@@ -45,8 +45,8 @@ class SubShooter : public frc2::SubsystemBase {
   static constexpr double ShooterD = 0;
   static constexpr double ShooterFF = 0.012;
 
-  int ShootFarTargetRPM = 3500;
-  int ShootCloseTargetRPM = 3500;
+  int ShootFarTargetRPM = 3700;
+  int ShootCloseTargetRPM = 3700;
 
   
 
