@@ -54,10 +54,8 @@ class SubClimber : public frc2::SubsystemBase {
   void Stop();
   void Lock();
   void Unlock();
-  bool IsMoving();
 
   void ZeroClimber();
-  void SetClimberTop();
 
   double GetCurrent();
 
@@ -68,7 +66,6 @@ class SubClimber : public frc2::SubsystemBase {
   frc2::CommandPtr ClimberStop();
   frc2::CommandPtr ClimberLock();
   frc2::CommandPtr ClimberUnlock();
-  frc2::CommandPtr ClimberResetTop();
   frc2::CommandPtr ClimberResetZero();
   frc2::CommandPtr ClimberAutoReset();
  private:
@@ -84,7 +81,6 @@ class SubClimber : public frc2::SubsystemBase {
   
                           rP = 20, rI = 0.0, rD = 0.0, rF = 0;
 
-  //
   static constexpr double currentLimit = 10;
 
   // Limit switches
@@ -100,6 +96,7 @@ class SubClimber : public frc2::SubsystemBase {
 
   //reset
   bool Reseting = false;
+  bool Reseted = false;
 
   // Sim
 
@@ -121,6 +118,4 @@ class SubClimber : public frc2::SubsystemBase {
 
   frc::DoubleSolenoid LockCylinder{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH,
                                     pcm1::LockCylinderForward, pcm1::LockCylinderReverse};
-
-    grpl::LaserCan *lc;                                    
 };

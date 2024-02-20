@@ -32,7 +32,7 @@ void SubClimber::Periodic() {
     frc::SmartDashboard::PutNumber("Climber/Target distance", TargetDistance.value());
     frc::SmartDashboard::PutNumber("Climber/Left current", _lClimbMotor.GetOutputCurrent());
     frc::SmartDashboard::PutNumber("Climber/Right current", _rClimbMotor.GetOutputCurrent());
-    // frc::SmartDashboard::PutBoolean("Climber/Reset?", )
+    frc::SmartDashboard::PutBoolean("Climber/Reset?", Reseted);
 
     // if (TurnToDistance(_lClimbMotor.GetPosition()) > TopHeight || TurnToDistance(_rClimbMotor.GetPosition()) > TopHeight) {
     //     if (_lClimbMotor.GetVelocity().value() > 0 || _rClimbMotor.GetVelocity().value() > 0) {
@@ -118,19 +118,9 @@ void SubClimber::Unlock() {
     LockCylinder.Set(frc::DoubleSolenoid::Value::kReverse);
 }
 
-bool SubClimber::IsMoving() {
-    return std::abs(_lClimbMotor.GetVelocity().value()) > 0 || std::abs(_rClimbMotor.GetVelocity().value()) > 0;
-}
-
 void SubClimber::ZeroClimber() {
     _lClimbMotor.SetPosition(0_tr);
     _rClimbMotor.SetPosition(0_tr);
-}
-
-void SubClimber::SetClimberTop() {
-    auto turns = DistanceToTurn(TopHeight);
-    _lClimbMotor.SetPosition(turns);
-    _rClimbMotor.SetPosition(turns);
 }
 
 double SubClimber::GetCurrent() {
@@ -169,10 +159,6 @@ frc2::CommandPtr SubClimber::ClimberUnlock() {
     return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Unlock();});
 }
 
-frc2::CommandPtr SubClimber::ClimberResetTop() {
-    return frc2::cmd::RunOnce([] {SubClimber::GetInstance().SetClimberTop();});
-}
-
 frc2::CommandPtr SubClimber::ClimberResetZero() {
     return frc2::cmd::RunOnce([] {SubClimber::GetInstance().ZeroClimber();});
 }
@@ -181,5 +167,5 @@ frc2::CommandPtr SubClimber::ClimberAutoReset() {
     return RunOnce([this] {Reseting = true;}).AndThen(ClimberManualDrive(-0.2)).AndThen(frc2::cmd::Wait(0.5_s))
     .AndThen(frc2::cmd::WaitUntil([this] { return GetCurrent() > currentLimit;}))
     .AndThen(ClimberStop()).AndThen(ClimberResetZero()).AndThen(ClimberPosition(0.2_m))
-    .AndThen(RunOnce([this] {Reseting = false;}));
+    .AndThen(RunOnce([this] {Reseting = false; Reseted = true;}));
 }

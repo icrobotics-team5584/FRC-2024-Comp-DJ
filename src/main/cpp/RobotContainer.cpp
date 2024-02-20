@@ -50,9 +50,6 @@ frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
 void RobotContainer::ConfigureBindings() {
   _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd()); //working
 
-  // _driverController.LeftTrigger().WhileTrue(cmd::ShootSequence());
-  // _driverController.RightTrigger().WhileTrue(cmd::IntakeSequence().AndThen([this]{_driverController.SetRumble(frc::GenericHID::kBothRumble, 1); _operatorController.SetRumble(frc::GenericHID::kBothRumble, 1);}));
-
   _driverController.LeftTrigger().OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
   _driverController.LeftTrigger().OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
   _driverController.RightTrigger().OnTrue(SubClimber::GetInstance().ClimberManualDrive(-0.5));
@@ -61,7 +58,6 @@ void RobotContainer::ConfigureBindings() {
   _driverController.A().OnTrue(SubClimber::GetInstance().ClimberAutoReset());
   _driverController.B().OnTrue(SubClimber::GetInstance().ClimberPosition(0.65_m));
   _driverController.X().OnTrue(SubClimber::GetInstance().ClimberStop());
-  _driverController.Y().OnTrue(SubClimber::GetInstance().ClimberResetTop());
   
 
   // _driverController.Y().OnTrue(frc2::cmd::RunOnce( [] { SubDrivebase::GetInstance().ResetGyroHeading(); } ));
