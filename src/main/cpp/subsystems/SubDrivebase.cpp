@@ -146,7 +146,9 @@ void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_se
                     : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
 
   // Set speed limit and apply speed limit to all modules
-  _kinematics.DesaturateWheelSpeeds(&states, MAX_VELOCITY);
+  _kinematics.DesaturateWheelSpeeds(
+      &states,
+      frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) * 1_mps);
 
   // Setting modules from aquired states
   auto [fl, fr, bl, br] = states;

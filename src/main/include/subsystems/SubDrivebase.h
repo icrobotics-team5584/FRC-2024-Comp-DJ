@@ -50,8 +50,8 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::SwerveDriveKinematics<4> GetKinematics();
   frc::ChassisSpeeds GetRobotRelativeSpeeds();
 
-  static constexpr units::meters_per_second_t MAX_VELOCITY = 2.5_mps;
-  static constexpr units::degrees_per_second_t MAX_ANGULAR_VELOCITY = 180_deg_per_s;
+  static constexpr units::meters_per_second_t MAX_VELOCITY = 3_mps;
+  static constexpr units::degrees_per_second_t MAX_ANGULAR_VELOCITY = 360_deg_per_s;
   static constexpr units::radians_per_second_squared_t MAX_ANG_ACCEL{std::numbers::pi};
 
   double MAX_JOYSTICK_ACCEL = 3;
