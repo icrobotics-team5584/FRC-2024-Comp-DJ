@@ -14,9 +14,11 @@
 #include <frc/controller/HolonomicDriveController.h>
 #include <numbers>
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/Commands.h>
 #include "Constants.h"
 #include "utilities/SwerveModule.h"
 #include <frc2/command/button/CommandXboxController.h>
+#include <frc2/command/sysid/SysIdRoutine.h>
 
 class SubDrivebase : public frc2::SubsystemBase {
  public:
@@ -48,19 +50,23 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::SwerveDriveKinematics<4> GetKinematics();
   frc::ChassisSpeeds GetRobotRelativeSpeeds();
 
-  static constexpr units::meters_per_second_t MAX_VELOCITY = 2_mps;
-  static constexpr units::degrees_per_second_t MAX_ANGULAR_VELOCITY =
-      180_deg_per_s;
-  static constexpr units::radians_per_second_squared_t MAX_ANG_ACCEL{
-      std::numbers::pi};
+  static constexpr units::meters_per_second_t MAX_VELOCITY = 2.5_mps;
+  static constexpr units::degrees_per_second_t MAX_ANGULAR_VELOCITY = 180_deg_per_s;
+  static constexpr units::radians_per_second_squared_t MAX_ANG_ACCEL{std::numbers::pi};
 
- double MAX_JOYSTICK_ACCEL = 2;
- double MAX_ANGULAR_JOYSTICK_ACCEL = 0.5;
+  double MAX_JOYSTICK_ACCEL = 3;
+  double MAX_ANGULAR_JOYSTICK_ACCEL = 3;
 
   // Commands
   frc2::CommandPtr JoystickDrive(frc2::CommandXboxController& controller);
   frc2::CommandPtr SyncSensorBut();
   frc2::CommandPtr ResetGyroCmd();
+  frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction) {
+    return _sysIdRoutine.Quasistatic(direction);
+  }
+  frc2::CommandPtr SysIdDynamic(frc2::sysid::Direction direction) {
+    return _sysIdRoutine.Dynamic(direction);
+  }
 
  private:
   AHRS _gyro{frc::SerialPort::kMXP};
@@ -70,19 +76,19 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::Translation2d _backLeftLocation{-0.281_m, +0.281_m};
   frc::Translation2d _backRightLocation{-0.281_m, -0.281_m};
 
-  const double FRONT_RIGHT_MAG_OFFSET = -0.872803;  //-0.629883; //-0.127930;
-  const double FRONT_LEFT_MAG_OFFSET =  -0.800049;  //-0.695312; //-0.198730;
-  const double BACK_RIGHT_MAG_OFFSET =  -0.668701;  //-0.831543; //-0.331543;
-  const double BACK_LEFT_MAG_OFFSET =   -0.532715;  //-0.965088; //-0.467041;
+  const double FRONT_RIGHT_MAG_OFFSET = -0.01904296875;  //-0.872803;  //-0.629883; //-0.127930;
+  const double FRONT_LEFT_MAG_OFFSET = -0.670898;        //-0.800049;  //-0.695312; //-0.198730;
+  const double BACK_RIGHT_MAG_OFFSET = -0.900146484375;  //-0.668701;  //-0.831543; //-0.331543;
+  const double BACK_LEFT_MAG_OFFSET = -0.453125;         //-0.532715;  //-0.965088; //-0.467041;
 
-  SwerveModule _frontLeft{canivore::DriveBaseFrontLeftDrive, canivore::DriveBaseFrontLeftTurn,
-                          canivore::DriveBaseFrontLeftEncoder, FRONT_LEFT_MAG_OFFSET};
-  SwerveModule _frontRight{canivore::DriveBaseFrontRightDrive, canivore::DriveBaseFrontRightTurn,
-                           canivore::DriveBaseFrontRightEncoder, FRONT_RIGHT_MAG_OFFSET};
-  SwerveModule _backLeft{canivore::DriveBaseBackLeftDrive, canivore::DriveBaseBackLeftTurn,
-                         canivore::DriveBaseBackLeftEncoder, BACK_LEFT_MAG_OFFSET}; 
-  SwerveModule _backRight{canivore::DriveBaseBackRightDrive, canivore::DriveBaseBackRightTurn,
-                          canivore::DriveBaseBackRightEncoder, BACK_RIGHT_MAG_OFFSET};
+  SwerveModule _frontLeft{canid::DriveBaseFrontLeftDrive, canid::DriveBaseFrontLeftTurn,
+                          canid::DriveBaseFrontLeftEncoder, FRONT_LEFT_MAG_OFFSET};
+  SwerveModule _frontRight{canid::DriveBaseFrontRightDrive, canid::DriveBaseFrontRightTurn,
+                           canid::DriveBaseFrontRightEncoder, FRONT_RIGHT_MAG_OFFSET};
+  SwerveModule _backLeft{canid::DriveBaseBackLeftDrive, canid::DriveBaseBackLeftTurn,
+                         canid::DriveBaseBackLeftEncoder, BACK_LEFT_MAG_OFFSET};
+  SwerveModule _backRight{canid::DriveBaseBackRightDrive, canid::DriveBaseBackRightTurn,
+                          canid::DriveBaseBackRightEncoder, BACK_RIGHT_MAG_OFFSET};
 
   frc::SwerveDriveKinematics<4> _kinematics{_frontLeftLocation, _frontRightLocation,
                                             _backLeftLocation, _backRightLocation};
@@ -104,4 +110,25 @@ class SubDrivebase : public frc2::SubsystemBase {
 
   frc::Field2d _fieldDisplay;
   frc::Pose2d _prevPose;  // Used for velocity calculations
+
+  // Sysid
+  frc2::sysid::SysIdRoutine _sysIdRoutine{
+      frc2::sysid::Config{std::nullopt, std::nullopt, std::nullopt, std::nullopt},
+      frc2::sysid::Mechanism{[this](units::volt_t driveVoltage) {
+                               _frontLeft.DriveStraightVolts(driveVoltage);
+                               _backLeft.DriveStraightVolts(driveVoltage);
+                               _frontRight.DriveStraightVolts(driveVoltage);
+                               _backRight.DriveStraightVolts(driveVoltage);
+                             },
+                             [this](frc::sysid::SysIdRoutineLog* log) {
+                               log->Motor("drive-left")
+                                   .voltage(_frontLeft.GetDriveVoltage())
+                                   .position(_frontLeft.GetPosition().distance)
+                                   .velocity(_frontLeft.GetSpeed());
+                               log->Motor("drive-right")
+                                   .voltage(_frontRight.GetDriveVoltage())
+                                   .position(_frontRight.GetPosition().distance)
+                                   .velocity(_frontRight.GetSpeed());
+                             },
+                             this}};
 };

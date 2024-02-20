@@ -1,23 +1,35 @@
 {
   "HALProvider": {
     "Other Devices": {
-      "SPARK MAX [8]": {
+      "SPARK MAX [1]": {
         "header": {
           "open": true
         }
+      },
+      "window": {
+        "visible": false
       }
     }
   },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/Chosen Path": "String Chooser",
-      "/SmartDashboard/Delay By": "String Chooser",
-      "/SmartDashboard/delay by": "String Chooser",
-      "/SmartDashboard/field": "Field2d"
+      "/SmartDashboard/Climber/Mech Display": "Mechanism2d",
+      "/SmartDashboard/Climber/Test mech display": "Mechanism2d",
+      "/SmartDashboard/Climber/testMech": "Mechanism2d"
     },
     "windows": {
-      "/SmartDashboard/field": {
+      "/SmartDashboard/Climber/Mech Display": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Climber/Test mech display": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Climber/testMech": {
         "window": {
           "visible": true
         }
@@ -25,9 +37,31 @@
     }
   },
   "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
     "transitory": {
       "SmartDashboard": {
-        "Drivebase": {
+        "amp": {
+          "Dizzy Arm tilt motor: ": {
+            "open": true
+          },
+          "Dizzy Claw tilt motor speed:: ": {
+            "open": true
+          },
+          "Dizzy Claw tilt motor: ": {
+            "open": true
+          },
+          "Mechanism Display": {
+            "open": true
+          },
+          "open": true
+        },
+        "arm": {
+        "Climber": {
+          "Left motor": {
+            "open": true
+          },
           "open": true
         },
         "open": true
@@ -35,6 +69,93 @@
     }
   },
   "NetworkTables Info": {
+    "Connections": {
+      "open": true
+    },
+    "Server": {
+      "Subscribers": {
+        "open": true
+      }
+    }
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 578,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/amp/Dizzy Claw tilt motor: /Position"
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/amp/Dizzy Claw tilt motor: /Position Target"
+            }
+          ]
+        }
+      ],
+      "window": {
+        "visible": false
+      }
+    },
+    "Plot <1>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 502,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/amp/Dizzy Arm tilt motor: /Position"
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/amp/Dizzy Arm tilt motor: /Position Target"
+            }
+          ]
+        }
+      ]
+    },
+    "Plot <2>": {
+      "window": {
+        "visible": false
+      }
+    }
+      },
+      "open": true
+    },
     "visible": true
   }
-}
+
