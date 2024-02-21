@@ -52,12 +52,14 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureBindings() {
+
+  // use for robot testing
+
   _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd()); //working
 
 
   _driverController.LeftBumper().OnTrue(cmd::ArmToAmpPos()); //working
   _driverController.LeftBumper().OnFalse(cmd::ArmToStow()); //working
-  _driverController.RightBumper().OnTrue(SubLED::GetInstance().IndicateAmp()); //working
 
   _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberExtend()); //working
   _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberRetract()); //working
@@ -66,10 +68,28 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose()); //working
   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar()); //working
   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence()); //working
+
+  // new controls below WIP 
+  /*
+  _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
+
+  _operatorController.Start().OnTrue(nullptr outtake/eject);
+
+  _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
+  _operatorController.LeftBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosClose());
+  _operatorController.RightBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosFar());
+  _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequence());
+
+  _operatorController.Y().OnTrue(cmd::ArmToTrapPos());
+  _operatorController.X().OnTrue(nullptr climb sequence);
+  _operatorController.A().OnTrue(cmd::ArmToAmpPos());
+  _operatorController.B().OnTrue(SubShooter::GetInstance().StartShooter());
+
+  //_operatorController.POVLeft(true).OnTrue(SubLED::GetInstance().IndicateSourceDrop());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   _autoSelected = _autoChooser.GetSelected();
   units::second_t delay = _delayChooser.GetSelected() * 1_s;
-  return frc2::cmd::Wait(delay).AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr());
+  return frc2::cmd::Wait(delay).AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr()); */
 }
