@@ -18,8 +18,8 @@
 #include "commands/UniversalCommands.h"
 
 RobotContainer::RobotContainer() {
-  pathplanner::NamedCommands::registerCommand("ExtendIntake", SubIntake::GetInstance().ExtendIntake());
-  pathplanner::NamedCommands::registerCommand("StartIntakeSpinning", SubIntake::GetInstance().StartSpinningIntake());
+  pathplanner::NamedCommands::registerCommand("Useless", frc2::cmd::Print("Running Useless"));
+  pathplanner::NamedCommands::registerCommand("Intake", SubIntake::GetInstance().Intake());
   pathplanner::NamedCommands::registerCommand("StopIntakeSpinning", SubIntake::GetInstance().StopSpinningIntake());
   pathplanner::NamedCommands::registerCommand("StartShooter", SubShooter::GetInstance().StartShooter());
   pathplanner::NamedCommands::registerCommand("RetractIntake", SubIntake::GetInstance().CommandRetractIntake());

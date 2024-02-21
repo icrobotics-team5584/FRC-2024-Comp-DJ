@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.649054998537956,
-        "y": 4.11050362756931
+        "x": 2.5670791427174855,
+        "y": 4.04023860829462
       },
       "prevControl": {
-        "x": 1.3725738150477713,
-        "y": 4.098792791023528
+        "x": 1.290597959227301,
+        "y": 4.028527771748838
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,59 +41,53 @@
             {
               "type": "named",
               "data": {
-                "name": "StartIntakeSpinning"
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Shoot 1",
+      "waypointRelativePos": 0.5,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Useless"
               }
             },
+            {
+              "type": "named",
+              "data": {
+                "name": "FeedNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootNote"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Start Shooter",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
             {
               "type": "named",
               "data": {
                 "name": "StartShooter"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Shoot1",
-      "waypointRelativePos": 0.4,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "FeedNote"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "ShootNote"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Shoot2",
-      "waypointRelativePos": 1.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "FeedNote"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "ShootNote"
               }
             }
           ]
