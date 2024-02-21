@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3374413054104268,
-      "y": 5.632912378520905
+      "x": 1.5,
+      "y": 5.61
     },
-    "rotation": 180.0
+    "rotation": -179.49484142952844
   },
   "command": {
     "type": "sequential",
@@ -14,25 +14,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "A4_Speaker to As"
+            "pathName": "A5_Speaker to Aa"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "A4_As to Ac"
+            "pathName": "A5_Aa to Ac"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "A4_Ac to Aa"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A4_Aa to C1"
+            "pathName": "A5_Ac to C1"
           }
         }
       ]

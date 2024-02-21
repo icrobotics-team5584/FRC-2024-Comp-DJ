@@ -3,11 +3,12 @@
   "robotLength": 0.75,
   "holonomicMode": true,
   "pathFolders": [
-    "A4"
+    "A1",
+    "A4",
+    "A5",
+    "SUPRISE!"
   ],
-  "autoFolders": [
-    "A4"
-  ],
+  "autoFolders": [],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
