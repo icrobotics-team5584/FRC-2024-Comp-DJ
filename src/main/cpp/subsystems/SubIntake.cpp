@@ -34,7 +34,7 @@ frc2::CommandPtr SubIntake::StopSpinningIntake() {
 }
 
 frc2::CommandPtr SubIntake::StartSpinningIntake() {
-  return Run([this] { _intakeMotorSpin.Set(1); }).FinallyDo([this]{_intakeMotorSpin.Set(0);});
+  return Run([this] { _intakeMotorSpin.Set(1); frc::SmartDashboard::PutBoolean("intake/RunningIntake", true); }).FinallyDo([this]{_intakeMotorSpin.Set(0);});
 }
 
 frc2::CommandPtr SubIntake::Intake(){

@@ -12,27 +12,79 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "A4_Speaker to As"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A4_As to Ac"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A4_Ac to Aa"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "A4_Aa to C1"
+            "commands": [
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "race",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "ShootNote"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "FeedNote"
+                            }
+                          },
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 3.0
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Speaker to As"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "As to Ac"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Ac to Aa"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Aa to C1"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]
