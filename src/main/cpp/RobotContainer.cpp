@@ -18,7 +18,6 @@
 #include "commands/UniversalCommands.h"
 
 RobotContainer::RobotContainer() {
-  pathplanner::NamedCommands::registerCommand("Useless", frc2::cmd::Print("Running Useless"));
   pathplanner::NamedCommands::registerCommand("Intake", SubIntake::GetInstance().Intake());
   pathplanner::NamedCommands::registerCommand("StopIntakeSpinning", SubIntake::GetInstance().StopSpinningIntake());
   pathplanner::NamedCommands::registerCommand("StartShooter", SubShooter::GetInstance().StartShooter());
@@ -26,6 +25,7 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("ShootNote", SubShooter::GetInstance().ShootSequence());
   pathplanner::NamedCommands::registerCommand("StopShooter", SubShooter::GetInstance().StopShooterCommand());
   pathplanner::NamedCommands::registerCommand("FeedNote", SubAmp::GetInstance().FeedNote());
+  pathplanner::NamedCommands::registerCommand("Shoot3_s", cmd::ShootFullSequence().WithTimeout(3_s));
 
   
   SubAmp::GetInstance();
