@@ -85,11 +85,11 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.A().OnTrue(cmd::ArmToAmpPos());
   _operatorController.B().OnTrue(SubShooter::GetInstance().StartShooter());
 
-  //_operatorController.POVLeft(true).OnTrue(SubLED::GetInstance().IndicateSourceDrop());
+  //_operatorController.POVLeft(true).OnTrue(SubLED::GetInstance().IndicateSourceDrop()); */
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   _autoSelected = _autoChooser.GetSelected();
   units::second_t delay = _delayChooser.GetSelected() * 1_s;
-  return frc2::cmd::Wait(delay).AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr()); */
+  return frc2::cmd::Wait(delay).AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr()); 
 }
