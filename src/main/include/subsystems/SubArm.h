@@ -79,15 +79,9 @@ class SubArm : public frc2::SubsystemBase {
   static constexpr double ARM_D = 0;//7.5828;
   static constexpr double ARM_F = 0;//0.0;
 
-
-  // static constexpr auto ARM_S = 0_V;
-  // static constexpr auto ARM_V = 0_V/1_tps;
-  // static constexpr auto ARM_G = 0.23445_V;
-  // static constexpr auto ARM_A = 0_V/1_tr_per_s_sq;
-
   static constexpr auto ARM_S = 0.17_V;
   static constexpr auto ARM_V = 9_V/1_tps;
-  static constexpr auto ARM_G = 0.5_V;
+  static constexpr auto ARM_G = 0.4_V;
   static constexpr auto ARM_A = 0_V/1_tr_per_s_sq;
 
   frc::ArmFeedforward _armFF{ARM_S, ARM_G, ARM_V, ARM_A};

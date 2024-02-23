@@ -127,8 +127,9 @@ void ICSparkMax::UseAlternateEncoder() {
 
 void ICSparkMax::UseAbsoluteEncoder(units::turn_t zeroOffset) {
   auto encoder = GetAbsoluteEncoder(rev::SparkAbsoluteEncoder::Type::kDutyCycle);
-  encoder.SetAverageDepth(128); //DO NOT CHANGE
-
+  encoder.SetAverageDepth(128); 
+  SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus5, 10);
+  SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus6, 10);
   encoder.SetZeroOffset(zeroOffset.value());
   _encoder.UseAbsolute(std::move(encoder));
   _pidController.SetFeedbackDevice(_encoder.GetAbsolute());
