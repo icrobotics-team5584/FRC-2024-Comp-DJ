@@ -45,15 +45,15 @@ SubArm::SubArm() {
 void SubArm::Periodic() {
  // Update controller
   auto setpoint = _motionProfile.Calculate(
-      100_ms, {_armMotor.GetPosition(), _armMotor.GetVelocity()}, {_currentTarget, 0_tps});
+      100_ms, {_armMotor.GetPosition(), _armMotor.GetVelocity()}, {_targetAngle, 0_tps});
   auto nextSetpoint = _motionProfile.Calculate(
-      120_ms, {_armMotor.GetPosition(), _armMotor.GetVelocity()}, {_currentTarget, 0_tps});
+      120_ms, {_armMotor.GetPosition(), _armMotor.GetVelocity()}, {_targetAngle, 0_tps});
   units::turns_per_second_squared_t accel = (nextSetpoint.velocity - setpoint.velocity) / 20_ms;
   auto feedForward = _armFF.Calculate(setpoint.position-90_deg, setpoint.velocity, accel);
   _armMotor.SetPositionTarget(setpoint.position, feedForward);
 
   // Display info
-  frc::SmartDashboard::PutNumber("arm/final target", _currentTarget.value());
+  frc::SmartDashboard::PutNumber("arm/final target", _targetAngle.value());
  frc::SmartDashboard::PutNumber("arm/profile accel", accel.value());
  frc::SmartDashboard::PutNumber("arm/profile veloc", setpoint.velocity.value());
   frc::SmartDashboard::PutData("arm/Arm Mechanism Display", &_doubleJointedArmMech);
@@ -83,15 +83,15 @@ frc2::CommandPtr SubArm::AmpShooter() {
   return StartEnd([this] { _ampMotor.Set(0.7); }, [this] { _ampMotor.Set(0); });
 }
 
-frc2::CommandPtr SubArm::ReverseAmpShooter() {
-  return StartEnd([this] { _ampMotor.Set(-0.7); }, [this] { _ampMotor.Set(0); });
+frc2::CommandPtr SubArm::FastAmpShooter() {
+  return StartEnd([this] { _ampMotor.Set(1); }, [this] { _ampMotor.Set(0); });
 }
 
 // arm
 frc2::CommandPtr SubArm::TiltArmToAngle(units::turn_t targetAngle) {
-  return RunOnce([this, targetAngle] { _currentTarget = targetAngle; })
+  return RunOnce([this, targetAngle] { _targetAngle = targetAngle; })
       .AndThen(WaitUntil([this, targetAngle] {
-        return units::math::abs(targetAngle - _armMotor.GetPosition()) < 5_deg;
+        return units::math::abs(targetAngle - _armMotor.GetPosition()) < 1_deg;
       }));
 }
 
@@ -109,12 +109,7 @@ frc2::CommandPtr SubArm::FeedNote(){
 // booleans
 
 bool SubArm::CheckIfArmIsHome() {
-  /*if (_armHomeSwitch.Get() == true) {
-    return true;
-  } else {
-    return false;
-  } */ /*BRING ME BACK*/
-  return true;
+  return units::math::abs(_armMotor.GetPosition() - HOME_ANGLE) < 2_deg;
 }
 
 bool SubArm::CheckIfArmHasGamePiece() {

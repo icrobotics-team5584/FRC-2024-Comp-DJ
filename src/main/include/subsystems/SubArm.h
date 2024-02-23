@@ -32,8 +32,8 @@ class SubArm : public frc2::SubsystemBase {
 
   // variables
   static constexpr units::degree_t OFFSET_ANGLE = 0.8291796_tr;
-  static constexpr units::degree_t HOME_ANGLE = 45_deg; //working test was 50_deg
-  static constexpr units::degree_t AMP_ANGLE = 225_deg;
+  static constexpr units::degree_t HOME_ANGLE = 0.108_tr;
+  static constexpr units::degree_t AMP_ANGLE = 0.615_tr;
   static constexpr units::degree_t TRAP_ANGLE = 110_deg;
 
   // Instance
@@ -48,7 +48,7 @@ class SubArm : public frc2::SubsystemBase {
 
   // shooter amp
   frc2::CommandPtr AmpShooter();
-  frc2::CommandPtr ReverseAmpShooter();
+  frc2::CommandPtr FastAmpShooter();
   frc2::CommandPtr StoreNote();
 
   // amp
@@ -74,21 +74,21 @@ class SubArm : public frc2::SubsystemBase {
   ICSparkMax _armMotor{canid::ArmMotor, 30_A}; // arm
 
   // arm (tune values for robot)
-  static constexpr double ARM_P = 0;//44.597;
+  static constexpr double ARM_P = 4;//44.597;
   static constexpr double ARM_I = 0;//0.0;
   static constexpr double ARM_D = 0;//7.5828;
   static constexpr double ARM_F = 0;//0.0;
 
   static constexpr auto ARM_S = 0.17_V;
-  static constexpr auto ARM_V = 9_V/1_tps;
+  static constexpr auto ARM_V = 10_V/1_tps;
   static constexpr auto ARM_G = 0.4_V;
-  static constexpr auto ARM_A = 0_V/1_tr_per_s_sq;
+  static constexpr auto ARM_A = 0.3_V/1_tr_per_s_sq;
 
   frc::ArmFeedforward _armFF{ARM_S, ARM_G, ARM_V, ARM_A};
 
   static constexpr double ARM_GEAR_RATIO = 85;
-  static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 80_deg_per_s_sq;
-  static constexpr units::degrees_per_second_t ARM_MAX_VEL = 60_deg_per_s;
+  static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 200_deg_per_s_sq;
+  static constexpr units::degrees_per_second_t ARM_MAX_VEL = 120_deg_per_s;
   static constexpr units::degree_t ARM_TOLERANCE = 0.5_deg;
   static constexpr units::meter_t ARM_LENGTH = 0.9_m;
   static constexpr units::kilogram_t ARM_MASS = 1_kg;
@@ -97,7 +97,7 @@ class SubArm : public frc2::SubsystemBase {
 
   // Motion
   frc::TrapezoidProfile<units::turns> _motionProfile{{ARM_MAX_VEL, ARM_MAX_ACCEL}};
-  units::turn_t _currentTarget = HOME_ANGLE;
+  units::turn_t _targetAngle = HOME_ANGLE;
 
   // simulating arm in smartdashboard
   frc::sim::SingleJointedArmSim _armSim{

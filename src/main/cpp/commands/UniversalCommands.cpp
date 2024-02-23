@@ -9,8 +9,10 @@ namespace cmd {
 using namespace frc2::cmd;
 
 frc2::CommandPtr ArmToAmpPos() {
-  return SubIntake::GetInstance().ExtendIntake()
-      .AndThen(SubArm::GetInstance().TiltArmToAngle(SubArm::AMP_ANGLE));
+  return SubIntake::GetInstance()
+      .ExtendIntake()
+      .AndThen(SubArm::GetInstance().TiltArmToAngle(SubArm::AMP_ANGLE))
+      .AndThen(SubArm::GetInstance().FastAmpShooter().WithTimeout(3_s));
 }
 
 frc2::CommandPtr ArmToTrapPos() {
@@ -22,8 +24,8 @@ frc2::CommandPtr ArmToTrapPos() {
 frc2::CommandPtr ArmToStow() {
   return SubArm::GetInstance()
       .TiltArmToAngle(SubArm::HOME_ANGLE)
-      .Until([] { return SubArm::GetInstance().CheckIfArmIsHome(); });
-      //.AndThen([] { SubIntake::GetInstance().FuncRetractIntake(); });
+      .Until([] { return SubArm::GetInstance().CheckIfArmIsHome(); })
+      .AndThen([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }
 
 frc2::CommandPtr SequenceArmToAmpPos() {
