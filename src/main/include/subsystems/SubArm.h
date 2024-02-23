@@ -52,7 +52,7 @@ class SubArm : public frc2::SubsystemBase {
   frc2::CommandPtr StoreNote();
 
   // amp
-  frc2::CommandPtr TiltArmToAngle(units::degree_t targetAngle);
+  frc2::CommandPtr TiltArmToAngle(units::turn_t targetAngle);
 
   frc2::CommandPtr CheckArmPos();
   frc2::CommandPtr Check();
@@ -85,16 +85,16 @@ class SubArm : public frc2::SubsystemBase {
   // static constexpr auto ARM_G = 0.23445_V;
   // static constexpr auto ARM_A = 0_V/1_tr_per_s_sq;
 
-  static constexpr auto ARM_S = 0.011576_V;
-  static constexpr auto ARM_V = 10.476_V/1_tps;
-  static constexpr auto ARM_G = 0.23445_V;
-  static constexpr auto ARM_A = 0.13573_V/1_tr_per_s_sq;
+  static constexpr auto ARM_S = 0.17_V;
+  static constexpr auto ARM_V = 9_V/1_tps;
+  static constexpr auto ARM_G = 0.5_V;
+  static constexpr auto ARM_A = 0_V/1_tr_per_s_sq;
 
   frc::ArmFeedforward _armFF{ARM_S, ARM_G, ARM_V, ARM_A};
 
   static constexpr double ARM_GEAR_RATIO = 85;
-  static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 3_tr_per_s_sq;
-  static constexpr units::degrees_per_second_t ARM_MAX_VEL = 1_tps;
+  static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 80_deg_per_s_sq;
+  static constexpr units::degrees_per_second_t ARM_MAX_VEL = 60_deg_per_s;
   static constexpr units::degree_t ARM_TOLERANCE = 0.5_deg;
   static constexpr units::meter_t ARM_LENGTH = 0.9_m;
   static constexpr units::kilogram_t ARM_MASS = 1_kg;
@@ -135,7 +135,7 @@ class SubArm : public frc2::SubsystemBase {
       frc2::sysid::Mechanism{[this](units::volt_t volts) { _armMotor.SetVoltage(volts); },
                              [this](frc::sysid::SysIdRoutineLog* log) {
                                log->Motor("arm")
-                                   .voltage(_armMotor.GetSimVoltage())
+                                   .voltage(_armMotor.GetAppliedOutput()*12_V)
                                    .position(_armMotor.GetPosition())
                                    .velocity(_armMotor.GetVelocity());
                              },

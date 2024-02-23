@@ -46,9 +46,10 @@ void RobotContainer::ConfigureBindings() {
   _driverController.LeftTrigger().WhileTrue(cmd::ShootFullSequence()); //working
   _driverController.RightTrigger().WhileTrue(cmd::IntakefullSequence());//working     /*.AndThen([this]{_driverController.SetRumble(frc::GenericHID::kBothRumble, 1); _operatorController.SetRumble(frc::GenericHID::kBothRumble, 1);})*/)
 
-  _driverController.LeftBumper().OnTrue(cmd::ArmToAmpPos()); //working
-  _driverController.LeftBumper().OnFalse(cmd::ArmToStow()); //working
+  _driverController.LeftBumper().OnTrue(SubArm::GetInstance().TiltArmToAngle(0.25_tr)); //working
+  _driverController.LeftBumper().OnFalse(SubArm::GetInstance().TiltArmToAngle(0.125_tr)); //working
   _driverController.RightBumper().OnTrue(SubLED::GetInstance().IndicateAmp()); //working
+
 
   _operatorController.B().OnTrue(SubClimber::GetInstance().ClimberExtend()); //working
   _operatorController.A().OnTrue(SubClimber::GetInstance().ClimberRetract()); //working
@@ -59,13 +60,12 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar()); //working
   _operatorController.LeftTrigger().WhileTrue(SubArm::GetInstance().AmpShooter()); //working
 
-  _driverController.A().WhileTrue(SubArm::GetInstance().TiltArmToAngle(SubArm::HOME_ANGLE));
-  _driverController.B().WhileTrue(SubArm::GetInstance().TiltArmToAngle(SubArm::AMP_ANGLE));
+  _driverController.Back().OnTrue(SubIntake::GetInstance().ExtendIntake());
 
-  // _driverController.A().WhileTrue(SubArm::GetInstance().SysIdDynamic(frc2::sysid::Direction::kForward));
-  // _driverController.B().WhileTrue(SubArm::GetInstance().SysIdDynamic(frc2::sysid::Direction::kReverse));
-  // _driverController.X().WhileTrue(SubArm::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kForward));
-  // _driverController.Y().WhileTrue(SubArm::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+   _driverController.A().WhileTrue(SubArm::GetInstance().SysIdDynamic(frc2::sysid::Direction::kForward));
+   _driverController.B().WhileTrue(SubArm::GetInstance().SysIdDynamic(frc2::sysid::Direction::kReverse));
+   _driverController.X().WhileTrue(SubArm::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kForward));
+   _driverController.Y().WhileTrue(SubArm::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 
 
 }
@@ -75,3 +75,4 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   units::second_t delay = _delayChooser.GetSelected() * 1_s;
   return frc2::cmd::Wait(delay).AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr());
 }
+

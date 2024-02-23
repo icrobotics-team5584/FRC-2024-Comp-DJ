@@ -35,19 +35,19 @@ SubArm::SubArm() {
 
 // This method will be called once per scheduler run
 void SubArm::Periodic() {
-  // Update controller
+ // Update controller
   auto setpoint = _motionProfile.Calculate(
-      20_ms, {_armMotor.GetPosition(), _armMotor.GetVelocity()}, {_currentTarget, 0_tps});
+      100_ms, {_armMotor.GetPosition(), _armMotor.GetVelocity()}, {_currentTarget, 0_tps});
   auto nextSetpoint = _motionProfile.Calculate(
-      40_ms, {_armMotor.GetPosition(), _armMotor.GetVelocity()}, {_currentTarget, 0_tps});
+      120_ms, {_armMotor.GetPosition(), _armMotor.GetVelocity()}, {_currentTarget, 0_tps});
   units::turns_per_second_squared_t accel = (nextSetpoint.velocity - setpoint.velocity) / 20_ms;
   auto feedForward = _armFF.Calculate(setpoint.position-90_deg, setpoint.velocity, accel);
   _armMotor.SetPositionTarget(setpoint.position, feedForward);
 
   // Display info
   frc::SmartDashboard::PutNumber("arm/final target", _currentTarget.value());
-  frc::SmartDashboard::PutNumber("arm/profile accel", accel.value());
-  frc::SmartDashboard::PutNumber("arm/profile veloc", setpoint.velocity.value());
+ frc::SmartDashboard::PutNumber("arm/profile accel", accel.value());
+ frc::SmartDashboard::PutNumber("arm/profile veloc", setpoint.velocity.value());
   frc::SmartDashboard::PutData("arm/Arm Mechanism Display", &_doubleJointedArmMech);
   frc::SmartDashboard::PutNumber("arm/Amp Shooter Motor: ", _ampMotor.Get());
   frc::SmartDashboard::PutBoolean("arm/Linebreak", _sdLineBreak.Get());
@@ -80,7 +80,7 @@ frc2::CommandPtr SubArm::ReverseAmpShooter() {
 }
 
 // arm
-frc2::CommandPtr SubArm::TiltArmToAngle(units::degree_t targetAngle) {
+frc2::CommandPtr SubArm::TiltArmToAngle(units::turn_t targetAngle) {
   return RunOnce([this, targetAngle] { _currentTarget = targetAngle; })
       .AndThen(WaitUntil([this, targetAngle] {
         return units::math::abs(targetAngle - _armMotor.GetPosition()) < 5_deg;

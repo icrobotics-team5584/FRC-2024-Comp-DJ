@@ -1,6 +1,7 @@
 #include <Utilities/ICSparkEncoder.h>
 #include <frc/RobotBase.h>
 #include <utility>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 ICSparkEncoder::ICSparkEncoder(rev::SparkRelativeEncoder&& inbuilt)
     : _inbuilt(std::move(inbuilt)) {}
@@ -20,6 +21,7 @@ double ICSparkEncoder::GetPosition() {
 double ICSparkEncoder::GetVelocity() {
   switch (_selected) {
     case ABSOLUTE:
+    frc::SmartDashboard::PutNumber("arm/Encoder velocity", _absolute->GetVelocity());
       return _absolute->GetVelocity();
     case ALTERNATE:
       return _alternate->GetVelocity();
@@ -38,12 +40,12 @@ void ICSparkEncoder::SetPosition(double pos) {
 }
 
 void ICSparkEncoder::SetConversionFactor(double rotationsToDesired) {
-  // Need to divide vel by 60 because Spark Max uses Revs per minute not Revs per second
+
   if(_absolute){
      _absolute->SetPositionConversionFactor(rotationsToDesired);
-     _absolute->SetVelocityConversionFactor(rotationsToDesired / 60);
+     _absolute->SetVelocityConversionFactor(rotationsToDesired);
   }
-
+  // Need to divide vel by 60 because Spark Max uses Revs per minute not Revs per second
   if(_alternate){
     _alternate->SetPositionConversionFactor(rotationsToDesired);
     _alternate->SetVelocityConversionFactor(rotationsToDesired / 60);
