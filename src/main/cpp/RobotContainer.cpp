@@ -16,6 +16,10 @@
 #include "subsystems/SubClimber.h"
 #include <frc2/command/Commands.h>
 #include "commands/UniversalCommands.h"
+#include "subsystems/SubIntake.h"
+#include "subsystems/SubLED.h"
+#include "subsystems/SubVision.h"
+#include "commands/VisionCommands.h"
 
 RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("Intake", SubIntake::GetInstance().Intake());
@@ -31,6 +35,8 @@ RobotContainer::RobotContainer() {
   SubAmp::GetInstance();
   SubDrivebase::GetInstance();
   SubIntake::GetInstance();
+  SubVision::GetInstance();
+
   SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
@@ -72,6 +78,7 @@ void RobotContainer::ConfigureBindings() {
   // new controls below WIP 
   /*
   _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
+  _driverController.Y().OnTrue(frc2::cmd::RunOnce( [] { SubDrivebase::GetInstance().ResetGyroHeading(); } ));
 
   _operatorController.Start().OnTrue(nullptr outtake/eject);
 

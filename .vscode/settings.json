@@ -103,6 +103,27 @@
     "xlocnum": "cpp",
     "xstddef": "cpp",
     "xstring": "cpp",
-    "*.inc": "cpp"
-  }}
-
+    "*.inc": "cpp",
+    "barrier": "cpp",
+    "charconv": "cpp",
+    "coroutine": "cpp",
+    "csetjmp": "cpp",
+    "csignal": "cpp",
+    "cuchar": "cpp",
+    "expected": "cpp",
+    "source_location": "cpp",
+    "latch": "cpp",
+    "scoped_allocator": "cpp",
+    "shared_mutex": "cpp",
+    "spanstream": "cpp",
+    "stacktrace": "cpp",
+    "syncstream": "cpp",
+    "format": "cpp",
+    "locale": "cpp",
+    "xlocbuf": "cpp",
+    "xlocmes": "cpp",
+    "xlocmon": "cpp",
+    "xloctime": "cpp",
+    "xtree": "cpp"
+  }
+}

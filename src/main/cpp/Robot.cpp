@@ -8,7 +8,13 @@
 #include "subsystems/SubDrivebase.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 
-void Robot::RobotInit() {}
+#include <frc/DataLogManager.h>
+#include <frc/DriverStation.h>
+
+void Robot::RobotInit() {
+  frc::DataLogManager::Start();
+  frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog(),true);
+}
 
 void Robot::RobotPeriodic() {
   frc2::CommandScheduler::GetInstance().Run();

@@ -56,6 +56,8 @@ class SubClimber : public frc2::SubsystemBase {
 
   frc2::CommandPtr ClimberExtend();
   frc2::CommandPtr ClimberRetract();
+  frc2::CommandPtr ClimberPosition(units::meter_t distance);
+  frc2::CommandPtr ClimberManualDrive(float power);
   frc2::CommandPtr ClimberStop();
   frc2::CommandPtr ClimberLock();
   frc2::CommandPtr ClimberUnlock();
@@ -72,7 +74,7 @@ class SubClimber : public frc2::SubsystemBase {
   static constexpr double gearRatio = 30.0;
   static constexpr double lP = 0.0, lI = 0.0, lD = 0.0, lF = 0,
   
-                          rP = 0.0, rI = 0.0, rD = 0.0, rF = 0;
+                          rP = 0.1, rI = 0.0, rD = 0.0, rF = 0;
 
   // Unit translation
   static constexpr units::meter_t WheelCir = 0.3_m;

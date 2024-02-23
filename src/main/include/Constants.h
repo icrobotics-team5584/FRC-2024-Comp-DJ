@@ -69,7 +69,6 @@ namespace pwm {
   constexpr int LEDS = 1;
 }
 
-
 namespace OperatorConstants {}
 
 constexpr int kDriverControllerPort = 0;

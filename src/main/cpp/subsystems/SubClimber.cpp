@@ -10,12 +10,10 @@ SubClimber::SubClimber() {
     _lClimbMotor.SetConversionFactor(1.0 / gearRatio);
     _lClimbMotor.SetPIDFF(lP,lI,lD,lF);
     _lClimbMotor.SetInverted(true);
-    _lClimbMotor.UseAbsoluteEncoder();
 
     _rClimbMotor.SetConversionFactor(1.0 / gearRatio);
     _rClimbMotor.SetPIDFF(rP,rI,rD,rF);
     _rClimbMotor.SetInverted(false);
-    _rClimbMotor.UseAbsoluteEncoder();
 
     LockCylinder.Set(frc::DoubleSolenoid::Value::kReverse);
 
@@ -30,6 +28,8 @@ void SubClimber::Periodic() {
 
 void SubClimber::SimulationPeriodic() {
     frc::SmartDashboard::PutData("Climber/Mech Display", &mech);
+    frc::SmartDashboard::PutNumber("Climber/Left sim distance", TurnToDistance(lClimbMotor.GetPosition()).value());
+    frc::SmartDashboard::PutNumber("Climber/Right sim distance", TurnToDistance(rClimbMotor.GetPosition()).value());
 
   lElvSim.SetInputVoltage(_lClimbMotor.GetSimVoltage());
   lElvSim.Update(20_ms);
@@ -104,6 +104,15 @@ frc2::CommandPtr SubClimber::ClimberExtend() {
 
 frc2::CommandPtr SubClimber::ClimberRetract() {
     return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Retract();});
+}
+
+frc2::CommandPtr SubClimber::ClimberPosition(units::meter_t distance) {
+    return frc2::cmd::RunOnce([distance] {SubClimber::GetInstance().DriveToDistance(distance);});
+}
+
+frc2::CommandPtr SubClimber::ClimberManualDrive(float power) {
+    power = std::clamp(power, -1.0f, 1.0f);
+    return frc2::cmd::RunOnce([power] {SubClimber::GetInstance().Start(power);});
 }
 
 frc2::CommandPtr SubClimber::ClimberStop() {
