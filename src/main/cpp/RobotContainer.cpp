@@ -12,7 +12,6 @@
 #include "subsystems/SubLED.h"
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include "RobotContainer.h"
-#include "subsystems/SubAmp.h"
 #include "subsystems/SubClimber.h"
 #include <frc2/command/Commands.h>
 #include "commands/UniversalCommands.h"
@@ -20,6 +19,7 @@
 #include "subsystems/SubLED.h"
 #include "subsystems/SubVision.h"
 #include "commands/VisionCommands.h"
+#include "subsystems/SubArm.h"
 
 RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("Intake", SubIntake::GetInstance().Intake());
@@ -28,11 +28,11 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("RetractIntake", SubIntake::GetInstance().CommandRetractIntake());
   pathplanner::NamedCommands::registerCommand("ShootNote", SubShooter::GetInstance().ShootSequence());
   pathplanner::NamedCommands::registerCommand("StopShooter", SubShooter::GetInstance().StopShooterCommand());
-  pathplanner::NamedCommands::registerCommand("FeedNote", SubAmp::GetInstance().FeedNote());
+  pathplanner::NamedCommands::registerCommand("FeedNote", SubArm::GetInstance().FeedNote());
   pathplanner::NamedCommands::registerCommand("Shoot3_s", cmd::ShootFullSequence().WithTimeout(3_s));
 
   
-  SubAmp::GetInstance();
+  SubArm::GetInstance();
   SubDrivebase::GetInstance();
   SubIntake::GetInstance();
   SubVision::GetInstance();
@@ -100,3 +100,4 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   units::second_t delay = _delayChooser.GetSelected() * 1_s;
   return frc2::cmd::Wait(delay).AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr()); 
 }
+
