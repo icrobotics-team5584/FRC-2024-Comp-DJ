@@ -87,8 +87,8 @@ class SubArm : public frc2::SubsystemBase {
   frc::ArmFeedforward _armFF{ARM_S, ARM_G, ARM_V, ARM_A};
 
   static constexpr double ARM_GEAR_RATIO = 85;
-  static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 2000_deg_per_s_sq;
-  static constexpr units::degrees_per_second_t ARM_MAX_VEL = 300_deg_per_s;
+  static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 3000_deg_per_s_sq;
+  static constexpr units::degrees_per_second_t ARM_MAX_VEL = 400_deg_per_s;
   static constexpr units::degree_t ARM_TOLERANCE = 0.5_deg;
   static constexpr units::meter_t ARM_LENGTH = 0.9_m;
   static constexpr units::kilogram_t ARM_MASS = 1_kg;
