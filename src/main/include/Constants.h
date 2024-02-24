@@ -13,7 +13,7 @@ namespace canid {
  constexpr int DriveBaseFrontRightEncoder = 10;
 
  constexpr int DriveBaseFrontLeftDrive = 3;
- constexpr int DriveBaseFrontLeftTurn = 6;
+ constexpr int DriveBaseFrontLeftTurn = 6; //6
  constexpr int DriveBaseFrontLeftEncoder = 9;
       
  constexpr int DriveBaseBackRightDrive = 5;
@@ -34,7 +34,7 @@ namespace canid {
   constexpr int ShooterFeederMotor = 14;
 
 //Arm IDS used: 17-18
-  constexpr int ArmMotor = 19;
+  constexpr int ArmMotor = 19; //19
 
 //Amp/Trap IDS used: 19
   constexpr int AmpMotor = 20;

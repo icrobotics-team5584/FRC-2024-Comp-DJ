@@ -26,8 +26,8 @@ frc2::CommandPtr ArmToTrapPos() {
 frc2::CommandPtr ArmToStow() {
   return SubArm::GetInstance()
       .TiltArmToAngle(SubArm::HOME_ANGLE)
-      .Until([] { return SubArm::GetInstance().CheckIfArmIsHome(); })
-      .AndThen([] { SubIntake::GetInstance().FuncRetractIntake(); });
+      .Until([] { return SubArm::GetInstance().CheckIfArmIsHome(); });/*
+      .AndThen([] { SubIntake::GetInstance().FuncRetractIntake(); });*/
 }
 
 frc2::CommandPtr SequenceArmToAmpPos() {

@@ -63,15 +63,16 @@ void RobotContainer::ConfigureBindings() {
 
   _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd()); //working
 
-  _driverController.LeftBumper().OnTrue(cmd::ArmToAmpPos()); //working
+  _driverController.LeftBumper().WhileTrue(cmd::ArmToAmpPos()); //working
   _driverController.LeftBumper().OnFalse(cmd::ArmToStow()); //working
   _driverController.A().OnTrue(cmd::VisionRotateToZero());
   _driverController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
   _driverController.RightTrigger().WhileTrue(cmd::ShootFullSequence());
+  _driverController.B().OnTrue(SubIntake::GetInstance().ExtendIntake());
 
-  _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberExtend()); //working
-  _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberRetract()); //working
-  _operatorController.A().WhileTrue(SubShooter::GetInstance().StartShooter()); //working
+ // _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberExtend()); //working
+ // _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberRetract()); //working
+//  _operatorController.A().WhileTrue(SubShooter::GetInstance().StartShooter()); //working
   _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequence()); //working
   _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose()); //working
   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar()); //working
@@ -95,6 +96,12 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.B().OnTrue(SubShooter::GetInstance().StartShooter());
 
   //_operatorController.POVLeft(true).OnTrue(SubLED::GetInstance().IndicateSourceDrop()); */
+
+  //Operator controls sysID
+  _operatorController.A().WhileTrue(SubArm::GetInstance().SysIdDynamic(frc2::sysid::Direction::kForward));
+  _operatorController.B().WhileTrue(SubArm::GetInstance().SysIdDynamic(frc2::sysid::Direction::kReverse));
+  _operatorController.X().WhileTrue(SubArm::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kForward));
+  _operatorController.Y().WhileTrue(SubArm::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

@@ -31,6 +31,8 @@ SubArm::SubArm() {
   _armMotor.SetPIDFF(ARM_P, ARM_I, ARM_D, ARM_F);
   _armMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
   _armMotor.ConfigSmartMotion(ARM_MAX_VEL, ARM_MAX_ACCEL, ARM_TOLERANCE);
+  _armMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, (AMP_ANGLE+5_deg).value());
+  _armMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, HOME_ANGLE.value());
 
   _ampMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 500);
   _ampMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 500);
@@ -45,17 +47,17 @@ SubArm::SubArm() {
 void SubArm::Periodic() {
  // Update controller
   auto setpoint = _motionProfile.Calculate(
-      100_ms, {_armMotor.GetPosition(), _armMotor.GetVelocity()}, {_targetAngle, 0_tps});
-  auto nextSetpoint = _motionProfile.Calculate(
       120_ms, {_armMotor.GetPosition(), _armMotor.GetVelocity()}, {_targetAngle, 0_tps});
+  auto nextSetpoint = _motionProfile.Calculate(
+      200_ms, {_armMotor.GetPosition(), _armMotor.GetVelocity()}, {_targetAngle, 0_tps});
   units::turns_per_second_squared_t accel = (nextSetpoint.velocity - setpoint.velocity) / 20_ms;
   auto feedForward = _armFF.Calculate(setpoint.position-90_deg, setpoint.velocity, accel);
   _armMotor.SetPositionTarget(setpoint.position, feedForward);
 
   // Display info
   frc::SmartDashboard::PutNumber("arm/final target", _targetAngle.value());
- frc::SmartDashboard::PutNumber("arm/profile accel", accel.value());
- frc::SmartDashboard::PutNumber("arm/profile veloc", setpoint.velocity.value());
+  frc::SmartDashboard::PutNumber("arm/profile accel", accel.value());
+  frc::SmartDashboard::PutNumber("arm/profile veloc", setpoint.velocity.value());
   frc::SmartDashboard::PutData("arm/Arm Mechanism Display", &_doubleJointedArmMech);
   frc::SmartDashboard::PutNumber("arm/Amp Shooter Motor: ", _ampMotor.Get());
   frc::SmartDashboard::PutBoolean("arm/Linebreak", _sdLineBreak.Get());
