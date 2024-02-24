@@ -13,12 +13,18 @@
 #include <frc2/command/Commands.h>
 #include "subsystems/SubDrivebase.h"
 #include <frc/filter/SlewRateLimiter.h>
+#include <iostream>
 
 SubDrivebase::SubDrivebase() {
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value());
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularVelocity",
                                  MAX_ANGULAR_VELOCITY.value());
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAcceleration", MAX_JOYSTICK_ACCEL);
+  frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration",
+                                 MAX_ANGULAR_JOYSTICK_ACCEL);
+
+  frc::SmartDashboard::PutData("Drivebase/Vision/Rotation Controller: ", &Rcontroller);
+
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration",
                                  MAX_ANGULAR_JOYSTICK_ACCEL);
   _gyro.Calibrate();
@@ -35,15 +41,17 @@ SubDrivebase::SubDrivebase() {
         return GetRobotRelativeSpeeds();
       },  // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
       [this](frc::ChassisSpeeds speeds) {
-        Drive(speeds.vx, speeds.vy, speeds.omega, false);
+        Drive(speeds.vx, speeds.vy, -speeds.omega, false);
       },  // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       HolonomicPathFollowerConfig(
-          PIDConstants(0.5, 0.0, 0.0),  // Translation PID constants
-          PIDConstants(0.5, 0.0, 0.0),  // Rotation PID constants
-          0.5_mps,                      // Max module speed, in m/s
-          0.4_m,  // Drive base radius in meters. Distance from robot center to furthest module.
-                  // NEEDS TO BE CHECKED AND MADE ACCURATE!!
-          ReplanningConfig()  // Default path replanning config. See the API for the options here
+          PIDConstants(0.7, 0.0, 0.1),    // Translation PID constants
+          PIDConstants(1.173, 0.0, 0.0),  // Rotation PID constants
+          0.5_mps,                        // Max module speed, in m/s
+          432_mm,  // Drive base radius in meters. Distance from robot center to furthest module.
+                   // NEEDS TO BE CHECKED AND MADE ACCURATE!!
+          ReplanningConfig(
+              false, false, 1_m,
+              0.25_m)  // Default path replanning config. See the API for the options here
           ),
       []() {
         // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -53,6 +61,7 @@ SubDrivebase::SubDrivebase() {
         if (alliance) {
           return alliance.value() == frc::DriverStation::Alliance::kRed;
         }
+        std::cout << "Failed to detect alliance\n";
         return false;
       },
       this  // Reference to this subsystem to set requirements
@@ -143,13 +152,16 @@ void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_se
   } else {
     invert = 1;
   }
-  auto states = _kinematics.ToSwerveModuleStates(
+  auto states = _kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
       fieldRelative
-          ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, -GetHeading() * invert)
-          : frc::ChassisSpeeds{xSpeed, ySpeed, rot});
+          ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, GetHeading() * invert)
+          : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
+      -200_ms));
 
   // Set speed limit and apply speed limit to all modules
-  _kinematics.DesaturateWheelSpeeds(&states, MAX_VELOCITY);
+  _kinematics.DesaturateWheelSpeeds(
+      &states,
+      frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) * 1_mps);
 
   // Setting modules from aquired states
   auto [fl, fr, bl, br] = states;
@@ -203,7 +215,7 @@ frc2::CommandPtr SubDrivebase::SyncSensorBut() {
 }
 
 frc::Rotation2d SubDrivebase::GetHeading() {
-  return _gyro.GetRotation2d();
+  return -_gyro.GetRotation2d();
 }
 
 // Calculate robot's velocity over past time step (20 ms)
@@ -249,6 +261,13 @@ void SubDrivebase::DriveToPose(frc::Pose2d targetPose) {
   } else {
     Drive(speedX * 1_mps, speedY * 1_mps, speedRot * 1_rad_per_s, true);
   }
+}
+
+void SubDrivebase::RotateToZero(units::degree_t rotationError) {
+  double speedRot = Rcontroller.Calculate(rotationError, 0_deg);
+  speedRot = std::clamp(speedRot, -2.0, 2.0);
+
+  Drive(0_mps, 0_mps, speedRot * 1_rad_per_s, false);
 }
 
 bool SubDrivebase::IsAtPose(frc::Pose2d pose) {

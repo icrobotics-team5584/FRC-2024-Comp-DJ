@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3725738150477713,
-      "y": 4.520382906671662
+      "x": 0.76,
+      "y": 4.39
     },
-    "rotation": 0
+    "rotation": 113.69040122776325
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Podium Path"
+            "pathName": "A1_Source to C5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A1_C5 to C4"
           }
         }
       ]

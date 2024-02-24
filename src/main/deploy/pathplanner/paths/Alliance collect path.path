@@ -1,0 +1,258 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.3959954881393342,
+        "y": 7.272429494930317
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.3317426626303537,
+        "y": 7.244892569712182
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.83630329746786,
+        "y": 7.023562282418683
+      },
+      "prevControl": {
+        "x": 1.821493649257145,
+        "y": 7.497140118250348
+      },
+      "nextControl": {
+        "x": 3.111672549649206,
+        "y": 6.895056631400722
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.4875022447048227,
+        "y": 5.536568320639416
+      },
+      "prevControl": {
+        "x": 0.44059080349015345,
+        "y": 6.601329429073954
+      },
+      "nextControl": {
+        "x": 2.709019681987256,
+        "y": 5.421339519183083
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.379705757984981,
+        "y": 4.251033666118688
+      },
+      "prevControl": {
+        "x": 0.24949112015446984,
+        "y": 4.816192651665559
+      },
+      "nextControl": {
+        "x": 2.8294755365478457,
+        "y": 4.131706990173438
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.83630329746786,
+        "y": 2.705203242075528
+      },
+      "prevControl": {
+        "x": 2.0400914981573175,
+        "y": 2.2719022898816124
+      },
+      "nextControl": {
+        "x": 3.543751701592809,
+        "y": 3.090198876906417
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.848666424864946,
+        "y": 4.075371117931965
+      },
+      "prevControl": {
+        "x": 7.848666424864946,
+        "y": 4.066192142859255
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 11.040940180323672,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": 3.1798301198643353,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 3.0,
+      "rotationDegrees": -25.083594006190918,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "First note",
+      "waypointRelativePos": 0.8999999999999999,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "ExtendIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartIntakeSpinning"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StopSpinningIntake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Startup",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "StartShooter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Second Note",
+      "waypointRelativePos": 1.95,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartIntakeSpinning"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StopIntakeSpinning"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Third Note",
+      "waypointRelativePos": 2.95,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartIntakeSpinning"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StopIntakeSpinning"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RetractIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StopShooter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}

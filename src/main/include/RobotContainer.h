@@ -12,6 +12,7 @@
 #include <frc2/command/InstantCommand.h>
 #include <frc/XboxController.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <frc/Compressor.h>
 
 // Created classes includes 
 #include "Constants.h"
@@ -28,6 +29,7 @@ class RobotContainer {
   RobotContainer();
 
   frc2::CommandPtr GetAutonomousCommand();
+  frc::Compressor _compressor{22, frc::PneumaticsModuleType::REVPH};
 
  private:
   void ConfigureBindings();
@@ -38,5 +40,4 @@ class RobotContainer {
   frc::SendableChooser<int> _delayChooser;
   std::string _autoSelected;
 
-  
 };
