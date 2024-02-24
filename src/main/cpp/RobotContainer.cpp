@@ -16,6 +16,7 @@
 #include "subsystems/SubClimber.h"
 #include <frc2/command/Commands.h>
 #include "commands/UniversalCommands.h"
+#include "utilities/POVHelper.h"
 
 RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("ExtendIntake", SubIntake::GetInstance().ExtendIntake());
@@ -62,10 +63,13 @@ void RobotContainer::ConfigureBindings() {
 
   // _driverController.Y().OnTrue(frc2::cmd::RunOnce( [] { SubDrivebase::GetInstance().ResetGyroHeading(); } ));
 
+  POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
+  POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
+  _operatorController.Y().OnTrue(cmd::TrapSequence());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   _autoSelected = _autoChooser.GetSelected();
   units::second_t delay = _delayChooser.GetSelected() * 1_s;
   return frc2::cmd::Wait(delay).AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr());
-}
+}  

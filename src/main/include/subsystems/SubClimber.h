@@ -60,6 +60,9 @@ class SubClimber : public frc2::SubsystemBase {
   double GetLeftCurrent();
   double GetRightCurrent();
 
+  bool GetTrapStatus();
+  void SetTrapStatus(bool stat);
+
   frc2::CommandPtr ClimberExtend();
   frc2::CommandPtr ClimberRetract();
   frc2::CommandPtr ClimberPosition(units::meter_t distance);
@@ -83,7 +86,7 @@ class SubClimber : public frc2::SubsystemBase {
   
                           rP = 5, rI = 0.0, rD = 0.0, rF = 0;
 
-  static constexpr double currentLimit = 10;
+  static constexpr double currentLimit = 20;
 
   // Limit switches
   frc::DigitalInput TopLimitSwitch{5};
@@ -101,6 +104,9 @@ class SubClimber : public frc2::SubsystemBase {
   bool Reseted = false;
 
   bool ResetLeft = false; bool ResetRight = false;
+
+  // Trap sequence
+  bool TrapSequencing = false;
 
   // Sim
 

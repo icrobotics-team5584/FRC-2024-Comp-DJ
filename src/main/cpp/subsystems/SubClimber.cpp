@@ -12,13 +12,15 @@ SubClimber::SubClimber() {
     _lClimbMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
     _lClimbMotor.SetPIDFF(lP,lI,lD,lF);
     _lClimbMotor.SetInverted(false);
-    // _lClimbMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, DistanceToTurn(TopHeight).value());
+    _lClimbMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, DistanceToTurn(TopHeight).value());
+    _lClimbMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, DistanceToTurn(0.1_m).value());
 
     _rClimbMotor.SetConversionFactor(1.0 / gearRatio);
     _rClimbMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
     _rClimbMotor.SetPIDFF(rP,rI,rD,rF);
     _rClimbMotor.SetInverted(true);
-    // _rClimbMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, DistanceToTurn(TopHeight).value());
+    _rClimbMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, DistanceToTurn(TopHeight).value());
+    _rClimbMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, DistanceToTurn(0.1_m).value()); 
 
     LockCylinder.Set(frc::DoubleSolenoid::Value::kReverse);
 
@@ -33,7 +35,8 @@ void SubClimber::Periodic() {
     frc::SmartDashboard::PutNumber("Climber/Target distance", TargetDistance.value());
     frc::SmartDashboard::PutNumber("Climber/Left current", _lClimbMotor.GetOutputCurrent());
     frc::SmartDashboard::PutNumber("Climber/Right current", _rClimbMotor.GetOutputCurrent());
-    frc::SmartDashboard::PutBoolean("Climber/Reset?", Reseted);
+    frc::SmartDashboard::PutBoolean("Climber/Reseted", Reseted);
+    frc::SmartDashboard::PutBoolean("Climber/Reseting", Reseting);
 
     // if (TurnToDistance(_lClimbMotor.GetPosition()) > TopHeight || TurnToDistance(_rClimbMotor.GetPosition()) > TopHeight) {
     //     if (_lClimbMotor.GetVelocity().value() > 0 || _rClimbMotor.GetVelocity().value() > 0) {
@@ -132,6 +135,10 @@ double SubClimber::GetRightCurrent() {
     return _rClimbMotor.GetOutputCurrent();
 }
 
+bool SubClimber::GetTrapStatus() { return TrapSequencing; }
+
+void SubClimber::SetTrapStatus(bool stat) { TrapSequencing = stat;}
+
 //Pointer Commands
 
 frc2::CommandPtr SubClimber::ClimberExtend() {
@@ -180,8 +187,9 @@ frc2::CommandPtr SubClimber::ClimberResetCheck() {
         }
         if (ResetLeft && ResetRight) {
             Reseting = false;
+
         }
-    }));
+    }).Until([this] { return ResetLeft && ResetRight; }));
 }
 
 frc2::CommandPtr SubClimber::ClimberAutoReset() {
@@ -189,7 +197,11 @@ frc2::CommandPtr SubClimber::ClimberAutoReset() {
     // .AndThen(frc2::cmd::WaitUntil([this] { return GetCurrent() > currentLimit;}))
     // .AndThen(ClimberStop()).AndThen(ClimberResetZero()).AndThen(ClimberPosition(0.2_m))
     // .AndThen(RunOnce([this] {Reseting = false; Reseted = true;}));
-    return frc2::cmd::RunOnce([this] {Reseting = true;}).AndThen(ClimberManualDrive(-0.2))
-            .AndThen(frc2::cmd::Wait(0.5_s)).AndThen(ClimberResetCheck()).AndThen(frc2::cmd::WaitUntil([this] {return !Reseting;}))
-            .AndThen(ClimberManualDrive(0.5));
+    return frc2::cmd::RunOnce([this] { Reseting = true; })
+        .AndThen(ClimberManualDrive(-0.2))
+        .AndThen(frc2::cmd::Wait(0.5_s))
+        .AndThen(ClimberResetCheck())
+        .AndThen(ClimberResetZero())
+        .AndThen(ClimberStop())
+        .AndThen([this] { Reseted = true; });
 }
