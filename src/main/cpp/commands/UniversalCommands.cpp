@@ -52,4 +52,11 @@ frc2::CommandPtr IntakefullSequence(){
       .Until([]{return SubArm::GetInstance().CheckIfArmHasGamePiece();})
       .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }
+
+
+frc2::CommandPtr TrapSequence() {
+  return ArmToTrapPos()
+        .AndThen(SubAmp::GetInstance().AmpShooter().WithTimeout(1_s));
+}
+
 }  // namespace cmd

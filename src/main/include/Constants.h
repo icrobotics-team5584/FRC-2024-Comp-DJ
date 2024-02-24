@@ -69,6 +69,7 @@ namespace pwm {
   constexpr int LEDS = 1;
 }
 
+
 namespace OperatorConstants {}
 
 constexpr int kDriverControllerPort = 0;
@@ -77,7 +78,7 @@ namespace dio {
   constexpr int FDLineBreak = 9;
   constexpr int SDLineBreak = 1;
   constexpr int IntakeRetractedReed = 2;
-  constexpr int IntakeExtendedReed = 0;
+  constexpr int IntakeExtendedReed = 3;
   constexpr int ShooterEncoderChannelA = 7;
   constexpr int ShooterEncoderChannelB = 8;
 }
