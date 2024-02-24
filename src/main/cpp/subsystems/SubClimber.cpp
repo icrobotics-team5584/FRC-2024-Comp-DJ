@@ -179,7 +179,7 @@ frc2::CommandPtr SubClimber::ClimberResetCheck() {
             _rClimbMotor.StopMotor(); ResetRight = true;
         }
         if (ResetLeft && ResetRight) {
-            Reseting = true;
+            Reseting = false;
         }
     }));
 }
@@ -190,6 +190,6 @@ frc2::CommandPtr SubClimber::ClimberAutoReset() {
     // .AndThen(ClimberStop()).AndThen(ClimberResetZero()).AndThen(ClimberPosition(0.2_m))
     // .AndThen(RunOnce([this] {Reseting = false; Reseted = true;}));
     return frc2::cmd::RunOnce([this] {Reseting = true;}).AndThen(ClimberManualDrive(-0.2))
-            .AndThen(frc2::cmd::Wait(0.5_s)).AndThen(ClimberResetCheck()).AndThen(frc2::cmd::WaitUntil([this] {return Reseting;}))
+            .AndThen(frc2::cmd::Wait(0.5_s)).AndThen(ClimberResetCheck()).AndThen(frc2::cmd::WaitUntil([this] {return !Reseting;}))
             .AndThen(ClimberManualDrive(0.5));
 }
