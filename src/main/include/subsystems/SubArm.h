@@ -33,7 +33,7 @@ class SubArm : public frc2::SubsystemBase {
   // variables
   static constexpr units::degree_t OFFSET_ANGLE = 0.8080900_tr;
   static constexpr units::degree_t HOME_ANGLE = 0.108_tr; //0.108_tr
-  static constexpr units::degree_t AMP_ANGLE = 0.65_tr; //0.65_tr
+  static constexpr units::degree_t AMP_ANGLE = 0.626_tr; //0.65_tr
   static constexpr units::degree_t TRAP_ANGLE = 110_deg;
 
   // Instance
@@ -74,21 +74,21 @@ class SubArm : public frc2::SubsystemBase {
   ICSparkMax _armMotor{canid::ArmMotor, 30_A}; // arm
 
   // arm (tune values for robot)
-  static constexpr double ARM_P = 4;//44.597;
+  static constexpr double ARM_P = 8;//44.597;
   static constexpr double ARM_I = 0;//0.0;
   static constexpr double ARM_D = 0;//7.5828;
   static constexpr double ARM_F = 0;//0.0;
 
   static constexpr auto ARM_S = 0.31072_V;
-  static constexpr auto ARM_V = 8.7588_V/1_tps;
+  static constexpr auto ARM_V = 0_V/1_tps;// 8.7588_V/1_tps;
   static constexpr auto ARM_G = 0.4236_V;
   static constexpr auto ARM_A = 0_V/1_tr_per_s_sq;
 
   frc::ArmFeedforward _armFF{ARM_S, ARM_G, ARM_V, ARM_A};
 
   static constexpr double ARM_GEAR_RATIO = 85;
-  static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 100_deg_per_s_sq;
-  static constexpr units::degrees_per_second_t ARM_MAX_VEL = 60_deg_per_s;
+  static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 2000_deg_per_s_sq;
+  static constexpr units::degrees_per_second_t ARM_MAX_VEL = 300_deg_per_s;
   static constexpr units::degree_t ARM_TOLERANCE = 0.5_deg;
   static constexpr units::meter_t ARM_LENGTH = 0.9_m;
   static constexpr units::kilogram_t ARM_MASS = 1_kg;
