@@ -54,7 +54,7 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
 
- // _compressor.EnableAnalog(70_psi, 120_psi);
+  _compressor.EnableAnalog(70_psi, 120_psi);
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -63,9 +63,11 @@ void RobotContainer::ConfigureBindings() {
 
   _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd()); //working
 
-
   _driverController.LeftBumper().OnTrue(cmd::ArmToAmpPos()); //working
   _driverController.LeftBumper().OnFalse(cmd::ArmToStow()); //working
+  _driverController.A().OnTrue(cmd::VisionRotateToZero());
+  _driverController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
+  _driverController.RightTrigger().WhileTrue(cmd::ShootFullSequence());
 
   _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberExtend()); //working
   _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberRetract()); //working

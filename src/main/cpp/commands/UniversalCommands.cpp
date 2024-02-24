@@ -4,6 +4,8 @@
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubShooter.h"
 #include "subsystems/SubArm.h"
+#include "commands/VisionCommands.h"
+#include "subsystems/SubVision.h"
 
 namespace cmd {
 using namespace frc2::cmd;
@@ -37,7 +39,7 @@ frc2::CommandPtr SequenceArmToTrapPos() {
 }
 
 frc2::CommandPtr ShootFullSequence() {
-  return Run([] { /*AUTO VISION AIM COMMAND*/ })
+  return VisionRotateToZero().Until([]{return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);})
       .Until([] { return true; })
       .AndThen({SubShooter::GetInstance().ShootSequence()})
       .AlongWith(WaitUntil([] {
