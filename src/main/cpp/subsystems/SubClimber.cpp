@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "subsystems/SubClimber.h"
+#include "subsystems/SubIntake.h"
 #include <frc/RobotBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
@@ -123,9 +124,12 @@ void SubClimber::ZeroClimber() {
     _rClimbMotor.SetPosition(0_tr);
 }
 
-double SubClimber::GetCurrent() {
-    // return std::max(_lClimbMotor.GetOutputCurrent(),_rClimbMotor.GetOutputCurrent());
+double SubClimber::GetLeftCurrent() {
     return _lClimbMotor.GetOutputCurrent();
+}
+
+double SubClimber::GetRightCurrent() {
+    return _rClimbMotor.GetOutputCurrent();
 }
 
 //Pointer Commands
@@ -144,7 +148,7 @@ frc2::CommandPtr SubClimber::ClimberPosition(units::meter_t distance) {
 
 frc2::CommandPtr SubClimber::ClimberManualDrive(float power) {
     power = std::clamp(power, -1.0f, 1.0f);
-    return frc2::cmd::RunOnce([power] {SubClimber::GetInstance().Start(power);});
+    return SubIntake::GetInstance().ExtendIntake().AndThen(frc2::cmd::RunOnce([power] {SubClimber::GetInstance().Start(power);}));
 }
 
 frc2::CommandPtr SubClimber::ClimberStop() {
@@ -163,9 +167,29 @@ frc2::CommandPtr SubClimber::ClimberResetZero() {
     return frc2::cmd::RunOnce([] {SubClimber::GetInstance().ZeroClimber();});
 }
 
+frc2::CommandPtr SubClimber::ClimberResetCheck() {
+    return frc2::cmd::RunOnce ([this] {ResetLeft = false; ResetRight = false;})
+    .AndThen(
+    frc2::cmd::Run([this] {
+        
+        if (GetLeftCurrent() > currentLimit && !ResetLeft) {
+            _lClimbMotor.StopMotor(); ResetLeft = true;
+        }
+        if (GetRightCurrent() > currentLimit && !ResetRight) {
+            _rClimbMotor.StopMotor(); ResetRight = true;
+        }
+        if (ResetLeft && ResetRight) {
+            Reseting = true;
+        }
+    }));
+}
+
 frc2::CommandPtr SubClimber::ClimberAutoReset() {
-    return RunOnce([this] {Reseting = true;}).AndThen(ClimberManualDrive(-0.2)).AndThen(frc2::cmd::Wait(0.5_s))
-    .AndThen(frc2::cmd::WaitUntil([this] { return GetCurrent() > currentLimit;}))
-    .AndThen(ClimberStop()).AndThen(ClimberResetZero()).AndThen(ClimberPosition(0.2_m))
-    .AndThen(RunOnce([this] {Reseting = false; Reseted = true;}));
+    // return RunOnce([this] {Reseting = true;}).AndThen(ClimberManualDrive(-0.2)).AndThen(frc2::cmd::Wait(0.5_s))
+    // .AndThen(frc2::cmd::WaitUntil([this] { return GetCurrent() > currentLimit;}))
+    // .AndThen(ClimberStop()).AndThen(ClimberResetZero()).AndThen(ClimberPosition(0.2_m))
+    // .AndThen(RunOnce([this] {Reseting = false; Reseted = true;}));
+    return frc2::cmd::RunOnce([this] {Reseting = true;}).AndThen(ClimberManualDrive(-0.2))
+            .AndThen(frc2::cmd::Wait(0.5_s)).AndThen(ClimberResetCheck()).AndThen(frc2::cmd::WaitUntil([this] {return Reseting;}))
+            .AndThen(ClimberManualDrive(0.5));
 }

@@ -56,9 +56,9 @@ void RobotContainer::ConfigureBindings() {
   _driverController.RightTrigger().OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
 
   _driverController.A().OnTrue(SubClimber::GetInstance().ClimberAutoReset());
-  _driverController.B().OnTrue(SubClimber::GetInstance().ClimberPosition(0.65_m));
-  _driverController.X().OnTrue(SubClimber::GetInstance().ClimberStop());
-  
+  _driverController.B().OnTrue(SubClimber::GetInstance().ClimberPosition(0.2_m));
+  _driverController.X().OnTrue(SubClimber::GetInstance().ClimberPosition(0.55_m));
+  _driverController.Y().OnTrue(SubIntake::GetInstance().ExtendIntake());
 
   // _driverController.Y().OnTrue(frc2::cmd::RunOnce( [] { SubDrivebase::GetInstance().ResetGyroHeading(); } ));
 

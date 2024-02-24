@@ -57,7 +57,8 @@ class SubClimber : public frc2::SubsystemBase {
 
   void ZeroClimber();
 
-  double GetCurrent();
+  double GetLeftCurrent();
+  double GetRightCurrent();
 
   frc2::CommandPtr ClimberExtend();
   frc2::CommandPtr ClimberRetract();
@@ -68,18 +69,19 @@ class SubClimber : public frc2::SubsystemBase {
   frc2::CommandPtr ClimberUnlock();
   frc2::CommandPtr ClimberResetZero();
   frc2::CommandPtr ClimberAutoReset();
+  frc2::CommandPtr ClimberResetCheck();
  private:
   units::meter_t TargetDistance;
 
   // Motor
-  ICSparkMax _lClimbMotor{canid::lClimbMotor, 30_A};
-  ICSparkMax _rClimbMotor{canid::rClimbMotor, 30_A};
+  ICSparkMax _lClimbMotor{canid::lClimbMotor, 60_A};
+  ICSparkMax _rClimbMotor{canid::rClimbMotor, 60_A};
 
   // Motor Setup
   static constexpr double gearRatio = 26.44444444;
-  static constexpr double lP = 20, lI = 0.0, lD = 0.0, lF = 0,
+  static constexpr double lP = 5, lI = 0.0, lD = 0.0, lF = 0,
   
-                          rP = 20, rI = 0.0, rD = 0.0, rF = 0;
+                          rP = 5, rI = 0.0, rD = 0.0, rF = 0;
 
   static constexpr double currentLimit = 10;
 
@@ -97,6 +99,8 @@ class SubClimber : public frc2::SubsystemBase {
   //reset
   bool Reseting = false;
   bool Reseted = false;
+
+  bool ResetLeft = false; bool ResetRight = false;
 
   // Sim
 
