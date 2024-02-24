@@ -15,11 +15,10 @@
 #include "subsystems/SubClimber.h"
 #include <frc2/command/Commands.h>
 #include "commands/UniversalCommands.h"
-#include "subsystems/SubIntake.h"
-#include "subsystems/SubLED.h"
 #include "subsystems/SubVision.h"
 #include "commands/VisionCommands.h"
 #include "subsystems/SubArm.h"
+#include "utilities/POVHelper.h"
 
 RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("Intake", SubIntake::GetInstance().Intake());
@@ -70,13 +69,18 @@ void RobotContainer::ConfigureBindings() {
   _driverController.RightTrigger().WhileTrue(cmd::ShootFullSequence());
   _driverController.B().OnTrue(SubIntake::GetInstance().ExtendIntake());
 
- // _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberExtend()); //working
- // _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberRetract()); //working
-//  _operatorController.A().WhileTrue(SubShooter::GetInstance().StartShooter()); //working
-  _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequence()); //working
-  _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose()); //working
-  _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar()); //working
-  _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence()); //working
+  _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberExtend());    // working
+  _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberRetract());   // working
+  _operatorController.A().WhileTrue(SubShooter::GetInstance().StartShooter());  // working
+  _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequence());       // working
+  _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose());  // working
+  _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar());   // working
+  _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());  // working
+  _operatorController.Start().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
+  POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
+  POVHelper::Up(&_operatorController).OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
+  POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
+  POVHelper::Down(&_operatorController).OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
 
   // new controls below WIP 
   /*
@@ -90,7 +94,7 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.RightBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosFar());
   _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequence());
 
-  _operatorController.Y().OnTrue(cmd::ArmToTrapPos());
+  _operatorController.Y().OnTrue(cmd::TrapSequence());
   _operatorController.X().OnTrue(nullptr climb sequence);
   _operatorController.A().OnTrue(cmd::ArmToAmpPos());
   _operatorController.B().OnTrue(SubShooter::GetInstance().StartShooter());
@@ -98,10 +102,11 @@ void RobotContainer::ConfigureBindings() {
   //_operatorController.POVLeft(true).OnTrue(SubLED::GetInstance().IndicateSourceDrop()); */
 
   //Operator controls sysID
-  _operatorController.A().WhileTrue(SubArm::GetInstance().SysIdDynamic(frc2::sysid::Direction::kForward));
-  _operatorController.B().WhileTrue(SubArm::GetInstance().SysIdDynamic(frc2::sysid::Direction::kReverse));
-  _operatorController.X().WhileTrue(SubArm::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kForward));
-  _operatorController.Y().WhileTrue(SubArm::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+  // _operatorController.A().WhileTrue(SubArm::GetInstance().SysIdDynamic(frc2::sysid::Direction::kForward));
+  // _operatorController.B().WhileTrue(SubArm::GetInstance().SysIdDynamic(frc2::sysid::Direction::kReverse));
+  // _operatorController.X().WhileTrue(SubArm::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kForward));
+  // _operatorController.Y().WhileTrue(SubArm::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

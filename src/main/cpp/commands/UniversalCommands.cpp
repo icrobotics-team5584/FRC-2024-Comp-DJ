@@ -57,8 +57,14 @@ frc2::CommandPtr IntakefullSequence(){
 
 
 frc2::CommandPtr TrapSequence() {
-  return ArmToTrapPos()
-        .AndThen(SubArm::GetInstance().AmpShooter().WithTimeout(1_s));
+  if (SubClimber::GetInstance().GetTrapStatus()) {
+    SubClimber::GetInstance().SetTrapStatus(false);
+    return cmd::ArmToStow().AndThen(SubIntake::GetInstance().CommandRetractIntake());
+  }
+  else {
+    SubClimber::GetInstance().SetTrapStatus(true);
+    return SubIntake::GetInstance().ExtendIntake().AndThen(ArmToTrapPos());
+  }
 }
 
 }  // namespace cmd
