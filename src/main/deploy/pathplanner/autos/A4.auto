@@ -33,6 +33,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "ShooterChangePosClose"
+                      }
+                    },
+                    {
                       "type": "race",
                       "data": {
                         "commands": [
@@ -55,6 +61,12 @@
                             }
                           }
                         ]
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ShooterChangePosFar"
                       }
                     },
                     {

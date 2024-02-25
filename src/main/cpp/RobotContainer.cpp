@@ -28,8 +28,10 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("ShootNote", SubShooter::GetInstance().ShootSequence());
   pathplanner::NamedCommands::registerCommand("StopShooter", SubShooter::GetInstance().StopShooterCommand());
   pathplanner::NamedCommands::registerCommand("FeedNote", SubArm::GetInstance().FeedNote());
-  pathplanner::NamedCommands::registerCommand("Shoot3_s", cmd::ShootFullSequence().WithTimeout(3_s));
-
+  pathplanner::NamedCommands::registerCommand("ShootFullSequence", cmd::ShootFullSequence().WithTimeout(3_s));
+  pathplanner::NamedCommands::registerCommand("StoreNote", SubArm::GetInstance().StoreNote());
+  pathplanner::NamedCommands::registerCommand("ShooterChangePosFar", SubShooter::GetInstance().ShooterChangePosFar());
+  pathplanner::NamedCommands::registerCommand("ShooterChangePosClose", SubShooter::GetInstance().ShooterChangePosClose());
   
   SubArm::GetInstance();
   SubDrivebase::GetInstance();
