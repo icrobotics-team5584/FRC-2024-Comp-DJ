@@ -85,6 +85,15 @@ frc2::CommandPtr SubShooter::ShootSequence() {
       .FinallyDo([this] {StopShooterFunc();});
 }
 
+frc2::CommandPtr SubShooter::AutoShootSequence() {
+  return Sequence(StartShooter().WithTimeout(0.25_s), StartFeeder());
+}
+
+frc2::CommandPtr SubShooter::StopFeeder() {
+  return RunOnce([this] { _shooterFeederMotor.Set(0);});
+}
+
+
 bool SubShooter::CheckShooterSpeed(){
 if(units::math::abs(_secondaryShooterMotor.GetVelError()) < 200_rpm && units::math::abs(_shooterMotorMain.GetVelError()) < 200_rpm){
   return true;

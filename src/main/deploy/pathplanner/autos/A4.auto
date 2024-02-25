@@ -45,19 +45,13 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "ShootNote"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "FeedNote"
+                              "name": "AutoShootFullSequence"
                             }
                           },
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 3.0
+                              "waitTime": 1.0
                             }
                           }
                         ]
@@ -78,7 +72,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "ShootFullSequence"
+                        "name": "AutoShootFullSequence"
                       }
                     },
                     {
@@ -90,7 +84,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "ShootFullSequence"
+                        "name": "AutoShootFullSequence"
                       }
                     },
                     {
@@ -102,7 +96,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "ShootFullSequence"
+                        "name": "AutoShootFullSequence"
                       }
                     },
                     {
@@ -114,7 +108,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "ShootFullSequence"
+                        "name": "AutoShootFullSequence"
                       }
                     }
                   ]
