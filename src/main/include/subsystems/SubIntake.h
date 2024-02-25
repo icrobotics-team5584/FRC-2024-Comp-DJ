@@ -39,6 +39,7 @@ class SubIntake : public frc2::SubsystemBase {
 
  private:
   rev::CANSparkMax _intakeMotorSpin{canid::IntakeMotor, rev::CANSparkMax::MotorType::kBrushless};
+  rev::SparkRelativeEncoder encoder{_intakeMotorSpin.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)};
   frc::DoubleSolenoid solIntake{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH,
                                 pcm1::IntakeExtend, pcm1::IntakeRetract};
 
