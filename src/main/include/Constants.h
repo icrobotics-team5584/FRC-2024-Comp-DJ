@@ -77,6 +77,7 @@ constexpr int kDriverControllerPort = 0;
 namespace dio {
   constexpr int FDLineBreak = 9;
   constexpr int SDLineBreak = 1;
+  constexpr int ShooterLineBreak = 4;
   constexpr int IntakeRetractedReed = 2;
   constexpr int IntakeExtendedReed = 3;
   constexpr int ShooterEncoderChannelA = 7;

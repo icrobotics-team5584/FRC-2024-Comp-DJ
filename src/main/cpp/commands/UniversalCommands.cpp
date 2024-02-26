@@ -38,13 +38,20 @@ frc2::CommandPtr SequenceArmToTrapPos() {
   return StartEnd([] { ArmToTrapPos(); }, [] { ArmToStow(); });
 }
 
-frc2::CommandPtr ShootFullSequence() {
+frc2::CommandPtr ShootFullSequenceWithVision() {
   return VisionRotateToZero().Until([]{return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);})
       .Until([] { return true; })
       .AndThen({SubShooter::GetInstance().ShootSequence()})
       .AlongWith(WaitUntil([] {
                    return SubShooter::GetInstance().CheckShooterSpeed();
                  }).AndThen({SubArm::GetInstance().FeedNote()}));
+}
+
+frc2::CommandPtr ShootFullSequenceWithoutVision() {
+  return SubShooter::GetInstance().ShootSequence().AlongWith(
+      WaitUntil([] {
+        return SubShooter::GetInstance().CheckShooterSpeed();
+      }).AndThen({SubArm::GetInstance().FeedNote()}));
 }
 
 frc2::CommandPtr IntakefullSequence(){
@@ -65,6 +72,18 @@ frc2::CommandPtr TrapSequence() {
     SubClimber::GetInstance().SetTrapStatus(true);
     return SubIntake::GetInstance().ExtendIntake().AndThen(ArmToTrapPos());
   }
+}
+
+frc2::CommandPtr FeedNoteToShooter() {
+  return SubShooter::GetInstance()
+      .StartFeeder()
+      .AlongWith(SubArm::GetInstance().FeedNote())
+      .AlongWith(WaitUntil([] { return SubShooter::GetInstance().CheckShooterLineBreak(); }))
+      .FinallyDo([] { SubShooter::GetInstance().StopFeeder(); });
+}
+
+frc2::CommandPtr PrepareToShoot() {
+  return FeedNoteToShooter().AndThen(SubShooter::GetInstance().StartShooter());
 }
 
 }  // namespace cmd

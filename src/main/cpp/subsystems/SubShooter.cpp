@@ -80,6 +80,10 @@ frc2::CommandPtr SubShooter::StartFeeder() {
   return RunOnce([this] { _shooterFeederMotor.Set(1); });
 }
 
+frc2::CommandPtr SubShooter::StopFeeder() {
+  return RunOnce([this] {_shooterFeederMotor.Set(0);});
+}
+
 frc2::CommandPtr SubShooter::ShootSequence() {
   return Sequence(StartShooter(), StartFeeder(), Idle())
       .FinallyDo([this] {StopShooterFunc();});
@@ -98,4 +102,12 @@ frc2::CommandPtr SubShooter::ShooterChangePosFar() {
 
 frc2::CommandPtr SubShooter::ShooterChangePosClose() {
   return RunOnce([this] { solShooter.Set(frc::DoubleSolenoid::kForward); });
+}
+
+bool SubShooter::CheckShooterLineBreak() {
+  if(_shooterLineBreak.Get() == true){
+    return true;
+  }
+
+  return false;
 }
