@@ -33,28 +33,34 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "ShooterChangePosClose"
+                      }
+                    },
+                    {
                       "type": "race",
                       "data": {
                         "commands": [
                           {
                             "type": "named",
                             "data": {
-                              "name": "ShootNote"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "FeedNote"
+                              "name": "AutoShootFullSequence"
                             }
                           },
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 3.0
+                              "waitTime": 1.0
                             }
                           }
                         ]
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ShooterChangePosFar"
                       }
                     },
                     {
@@ -66,7 +72,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "ShootFullSequence"
+                        "name": "AutoShootFullSequence"
                       }
                     },
                     {
@@ -78,7 +84,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "ShootFullSequence"
+                        "name": "AutoShootFullSequence"
                       }
                     },
                     {
@@ -90,7 +96,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "ShootFullSequence"
+                        "name": "AutoShootFullSequence"
                       }
                     },
                     {
@@ -102,7 +108,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "ShootFullSequence"
+                        "name": "AutoShootFullSequence"
                       }
                     }
                   ]
