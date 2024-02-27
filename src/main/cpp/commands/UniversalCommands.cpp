@@ -39,18 +39,16 @@ frc2::CommandPtr SequenceArmToTrapPos() {
 }
 
 frc2::CommandPtr ShootFullSequence() {
-  return VisionRotateToZero().Until([]{return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);})
-      .Until([] { return true; })
-      .AndThen({SubShooter::GetInstance().ShootSequence()})
+//  return VisionRotateToZero().Until([]{return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);})
+//      .Until([] { return true; })
+      return SubShooter::GetInstance().ShootSequence()
       .AlongWith(WaitUntil([] {
                    return SubShooter::GetInstance().CheckShooterSpeed();
                  }).AndThen({SubArm::GetInstance().FeedNote()}));
 }
 
 frc2::CommandPtr AutoShootFullSequence() {
-  return VisionRotateToZero().Until([]{return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);})
-      .Until([] { return true; })
-      .AndThen({SubShooter::GetInstance().AutoShootSequence()})
+      return SubShooter::GetInstance().AutoShootSequence()
       .AndThen({SubArm::GetInstance().FeedNote()});
 }
 

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4662605074140238,
-      "y": 6.417538427088266
+      "x": 1.5013930170513679,
+      "y": 6.663465994549679
     },
     "rotation": 180.0
   },
@@ -28,19 +28,6 @@
           "type": "path",
           "data": {
             "pathName": "Start Centre Rush"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
           }
         },
         {
