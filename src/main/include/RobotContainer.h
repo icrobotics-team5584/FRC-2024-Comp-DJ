@@ -29,7 +29,7 @@ class RobotContainer {
   RobotContainer();
 
   frc2::CommandPtr GetAutonomousCommand();
- // frc::Compressor _compressor{22, frc::PneumaticsModuleType::REVPH};
+  frc::Compressor _compressor{22, frc::PneumaticsModuleType::REVPH};
 
  private:
   void ConfigureBindings();

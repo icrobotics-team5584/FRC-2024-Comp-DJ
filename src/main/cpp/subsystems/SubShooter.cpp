@@ -15,6 +15,14 @@ SubShooter::SubShooter() {
   frc::SmartDashboard::PutData("Shooter/Main Motor", (wpi::Sendable*)&_shooterMotorMain);
   frc::SmartDashboard::PutData("Shooter/Second Motor", (wpi::Sendable*)&_secondaryShooterMotor);
   frc::SmartDashboard::PutData("Shooter/Feeder motor", (wpi::Sendable*)&_shooterFeederMotor);
+
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 500);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 500);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 500);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus3, 500);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus4, 500);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus5, 500);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus6, 500);
 }
 
 using namespace frc2::cmd;
@@ -78,7 +86,7 @@ frc2::CommandPtr SubShooter::ShootSequence() {
 }
 
 bool SubShooter::CheckShooterSpeed(){
-if(units::math::abs(_secondaryShooterMotor.GetVelError()) < 150_rpm && units::math::abs(_shooterMotorMain.GetVelError()) < 150_rpm){
+if(units::math::abs(_secondaryShooterMotor.GetVelError()) < 200_rpm && units::math::abs(_shooterMotorMain.GetVelError()) < 200_rpm){
   return true;
  } 
  return false;

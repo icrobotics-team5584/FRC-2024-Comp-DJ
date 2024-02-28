@@ -104,7 +104,7 @@ void SubClimber::Retract() {
 }
 
 void SubClimber::Extend() {
-    DriveToDistance(1.3_m);
+    DriveToDistance(TopHeight);
 }
 
 void SubClimber::Start(double power) {

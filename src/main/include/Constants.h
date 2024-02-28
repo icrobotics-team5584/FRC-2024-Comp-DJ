@@ -13,7 +13,7 @@ namespace canid {
  constexpr int DriveBaseFrontRightEncoder = 10;
 
  constexpr int DriveBaseFrontLeftDrive = 3;
- constexpr int DriveBaseFrontLeftTurn = 6;
+ constexpr int DriveBaseFrontLeftTurn = 6; //6
  constexpr int DriveBaseFrontLeftEncoder = 9;
       
  constexpr int DriveBaseBackRightDrive = 5;
@@ -34,7 +34,7 @@ namespace canid {
   constexpr int ShooterFeederMotor = 14;
 
 //Arm IDS used: 17-18
-  constexpr int ArmMotor = 55; //19 /*BRING ME BACK*/
+  constexpr int ArmMotor = 19; //19
 
 //Amp/Trap IDS used: 19
   constexpr int AmpMotor = 20;
@@ -44,7 +44,7 @@ namespace canid {
   constexpr int rClimbMotor = 13;
 
   constexpr int ClimberLeftLaserCAN = 21;
-  constexpr int ClimberRightLaserCAN = 22;
+  constexpr int ClimberRightLaserCAN = 99; //same ID as Pcm1D
 
 }
 
@@ -61,7 +61,7 @@ namespace pcm1 {
     constexpr int LockCylinderForward = 4;
     constexpr int LockCylinderReverse = 5;
 
-    constexpr int Pcm1Id = 22;
+    constexpr int Pcm1Id = 22; //same ID as ClimberRightLaserCan
 
 }
 
@@ -75,7 +75,7 @@ namespace OperatorConstants {}
 constexpr int kDriverControllerPort = 0;
 
 namespace dio {
-  constexpr int FDLineBreak = 0;
+  constexpr int FDLineBreak = 9;
   constexpr int SDLineBreak = 1;
   constexpr int IntakeRetractedReed = 2;
   constexpr int IntakeExtendedReed = 3;

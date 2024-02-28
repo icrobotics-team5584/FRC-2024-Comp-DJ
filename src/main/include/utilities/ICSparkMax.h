@@ -59,11 +59,12 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
    * Sets a closed loop position target (aka reference or goal) for the motor to drive to using
    * the Spark Max's Smart Motion control mode.
    * This generates a profiled movement that accelerates and decelerates in a controlled way. This
-   * can reduce ware on components and is often much easier to tune. For anything beyond prototypes
-   * and the simplest of mechanisms, this is preferred over regular position control. In this mode,
-   * you are actually controlling the velocity of the motor to follow a trapezoid (speeding up,
-   * staying constant, then slowing down) and as such the PID values should be tuned to follow a
-   * velocity target. Controlling velocity also allows us to use the WPILib feedforward classes.
+   * can reduce ware on components and is often much easier to tune. In this mode, you are actually
+   * controlling the velocity of the motor to follow a trapezoid (speeding up, staying constant,
+   * then slowing down) and as such the PID values should be tuned to follow a velocity target.
+   * Controlling velocity also allows us to use the WPILib feedforward classes.
+   * Also consider feeding CalcMotionProfileTarget() into SetPositionTarget() to use a profile that
+   * performs feedback control based on position.
    *
    * @param target The target position drive to.
    *
@@ -224,8 +225,12 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
 
   /**
    * Switch to using an external absolute encoder connected to the data port on the SPARK MAX.
+   *
+   * @param zeroOffset the position that is reported as zero. It is influenced by the absolute
+   * encoder's position conversion factor, and whether it is inverted. So set those parameters
+   * before calling this.
    */
-  void UseAbsoluteEncoder();
+  void UseAbsoluteEncoder(units::turn_t zeroOffset = 0_tr);
 
   /**
    * Set the minimum and maximum input value for PID Wrapping with position closed loop
@@ -254,15 +259,14 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
 
   // Sendable setup, called automatically when this is passed into smartDashbaord::PutData()
   void InitSendable(wpi::SendableBuilder& builder) override;
+  
 
  private:
   using Mode = rev::CANSparkMax::ControlType;
 
   // Related REVLib objects
   rev::SparkPIDController _pidController{CANSparkMax::GetPIDController()};
-  ICSparkEncoder _encoder{GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor),
-                          GetAbsoluteEncoder(rev::SparkAbsoluteEncoder::Type::kDutyCycle)};
-                    //      GetAlternateEncoder(8192)};  // 8192 counts per rev on throughbore /*BRING ME BACK*/
+  ICSparkEncoder _encoder{GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)};
 
   // PID simulation configuration
   bool _updatingTargetFromSendable = false;
@@ -272,7 +276,7 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
   units::volt_t _arbFeedForward = 0.0_V;
   frc::PIDController _simController{0, 0, 0};
   double _simFF{0};
-  frc::TrapezoidProfile<units::turns> _simSmartMotionProfile{
+  frc::TrapezoidProfile<units::turns> _motionProfile{
       {units::turns_per_second_t{0},
        units::turns_per_second_squared_t{0}}  // constraints updated by Smart motion config
   };

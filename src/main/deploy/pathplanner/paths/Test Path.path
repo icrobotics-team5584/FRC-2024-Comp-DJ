@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0,
-        "y": 5.0
+        "x": 4.522788845867719,
+        "y": 5.632912378519513
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0,
-        "y": 5.0
+        "x": 2.227464882894544,
+        "y": 5.586069032336387
       },
       "isLocked": false,
       "linkedName": null
@@ -52,7 +52,31 @@
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Extend Intake",
+      "waypointRelativePos": 0.45,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ExtendIntake"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 2.0
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 2.0,

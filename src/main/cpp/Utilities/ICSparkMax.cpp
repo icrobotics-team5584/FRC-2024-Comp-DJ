@@ -113,20 +113,25 @@ void ICSparkMax::ConfigSmartMotion(units::turns_per_second_t maxVelocity,
   _pidController.SetSmartMotionMaxVelocity(maxVelocity.value());
   _pidController.SetSmartMotionAllowedClosedLoopError(tolerance.value());
 
-  _simSmartMotionProfile = frc::TrapezoidProfile<units::turns>{{maxVelocity, maxAcceleration}};
+  _motionProfile = frc::TrapezoidProfile<units::turns>{{maxVelocity, maxAcceleration}};
 }
 
 void ICSparkMax::SetConversionFactor(double rotationsToDesired) {
   _encoder.SetConversionFactor(rotationsToDesired);
 }
 
-/* void ICSparkMax::UseAlternateEncoder() {
-  _encoder.selected = ICSparkEncoder::ALTERNATE;
+void ICSparkMax::UseAlternateEncoder() {
+  _encoder.UseAlternate(GetAlternateEncoder(8192));  // 8192 counts per rev on throughbore
   _pidController.SetFeedbackDevice(_encoder.GetAlternate());
-} */ /*BRING ME BACK*/
+}
 
-void ICSparkMax::UseAbsoluteEncoder() {
-  _encoder.selected = ICSparkEncoder::ABSOLUTE;
+void ICSparkMax::UseAbsoluteEncoder(units::turn_t zeroOffset) {
+  auto encoder = GetAbsoluteEncoder(rev::SparkAbsoluteEncoder::Type::kDutyCycle);
+  encoder.SetAverageDepth(128); 
+  SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus5, 10);
+  SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus6, 10);
+  encoder.SetZeroOffset(zeroOffset.value());
+  _encoder.UseAbsolute(std::move(encoder));
   _pidController.SetFeedbackDevice(_encoder.GetAbsolute());
 }
 
@@ -234,8 +239,8 @@ units::turns_per_second_t ICSparkMax::EstimateSMVelocity() {
     return units::turns_per_second_t{0};
   }
 
-  return _simSmartMotionProfile
+  return _motionProfile
       .Calculate(20_ms, {GetPosition(), GetVelocity()},
-                        {_positionTarget, units::turns_per_second_t{0}})
+                 {_positionTarget, units::turns_per_second_t{0}})
       .velocity;
 }

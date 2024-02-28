@@ -22,7 +22,7 @@
 
 class SubDrivebase : public frc2::SubsystemBase {
  public:
-  static SubDrivebase& GetInstance() {
+  static SubDrivebase &GetInstance() {
     static SubDrivebase inst;
     return inst;
   }
@@ -35,6 +35,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   void ResetGyroHeading(units::degree_t startingAngle = 0_deg);
   void UpdatePosition(frc::Pose2d robotPosition);
   void DriveToPose(frc::Pose2d targetPose);
+  void RotateToZero(units::degree_t rotationError);
   bool IsAtPose(frc::Pose2d pose);
   void DisplayTrajectory(std::string name, frc::Trajectory trajectory);
   void SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode);
@@ -42,7 +43,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   void DisplayPose(std::string label, frc::Pose2d pose);
   void UpdateOdometry();
   void SyncSensors();
-
+  
   units::degree_t GetPitch();
   frc::Pose2d GetPose();
   frc::Rotation2d GetHeading();
@@ -50,8 +51,8 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::SwerveDriveKinematics<4> GetKinematics();
   frc::ChassisSpeeds GetRobotRelativeSpeeds();
 
-  static constexpr units::meters_per_second_t MAX_VELOCITY = 2.5_mps;
-  static constexpr units::degrees_per_second_t MAX_ANGULAR_VELOCITY = 180_deg_per_s;
+  static constexpr units::meters_per_second_t MAX_VELOCITY = 3_mps;
+  static constexpr units::degrees_per_second_t MAX_ANGULAR_VELOCITY = 360_deg_per_s;
   static constexpr units::radians_per_second_squared_t MAX_ANG_ACCEL{std::numbers::pi};
 
   double MAX_JOYSTICK_ACCEL = 3;
@@ -96,7 +97,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::PIDController Xcontroller{0.5, 0, 0};
   frc::PIDController Ycontroller{0.5, 0, 0};
   frc::ProfiledPIDController<units::radian> Rcontroller{
-      1.8, 0, 0, {MAX_ANGULAR_VELOCITY, MAX_ANG_ACCEL}};
+      8, 0, 0.3, {MAX_ANGULAR_VELOCITY, MAX_ANG_ACCEL}};
   frc::HolonomicDriveController _driveController{Xcontroller, Ycontroller, Rcontroller};
 
   frc::SwerveDrivePoseEstimator<4> _poseEstimator{

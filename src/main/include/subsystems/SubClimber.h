@@ -92,7 +92,7 @@ class SubClimber : public frc2::SubsystemBase {
   
                           rP = 5, rI = 0.0, rD = 0.0, rF = 0;
 
-  static constexpr double currentLimit = 20;
+  static constexpr double currentLimit = 10;
 
   // Limit switches
   frc::DigitalInput TopLimitSwitch{5};
