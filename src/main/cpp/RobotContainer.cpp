@@ -32,6 +32,7 @@ RobotContainer::RobotContainer() {
   SubDrivebase::GetInstance();
   SubIntake::GetInstance();
   SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
+  SubClimber::GetInstance().SetDefaultCommand(SubClimber::GetInstance().JoyStickDrive(_operatorController));
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
   _delayChooser.AddOption("1 Seconds", 1);
@@ -57,9 +58,9 @@ void RobotContainer::ConfigureBindings() {
   _driverController.RightTrigger().OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
 
   _driverController.A().OnTrue(SubClimber::GetInstance().ClimberAutoReset());
-  _driverController.B().OnTrue(SubClimber::GetInstance().ClimberPosition(0.2_m));
-  _driverController.X().OnTrue(SubClimber::GetInstance().ClimberPosition(0.55_m));
-  _driverController.Y().OnTrue(SubIntake::GetInstance().ExtendIntake());
+  _driverController.B().OnTrue(SubClimber::GetInstance().ClimberPosition(0.625_m));
+  _driverController.X().OnTrue(SubClimber::GetInstance().ClimberPosition(0.4_m));
+  _driverController.Y().OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
 
   // _driverController.Y().OnTrue(frc2::cmd::RunOnce( [] { SubDrivebase::GetInstance().ResetGyroHeading(); } ));
 

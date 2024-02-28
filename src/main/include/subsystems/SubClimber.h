@@ -11,6 +11,8 @@
 
 #include "Utilities/ICSparkMax.h"
 
+#include <frc2/command/button/CommandXboxController.h>
+
 #include <frc/simulation/ElevatorSim.h>
 #include <frc/system/plant/DCMotor.h>
 
@@ -63,6 +65,8 @@ class SubClimber : public frc2::SubsystemBase {
   bool GetTrapStatus();
   void SetTrapStatus(bool stat);
 
+  frc2::CommandPtr JoyStickDrive(frc2::CommandXboxController& _controller);
+
   frc2::CommandPtr ClimberExtend();
   frc2::CommandPtr ClimberRetract();
   frc2::CommandPtr ClimberPosition(units::meter_t distance);
@@ -73,6 +77,8 @@ class SubClimber : public frc2::SubsystemBase {
   frc2::CommandPtr ClimberResetZero();
   frc2::CommandPtr ClimberAutoReset();
   frc2::CommandPtr ClimberResetCheck();
+
+  frc2::CommandPtr ClimberDriveByInput();
  private:
   units::meter_t TargetDistance;
 
@@ -107,6 +113,8 @@ class SubClimber : public frc2::SubsystemBase {
 
   // Trap sequence
   bool TrapSequencing = false;
+
+  double inputDistance;
 
   // Sim
 

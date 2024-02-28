@@ -27,6 +27,7 @@ SubClimber::SubClimber() {
     frc::SmartDashboard::PutData("Climber/Left motor", (wpi::Sendable*)&_lClimbMotor);
     frc::SmartDashboard::PutData("Climber/Right motor", (wpi::Sendable*)&_rClimbMotor);
     frc::SmartDashboard::PutData("Climber/Lock Cylinder", (wpi::Sendable*)&LockCylinder);
+
 };
 
 void SubClimber::Periodic() {
@@ -139,6 +140,15 @@ bool SubClimber::GetTrapStatus() { return TrapSequencing; }
 
 void SubClimber::SetTrapStatus(bool stat) { TrapSequencing = stat;}
 
+frc2::CommandPtr SubClimber::JoyStickDrive(frc2::CommandXboxController& _controller) {
+    return Run([this, &_controller] {
+        double speed = _controller.GetLeftY();
+        if (speed != 0.0 && !Reseting) {
+            Start(speed);
+        }
+    });
+} 
+
 //Pointer Commands
 
 frc2::CommandPtr SubClimber::ClimberExtend() {
@@ -205,3 +215,10 @@ frc2::CommandPtr SubClimber::ClimberAutoReset() {
         .AndThen(ClimberStop())
         .AndThen([this] { Reseted = true; });
 }
+
+// frc2::CommandPtr SubClimber::ClimberDriveByInput() {
+//     return frc2::cmd::Run([this] {
+//         // double dis = frc::SmartDashboard::GetData("Climber/Resetting");
+//         ClimberPosition(dis * 1_m);
+//     });
+// }
