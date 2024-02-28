@@ -62,6 +62,8 @@ class SubClimber : public frc2::SubsystemBase {
   double GetLeftCurrent();
   double GetRightCurrent();
 
+  void SoftLimit(bool e);
+
   bool GetTrapStatus();
   void SetTrapStatus(bool stat);
 
@@ -77,8 +79,6 @@ class SubClimber : public frc2::SubsystemBase {
   frc2::CommandPtr ClimberResetZero();
   frc2::CommandPtr ClimberAutoReset();
   frc2::CommandPtr ClimberResetCheck();
-
-  frc2::CommandPtr ClimberDriveByInput();
  private:
   units::meter_t TargetDistance;
 
@@ -103,13 +103,15 @@ class SubClimber : public frc2::SubsystemBase {
 
   // Robot info
   static constexpr units::meter_t BaseHeight = 0.2_m;
-  static constexpr units::meter_t TopHeight = 0.55_m;
+  static constexpr units::meter_t TopHeight = 0.62_m;
 
   //reset
   bool Reseting = false;
   bool Reseted = false;
 
   bool ResetLeft = false; bool ResetRight = false;
+
+  double LastJoystickInput = 0;
 
   // Trap sequence
   bool TrapSequencing = false;

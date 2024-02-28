@@ -62,6 +62,8 @@ void RobotContainer::ConfigureBindings() {
   _driverController.X().OnTrue(SubClimber::GetInstance().ClimberPosition(0.4_m));
   _driverController.Y().OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
 
+  _operatorController.A().OnTrue(SubIntake::GetInstance().ExtendIntake());
+
   // _driverController.Y().OnTrue(frc2::cmd::RunOnce( [] { SubDrivebase::GetInstance().ResetGyroHeading(); } ));
 
   POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
