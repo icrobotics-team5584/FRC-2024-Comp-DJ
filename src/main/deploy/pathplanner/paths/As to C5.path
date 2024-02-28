@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.95,
-        "y": 6.16
+        "x": 2.356284084893418,
+        "y": 3.4429859444597626
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.260571548247232,
-        "y": 6.991369417831561
+        "x": 2.7778742005415493,
+        "y": 3.103371684632099
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Speaker-Side Shoot Pos"
     },
     {
       "anchor": {
-        "x": 8.141437338509483,
-        "y": 5.668044888158249
+        "x": 7.942353117231199,
+        "y": 0.8431802312962678
       },
       "prevControl": {
-        "x": 8.106304828872137,
-        "y": 5.527514849608871
+        "x": 7.930642280685416,
+        "y": 0.7612043754757963
       },
       "nextControl": {
-        "x": 8.181605176478218,
-        "y": 5.828716240033184
+        "x": 7.960570903487957,
+        "y": 0.9707047350935649
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.95,
-        "y": 6.16
+        "x": 2.356284084893418,
+        "y": 3.4429859444597626
       },
       "prevControl": {
-        "x": 5.237149875155669,
-        "y": 6.991369417831561
+        "x": 3.058934277640309,
+        "y": 2.670070732438183
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Shoot Position"
+      "linkedName": "Speaker-Side Shoot Pos"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.85,
+      "waypointRelativePos": 1.0,
       "rotationDegrees": 180.0,
       "rotateFast": false
     }
@@ -55,7 +55,24 @@
   "eventMarkers": [
     {
       "name": "Shoot",
-      "waypointRelativePos": 2.0,
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootNote"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Shoot2",
+      "waypointRelativePos": 1.9,
       "command": {
         "type": "parallel",
         "data": {
@@ -64,46 +81,6 @@
               "type": "named",
               "data": {
                 "name": "AutoShootFullSequence"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Intake",
-      "waypointRelativePos": 0.1,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "StoreNote"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.5,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "StopFeeder"
               }
             }
           ]
@@ -119,14 +96,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -155.0,
+    "rotation": 135.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "A10",
+  "folder": "S1",
   "previewStartingState": {
-    "rotation": -155.0,
-    "velocity": 0.0
+    "rotation": 135.0,
+    "velocity": 0
   },
   "useDefaultConstraints": true
 }

@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.667897778020947,
-        "y": 5.386984811059493
+        "x": 4.5579213555003415,
+        "y": 6.335562571267796
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.790112242136038,
-        "y": 7.3544053507507865
+        "x": 8.188280684692609,
+        "y": 7.448092043117039
       },
       "prevControl": {
-        "x": 3.8435603262076694,
-        "y": 6.113056676897948
+        "x": 4.241728768764241,
+        "y": 6.2067433692642
       },
       "nextControl": {
-        "x": 7.971967040573926,
-        "y": 7.411605969844009
+        "x": 8.370135483130497,
+        "y": 7.505292662210262
       },
       "isLocked": false,
       "linkedName": null
@@ -36,17 +36,76 @@
         "y": 6.16
       },
       "prevControl": {
-        "x": 5.38939075025083,
+        "x": 5.120041509697854,
         "y": 6.417538427088266
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Shoot Position"
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [],
-  "eventMarkers": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 1.15,
+      "maxWaypointRelativePos": 1.45,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 5.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 2.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "AutoShootFullSequence"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.55,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StoreNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 5.0,

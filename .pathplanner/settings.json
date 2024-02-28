@@ -4,9 +4,10 @@
   "holonomicMode": true,
   "pathFolders": [
     "A1",
-    "A4",
+    "A10",
+    "M4",
     "A5",
-    "A10"
+    "S1"
   ],
   "autoFolders": [
     "A4"
