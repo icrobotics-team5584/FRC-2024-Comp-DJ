@@ -57,6 +57,7 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("Test Path", "Test Path");
   _autoChooser.AddOption("A4", "A4");
   _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
+  _autoChooser.AddOption("Nothing", "Nothing");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
 
   _compressor.EnableAnalog(70_psi, 120_psi);
@@ -73,12 +74,12 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose());  // working
   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar());   // working
   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());  // working
-  _operatorController.Start().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
   _operatorController.Y().WhileTrue(cmd::ArmToAmpPos());
   _operatorController.Y().OnFalse(cmd::ArmToStow());
+  _operatorController.Back().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
+  _operatorController.B().OnTrue(SubIntake::GetInstance().ExtendIntake());
   POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.625_m));
   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
-  POVHelper::Left(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberAutoReset());
 
   // new controls below WIP 
   /*
