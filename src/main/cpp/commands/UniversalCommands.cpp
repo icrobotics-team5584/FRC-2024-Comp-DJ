@@ -35,11 +35,12 @@ frc2::CommandPtr SequenceArmToTrapPos() {
   return StartEnd([] { ArmToTrapPos(); }, [] { ArmToStow(); });
 }
 
-frc2::CommandPtr ShootSequence() {
-  return Run([] { /*AUTO VISION AIM COMMAND*/ })
-      .Until(/*AUTO VISION CHECKER = true*/ {})
-      .AndThen({SubShooter::GetInstance().ShootNote()});
-}
+
+//frc2::CommandPtr ShootSequence() {
+//  return Run([] { /*AUTO VISION AIM COMMAND*/ })
+//      .Until(/*AUTO VISION CHECKER = true*/ {})
+//      .AndThen({SubShooter::GetInstance().ShootNote()});
+//}
 
 frc2::CommandPtr IntakeSequence() {
   return StartEnd(
