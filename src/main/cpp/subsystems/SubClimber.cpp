@@ -155,37 +155,32 @@ frc2::CommandPtr SubClimber::JoyStickDrive(frc2::CommandXboxController& _control
         double lspeed = -_controller.GetLeftY();
         frc::SmartDashboard::PutNumber("Climber/Input left", lspeed);
         if (lspeed < 0.2 && lspeed > -0.2) {lspeed = 0;}
-
-        // lspeed = frc::ApplyDeadband(lspeed,0.2);
         if (!Reseting) {
-            _lClimbMotor.Set(lspeed);
+            if (lspeed != 0) {OnJoyStick = true;}
+            if (OnJoyStick) {
+                _lClimbMotor.Set(lspeed);
+            }
         }
         double rspeed = -_controller.GetRightY();
         if (rspeed < 0.2 && rspeed > -0.2) {rspeed = 0;}
-        
         if (!Reseting) {
-            _rClimbMotor.Set(rspeed);
+            if (rspeed != 0) {OnJoyStick = true;}
+            if (OnJoyStick) {
+                _rClimbMotor.Set(rspeed);
+            }
         }
     });
 } 
 
 //Pointer Commands
 
-frc2::CommandPtr SubClimber::ClimberExtend() {
-    return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Extend();});
-}
-
-frc2::CommandPtr SubClimber::ClimberRetract() {
-    return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Retract();});
-}
-
 frc2::CommandPtr SubClimber::ClimberPosition(units::meter_t distance) {
-    return frc2::cmd::RunOnce([distance] {SubClimber::GetInstance().DriveToDistance(distance);});
+    return frc2::cmd::RunOnce([this,distance] { OnJoyStick = false; SubClimber::GetInstance().DriveToDistance(distance);});
 }
 
 frc2::CommandPtr SubClimber::ClimberManualDrive(float power) {
     power = std::clamp(power, -1.0f, 1.0f);
-    return SubIntake::GetInstance().ExtendIntake().AndThen(frc2::cmd::RunOnce([power] {SubClimber::GetInstance().Start(power);}));
+    return frc2::cmd::RunOnce([power] {SubClimber::GetInstance().Start(power);});
 }
 
 frc2::CommandPtr SubClimber::ClimberStop() {
