@@ -41,19 +41,6 @@ void SubClimber::Periodic() {
     frc::SmartDashboard::PutNumber("Climber/Right current", _rClimbMotor.GetOutputCurrent());
     frc::SmartDashboard::PutBoolean("Climber/Reseted", Reseted);
     frc::SmartDashboard::PutBoolean("Climber/Reseting", Reseting);
-
-    // if (TurnToDistance(_lClimbMotor.GetPosition()) > TopHeight || TurnToDistance(_rClimbMotor.GetPosition()) > TopHeight) {
-    //     if (_lClimbMotor.GetVelocity().value() > 0 || _rClimbMotor.GetVelocity().value() > 0) {
-    //         Stop();
-    //     }
-    // }
-    // if (!Reseting) {
-    //     if (TurnToDistance(_lClimbMotor.GetPosition()) < 0.1_m || TurnToDistance(_rClimbMotor.GetPosition()) < 0.1_m) {
-    //         if (_lClimbMotor.GetVelocity().value() < 0 || _rClimbMotor.GetVelocity().value() < 0) {
-    //             Stop();
-    //         }
-    //     }
-    // }
 }
 
 void SubClimber::SimulationPeriodic() {
@@ -113,8 +100,8 @@ void SubClimber::Start(double power) {
 }
 
 void SubClimber::Stop() {
-  _lClimbMotor.Set(0);
-  _rClimbMotor.Set(0);
+  _lClimbMotor.StopMotor();
+  _rClimbMotor.StopMotor();
 }
 
 void SubClimber::Lock() {
@@ -217,11 +204,11 @@ frc2::CommandPtr SubClimber::ClimberResetCheck() {
 }
 
 frc2::CommandPtr SubClimber::ClimberAutoReset() {
-    return frc2::cmd::RunOnce([this] { Reseting = true; EnableSoftLimit(false); })
+    return frc2::cmd::RunOnce([this] { Reseting = true; EnableSoftLimit(false);})
         .AndThen(ClimberManualDrive(-0.2))
         .AndThen(frc2::cmd::Wait(0.5_s))
         .AndThen(ClimberResetCheck())
         .AndThen(ClimberResetZero())
         .AndThen(ClimberStop())
-        .AndThen([this] { Reseted = true; EnableSoftLimit(true); });
+        .FinallyDo([this] {Reseting = false; Reseted = true; EnableSoftLimit(true); Stop();});
 }
