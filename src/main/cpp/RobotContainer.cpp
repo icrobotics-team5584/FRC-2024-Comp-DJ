@@ -69,9 +69,8 @@ void RobotContainer::ConfigureBindings() {
 
   _driverController.LeftBumper().WhileTrue(cmd::ArmToAmpPos()); //working
   _driverController.LeftBumper().OnFalse(cmd::ArmToStow()); //working
-  _driverController.A().OnTrue(cmd::VisionRotateToZero());
   _driverController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
-  _driverController.RightTrigger().WhileTrue(cmd::ShootFullSequence());
+  _driverController.RightTrigger().WhileTrue(cmd::VisionRotateToZero());
   _driverController.B().OnTrue(SubIntake::GetInstance().ExtendIntake());
 
   _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberExtend());    // working
@@ -82,6 +81,9 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar());   // working
   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());  // working
   _operatorController.Start().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
+
+
+
   POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
   POVHelper::Up(&_operatorController).OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));

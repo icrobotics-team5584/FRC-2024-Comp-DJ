@@ -59,9 +59,10 @@ std::optional<units::degree_t> SubVision::GetSpecificTagYaw(FieldElement chosenF
   } 
 
   // return 0 when looses target
-  else {
-    return {};
-  }
+  else { return {}; }
+
+
+
 }
 
 // exists out when the range of yaw is between [-0.4, 0.4]

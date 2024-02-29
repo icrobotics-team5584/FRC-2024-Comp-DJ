@@ -32,6 +32,7 @@ class SubVision : public frc2::SubsystemBase {
   void SimulationPeriodic() override;
   bool VisionHasTargets();
   bool IsOnTarget(FieldElement chosenFieldElement);
+  
 
   int FindID(FieldElement chosenFieldElement);
   std::optional<units::degree_t> GetSpecificTagYaw(FieldElement chosenFieldElement);
