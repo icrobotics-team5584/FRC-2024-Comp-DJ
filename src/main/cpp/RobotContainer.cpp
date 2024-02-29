@@ -68,16 +68,7 @@ void RobotContainer::ConfigureBindings() {
 
   _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd()); //working
 
-  _driverController.A().OnTrue(SubClimber::GetInstance().ClimberAutoReset());
-  _driverController.B().OnTrue(SubClimber::GetInstance().ClimberPosition(0.625_m));
-  _driverController.X().OnTrue(SubClimber::GetInstance().ClimberPosition(0.4_m));
-  _driverController.Y().OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
-
-  _operatorController.A().OnTrue(SubIntake::GetInstance().ExtendIntake());
-
-  // _driverController.Y().OnTrue(frc2::cmd::RunOnce( [] { SubDrivebase::GetInstance().ResetGyroHeading(); } ));
-  
-  // _operatorController.A().WhileTrue(SubShooter::GetInstance().StartShooter());  // working
+  _operatorController.A().WhileTrue(SubShooter::GetInstance().StartShooter());  // working
   _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequence());       // working
   _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose());  // working
   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar());   // working
@@ -85,10 +76,9 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.Start().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
   _operatorController.Y().WhileTrue(cmd::ArmToAmpPos());
   _operatorController.Y().OnFalse(cmd::ArmToStow());
-  POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
-  POVHelper::Up(&_operatorController).OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
-  POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
-  POVHelper::Down(&_operatorController).OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
+  POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.625_m));
+  POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
+  POVHelper::Left(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberAutoReset());
 
   // new controls below WIP 
   /*
