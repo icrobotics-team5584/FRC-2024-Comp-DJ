@@ -8,7 +8,7 @@
 
 class SubLED : public frc2::SubsystemBase {
  public:
-  frc2::CommandPtr IndicateAmp();
+  frc2::CommandPtr IndicateSourceDrop();
   SubLED();
 
   static SubLED& GetInstance() {

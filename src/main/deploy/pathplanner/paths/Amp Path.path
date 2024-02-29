@@ -67,13 +67,25 @@
       "name": "1st Shot",
       "waypointRelativePos": 0.0,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
-              "type": "wait",
+              "type": "named",
               "data": {
-                "waitTime": 2.0
+                "name": "ShootNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "ExtendIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StartIntakeSpinning"
               }
             }
           ]
@@ -88,9 +100,9 @@
         "data": {
           "commands": [
             {
-              "type": "wait",
+              "type": "named",
               "data": {
-                "waitTime": 2.0
+                "name": "ShootNote"
               }
             }
           ]
@@ -105,9 +117,27 @@
         "data": {
           "commands": [
             {
-              "type": "wait",
+              "type": "named",
               "data": {
-                "waitTime": 2.0
+                "name": "ShootNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StopShooter"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StopIntakeSpinning"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RetractIntake"
               }
             }
           ]

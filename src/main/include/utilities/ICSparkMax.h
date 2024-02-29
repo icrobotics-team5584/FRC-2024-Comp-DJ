@@ -17,6 +17,7 @@
 #include <units/velocity.h>
 #include <wpi/sendable/Sendable.h>
 #include <wpi/sendable/SendableBuilder.h>
+#include <utilities/ICSparkEncoder.h>
 
 /**
  * Wrapper around the Rev CANSparkMax class with some convenience features.
@@ -58,11 +59,12 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
    * Sets a closed loop position target (aka reference or goal) for the motor to drive to using
    * the Spark Max's Smart Motion control mode.
    * This generates a profiled movement that accelerates and decelerates in a controlled way. This
-   * can reduce ware on components and is often much easier to tune. For anything beyond prototypes
-   * and the simplest of mechanisms, this is preferred over regular position control. In this mode,
-   * you are actually controlling the velocity of the motor to follow a trapezoid (speeding up,
-   * staying constant, then slowing down) and as such the PID values should be tuned to follow a
-   * velocity target. Controlling velocity also allows us to use the WPILib feedforward classes.
+   * can reduce ware on components and is often much easier to tune. In this mode, you are actually
+   * controlling the velocity of the motor to follow a trapezoid (speeding up, staying constant,
+   * then slowing down) and as such the PID values should be tuned to follow a velocity target.
+   * Controlling velocity also allows us to use the WPILib feedforward classes.
+   * Also consider feeding CalcMotionProfileTarget() into SetPositionTarget() to use a profile that
+   * performs feedback control based on position.
    *
    * @param target The target position drive to.
    *
@@ -218,18 +220,17 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
    *    > Pin 8 (Reverse Limit Switch): Encoder B
    *
    * This call will disable support for the limit switch inputs.
-   *
-   * @param countsPerRev The number of encoder counts per revolution. Leave as
-   * default for the REV through bore encoder.
    */
-  void UseAlternateEncoder(int countsPerRev = 8192);
+  void UseAlternateEncoder();
 
   /**
    * Switch to using an external absolute encoder connected to the data port on the SPARK MAX.
    *
-   * @param encoder The encoder to use as a feedback sensor for closed loop control
+   * @param zeroOffset the position that is reported as zero. It is influenced by the absolute
+   * encoder's position conversion factor, and whether it is inverted. So set those parameters
+   * before calling this.
    */
-  void UseAbsoluteEncoder(rev::SparkAbsoluteEncoder& encoder);
+  void UseAbsoluteEncoder(units::turn_t zeroOffset = 0_tr);
 
   /**
    * Set the minimum and maximum input value for PID Wrapping with position closed loop
@@ -258,38 +259,14 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
 
   // Sendable setup, called automatically when this is passed into smartDashbaord::PutData()
   void InitSendable(wpi::SendableBuilder& builder) override;
-
-  // Delete some SPARK MAX functions so user doesn't get multiple copies of friend objects.
-  rev::SparkRelativeEncoder GetEncoder() = delete;
-  rev::SparkMaxAlternateEncoder GetAlternateEncoder() = delete;
-  rev::SparkPIDController GetPIDController() = delete;
+  
 
  private:
   using Mode = rev::CANSparkMax::ControlType;
 
-  // Conversion helpers
-  units::turn_t SparkRevsToPos(double revs) {
-    return units::turn_t{revs * _encoder.GetPositionConversionFactor()};
-  }
-  units::turns_per_second_t SparkRPMToVel(double rpm) {
-    return units::turns_per_second_t{rpm * _encoder.GetVelocityConversionFactor()};
-  }
-  units::turns_per_second_squared_t SparkRPMpsToAccel(double accel) {
-    return units::turns_per_second_squared_t{accel * _encoder.GetVelocityConversionFactor()};
-  }
-  double PosToSparkRevs(units::turn_t pos) {
-    return pos.value() / _encoder.GetPositionConversionFactor();
-  }
-  double VelToSparkRPM(units::turns_per_second_t vel) {
-    return vel.value() / _encoder.GetVelocityConversionFactor();
-  }
-  double AccelToSparkRPMps(units::turns_per_second_squared_t accel) {
-    return accel.value() / _encoder.GetVelocityConversionFactor();
-  }
-
   // Related REVLib objects
   rev::SparkPIDController _pidController{CANSparkMax::GetPIDController()};
-  rev::SparkRelativeEncoder _encoder{CANSparkBase::GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)};
+  ICSparkEncoder _encoder{GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)};
 
   // PID simulation configuration
   bool _updatingTargetFromSendable = false;
@@ -299,7 +276,7 @@ class ICSparkMax : public rev::CANSparkMax, wpi::Sendable {
   units::volt_t _arbFeedForward = 0.0_V;
   frc::PIDController _simController{0, 0, 0};
   double _simFF{0};
-  frc::TrapezoidProfile<units::turns> _simSmartMotionProfile{
+  frc::TrapezoidProfile<units::turns> _motionProfile{
       {units::turns_per_second_t{0},
        units::turns_per_second_squared_t{0}}  // constraints updated by Smart motion config
   };

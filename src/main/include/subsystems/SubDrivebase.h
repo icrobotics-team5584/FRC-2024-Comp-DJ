@@ -51,8 +51,8 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::SwerveDriveKinematics<4> GetKinematics();
   frc::ChassisSpeeds GetRobotRelativeSpeeds();
 
-  static constexpr units::meters_per_second_t MAX_VELOCITY = 2.5_mps;
-  static constexpr units::degrees_per_second_t MAX_ANGULAR_VELOCITY = 180_deg_per_s;
+  static constexpr units::meters_per_second_t MAX_VELOCITY = 4.5_mps;
+  static constexpr units::degrees_per_second_t MAX_ANGULAR_VELOCITY = 360_deg_per_s;
   static constexpr units::radians_per_second_squared_t MAX_ANG_ACCEL{std::numbers::pi};
 
   double MAX_JOYSTICK_ACCEL = 3;
@@ -77,10 +77,10 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::Translation2d _backLeftLocation{-0.281_m, +0.281_m};
   frc::Translation2d _backRightLocation{-0.281_m, -0.281_m};
 
-  const double FRONT_RIGHT_MAG_OFFSET = -0.01904296875;  //-0.872803;  //-0.629883; //-0.127930;
-  const double FRONT_LEFT_MAG_OFFSET = -0.670898;        //-0.800049;  //-0.695312; //-0.198730;
-  const double BACK_RIGHT_MAG_OFFSET = -0.900146484375;  //-0.668701;  //-0.831543; //-0.331543;
-  const double BACK_LEFT_MAG_OFFSET = -0.453125;         //-0.532715;  //-0.965088; //-0.467041;
+  const double FRONT_RIGHT_MAG_OFFSET =  -0.875732; // <- Low Modules | Raised modules -> -0.01904296875;  
+  const double FRONT_LEFT_MAG_OFFSET =   -0.443359; // <- Low Modules | Raised modules -> -0.670898;        
+  const double BACK_RIGHT_MAG_OFFSET =   -0.959473; // <- Low Modules | Raised modules -> -0.900146484375;  
+  const double BACK_LEFT_MAG_OFFSET =    -0.825928; // <- Low Modules | Raised modules -> -0.453125;         
 
   SwerveModule _frontLeft{canid::DriveBaseFrontLeftDrive, canid::DriveBaseFrontLeftTurn,
                           canid::DriveBaseFrontLeftEncoder, FRONT_LEFT_MAG_OFFSET};

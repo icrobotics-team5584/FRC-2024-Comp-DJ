@@ -44,9 +44,9 @@ SubDrivebase::SubDrivebase() {
         Drive(speeds.vx, speeds.vy, -speeds.omega, false);
       },  // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       HolonomicPathFollowerConfig(
-          PIDConstants(0.7, 0.0, 0.1),    // Translation PID constants
-          PIDConstants(1.173, 0.0, 0.0),  // Rotation PID constants
-          0.5_mps,                        // Max module speed, in m/s
+          PIDConstants(2, 0.0, 0.0),    // Translation PID constants
+          PIDConstants(0.5, 0.0, 0.0),  // Rotation PID constants
+          4_mps,                        // Max module speed, in m/s
           432_mm,  // Drive base radius in meters. Distance from robot center to furthest module.
                    // NEEDS TO BE CHECKED AND MADE ACCURATE!!
           ReplanningConfig(
@@ -159,7 +159,9 @@ void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_se
       -200_ms));
 
   // Set speed limit and apply speed limit to all modules
-  _kinematics.DesaturateWheelSpeeds(&states, MAX_VELOCITY);
+  _kinematics.DesaturateWheelSpeeds(
+      &states,
+      frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) * 1_mps);
 
   // Setting modules from aquired states
   auto [fl, fr, bl, br] = states;

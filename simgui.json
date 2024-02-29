@@ -139,6 +139,12 @@
     "open": true,
     "transitory": {
       "SmartDashboard": {
+        "Climber": {
+          "Left motor": {
+            "open": true
+          },
+          "open": true
+        },
         "amp": {
           "Dizzy Arm tilt motor: ": {
             "open": true
@@ -151,8 +157,7 @@
           },
           "Mechanism Display": {
             "open": true
-          },
-          "open": true
+          }
         },
         "arm": {
           "Climber": {

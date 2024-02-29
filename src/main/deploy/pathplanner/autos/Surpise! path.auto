@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.6067905459634015,
-      "y": 6.382405917450922
+      "x": 1.5053317825933898,
+      "y": 7.414564478251764
     },
     "rotation": 0
   },
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp Path"
+            "pathName": "Suprise! Path"
           }
         }
       ]
