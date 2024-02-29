@@ -42,6 +42,7 @@ RobotContainer::RobotContainer() {
   SubVision::GetInstance();
 
   SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
+  SubClimber::GetInstance().SetDefaultCommand(SubClimber::GetInstance().JoyStickDrive(_operatorController));
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
   _delayChooser.AddOption("1 Seconds", 1);
@@ -67,25 +68,17 @@ void RobotContainer::ConfigureBindings() {
 
   _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd()); //working
 
-  _driverController.LeftBumper().WhileTrue(cmd::ArmToAmpPos()); //working
-  _driverController.LeftBumper().OnFalse(cmd::ArmToStow()); //working
-  _driverController.A().OnTrue(cmd::VisionRotateToZero());
-  _driverController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
-  _driverController.RightTrigger().WhileTrue(cmd::ShootFullSequence());
-  _driverController.B().OnTrue(SubIntake::GetInstance().ExtendIntake());
-
-  _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberExtend());    // working
-  _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberRetract());   // working
   _operatorController.A().WhileTrue(SubShooter::GetInstance().StartShooter());  // working
   _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequence());       // working
   _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose());  // working
   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar());   // working
   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());  // working
   _operatorController.Start().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
-  POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
-  POVHelper::Up(&_operatorController).OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
-  POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
-  POVHelper::Down(&_operatorController).OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
+  _operatorController.Y().WhileTrue(cmd::ArmToAmpPos());
+  _operatorController.Y().OnFalse(cmd::ArmToStow());
+  POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.625_m));
+  POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
+  POVHelper::Left(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberAutoReset());
 
   // new controls below WIP 
   /*

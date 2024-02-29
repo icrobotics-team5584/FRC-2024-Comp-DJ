@@ -11,6 +11,7 @@ frc2::CommandPtr IntakefullSequence();
 frc2::CommandPtr AutoShootFullSequence();
 frc2::CommandPtr ShootSequence();
 frc2::CommandPtr IntakeSequence();
-frc2::CommandPtr TrapSequence();
+frc2::CommandPtr StartTrapSequence();
+frc2::CommandPtr EndTrapSequence();
 frc2::CommandPtr ShootFullSequence();
 }  // namespace cmd
