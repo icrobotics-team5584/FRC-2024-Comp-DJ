@@ -23,7 +23,7 @@ SubClimber::SubClimber() {
     _rClimbMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, DistanceToTurn(TopHeight).value());
     _rClimbMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, DistanceToTurn(0.02_m).value()); 
 
-    SoftLimit(true);
+    EnableSoftLimit(true);
 
     LockCylinder.Set(frc::DoubleSolenoid::Value::kReverse);
 
@@ -143,20 +143,28 @@ bool SubClimber::GetTrapStatus() { return TrapSequencing; }
 
 void SubClimber::SetTrapStatus(bool stat) { TrapSequencing = stat;}
 
-void SubClimber::SoftLimit(bool e) {
-    _lClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, e);
-    _lClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, e);
-    _rClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, e);
-    _rClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, e);
+void SubClimber::EnableSoftLimit(bool enabled) {
+    _lClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, enabled);
+    _lClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, enabled);
+    _rClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, enabled);
+    _rClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, enabled);
 }
 
 frc2::CommandPtr SubClimber::JoyStickDrive(frc2::CommandXboxController& _controller) {
     return Run([this, &_controller] {
-        double speed = -_controller.GetLeftY();
-        if (abs(speed) < 0.3) {speed = 0;}
-        if (speed != 0.0 && !Reseting && speed != LastJoystickInput) {
-            Start(speed);
-            LastJoystickInput = speed;
+        double lspeed = -_controller.GetLeftY();
+        frc::SmartDashboard::PutNumber("Climber/Input left", lspeed);
+        if (lspeed < 0.2 && lspeed > -0.2) {lspeed = 0;}
+
+        // lspeed = frc::ApplyDeadband(lspeed,0.2);
+        if (!Reseting) {
+            _lClimbMotor.Set(lspeed);
+        }
+        double rspeed = -_controller.GetRightY();
+        if (rspeed < 0.2 && rspeed > -0.2) {rspeed = 0;}
+        
+        if (!Reseting) {
+            _rClimbMotor.Set(rspeed);
         }
     });
 } 
@@ -209,17 +217,16 @@ frc2::CommandPtr SubClimber::ClimberResetCheck() {
         }
         if (ResetLeft && ResetRight) {
             Reseting = false;
-
         }
     }).Until([this] { return ResetLeft && ResetRight; }));
 }
 
 frc2::CommandPtr SubClimber::ClimberAutoReset() {
-    return frc2::cmd::RunOnce([this] { Reseting = true; SoftLimit(false); })
+    return frc2::cmd::RunOnce([this] { Reseting = true; EnableSoftLimit(false); })
         .AndThen(ClimberManualDrive(-0.2))
         .AndThen(frc2::cmd::Wait(0.5_s))
         .AndThen(ClimberResetCheck())
         .AndThen(ClimberResetZero())
         .AndThen(ClimberStop())
-        .AndThen([this] { Reseted = true; SoftLimit(true); });
+        .AndThen([this] { Reseted = true; EnableSoftLimit(true); });
 }

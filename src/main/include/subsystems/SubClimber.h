@@ -62,7 +62,7 @@ class SubClimber : public frc2::SubsystemBase {
   double GetLeftCurrent();
   double GetRightCurrent();
 
-  void SoftLimit(bool e);
+  void EnableSoftLimit(bool enabled);
 
   bool GetTrapStatus();
   void SetTrapStatus(bool stat);
@@ -111,7 +111,7 @@ class SubClimber : public frc2::SubsystemBase {
 
   bool ResetLeft = false; bool ResetRight = false;
 
-  double LastJoystickInput = 0;
+  bool OnJoyStick = false;
 
   // Trap sequence
   bool TrapSequencing = false;
