@@ -47,6 +47,13 @@ frc2::CommandPtr ShootFullSequence() {
                  }).AndThen({SubArm::GetInstance().FeedNote()}));
 }
 
+frc2::CommandPtr AutoShootFullSequence() {
+  return VisionRotateToZero().Until([]{return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);})
+      .Until([] { return true; })
+      .AndThen({SubShooter::GetInstance().AutoShootSequence()})
+      .AndThen({SubArm::GetInstance().FeedNote()});
+}
+
 frc2::CommandPtr IntakefullSequence(){
   return SubIntake::GetInstance()
       .Intake()

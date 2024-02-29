@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4961729368519783,
-        "y": 5.610000121221109
+        "x": 2.63,
+        "y": 5.51
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8357950145423056,
-        "y": 6.931772531691569
+        "x": 1.0675090125618847,
+        "y": 6.357987201939316
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.53,
-        "y": 7.0052043322732604
+        "x": 2.6751378064159637,
+        "y": 6.843263861966321
       },
       "prevControl": {
-        "x": 2.5425768584109476,
-        "y": 6.996026403046346
+        "x": 2.56974027750393,
+        "y": 6.714444659962725
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,25 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "StoreNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 5.0,
@@ -39,11 +57,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
-    "rotateFast": true
+    "rotation": -150.0,
+    "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "A4",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0
