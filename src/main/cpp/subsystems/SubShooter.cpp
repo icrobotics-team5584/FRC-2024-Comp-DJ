@@ -12,13 +12,14 @@ SubShooter::SubShooter() {
   _secondaryShooterMotor.SetInverted(true);
   _shooterMotorMain.SetPIDFF(ShooterP, ShooterI, ShooterD, ShooterFF);
   _secondaryShooterMotor.SetPIDFF(ShooterP, ShooterI, ShooterD, ShooterFF);
+  _shooterFeederMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
   frc::SmartDashboard::PutData("Shooter/Main Motor", (wpi::Sendable*)&_shooterMotorMain);
   frc::SmartDashboard::PutData("Shooter/Second Motor", (wpi::Sendable*)&_secondaryShooterMotor);
   frc::SmartDashboard::PutData("Shooter/Feeder motor", (wpi::Sendable*)&_shooterFeederMotor);
   
 
   _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 500);
-  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 500);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 20);
   _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 500);
   _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus3, 500);
   _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus4, 500);
@@ -83,7 +84,7 @@ frc2::CommandPtr SubShooter::StartFeeder() {
 }
 
 frc2::CommandPtr SubShooter::StartFeederSlow(){
-  return Run([this]{ _shooterFeederMotor.Set(0.4);});
+  return Run([this]{ _shooterFeederMotor.Set(1);});
 }
 
 frc2::CommandPtr SubShooter::ReverseFeeder() {
@@ -94,6 +95,10 @@ frc2::CommandPtr SubShooter::ReverseFeeder() {
 
 frc2::CommandPtr SubShooter::StopFeeder() {
   return RunOnce([this] {_shooterFeederMotor.Set(0);});
+}
+
+void SubShooter::StopFeederFunc() {
+  _shooterFeederMotor.Set(0);
 }
 
 frc2::CommandPtr SubShooter::ShootSequence() {

@@ -94,7 +94,7 @@ frc2::CommandPtr FeedNoteToShooter() {
       .StartFeederSlow()
       .AlongWith(SubArm::GetInstance().FeedNote())
       .Until([] { return SubShooter::GetInstance().CheckShooterLineBreak(); })
-      .FinallyDo([] { SubShooter::GetInstance().StopFeeder(); });
+      .FinallyDo([] { SubShooter::GetInstance().StopFeederFunc(); });
 }
 
 frc2::CommandPtr PrepareToShoot() {
