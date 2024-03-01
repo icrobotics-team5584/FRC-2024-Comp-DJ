@@ -1,0 +1,50 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.5013930170513679,
+      "y": 6.663465994549679
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "StartShooter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start Centre Rush"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Side C1 Rush"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Side C2 Rush"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

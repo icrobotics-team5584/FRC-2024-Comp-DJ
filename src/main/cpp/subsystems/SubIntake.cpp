@@ -10,7 +10,7 @@ using namespace frc2::cmd;
 SubIntake::SubIntake() {
   frc::SmartDashboard::PutString("Intake/Intake Deploy State: ", "Intake retracted");
   _intakeMotorSpin.RestoreFactoryDefaults();
-  _intakeMotorSpin.SetSmartCurrentLimit(40);
+  _intakeMotorSpin.SetSmartCurrentLimit(60);
   _intakeMotorSpin.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 500);
   _intakeMotorSpin.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 500);
   _intakeMotorSpin.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 500);
@@ -25,6 +25,7 @@ void SubIntake::Periodic() {
   frc::SmartDashboard::PutNumber("Intake/Intake Motor: ", _intakeMotorSpin.Get());
   frc::SmartDashboard::PutBoolean("Intake/Extended Reed Switch", _intakeExtendedReed.Get());
   frc::SmartDashboard::PutBoolean("Intake/Retracted Reed Switch", _intakeRetractedReed.Get());
+  frc::SmartDashboard::PutNumber("Intake/speed", encoder.GetVelocity());
 }
 
 void SubIntake::SimulationPeriodic(){

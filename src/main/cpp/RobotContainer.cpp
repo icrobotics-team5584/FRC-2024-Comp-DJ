@@ -48,14 +48,10 @@ RobotContainer::RobotContainer() {
   _delayChooser.AddOption("2 Seconds", 2);
   frc::SmartDashboard::PutData("Delay By", &_delayChooser);
 
-  _autoChooser.AddOption("Middle Path", "Middle Path");
-  _autoChooser.AddOption("Amp Path", "Amp Path");
-  _autoChooser.AddOption("Podium Path", "Podium Path");
-  _autoChooser.AddOption("Mid Path-Break Podium", "Mid Path-Break Podium");
-  _autoChooser.AddOption("Mid Path-Break Amp", "Mid Path-Break Amp");
+  _autoChooser.AddOption("A10", "A10");
   _autoChooser.AddOption("Test Path", "Test Path");
-  _autoChooser.AddOption("A4", "A4");
-  _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
+  _autoChooser.AddOption("M4", "M4");
+  _autoChooser.AddOption("S1", "S1");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
 
   _compressor.EnableAnalog(70_psi, 120_psi);
