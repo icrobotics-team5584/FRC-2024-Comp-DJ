@@ -13,7 +13,7 @@
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include "RobotContainer.h"
 #include "subsystems/SubClimber.h"
-#include <frc2/command/Commands.h>
+#include <frc2/command/button/CommandXboxController.h>
 #include "commands/UniversalCommands.h"
 #include "subsystems/SubVision.h"
 #include "commands/VisionCommands.h"
@@ -28,7 +28,7 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("ShootNote", SubShooter::GetInstance().ShootSequence());
   pathplanner::NamedCommands::registerCommand("StopShooter", SubShooter::GetInstance().StopShooterCommand());
   pathplanner::NamedCommands::registerCommand("FeedNote", SubArm::GetInstance().FeedNote());
-  pathplanner::NamedCommands::registerCommand("ShootFullSequence", cmd::ShootFullSequence().WithTimeout(0.5_s));
+  pathplanner::NamedCommands::registerCommand("ShootFullSequence", cmd::ShootFullSequence(_driverController).WithTimeout(0.5_s));
   pathplanner::NamedCommands::registerCommand("AutoShootFullSequence", cmd::AutoShootFullSequence().WithTimeout(0.5_s));
   pathplanner::NamedCommands::registerCommand("StoreNote", SubArm::GetInstance().StoreNote());
   pathplanner::NamedCommands::registerCommand("ShooterChangePosFar", SubShooter::GetInstance().ShooterChangePosFar());
@@ -41,7 +41,7 @@ RobotContainer::RobotContainer() {
   SubIntake::GetInstance();
   SubVision::GetInstance();
 
-  SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
+  SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController, true));
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
   _delayChooser.AddOption("1 Seconds", 1);
@@ -70,13 +70,13 @@ void RobotContainer::ConfigureBindings() {
   _driverController.LeftBumper().WhileTrue(cmd::ArmToAmpPos()); //working
   _driverController.LeftBumper().OnFalse(cmd::ArmToStow()); //working
   _driverController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
-  _driverController.RightTrigger().WhileTrue(cmd::VisionRotateToZero());
+  _driverController.RightTrigger().WhileTrue(cmd::VisionRotateToZero(_driverController));
   _driverController.B().OnTrue(SubIntake::GetInstance().ExtendIntake());
 
   _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberExtend());    // working
   _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberRetract());   // working
   _operatorController.A().WhileTrue(SubShooter::GetInstance().StartShooter());  // working
-  _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequence());       // working
+  _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequence(_driverController));       // working
   _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose());  // working
   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar());   // working
   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());  // working
@@ -99,7 +99,7 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
   _operatorController.LeftBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosClose());
   _operatorController.RightBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosFar());
-  _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequence());
+  _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequence(_driverController));
 
   _operatorController.Y().OnTrue(cmd::TrapSequence());
   _operatorController.X().OnTrue(nullptr climb sequence);

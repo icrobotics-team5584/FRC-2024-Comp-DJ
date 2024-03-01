@@ -1,5 +1,6 @@
 #pragma once
 #include <frc2/command/commands.h>
+#include <frc2/command/button/CommandXboxController.h>
 
 namespace cmd {
 frc2::CommandPtr ArmToAmpPos();
@@ -12,5 +13,5 @@ frc2::CommandPtr AutoShootFullSequence();
 frc2::CommandPtr ShootSequence();
 frc2::CommandPtr IntakeSequence();
 frc2::CommandPtr TrapSequence();
-frc2::CommandPtr ShootFullSequence();
+frc2::CommandPtr ShootFullSequence(frc2::CommandXboxController& controller);
 }  // namespace cmd
