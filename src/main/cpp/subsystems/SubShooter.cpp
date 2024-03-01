@@ -15,6 +15,7 @@ SubShooter::SubShooter() {
   frc::SmartDashboard::PutData("Shooter/Main Motor", (wpi::Sendable*)&_shooterMotorMain);
   frc::SmartDashboard::PutData("Shooter/Second Motor", (wpi::Sendable*)&_secondaryShooterMotor);
   frc::SmartDashboard::PutData("Shooter/Feeder motor", (wpi::Sendable*)&_shooterFeederMotor);
+  
 
   _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 500);
   _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 500);
@@ -36,6 +37,8 @@ void SubShooter::Periodic() {
   } else {
     frc::SmartDashboard::PutString("Shooter/Angle: ", "Score From Subwoofer");
   }
+
+  frc::SmartDashboard::PutBoolean("Shooter/Shooter linebreaker", _shooterLineBreak.Get());
 }
 
 void SubShooter::SimulationPeriodic(){
@@ -79,6 +82,20 @@ frc2::CommandPtr SubShooter::StartFeeder() {
   return RunOnce([this] { _shooterFeederMotor.Set(1); });
 }
 
+frc2::CommandPtr SubShooter::StartFeederSlow(){
+  return Run([this]{ _shooterFeederMotor.Set(0.4);});
+}
+
+frc2::CommandPtr SubShooter::ReverseFeeder() {
+  return Run([this] { _shooterFeederMotor.Set(-0.2); }).WithTimeout(0.2_s).FinallyDo([this] {
+    _shooterFeederMotor.Set(0);
+  });
+}
+
+frc2::CommandPtr SubShooter::StopFeeder() {
+  return RunOnce([this] {_shooterFeederMotor.Set(0);});
+}
+
 frc2::CommandPtr SubShooter::ShootSequence() {
   return Sequence(StartShooter(), StartFeeder(), Idle())
       .FinallyDo([this] {StopShooterFunc();});
@@ -86,10 +103,6 @@ frc2::CommandPtr SubShooter::ShootSequence() {
 
 frc2::CommandPtr SubShooter::AutoShootSequence() {
   return Sequence(StartShooter().WithTimeout(0.25_s), StartFeeder());
-}
-
-frc2::CommandPtr SubShooter::StopFeeder() {
-  return RunOnce([this] { _shooterFeederMotor.Set(0);});
 }
 
 
@@ -119,4 +132,12 @@ frc2::CommandPtr SubShooter::Outtake() {
         _shooterMotorMain.Set(0);
         _shooterFeederMotor.Set(0);
       });
+}
+
+bool SubShooter::CheckShooterLineBreak() {
+  if(_shooterLineBreak.Get() == true){
+    return true;
+  }
+
+  return false;
 }

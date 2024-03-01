@@ -115,6 +115,8 @@ frc2::CommandPtr SubArm::Outtake() {
 
 // booleans
 
+
+
 bool SubArm::CheckIfArmIsHome() {
   return units::math::abs(_armMotor.GetPosition() - HOME_ANGLE) < 2_deg;
 }

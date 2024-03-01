@@ -14,4 +14,8 @@ frc2::CommandPtr IntakeSequence();
 frc2::CommandPtr TrapSequence();
 frc2::CommandPtr ShootFullSequence();
 frc2::CommandPtr OuttakeNote();
+frc2::CommandPtr ShootFullSequenceWithVision();
+frc2::CommandPtr ShootFullSequenceWithoutVision();
+frc2::CommandPtr FeedNoteToShooter();
+frc2::CommandPtr PrepareToShoot();
 }  // namespace cmd

@@ -38,10 +38,10 @@ frc2::CommandPtr SequenceArmToTrapPos() {
   return StartEnd([] { ArmToTrapPos(); }, [] { ArmToStow(); });
 }
 
-frc2::CommandPtr ShootFullSequence() {
-//  return VisionRotateToZero().Until([]{return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);})
-//      .Until([] { return true; })
-      return SubShooter::GetInstance().ShootSequence()
+frc2::CommandPtr ShootFullSequenceWithVision() {
+  return VisionRotateToZero().Until([]{return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);})
+      .Until([] { return true; })
+      .AndThen({SubShooter::GetInstance().ShootSequence()})
       .AlongWith(WaitUntil([] {
                    return SubShooter::GetInstance().CheckShooterSpeed();
                  }).AndThen({SubArm::GetInstance().FeedNote()}));
@@ -50,6 +50,13 @@ frc2::CommandPtr ShootFullSequence() {
 frc2::CommandPtr AutoShootFullSequence() {
       return SubShooter::GetInstance().AutoShootSequence()
       .AndThen({SubArm::GetInstance().FeedNote()});
+}
+
+frc2::CommandPtr ShootFullSequenceWithoutVision() {
+  return SubShooter::GetInstance().ShootSequence().AlongWith(
+      WaitUntil([] {
+        return SubShooter::GetInstance().CheckShooterSpeed();
+      }).AndThen({SubArm::GetInstance().FeedNote()}));
 }
 
 frc2::CommandPtr IntakefullSequence(){
@@ -80,6 +87,18 @@ frc2::CommandPtr OuttakeNote() {
       .AlongWith(SubShooter::GetInstance().Outtake())
       .AndThen(Idle())
       .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake(); });
+}
+
+frc2::CommandPtr FeedNoteToShooter() {
+  return SubShooter::GetInstance()
+      .StartFeederSlow()
+      .AlongWith(SubArm::GetInstance().FeedNote())
+      .Until([] { return SubShooter::GetInstance().CheckShooterLineBreak(); })
+      .FinallyDo([] { SubShooter::GetInstance().StopFeeder(); });
+}
+
+frc2::CommandPtr PrepareToShoot() {
+  return FeedNoteToShooter().AndThen(SubShooter::GetInstance().StartShooter());
 }
 
 }  // namespace cmd

@@ -9,6 +9,7 @@
 #include <frc2/command/commands.h>
 #include <frc/DoubleSolenoid.h>
 #include "utilities/ICSparkMax.h"
+#include <frc/DigitalInput.h>
 
 #include <frc/simulation/DCMotorSim.h>
 #include <units/moment_of_inertia.h>
@@ -37,9 +38,13 @@ class SubShooter : public frc2::SubsystemBase {
   frc2::CommandPtr StopShooterCommand();
   frc2::CommandPtr StopFeeder();
   frc2::CommandPtr Outtake();
+  frc2::CommandPtr StartFeederSlow();
+  frc2::CommandPtr ReverseFeeder();
   
   void StopShooterFunc();
   bool CheckShooterSpeed();
+  bool CheckShooterLineBreak();
+
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -63,6 +68,8 @@ class SubShooter : public frc2::SubsystemBase {
 
   double mainMotorPower = 0.3;
   double secondaryMotorPower = 0.3;
+
+  frc::DigitalInput _shooterLineBreak{dio::ShooterLineBreak};
 
   //Sim configs
   frc::sim::DCMotorSim _topShooterSim{frc::DCMotor::NEO(), 1, 0.001_kg_sq_m};
