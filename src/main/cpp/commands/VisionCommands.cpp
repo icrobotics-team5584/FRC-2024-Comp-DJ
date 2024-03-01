@@ -9,7 +9,7 @@ frc2::CommandPtr VisionRotateToZero(frc2::CommandXboxController& controller) {
   static units::degree_t camYaw = 0_deg;
   static units::degree_t startingGyroYaw = 0_deg;
 
-  return (Run(
+  return Run(
       []{ auto result = SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER);
 
         if (result.has_value()) {
@@ -22,7 +22,7 @@ frc2::CommandPtr VisionRotateToZero(frc2::CommandXboxController& controller) {
         units::degree_t errorAngle = camYaw - gyroAngleTravelled;
 
         SubDrivebase::GetInstance().RotateToZero(errorAngle);
-      }).AlongWith(SubDrivebase::GetInstance().JoystickDrive(controller, true)));
+      }).AlongWith(SubDrivebase::GetInstance().JoystickDrive(controller, true));
 }
 
 frc2::CommandPtr ShootSequence(frc2::CommandXboxController& controller) {
