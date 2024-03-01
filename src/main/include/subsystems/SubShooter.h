@@ -36,6 +36,7 @@ class SubShooter : public frc2::SubsystemBase {
   frc2::CommandPtr AutoShootSequence();
   frc2::CommandPtr StopShooterCommand();
   frc2::CommandPtr StopFeeder();
+  frc2::CommandPtr Outtake();
   
   void StopShooterFunc();
   bool CheckShooterSpeed();
@@ -48,8 +49,8 @@ class SubShooter : public frc2::SubsystemBase {
   static constexpr double ShooterD = 0;
   static constexpr double ShooterFF = 0.012;
 
-  int ShootFarTargetRPM = 3700;
-  int ShootCloseTargetRPM = 3700;
+  units::turns_per_second_t ShootFarTargetRPM = 42_tps;
+  units::turns_per_second_t ShootCloseTargetRPM = 42_tps;
 
   
 

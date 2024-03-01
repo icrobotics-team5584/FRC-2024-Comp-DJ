@@ -108,6 +108,11 @@ frc2::CommandPtr SubArm::StoreNote() {
 frc2::CommandPtr SubArm::FeedNote(){
   return Run([this]{_ampMotor.Set(-1);}).FinallyDo([this]{return  _ampMotor.Set(0);});
 }
+
+frc2::CommandPtr SubArm::Outtake() {
+  return Run([this]{_ampMotor.Set(1);}).FinallyDo([this]{return _ampMotor.Set(0);});
+}
+
 // booleans
 
 bool SubArm::CheckIfArmIsHome() {

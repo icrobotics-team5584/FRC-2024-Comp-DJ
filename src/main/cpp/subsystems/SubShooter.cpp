@@ -53,17 +53,16 @@ void SubShooter::SimulationPeriodic(){
 }
 
 frc2::CommandPtr SubShooter::StartShooter() {
-  return RunOnce(
-      [this] {
-        if (solShooter.Get() == frc::DoubleSolenoid::kReverse) {
-          _shooterMotorMain.SetVelocityTarget(ShootFarTargetRPM*-1_rpm);
-              _secondaryShooterMotor.SetVelocityTarget(ShootFarTargetRPM*1_rpm);
-        } else {
-          _shooterMotorMain.SetVelocityTarget(ShootCloseTargetRPM*-1_rpm);
-              _secondaryShooterMotor.SetVelocityTarget(ShootCloseTargetRPM*1_rpm);
-        }
-      })
-      .AndThen(WaitUntil([this]{return CheckShooterSpeed();}));
+  return RunOnce([this] {
+           if (solShooter.Get() == frc::DoubleSolenoid::kReverse) {
+             _shooterMotorMain.SetVelocityTarget(-ShootFarTargetRPM);
+             _secondaryShooterMotor.SetVelocityTarget(ShootFarTargetRPM);
+           } else {
+             _shooterMotorMain.SetVelocityTarget(-ShootCloseTargetRPM);
+             _secondaryShooterMotor.SetVelocityTarget(ShootCloseTargetRPM);
+           }
+         })
+      .AndThen(WaitUntil([this] { return CheckShooterSpeed(); }));
 }
 
 void SubShooter::StopShooterFunc(){
@@ -107,4 +106,17 @@ frc2::CommandPtr SubShooter::ShooterChangePosFar() {
 
 frc2::CommandPtr SubShooter::ShooterChangePosClose() {
   return RunOnce([this] { solShooter.Set(frc::DoubleSolenoid::kForward); });
+}
+
+frc2::CommandPtr SubShooter::Outtake() {
+  return Run([this] {
+           _shooterFeederMotor.Set(-1);
+           _secondaryShooterMotor.Set(-0.1);
+           _shooterMotorMain.Set(-0.1);
+         })
+      .FinallyDo([this] {
+        _secondaryShooterMotor.Set(0);
+        _shooterMotorMain.Set(0);
+        _shooterFeederMotor.Set(0);
+      });
 }
