@@ -103,6 +103,7 @@ void RobotContainer::ConfigureBindings() {
   //DRIVER CONTROLS
   
   _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
+  _driverController.RightTrigger().WhileTrue(cmd::VisionRotateToSpeaker(_driverController));
 
   // _driverController.LeftTrigger().WhileTrue(/*Align2Stage*/);
   // _driverController.LeftBumper().WhileTrue(/*IntakeFromSource*/);
