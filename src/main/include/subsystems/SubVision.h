@@ -32,6 +32,7 @@ class SubVision : public frc2::SubsystemBase {
   void SimulationPeriodic() override;
   bool VisionHasTargets();
   bool IsOnTarget(FieldElement chosenFieldElement);
+  units::degree_t getTrapAngle();
   
 
   int FindID(FieldElement chosenFieldElement);
@@ -44,11 +45,9 @@ class SubVision : public frc2::SubsystemBase {
   photon::PhotonCamera _camera{"photonvision_5584"};
   double _bestYaw;
 
-  std::map<FieldElement, int> blueFieldElement = {
-    {SPEAKER, 7}, {SPEAKER_SIDE, 8}, {AMP, 6}, {SOURCE_LEFT, 2}, {SOURCE_RIGHT, 1}};
-
-  std::map<FieldElement, int> redFieldElement = {
-    {SPEAKER, 4}, {SPEAKER_SIDE, 3}, {AMP, 5}, {SOURCE_LEFT, 10}, {SOURCE_RIGHT, 9}};
+  std::map<FieldElement, int> blueFieldElement = {{SPEAKER, 7}, {SPEAKER_SIDE, 8}, {AMP, 6}, {SOURCE_LEFT, 2}, {SOURCE_RIGHT, 1}};
+  std::map<FieldElement, int> redFieldElement = {{SPEAKER, 4}, {SPEAKER_SIDE, 3}, {AMP, 5}, {SOURCE_LEFT, 10}, {SOURCE_RIGHT, 9}};
+  std::map<int, units::degree_t> trapAngle{{11, 116_deg}, {12, 0_deg}, {13, 0_deg}, {14, 0_deg}, {15, 0_deg}, {16, 0_deg}}; //11-13 is red, 14-16 is blue
 
   frc::Transform3d _camToBot{{0_mm, 0_mm, 0_mm}, {}};
 

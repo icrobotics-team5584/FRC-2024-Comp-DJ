@@ -61,8 +61,6 @@ std::optional<units::degree_t> SubVision::GetSpecificTagYaw(FieldElement chosenF
   // return 0 when looses target
   else { return {}; }
 
-
-
 }
 
 // exists out when the range of yaw is between [-0.4, 0.4]
@@ -91,4 +89,12 @@ int SubVision::FindID(FieldElement chosenFieldElement) {
   }
 
   return redFieldElement[chosenFieldElement];
+}
+
+units::degree_t SubVision::getTrapAngle(){
+  auto result = _camera.GetLatestResult();
+  auto target = result.GetBestTarget();
+  auto trapID = target.GetFiducialId();
+
+  return trapAngle[trapID];
 }

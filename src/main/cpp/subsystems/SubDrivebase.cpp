@@ -28,7 +28,7 @@ SubDrivebase::SubDrivebase() {
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration",
                                  MAX_ANGULAR_JOYSTICK_ACCEL);
   _gyro.Calibrate();
-  Rcontroller.EnableContinuousInput(-180_deg, 180_deg);
+  Rcontroller.EnableContinuousInput(0_deg, 360_deg);
   frc::SmartDashboard::PutData("field", &_fieldDisplay);
 
   using namespace pathplanner;
@@ -144,7 +144,7 @@ frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& contro
       _forwardSpeedRequest = forwardSpeed;
       _sidewaysSpeedRequest = sidewaysSpeed;
       if(ignoreJoystickRotation == false){
-        _rotationSpeedRequest = -rotationSpeed;
+        _rotationSpeedRequest = rotationSpeed;
       }
       _fieldOrientedRquest = true;
     }
@@ -257,8 +257,7 @@ void SubDrivebase::DriveToPose(frc::Pose2d targetPose) {
   frc::Pose2d currentPosition = _poseEstimator.GetEstimatedPosition();
   double speedX = Xcontroller.Calculate(currentPosition.X().value(), targetPose.X().value());
   double speedY = Ycontroller.Calculate(currentPosition.Y().value(), targetPose.Y().value());
-  double speedRot =
-      Rcontroller.Calculate(currentPosition.Rotation().Radians(), targetPose.Rotation().Radians());
+  double speedRot = Rcontroller.Calculate(currentPosition.Rotation().Radians(), targetPose.Rotation().Radians());
 
   speedX = std::clamp(speedX, -0.5, 0.5);
   speedY = std::clamp(speedY, -0.5, 0.5);
@@ -281,6 +280,14 @@ void SubDrivebase::RotateToZero(units::degree_t rotationError) {
 
 }
 
+void SubDrivebase::TranslateToZero(units::degree_t translationError){
+  double speedRot = Rcontroller.Calculate(translationError, 0_deg);
+  speedRot = std::clamp(speedRot, -2.0, 2.0);
+
+  double speedX = Xcontroller.Calculate(translationError.value(), 0);
+
+  _sidewaysSpeedRequest = speedX * 1_mps;
+}
 
 
 bool SubDrivebase::IsAtPose(frc::Pose2d pose) {

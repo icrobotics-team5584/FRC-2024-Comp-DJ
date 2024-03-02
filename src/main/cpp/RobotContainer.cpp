@@ -70,8 +70,9 @@ void RobotContainer::ConfigureBindings() {
   _driverController.LeftBumper().WhileTrue(cmd::ArmToAmpPos()); //working
   _driverController.LeftBumper().OnFalse(cmd::ArmToStow()); //working
   _driverController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
-  _driverController.RightTrigger().WhileTrue(cmd::VisionRotateToZero(_driverController));
+  _driverController.RightTrigger().WhileTrue(cmd::VisionRotateToSpeaker(_driverController));
   _driverController.B().OnTrue(SubIntake::GetInstance().ExtendIntake());
+  _driverController.A().WhileTrue(cmd::VisionClimb()); //change later
 
   _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberExtend());    // working
   _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberRetract());   // working

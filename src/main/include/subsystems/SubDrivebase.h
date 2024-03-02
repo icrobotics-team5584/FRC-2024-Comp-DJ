@@ -36,6 +36,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   void UpdatePosition(frc::Pose2d robotPosition);
   void DriveToPose(frc::Pose2d targetPose);
   void RotateToZero(units::degree_t rotationError);
+  void TranslateToZero(units::degree_t translationError);
   bool IsAtPose(frc::Pose2d pose);
   void DisplayTrajectory(std::string name, frc::Trajectory trajectory);
   void SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode);
