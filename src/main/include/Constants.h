@@ -83,6 +83,8 @@ namespace dio {
   constexpr int ShooterLineBreak = 11;
   constexpr int IntakeRetractedReed = 2;
   constexpr int IntakeExtendedReed = 3;
-  constexpr int ShooterEncoderChannelA = 7;
-  constexpr int ShooterEncoderChannelB = 8;
+  constexpr int TopShooterEncoderChannelA = 6;
+  constexpr int TopShooterEncoderChannelB = 7;
+  constexpr int BottomShooterEncoderChannelA = 8;
+  constexpr int BottomShooterEncoderChannelB = 9;
 }
