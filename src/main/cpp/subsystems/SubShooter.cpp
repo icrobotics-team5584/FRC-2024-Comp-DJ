@@ -57,9 +57,14 @@ void SubShooter::Periodic() {
   frc::SmartDashboard::PutNumber("Shooter/Bottom Encoder", _bottomEncoder.GetRate());
   frc::SmartDashboard::PutNumber("Shooter/Bottom Shooter Distance", _bottomEncoder.GetDistance());
   frc::SmartDashboard::PutNumber("Shooter/Bottom Shooter Distance Prev", (_bottomEncoder.GetDistance()-_bottomEncoderPositionPrev)/0.02);
+  frc::SmartDashboard::PutNumber("Shooter/Bottom Velocity Error", std::abs(ShootFarTarget.value() - ((_bottomEncoder.GetDistance() - _bottomEncoderPositionPrev) / 0.02)));
+  frc::SmartDashboard::PutNumber("Shooter/Top Velocity Error", std::abs(ShootFarTarget.value() - ((_topEncoder.GetDistance() - _topEncoderPositionPrev) / 0.02)));
+  frc::SmartDashboard::PutBoolean("Shooter/CheckShoote boolean", CheckShooterSpeed());
 
   _bottomEncoderPositionPrev = _bottomEncoder.GetDistance();
   _topEncoderPositionPrev = _topEncoder.GetDistance();
+
+  UpdatePIDFF();
 }
 
 void SubShooter::SimulationPeriodic(){
@@ -80,30 +85,28 @@ void SubShooter::SimulationPeriodic(){
  _shooterFeederMotor.UpdateSimEncoder(_feederSim.GetAngularPosition(), _feederSim.GetAngularVelocity());
 }
 
-void SubShooter::UpdatePIDFF() {
-  
+void SubShooter::UpdatePIDFF(units::turns_per_second_t TargetVelocity) {
+           if (solShooter.Get() == frc::DoubleSolenoid::kReverse) {
+             auto FFVolts = _shooterFF.Calculate(TargetVelocity);
+             _topShooterMotor.SetVoltage(
+                 _topPID.Calculate((_topEncoder.GetDistance()-_topEncoderPositionPrev)/0.02, TargetVelocity.value()) * 1_V + FFVolts);
+             _bottomShooterMotor.SetVoltage(
+                 _bottomPID.Calculate((_bottomEncoder.GetDistance()-_bottomEncoderPositionPrev)/0.02, TargetVelocity.value()) * 1_V +
+                 FFVolts);
+           } else {
+             auto FFVolts = _shooterFF.Calculate(TargetVelocity);
+             _topShooterMotor.SetVoltage(
+                 _topPID.Calculate((_topEncoder.GetDistance()-_topEncoderPositionPrev)/0.02, TargetVelocity.value()) * 1_V +
+                 FFVolts);
+             _bottomShooterMotor.SetVoltage(
+                 _bottomPID.Calculate((_bottomEncoder.GetDistance()-_bottomEncoderPositionPrev)/0.02, TargetVelocity.value()) * 1_V +
+                 FFVolts);
+           }
 }
 
 frc2::CommandPtr SubShooter::StartShooter() {
-  return Run([this] {
-           if (solShooter.Get() == frc::DoubleSolenoid::kReverse) {
-             auto FFVolts = _shooterFF.Calculate(ShootFarTarget);
-             _topShooterMotor.SetVoltage(
-                 _topPID.Calculate((_topEncoder.GetDistance()-_topEncoderPositionPrev)/0.02, ShootFarTarget.value()) * 1_V + FFVolts);
-             _bottomShooterMotor.SetVoltage(
-                 _bottomPID.Calculate((_bottomEncoder.GetDistance()-_bottomEncoderPositionPrev)/0.02, ShootFarTarget.value()) * 1_V +
-                 FFVolts);
-           } else {
-             auto FFVolts = _shooterFF.Calculate(ShootCloseTarget);
-             _topShooterMotor.SetVoltage(
-                 _topPID.Calculate((_topEncoder.GetDistance()-_topEncoderPositionPrev)/0.02, ShootCloseTarget.value()) * 1_V +
-                 FFVolts);
-             _bottomShooterMotor.SetVoltage(
-                 _bottomPID.Calculate((_bottomEncoder.GetDistance()-_bottomEncoderPositionPrev)/0.02, ShootCloseTarget.value()) * 1_V +
-                 FFVolts);
-           }
-         })
-      .AlongWith(WaitUntil([this] { return CheckShooterSpeed(); }));
+  return Run([this] {UpdatePIDFF(ShootFarTarget);})
+      .Until([this] { return CheckShooterSpeed(); });
 }
 
 void SubShooter::StopShooterFunc(){
@@ -149,9 +152,10 @@ frc2::CommandPtr SubShooter::AutoShootSequence() {
 
 
 bool SubShooter::CheckShooterSpeed(){
-if(units::math::abs(_bottomShooterMotor.GetVelError()) < 500_rpm && units::math::abs(_topShooterMotor.GetVelError()) < 500_rpm){
-  return true;
- } 
+  if (std::abs(ShootFarTarget.value() - ((_bottomEncoder.GetDistance() - _bottomEncoderPositionPrev) / 0.02)) < 8 &&
+      std::abs(ShootFarTarget.value() - ((_topEncoder.GetDistance() - _topEncoderPositionPrev) / 0.02)) < 8) {
+    return true;
+  }
  return false;
 }
 

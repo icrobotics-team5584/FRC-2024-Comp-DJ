@@ -45,7 +45,7 @@ class SubShooter : public frc2::SubsystemBase {
   void StopShooterFunc();
   bool CheckShooterSpeed();
   bool CheckShooterLineBreak();
-  void UpdatePIDFF();
+  void UpdatePIDFF(units::turns_per_second_t TargetVelocity = 0_tps);
   frc2::CommandPtr StopFeeder();
   void StopFeederFunc();
   frc2::CommandPtr Outtake();

@@ -80,6 +80,7 @@ void RobotContainer::ConfigureBindings() {
   _driverController.A().OnTrue(cmd::VisionRotateToZero());
   _driverController.B().OnTrue(SubIntake::GetInstance().ExtendIntake());
   _driverController.Y().OnTrue(cmd::PrepareToShoot());
+  //POVHelper::Up(&_driverController).WhileTrue(SubShooter::GetInstance().StartFeeder());
 
 
   _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequenceWithVision());

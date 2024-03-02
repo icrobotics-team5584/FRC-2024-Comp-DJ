@@ -79,7 +79,7 @@ frc2::CommandPtr EndTrapSequence() {
 frc2::CommandPtr OuttakeNote() {
   return SubIntake::GetInstance()
       .ExtendIntake()
-      .AndThen(SubIntake::GetInstance().Outtake())
+      //.AndThen(SubIntake::GetInstance().Outtake())
       //.AlongWith(SubArm::GetInstance().Outtake())
      // .AlongWith(SubShooter::GetInstance().Outtake())
       .AndThen(Idle())
