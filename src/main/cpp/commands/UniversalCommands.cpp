@@ -68,23 +68,20 @@ frc2::CommandPtr IntakefullSequence(){
 }
 
 
-frc2::CommandPtr TrapSequence() {
-  if (SubClimber::GetInstance().GetTrapStatus()) {
-    SubClimber::GetInstance().SetTrapStatus(false);
-    return cmd::ArmToStow().AndThen(SubIntake::GetInstance().CommandRetractIntake());
-  }
-  else {
-    SubClimber::GetInstance().SetTrapStatus(true);
-    return SubIntake::GetInstance().ExtendIntake().AndThen(ArmToTrapPos());
-  }
+frc2::CommandPtr StartTrapSequence() {
+  return SubIntake::GetInstance().ExtendIntake().AndThen(ArmToTrapPos()).AndThen(SubShooter::GetInstance().StartShooter());
+}
+
+frc2::CommandPtr EndTrapSequence() {
+  return cmd::ArmToStow();
 }
 
 frc2::CommandPtr OuttakeNote() {
   return SubIntake::GetInstance()
       .ExtendIntake()
       .AndThen(SubIntake::GetInstance().Outtake())
-      .AlongWith(SubArm::GetInstance().Outtake())
-      .AlongWith(SubShooter::GetInstance().Outtake())
+      //.AlongWith(SubArm::GetInstance().Outtake())
+     // .AlongWith(SubShooter::GetInstance().Outtake())
       .AndThen(Idle())
       .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }

@@ -30,6 +30,7 @@ SubArm::SubArm() {
   _armMotor.UseAbsoluteEncoder(OFFSET_ANGLE);
   _armMotor.SetPIDFF(ARM_P, ARM_I, ARM_D, ARM_F);
   _armMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
+  _ampMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
   _armMotor.ConfigSmartMotion(ARM_MAX_VEL, ARM_MAX_ACCEL, ARM_TOLERANCE);
   _armMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, (AMP_ANGLE+5_deg).value());
   _armMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, HOME_ANGLE.value());

@@ -43,6 +43,7 @@ RobotContainer::RobotContainer() {
   SubVision::GetInstance();
 
   SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
+  SubClimber::GetInstance().SetDefaultCommand(SubClimber::GetInstance().JoyStickDrive(_operatorController));
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
   _delayChooser.AddOption("1 Seconds", 1);
@@ -53,6 +54,9 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("Test Path", "Test Path");
   _autoChooser.AddOption("M4", "M4");
   _autoChooser.AddOption("S1", "S1");
+  _autoChooser.AddOption("A4", "A4");
+  _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
+  _autoChooser.AddOption("Nothing", "Nothing");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
 
   _compressor.EnableAnalog(70_psi, 120_psi);
@@ -84,9 +88,10 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose());
   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
 
-  _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberExtend());
-  _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberRetract());
+  _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberPosition(0.625_m));
+  _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
   _operatorController.A().WhileTrue(SubShooter::GetInstance().StartShooter());
+
 
   _operatorController.Start().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
 
@@ -125,6 +130,6 @@ void RobotContainer::ConfigureBindings() {
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   _autoSelected = _autoChooser.GetSelected();
   units::second_t delay = _delayChooser.GetSelected() * 1_s;
-  return frc2::cmd::Wait(delay).AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr()); 
+  return frc2::cmd::Wait(delay).AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr()).AlongWith(SubClimber::GetInstance().ClimberAutoReset()); 
 }
 
