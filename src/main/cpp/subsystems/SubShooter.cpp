@@ -19,7 +19,21 @@ SubShooter::SubShooter() {
   _topEncoder.SetDistancePerPulse(1.00/2048.00);
   _bottomEncoder.SetSamplesToAverage(7);
   _bottomEncoder.SetDistancePerPulse(1.00/2048.00);
- }
+ 
+  _shooterFeederMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
+  frc::SmartDashboard::PutData("Shooter/Main Motor", (wpi::Sendable*)&_shooterMotorMain);
+  frc::SmartDashboard::PutData("Shooter/Second Motor", (wpi::Sendable*)&_secondaryShooterMotor);
+  frc::SmartDashboard::PutData("Shooter/Feeder motor", (wpi::Sendable*)&_shooterFeederMotor);
+  
+
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 500);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 20);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 500);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus3, 500);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus4, 500);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus5, 500);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus6, 500);
+}
 
 using namespace frc2::cmd;
 
@@ -32,6 +46,8 @@ void SubShooter::Periodic() {
   } else {
     frc::SmartDashboard::PutString("Shooter/Angle: ", "Score From Subwoofer");
   }
+
+  frc::SmartDashboard::PutBoolean("Shooter/Shooter linebreaker", _shooterLineBreak.Get());
 }
 
 void SubShooter::SimulationPeriodic(){
@@ -92,13 +108,36 @@ frc2::CommandPtr SubShooter::StartFeeder() {
   return RunOnce([this] { _shooterFeederMotor.Set(1); });
 }
 
+frc2::CommandPtr SubShooter::StartFeederSlow(){
+  return Run([this]{ _shooterFeederMotor.Set(1);});
+}
+
+frc2::CommandPtr SubShooter::ReverseFeeder() {
+  return Run([this] { _shooterFeederMotor.Set(-0.2); }).WithTimeout(0.2_s).FinallyDo([this] {
+    _shooterFeederMotor.Set(0);
+  });
+}
+
+frc2::CommandPtr SubShooter::StopFeeder() {
+  return RunOnce([this] {_shooterFeederMotor.Set(0);});
+}
+
+void SubShooter::StopFeederFunc() {
+  _shooterFeederMotor.Set(0);
+}
+
 frc2::CommandPtr SubShooter::ShootSequence() {
   return Sequence(StartShooter(), StartFeeder(), Idle())
       .FinallyDo([this] {StopShooterFunc();});
 }
 
+frc2::CommandPtr SubShooter::AutoShootSequence() {
+  return Sequence(StartShooter().WithTimeout(0.25_s), StartFeeder());
+}
+
+
 bool SubShooter::CheckShooterSpeed(){
-if(units::math::abs(_secondaryShooterMotor.GetVelError()) < 150_rpm && units::math::abs(_shooterMotorMain.GetVelError()) < 150_rpm){
+if(units::math::abs(_secondaryShooterMotor.GetVelError()) < 200_rpm && units::math::abs(_shooterMotorMain.GetVelError()) < 200_rpm){
   return true;
  } 
  return false;
@@ -121,12 +160,24 @@ frc2::CommandPtr SubShooter::FeedNoteToArm() {
       .FinallyDo([this] {
         _shooterFeederMotor.Set(0);
         _secondaryShooterMotor.Set(0);
+        _shooterMotorMain.Set(0);})
+      
+}
+frc2::CommandPtr SubShooter::Outtake() {
+  return Run([this] {
+           _shooterFeederMotor.Set(-1);
+           _secondaryShooterMotor.Set(-0.1);
+           _shooterMotorMain.Set(-0.1);
+         })
+      .FinallyDo([this] {
+        _secondaryShooterMotor.Set(0);
         _shooterMotorMain.Set(0);
+        _shooterFeederMotor.Set(0);
       });
 }
 
 bool SubShooter::CheckShooterLineBreak() {
-  if (_shooterLineBreak.Get() == true){
+  if(_shooterLineBreak.Get() == true){
     return true;
   }
 

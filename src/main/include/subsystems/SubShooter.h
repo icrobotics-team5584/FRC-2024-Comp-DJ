@@ -10,6 +10,8 @@
 #include <frc/DoubleSolenoid.h>
 #include "utilities/ICSparkMax.h"
 #include <frc/controller/SimpleMotorFeedforward.h>
+#include <frc/DigitalInput.h>
+
 #include <frc/simulation/DCMotorSim.h>
 #include <units/moment_of_inertia.h>
 #include <frc/Encoder.h>
@@ -37,12 +39,23 @@ class SubShooter : public frc2::SubsystemBase {
   frc2::CommandPtr ShooterChangePosClose();
   frc2::CommandPtr StartFeeder();
   frc2::CommandPtr ShootSequence();
+  frc2::CommandPtr AutoShootSequence();
   frc2::CommandPtr StopShooterCommand();
   frc2::CommandPtr FeedNoteToArm();
   void StopShooterFunc();
   bool CheckShooterSpeed();
   bool CheckShooterLineBreak();
   void UpdatePIDFF();
+  frc2::CommandPtr StopFeeder();
+  void StopFeederFunc();
+  frc2::CommandPtr Outtake();
+  frc2::CommandPtr StartFeederSlow();
+  frc2::CommandPtr ReverseFeeder();
+  
+  void StopShooterFunc();
+  bool CheckShooterSpeed();
+  bool CheckShooterLineBreak();
+
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -72,6 +85,8 @@ class SubShooter : public frc2::SubsystemBase {
   ICSparkMax _shooterFeederMotor{canid::ShooterFeederMotor, 10_A};
   frc::DoubleSolenoid solShooter{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH, pcm1::ShootFar,
                                  pcm1::ShootClose};
+
+  frc::DigitalInput _shooterLineBreak{dio::ShooterLineBreak};
 
   frc::DigitalInput _shooterLineBreak{dio::ShooterLineBreak};
 

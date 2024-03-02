@@ -11,11 +11,14 @@
 
 #include "Utilities/ICSparkMax.h"
 
+#include <frc2/command/button/CommandXboxController.h>
+
 #include <frc/simulation/ElevatorSim.h>
 #include <frc/system/plant/DCMotor.h>
 
 #include <frc/DoubleSolenoid.h>
-#include <rev/SparkAbsoluteEncoder.h>
+#include <frc/DigitalInput.h>
+#include <grpl/LaserCan.h>
 
 #include <units/angle.h>
 
@@ -54,31 +57,64 @@ class SubClimber : public frc2::SubsystemBase {
   void Lock();
   void Unlock();
 
-  frc2::CommandPtr ClimberExtend();
-  frc2::CommandPtr ClimberRetract();
+  void ZeroClimber();
+
+  double GetLeftCurrent();
+  double GetRightCurrent();
+
+  void EnableSoftLimit(bool enabled);
+
+  bool GetTrapStatus();
+  void SetTrapStatus(bool stat);
+
+  frc2::CommandPtr JoyStickDrive(frc2::CommandXboxController& _controller);
+
+  frc2::CommandPtr ClimberPosition(units::meter_t distance);
+  frc2::CommandPtr ClimberManualDrive(float power);
   frc2::CommandPtr ClimberStop();
   frc2::CommandPtr ClimberLock();
   frc2::CommandPtr ClimberUnlock();
-
-
+  frc2::CommandPtr ClimberResetZero();
+  frc2::CommandPtr ClimberAutoReset();
+  frc2::CommandPtr ClimberResetCheck();
  private:
   units::meter_t TargetDistance;
 
   // Motor
-  ICSparkMax _lClimbMotor{canid::lClimbMotor, 30_A};
-  ICSparkMax _rClimbMotor{canid::rClimbMotor, 30_A};
+  ICSparkMax _lClimbMotor{canid::lClimbMotor, 60_A};
+  ICSparkMax _rClimbMotor{canid::rClimbMotor, 60_A};
 
   // Motor Setup
-  static constexpr double gearRatio = 30.0;
-  static constexpr double lP = 0.0, lI = 0.0, lD = 0.0, lF = 0,
+  static constexpr double gearRatio = 26.44444444;
+  static constexpr double lP = 5, lI = 0.0, lD = 0.0, lF = 0,
   
-                          rP = 0.0, rI = 0.0, rD = 0.0, rF = 0;
+                          rP = 5, rI = 0.0, rD = 0.0, rF = 0;
+
+  static constexpr double currentLimit = 10;
+
+  // Limit switches
+  frc::DigitalInput TopLimitSwitch{5};
+  frc::DigitalInput BottomLimitSwitch{6};
 
   // Unit translation
-  static constexpr units::meter_t WheelCir = 0.3_m;
+  static constexpr units::meter_t WheelCir = 0.12538_m;
 
   // Robot info
   static constexpr units::meter_t BaseHeight = 0.2_m;
+  static constexpr units::meter_t TopHeight = 0.62_m;
+
+  //reset
+  bool Reseting = false;
+  bool Reseted = false;
+
+  bool ResetLeft = false; bool ResetRight = false;
+
+  bool OnJoyStick = false;
+
+  // Trap sequence
+  bool TrapSequencing = false;
+
+  double inputDistance;
 
   // Sim
 

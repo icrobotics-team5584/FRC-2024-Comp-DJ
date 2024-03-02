@@ -12,9 +12,9 @@ namespace canid {
  constexpr int DriveBaseFrontRightTurn = 8;
  constexpr int DriveBaseFrontRightEncoder = 10; //done
 
- constexpr int DriveBaseFrontLeftDrive = 3; //done
- constexpr int DriveBaseFrontLeftTurn = 6;
- constexpr int DriveBaseFrontLeftEncoder = 9; //done
+ constexpr int DriveBaseFrontLeftDrive = 3;
+ constexpr int DriveBaseFrontLeftTurn = 6; //6
+ constexpr int DriveBaseFrontLeftEncoder = 9;
       
  constexpr int DriveBaseBackRightDrive = 5; //done
  constexpr int DriveBaseBackRightTurn = 2;
@@ -34,7 +34,7 @@ namespace canid {
   constexpr int ShooterFeederMotor = 14;
 
 //Arm IDS used: 17-18
-  constexpr int ArmMotor = 55; //19 /*BRING ME BACK*/
+  constexpr int ArmMotor = 19; //19
 
 //Amp/Trap IDS used: 19
   constexpr int AmpMotor = 20;
@@ -44,7 +44,7 @@ namespace canid {
   constexpr int rClimbMotor = 13;
 
   constexpr int ClimberLeftLaserCAN = 21;
-  constexpr int ClimberRightLaserCAN = 22;
+  constexpr int ClimberRightLaserCAN = 99; //same ID as Pcm1D
 
   constexpr int SpareSpark1 = 58;
   constexpr int SpareSpark2 = 60;
@@ -64,7 +64,7 @@ namespace pcm1 {
     constexpr int LockCylinderForward = 4;
     constexpr int LockCylinderReverse = 5;
 
-    constexpr int Pcm1Id = 22;
+    constexpr int Pcm1Id = 22; //same ID as ClimberRightLaserCan
 
 }
 
@@ -78,13 +78,13 @@ namespace OperatorConstants {}
 constexpr int kDriverControllerPort = 0;
 
 namespace dio {
-  constexpr int StorageLineBreak = 1;
-  constexpr int IntakeLineBreak = 10;
-  constexpr int ShooterLineBreak = 11;
+  constexpr int FDLineBreak = 3;
+  constexpr int SDLineBreak = 1;
+  constexpr int ShooterLineBreak = 4;
   constexpr int IntakeRetractedReed = 2;
-  constexpr int IntakeExtendedReed = 3;
-  constexpr int TopShooterEncoderChannelA = 6;
-  constexpr int TopShooterEncoderChannelB = 7;
+  constexpr int IntakeExtendedReed = 0;
+  constexpr int ShooterEncoderChannelA = 6;
+  constexpr int ShooterEncoderChannelB = 7;
   constexpr int BottomShooterEncoderChannelA = 8;
   constexpr int BottomShooterEncoderChannelB = 9;
 }

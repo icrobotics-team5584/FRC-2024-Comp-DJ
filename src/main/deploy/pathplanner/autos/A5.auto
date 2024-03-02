@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.5,
+      "y": 5.61
+    },
+    "rotation": -179.49484142952844
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A5_Speaker to Aa"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A5_Aa to Ac"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A5_Ac to C1"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
