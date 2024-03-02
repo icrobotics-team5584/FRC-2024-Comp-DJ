@@ -57,6 +57,7 @@ class SubArm : public frc2::SubsystemBase {
   frc2::CommandPtr CheckArmPos();
   frc2::CommandPtr Check();
   frc2::CommandPtr FeedNote();
+  frc2::CommandPtr Outtake();
   bool CheckIfArmIsHome();
   bool CheckIfArmHasGamePiece();
 

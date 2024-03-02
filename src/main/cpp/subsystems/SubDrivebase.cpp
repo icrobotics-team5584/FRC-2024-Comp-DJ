@@ -46,13 +46,14 @@ SubDrivebase::SubDrivebase() {
       HolonomicPathFollowerConfig(
           PIDConstants(2, 0.0, 0.0),    // Translation PID constants
           PIDConstants(0.5, 0.0, 0.0),  // Rotation PID constants
-          4_mps,                        // Max module speed, in m/s
+          MAX_VELOCITY,                        // Max module speed, in m/s
           432_mm,  // Drive base radius in meters. Distance from robot center to furthest module.
                    // NEEDS TO BE CHECKED AND MADE ACCURATE!!
           ReplanningConfig(
               false, false, 1_m,
               0.25_m)  // Default path replanning config. See the API for the options here
           ),
+          
       []() {
         // Boolean supplier that controls when the path will be mirrored for the red alliance
         // This will flip the path being followed to the red side of the field.
