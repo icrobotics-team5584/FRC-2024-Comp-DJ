@@ -34,7 +34,7 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("ShooterChangePosFar", SubShooter::GetInstance().ShooterChangePosFar());
   pathplanner::NamedCommands::registerCommand("ShooterChangePosClose", SubShooter::GetInstance().ShooterChangePosClose());
   pathplanner::NamedCommands::registerCommand("StopFeeder", SubShooter::GetInstance().StopFeeder());
-  pathplanner::NamedCommands::registerCommand("Shoot3_s", cmd::ShootFullSequenceWithVision().WithTimeout(3_s));
+  //pathplanner::NamedCommands::registerCommand("Shoot3_s", cmd::ShootFullSequenceWithVision(controller).WithTimeout(3_s));
 
   
   SubArm::GetInstance();
