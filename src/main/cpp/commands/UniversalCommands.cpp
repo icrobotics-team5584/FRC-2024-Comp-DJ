@@ -23,13 +23,6 @@ frc2::CommandPtr ArmToTrapPos() {
       .AndThen([]() { return SubArm::GetInstance().TiltArmToAngle(SubArm::TRAP_ANGLE); });
 }
 
-frc2::CommandPtr FeedNoteIntoArm() {
-  return SubAmp::GetInstance()
-      .FeedNoteArm()
-      .AlongWith(SubShooter::GetInstance().FeedNoteToArm())
-      .Until([]{return SubAmp::GetInstance().CheckIfArmHasGamePiece();});
-}
-
 frc2::CommandPtr ArmToStow() {
   return SubArm::GetInstance()
       .TiltArmToAngle(SubArm::HOME_ANGLE)
@@ -38,7 +31,7 @@ frc2::CommandPtr ArmToStow() {
 }
 
 frc2::CommandPtr SequenceArmToAmpPos() {
-  return Sequence(FeedNoteIntoArm(), ArmToAmpPos(), Idle()).FinallyDo([]() { ArmToStow(); });
+  return StartEnd([] { ArmToAmpPos(); }, [] { ArmToStow(); });
 }
 
 frc2::CommandPtr SequenceArmToTrapPos() {

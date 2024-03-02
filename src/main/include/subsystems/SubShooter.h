@@ -51,42 +51,37 @@ class SubShooter : public frc2::SubsystemBase {
   frc2::CommandPtr Outtake();
   frc2::CommandPtr StartFeederSlow();
   frc2::CommandPtr ReverseFeeder();
-  
-  void StopShooterFunc();
-  bool CheckShooterSpeed();
-  bool CheckShooterLineBreak();
 
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  static constexpr double ShooterP = 2; 
+  static constexpr double ShooterP = 0; 
   static constexpr double ShooterI = 0;
   static constexpr double ShooterD = 0;
 
   units::turns_per_second_t ShootFarTarget = 42_tps;
   units::turns_per_second_t ShootCloseTarget = 42_tps;
 
-  static constexpr units::volt_t kS = 0.0001_V;
+  static constexpr units::volt_t kS = 0.0000001_V;
   static constexpr decltype(1_V / 1_tps) kV = 0.14_V / 1_tps;
   static constexpr decltype(1_V / 1_tr_per_s_sq) kA = 0.001_V / 1_tr_per_s_sq;
-
+  double _bottomEncoderPositionPrev = 0;
+  double _topEncoderPositionPrev = 0;
   frc::SimpleMotorFeedforward<units::turns> _shooterFF{kS, kV, kA};
 
-  frc::Encoder _topEncoder{dio::TopShooterEncoderChannelA, dio::TopShooterEncoderChannelB, frc::Encoder::EncodingType::k1X};
-  frc::Encoder _bottomEncoder{dio::BottomShooterEncoderChannelA, dio::BottomShooterEncoderChannelB, frc::Encoder::EncodingType::k1X};
+  frc::Encoder _topEncoder{dio::TopShooterEncoderChannelA, dio::TopShooterEncoderChannelB, false , frc::Encoder::EncodingType::k1X};
+  frc::Encoder _bottomEncoder{dio::BottomShooterEncoderChannelA, dio::BottomShooterEncoderChannelB , false,   frc::Encoder::EncodingType::k1X};
   
   frc::PIDController _topPID{ShooterP, ShooterI, ShooterD};
   frc::PIDController _bottomPID{ShooterP, ShooterI, ShooterD};
 
-  ICSparkMax _shooterMotorMain{canid::ShooterMotorMain, 30_A};
-  ICSparkMax _secondaryShooterMotor{canid::SecondaryShooterMotor, 30_A};
+  ICSparkMax _topShooterMotor{canid::TopShooterMotor, 30_A};
+  ICSparkMax _bottomShooterMotor{canid::BottomShooterMotor, 30_A};
 
   ICSparkMax _shooterFeederMotor{canid::ShooterFeederMotor, 10_A};
   frc::DoubleSolenoid solShooter{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH, pcm1::ShootFar,
                                  pcm1::ShootClose};
-
-  frc::DigitalInput _shooterLineBreak{dio::ShooterLineBreak};
 
   frc::DigitalInput _shooterLineBreak{dio::ShooterLineBreak};
 

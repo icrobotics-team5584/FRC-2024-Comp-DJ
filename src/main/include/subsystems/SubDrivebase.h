@@ -77,10 +77,10 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::Translation2d _backLeftLocation{-0.281_m, +0.281_m};
   frc::Translation2d _backRightLocation{-0.281_m, -0.281_m};
 
-  const double FRONT_RIGHT_MAG_OFFSET =  -0.014648; //Raised modules -> -0.014648; | Low modules -> -0.875732; new
-  const double FRONT_LEFT_MAG_OFFSET =   -0.673584 ; //Raised modules -> -0.673584; | Low modules -> -0.443359; new
-  const double BACK_RIGHT_MAG_OFFSET =   -0.898926; //Raised modules -> -0.898926; | Low modules -> -0.959473;
-  const double BACK_LEFT_MAG_OFFSET =    -0.455322; //Raised modules -> -0.455322; | Low modules -> -0.825928;
+  const double FRONT_RIGHT_MAG_OFFSET =  -0.875732; //Raised modules -> -0.014648; | Low modules -> -0.875732; new
+  const double FRONT_LEFT_MAG_OFFSET =   -0.443359 ; //Raised modules -> -0.673584; | Low modules -> -0.443359; new
+  const double BACK_RIGHT_MAG_OFFSET =   -0.959473; //Raised modules -> -0.898926; | Low modules -> -0.959473;
+  const double BACK_LEFT_MAG_OFFSET =    -0.825928; //Raised modules -> -0.455322; | Low modules -> -0.825928;
 
   SwerveModule _frontLeft{canid::DriveBaseFrontLeftDrive, canid::DriveBaseFrontLeftTurn,
                           canid::DriveBaseFrontLeftEncoder, FRONT_LEFT_MAG_OFFSET};

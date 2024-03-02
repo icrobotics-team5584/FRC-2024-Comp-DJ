@@ -8,21 +8,24 @@
 SubShooter::SubShooter() {
   solShooter.Set(frc::DoubleSolenoid::kReverse);
 
-  _secondaryShooterMotor.SetInverted(true);
-  frc::SmartDashboard::PutData("Shooter/Main Motor", (wpi::Sendable*)&_shooterMotorMain);
-  frc::SmartDashboard::PutData("Shooter/Second Motor", (wpi::Sendable*)&_secondaryShooterMotor);
+  _bottomShooterMotor.SetInverted(true);
+  _topShooterMotor.SetInverted(true);
+  _topEncoder.SetReverseDirection(true);
+  _bottomEncoder.SetReverseDirection(true);
+  frc::SmartDashboard::PutData("Shooter/Top Motor", (wpi::Sendable*)&_topShooterMotor);
+  frc::SmartDashboard::PutData("Shooter/Bottom Motor", (wpi::Sendable*)&_bottomShooterMotor);
   frc::SmartDashboard::PutData("Shooter/Feeder motor", (wpi::Sendable*)&_shooterFeederMotor);
   frc::SmartDashboard::PutData("Shooter/Top PID", (wpi::Sendable*)&_topPID);
   frc::SmartDashboard::PutData("Shooter/Bottom PID", (wpi::Sendable*)&_bottomPID);
 
-  _topEncoder.SetSamplesToAverage(7);
+  _topEncoder.SetSamplesToAverage(30);
   _topEncoder.SetDistancePerPulse(1.00/2048.00);
-  _bottomEncoder.SetSamplesToAverage(7);
+  _bottomEncoder.SetSamplesToAverage(30);
   _bottomEncoder.SetDistancePerPulse(1.00/2048.00);
  
   _shooterFeederMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
-  frc::SmartDashboard::PutData("Shooter/Main Motor", (wpi::Sendable*)&_shooterMotorMain);
-  frc::SmartDashboard::PutData("Shooter/Second Motor", (wpi::Sendable*)&_secondaryShooterMotor);
+  frc::SmartDashboard::PutData("Shooter/Top Motor", (wpi::Sendable*)&_topShooterMotor);
+  frc::SmartDashboard::PutData("Shooter/Bottom Motor", (wpi::Sendable*)&_bottomShooterMotor);
   frc::SmartDashboard::PutData("Shooter/Feeder motor", (wpi::Sendable*)&_shooterFeederMotor);
   
 
@@ -48,18 +51,27 @@ void SubShooter::Periodic() {
   }
 
   frc::SmartDashboard::PutBoolean("Shooter/Shooter linebreaker", _shooterLineBreak.Get());
+  frc::SmartDashboard::PutNumber("Shooter/Top Encoder", _topEncoder.GetRate());
+  frc::SmartDashboard::PutNumber("Shooter/Top Shooter Distance", _topEncoder.GetDistance());
+  frc::SmartDashboard::PutNumber("Shooter/Top Shooter Distance Prev", (_topEncoder.GetDistance()-_topEncoderPositionPrev)/0.02);
+  frc::SmartDashboard::PutNumber("Shooter/Bottom Encoder", _bottomEncoder.GetRate());
+  frc::SmartDashboard::PutNumber("Shooter/Bottom Shooter Distance", _bottomEncoder.GetDistance());
+  frc::SmartDashboard::PutNumber("Shooter/Bottom Shooter Distance Prev", (_bottomEncoder.GetDistance()-_bottomEncoderPositionPrev)/0.02);
+
+  _bottomEncoderPositionPrev = _bottomEncoder.GetDistance();
+  _topEncoderPositionPrev = _topEncoder.GetDistance();
 }
 
 void SubShooter::SimulationPeriodic(){
- _topShooterSim.SetInputVoltage(_shooterMotorMain.GetSimVoltage());
+ _topShooterSim.SetInputVoltage(_topShooterMotor.GetSimVoltage());
  _topShooterSim.Update(20_ms);
- _shooterMotorMain.UpdateSimEncoder(_topShooterSim.GetAngularPosition(), _topShooterSim.GetAngularVelocity());
+ _topShooterMotor.UpdateSimEncoder(_topShooterSim.GetAngularPosition(), _topShooterSim.GetAngularVelocity());
  _topEncoderSim.SetDistance(_topShooterSim.GetAngularPosition().convert<units::turns>().value());
  _topEncoderSim.SetRate(_topShooterSim.GetAngularVelocity().convert<units::turns_per_second>().value());
 
- _bottomShooterSim.SetInputVoltage(_secondaryShooterMotor.GetSimVoltage());
+ _bottomShooterSim.SetInputVoltage(_bottomShooterMotor.GetSimVoltage());
  _bottomShooterSim.Update(20_ms);
- _secondaryShooterMotor.UpdateSimEncoder(_bottomShooterSim.GetAngularPosition(), _bottomShooterSim.GetAngularVelocity());
+ _bottomShooterMotor.UpdateSimEncoder(_bottomShooterSim.GetAngularPosition(), _bottomShooterSim.GetAngularVelocity());
  _bottomEncoderSim.SetDistance(_bottomShooterSim.GetAngularPosition().convert<units::turns>().value());
  _bottomEncoderSim.SetRate(_bottomShooterSim.GetAngularVelocity().convert<units::turns_per_second>().value());
  
@@ -76,18 +88,18 @@ frc2::CommandPtr SubShooter::StartShooter() {
   return Run([this] {
            if (solShooter.Get() == frc::DoubleSolenoid::kReverse) {
              auto FFVolts = _shooterFF.Calculate(ShootFarTarget);
-             _shooterMotorMain.SetVoltage(
-                 _topPID.Calculate(_topEncoder.GetRate(), ShootFarTarget.value()) * 1_V + FFVolts);
-             _secondaryShooterMotor.SetVoltage(
-                 _bottomPID.Calculate(_bottomEncoder.GetRate(), ShootFarTarget.value()) * 1_V +
+             _topShooterMotor.SetVoltage(
+                 _topPID.Calculate((_topEncoder.GetDistance()-_topEncoderPositionPrev)/0.02, ShootFarTarget.value()) * 1_V + FFVolts);
+             _bottomShooterMotor.SetVoltage(
+                 _bottomPID.Calculate((_bottomEncoder.GetDistance()-_bottomEncoderPositionPrev)/0.02, ShootFarTarget.value()) * 1_V +
                  FFVolts);
            } else {
              auto FFVolts = _shooterFF.Calculate(ShootCloseTarget);
-             _shooterMotorMain.SetVoltage(
-                 _topPID.Calculate(_topEncoder.GetRate(), ShootCloseTarget.value()) * 1_V +
+             _topShooterMotor.SetVoltage(
+                 _topPID.Calculate((_topEncoder.GetDistance()-_topEncoderPositionPrev)/0.02, ShootCloseTarget.value()) * 1_V +
                  FFVolts);
-             _secondaryShooterMotor.SetVoltage(
-                 _bottomPID.Calculate(_bottomEncoder.GetRate(), ShootCloseTarget.value()) * 1_V +
+             _bottomShooterMotor.SetVoltage(
+                 _bottomPID.Calculate((_bottomEncoder.GetDistance()-_bottomEncoderPositionPrev)/0.02, ShootCloseTarget.value()) * 1_V +
                  FFVolts);
            }
          })
@@ -95,13 +107,13 @@ frc2::CommandPtr SubShooter::StartShooter() {
 }
 
 void SubShooter::StopShooterFunc(){
- _shooterMotorMain.Set(0); 
- _secondaryShooterMotor.Set(0);
+ _topShooterMotor.Set(0); 
+ _bottomShooterMotor.Set(0);
  _shooterFeederMotor.Set(0);
 }
 
 frc2::CommandPtr SubShooter::StopShooterCommand(){
- return RunOnce([this]{ _shooterMotorMain.Set(0);}).AndThen(RunOnce([this] {_secondaryShooterMotor.Set(0);}));
+ return RunOnce([this]{ _topShooterMotor.Set(0);}).AndThen(RunOnce([this] {_bottomShooterMotor.Set(0);}));
 }
 
 frc2::CommandPtr SubShooter::StartFeeder() {
@@ -137,7 +149,7 @@ frc2::CommandPtr SubShooter::AutoShootSequence() {
 
 
 bool SubShooter::CheckShooterSpeed(){
-if(units::math::abs(_secondaryShooterMotor.GetVelError()) < 200_rpm && units::math::abs(_shooterMotorMain.GetVelError()) < 200_rpm){
+if(units::math::abs(_bottomShooterMotor.GetVelError()) < 500_rpm && units::math::abs(_topShooterMotor.GetVelError()) < 500_rpm){
   return true;
  } 
  return false;
@@ -154,24 +166,23 @@ frc2::CommandPtr SubShooter::ShooterChangePosClose() {
 frc2::CommandPtr SubShooter::FeedNoteToArm() {
   return Run([this] {
            _shooterFeederMotor.Set(-1);
-           _secondaryShooterMotor.Set(-0.2);
-           _shooterMotorMain.Set(-0.1);
+           _bottomShooterMotor.Set(-0.2);
+           _topShooterMotor.Set(-0.1);
          })
       .FinallyDo([this] {
         _shooterFeederMotor.Set(0);
-        _secondaryShooterMotor.Set(0);
-        _shooterMotorMain.Set(0);})
-      
+        _bottomShooterMotor.Set(0);
+        _topShooterMotor.Set(0);});
 }
 frc2::CommandPtr SubShooter::Outtake() {
   return Run([this] {
            _shooterFeederMotor.Set(-1);
-           _secondaryShooterMotor.Set(-0.1);
-           _shooterMotorMain.Set(-0.1);
+           _bottomShooterMotor.Set(-0.1);
+           _topShooterMotor.Set(-0.1);
          })
       .FinallyDo([this] {
-        _secondaryShooterMotor.Set(0);
-        _shooterMotorMain.Set(0);
+        _bottomShooterMotor.Set(0);
+        _topShooterMotor.Set(0);
         _shooterFeederMotor.Set(0);
       });
 }

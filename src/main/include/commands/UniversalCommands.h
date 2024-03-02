@@ -8,7 +8,6 @@ frc2::CommandPtr ArmToTrapPos();
 frc2::CommandPtr SequenceArmToTrapPos();
 frc2::CommandPtr ArmToStow();
 frc2::CommandPtr IntakefullSequence();
-frc2::CommandPtr FeedNoteIntoArm();
 
 frc2::CommandPtr AutoShootFullSequence();
 frc2::CommandPtr ShootSequence();

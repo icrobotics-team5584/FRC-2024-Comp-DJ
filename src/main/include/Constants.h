@@ -29,8 +29,8 @@ namespace canid {
   constexpr int IntakeMotor = 17;
 
 //Shooter IDS used: 14-16
-  constexpr int ShooterMotorMain = 18;
-  constexpr int SecondaryShooterMotor = 16;
+  constexpr int TopShooterMotor = 18;
+  constexpr int BottomShooterMotor = 16;
   constexpr int ShooterFeederMotor = 14;
 
 //Arm IDS used: 17-18
@@ -83,8 +83,8 @@ namespace dio {
   constexpr int ShooterLineBreak = 4;
   constexpr int IntakeRetractedReed = 2;
   constexpr int IntakeExtendedReed = 0;
-  constexpr int ShooterEncoderChannelA = 6;
-  constexpr int ShooterEncoderChannelB = 7;
+  constexpr int TopShooterEncoderChannelA = 6;
+  constexpr int TopShooterEncoderChannelB = 7;
   constexpr int BottomShooterEncoderChannelA = 8;
   constexpr int BottomShooterEncoderChannelB = 9;
 }
