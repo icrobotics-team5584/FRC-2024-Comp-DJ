@@ -152,7 +152,7 @@ frc2::CommandPtr SubShooter::StartFeederSlow(){
 }
 
 frc2::CommandPtr SubShooter::ReverseFeeder() {
-  return Run([this] { _shooterFeederMotor.Set(-0.2); }).WithTimeout(0.2_s).FinallyDo([this] {
+  return Run([this] { _shooterFeederMotor.Set(-0.2); }).FinallyDo([this] {
     _shooterFeederMotor.Set(0);
   });
 }
