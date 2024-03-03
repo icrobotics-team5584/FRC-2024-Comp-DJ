@@ -55,15 +55,15 @@ class SubShooter : public frc2::SubsystemBase {
   static constexpr double ShooterD = 0;
   static constexpr double ShooterFF = 0.012;
 
-  units::turns_per_second_t ShootFarTargetRPM = 42_tps;
-  units::turns_per_second_t ShootCloseTargetRPM = 42_tps;
+  units::turns_per_second_t ShootFarTargetRPM = 46_tps;
+  units::turns_per_second_t ShootCloseTargetRPM = 46_tps;
 
   
 
   ICSparkMax _shooterMotorMain{canid::ShooterMotorMain, 30_A};
   ICSparkMax _secondaryShooterMotor{canid::SecondaryShooterMotor, 30_A};
 
-  ICSparkMax _shooterFeederMotor{canid::ShooterFeederMotor, 10_A};
+  ICSparkMax _shooterFeederMotor{canid::ShooterFeederMotor, 20_A};
   frc::DoubleSolenoid solShooter{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH, pcm1::ShootFar,
                                  pcm1::ShootClose};
 
