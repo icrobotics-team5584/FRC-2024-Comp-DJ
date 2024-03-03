@@ -62,7 +62,7 @@ frc2::CommandPtr SubIntake::EndIntake(){
 frc2::CommandPtr SubIntake::IntakeSequence(){
   return Intake()
       .FinallyDo([this] {
-        /*solIntake.Set(frc::DoubleSolenoid::Value::kReverse);*/
+        solIntake.Set(frc::DoubleSolenoid::Value::kReverse);
         _intakeMotorSpin.Set(0);
       });
 }
@@ -72,9 +72,9 @@ bool SubIntake::IsIntakeDeployed(){
 }  // LOCK ARM IF RETURN FALSE
 
  void SubIntake::FuncRetractIntake(){
-  //solIntake.Set(frc::DoubleSolenoid::kReverse);
+  solIntake.Set(frc::DoubleSolenoid::kReverse);
  }
 
  frc2::CommandPtr SubIntake::CommandRetractIntake(){
-  return RunOnce([this]{/*solIntake.Set(frc::DoubleSolenoid::kReverse)*/;});
+  return RunOnce([this]{solIntake.Set(frc::DoubleSolenoid::kReverse);});
  }
