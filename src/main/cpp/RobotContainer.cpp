@@ -118,7 +118,7 @@ void RobotContainer::ConfigureBindings() {
 
   _operatorController.Y().OnTrue(cmd::ArmToAmpPos());
   _operatorController.Y().OnFalse(cmd::ArmToStow());
-//  _operatorController.X().OnTrue(/*ShootIntoAmp*/);
+  _operatorController.X().OnTrue(SubShooter::GetInstance().ShootIntoAmp());
   _operatorController.B().OnTrue(cmd::ArmToAmpPos());
   _operatorController.B().OnFalse(cmd::ArmToStow());
   _operatorController.A().OnTrue(cmd::PrepareToShoot());

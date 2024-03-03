@@ -134,6 +134,15 @@ frc2::CommandPtr SubShooter::StartShooter() {
       .Until([this] { return CheckShooterSpeed(); });
 }
 
+frc2::CommandPtr SubShooter::ShootIntoAmp() {
+  return ShooterChangePosClose()
+      .AndThen(Run([this] { CurrentShooterTarget = ShootAmpTarget; }).Until([this] {
+        return CheckShooterSpeed();
+      }))
+      .AndThen(StartFeeder())
+      .FinallyDo([this] { StopShooterFunc(); });
+}
+
 void SubShooter::StopShooterFunc(){
  CurrentShooterTarget = 0_tps;
  _shooterFeederMotor.Set(0);
