@@ -51,14 +51,17 @@ frc2::CommandPtr AutoShootFullSequence() {
       .AndThen({SubArm::GetInstance().FeedNote()});
 }
 
-frc2::CommandPtr ShootFullSequenceWithoutVision() {
-  return SubShooter::GetInstance().ShootSequence().AlongWith(
-      WaitUntil([] {
-        return SubShooter::GetInstance().CheckShooterSpeed();
-      }).AndThen({SubArm::GetInstance().FeedNote()}));
+frc2::CommandPtr ShootFullSequenceWithoutVision(){
+  return SubShooter::GetInstance()
+      .ShootSequence()
+      .AlongWith(WaitUntil([] {
+                   return SubShooter::GetInstance().CheckShooterSpeed();
+                 }).AndThen(SubArm::GetInstance().FeedNote()))
+      .AndThen(WaitUntil([] { return !SubShooter::GetInstance().CheckShooterLineBreak(); }))
+      .AndThen(SubShooter::GetInstance().ShooterChangePosClose());
 }
 
-frc2::CommandPtr ShootSpeakerOrAmp(){
+frc2::CommandPtr ShootSpeakerOrAmp() {
   return Either(ShootFullSequenceWithoutVision(), SubArm::GetInstance().FastAmpShooter(),
                 [] { return SubArm::GetInstance().GetAngle() < 0.4_tr; });
 }
