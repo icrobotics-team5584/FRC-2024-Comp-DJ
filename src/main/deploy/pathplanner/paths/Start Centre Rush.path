@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.5013930170513679,
-        "y": 6.663465994549679
+        "x": 1.4,
+        "y": 6.53
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.168910700160914,
-        "y": 6.358984244359359
+        "x": 2.0675176831095463,
+        "y": 6.225518249809681
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "StartPosition"
     },
     {
       "anchor": {
-        "x": 2.9535367487282747,
-        "y": 6.159900023081073
+        "x": 3.491281543966597,
+        "y": 6.335441091934815
       },
       "prevControl": {
-        "x": 2.625633325446393,
-        "y": 6.347273407813577
+        "x": 2.9925270376856545,
+        "y": 6.299168036932566
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "End center rush"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "Shoot Preload",
-      "waypointRelativePos": 0.05,
+      "waypointRelativePos": 0.4,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,7 +57,7 @@
   },
   "goalEndState": {
     "velocity": 3.5,
-    "rotation": -155.0,
+    "rotation": -155.4622715234223,
     "rotateFast": false
   },
   "reversed": false,

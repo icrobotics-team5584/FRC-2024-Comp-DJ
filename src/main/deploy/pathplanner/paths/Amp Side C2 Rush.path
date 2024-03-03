@@ -3,51 +3,71 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.95,
-        "y": 6.16
+        "x": 3.699851610229537,
+        "y": 5.365136870624618
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.260571548247232,
-        "y": 6.991369417831561
+        "x": 6.610764274160127,
+        "y": 7.323881840746138
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "End C1 rush"
     },
     {
       "anchor": {
-        "x": 8.141437338509483,
-        "y": 5.668044888158249
+        "x": 7.916594254241141,
+        "y": 5.655321310642622
       },
       "prevControl": {
-        "x": 8.106304828872137,
-        "y": 5.527514849608871
+        "x": 7.8814617446037945,
+        "y": 5.514791272093244
       },
       "nextControl": {
-        "x": 8.181605176478218,
-        "y": 5.828716240033184
+        "x": 7.9567620922098765,
+        "y": 5.815992662517556
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.95,
-        "y": 6.16
+        "x": 3.699851610229537,
+        "y": 5.365136870624618
       },
       "prevControl": {
-        "x": 5.237149875155669,
-        "y": 6.991369417831561
+        "x": 6.084804976627497,
+        "y": 7.514315379507952
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Shoot Position"
+      "linkedName": "End C1 rush"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.85,
+      "waypointRelativePos": 0.6,
+      "rotationDegrees": 160.56,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 2.0,
       "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1.65,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 157.55724663470565,
       "rotateFast": false
     }
   ],
@@ -94,7 +114,7 @@
       }
     },
     {
-      "name": "New Event Marker",
+      "name": "Stop Feeder",
       "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",
@@ -119,13 +139,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -155.0,
+    "rotation": -178.56474572426436,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "A10",
   "previewStartingState": {
-    "rotation": -155.0,
+    "rotation": 180.0,
     "velocity": 0.0
   },
   "useDefaultConstraints": true

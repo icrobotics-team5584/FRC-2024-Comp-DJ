@@ -3,51 +3,61 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.95,
-        "y": 6.16
+        "x": 3.491281543966597,
+        "y": 6.335441091934815
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.5579213555003415,
-        "y": 6.335562571267796
+        "x": 5.099202899466939,
+        "y": 6.511003663202611
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "End center rush"
     },
     {
       "anchor": {
-        "x": 8.188280684692609,
-        "y": 7.448092043117039
+        "x": 7.98007210049508,
+        "y": 7.360154895748388
       },
       "prevControl": {
-        "x": 4.241728768764241,
-        "y": 6.2067433692642
+        "x": 7.363433841742796,
+        "y": 7.31476360719078
       },
       "nextControl": {
-        "x": 8.370135483130497,
-        "y": 7.505292662210262
+        "x": 8.587614333696552,
+        "y": 7.40487661780628
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.95,
-        "y": 6.16
+        "x": 3.699851610229537,
+        "y": 5.365136870624618
       },
       "prevControl": {
-        "x": 5.120041509697854,
-        "y": 6.417538427088266
+        "x": 4.543200139031862,
+        "y": 6.145007553173002
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Shoot Position"
+      "linkedName": "End C1 rush"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 1.0,
+      "rotationDegrees": -176.5,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 2,
       "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.6,
+      "rotationDegrees": -176.5,
       "rotateFast": false
     }
   ],
@@ -65,23 +75,6 @@
     }
   ],
   "eventMarkers": [
-    {
-      "name": "Shoot",
-      "waypointRelativePos": 2.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "AutoShootFullSequence"
-              }
-            }
-          ]
-        }
-      }
-    },
     {
       "name": "Intake",
       "waypointRelativePos": 0.55,
@@ -114,7 +107,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -155.0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,

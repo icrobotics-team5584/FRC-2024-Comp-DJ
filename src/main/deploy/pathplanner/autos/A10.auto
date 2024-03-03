@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.5013930170513679,
-      "y": 6.663465994549679
+      "x": 1.4,
+      "y": 6.53
     },
     "rotation": 180.0
   },
@@ -34,6 +34,12 @@
           "type": "path",
           "data": {
             "pathName": "Amp Side C1 Rush"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShootFullSequence"
           }
         },
         {
