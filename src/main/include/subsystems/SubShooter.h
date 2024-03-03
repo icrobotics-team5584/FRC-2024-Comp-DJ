@@ -45,7 +45,7 @@ class SubShooter : public frc2::SubsystemBase {
   void StopShooterFunc();
   bool CheckShooterSpeed();
   bool CheckShooterLineBreak();
-  void UpdatePIDFF(units::turns_per_second_t TargetVelocity = 0_tps);
+  void UpdatePIDFF();
   frc2::CommandPtr StopFeeder();
   void StopFeederFunc();
   frc2::CommandPtr Outtake();
@@ -60,14 +60,22 @@ class SubShooter : public frc2::SubsystemBase {
   static constexpr double ShooterI = 0;
   static constexpr double ShooterD = 0;
 
-  units::turns_per_second_t ShootFarTarget = 42_tps;
-  units::turns_per_second_t ShootCloseTarget = 42_tps;
+  units::turns_per_second_t ShootFarTarget = 42.5_tps;
+  units::turns_per_second_t ShootCloseTarget = 42.5_tps;
+
+  units::turns_per_second_t CurrentShooterTarget = 0_tps;
 
   static constexpr units::volt_t kS = 0.0000001_V;
-  static constexpr decltype(1_V / 1_tps) kV = 0.14_V / 1_tps;
+  static constexpr decltype(1_V / 1_tps) kV = 0.135_V / 1_tps;
   static constexpr decltype(1_V / 1_tr_per_s_sq) kA = 0.001_V / 1_tr_per_s_sq;
   double _bottomEncoderPositionPrev = 0;
   double _topEncoderPositionPrev = 0;
+  double _bottomEncoderDiff = 0;
+  double _topEncoderDiff = 0;
+  std::array<double, 3> _topPastVelocityMeasurements{0,0,0};
+  std::array<double, 3> _bottomPastVelocityMeasurements{0,0,0};
+  double _topPastVelocityAvg = 0;
+  double _bottomPastVelocityAvg = 0;
   frc::SimpleMotorFeedforward<units::turns> _shooterFF{kS, kV, kA};
 
   frc::Encoder _topEncoder{dio::TopShooterEncoderChannelA, dio::TopShooterEncoderChannelB, false , frc::Encoder::EncodingType::k1X};

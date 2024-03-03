@@ -42,6 +42,32 @@ using namespace frc2::cmd;
 
 // This method will be called once per scheduler run
 void SubShooter::Periodic() {
+
+  // Calculate and filter velocity measurements
+  // (we were having issues with the WPILib encoder's GetRate() readings)
+  _bottomEncoderDiff = (_bottomEncoder.GetDistance()-_bottomEncoderPositionPrev)/0.02;
+  _topEncoderDiff = (_topEncoder.GetDistance()-_topEncoderPositionPrev)/0.02;
+
+  _bottomEncoderPositionPrev = _bottomEncoder.GetDistance();
+  _topEncoderPositionPrev = _topEncoder.GetDistance();
+
+
+  _topPastVelocityMeasurements[2] = _topPastVelocityMeasurements[1];
+  _topPastVelocityMeasurements[1] = _topPastVelocityMeasurements[0];
+  _topPastVelocityMeasurements[0] = _topEncoderDiff;
+
+  _bottomPastVelocityMeasurements[2] = _bottomPastVelocityMeasurements[1];
+  _bottomPastVelocityMeasurements[1] = _bottomPastVelocityMeasurements[0];
+  _bottomPastVelocityMeasurements[0] = _bottomEncoderDiff;
+
+
+  _topPastVelocityAvg = (_topPastVelocityMeasurements[0] + _topPastVelocityMeasurements[1] + _topPastVelocityMeasurements[2])/3.0;
+  _bottomPastVelocityAvg = (_bottomPastVelocityMeasurements[0] + _bottomPastVelocityMeasurements[1] + _bottomPastVelocityMeasurements[2])/3.0;
+
+  UpdatePIDFF();
+
+
+  // Log subsystem info
   frc::SmartDashboard::PutNumber("Shooter/Piston Position", solShooter.Get());
 
   if (solShooter.Get() == frc::DoubleSolenoid::kReverse) {
@@ -53,18 +79,15 @@ void SubShooter::Periodic() {
   frc::SmartDashboard::PutBoolean("Shooter/Shooter linebreaker", _shooterLineBreak.Get());
   frc::SmartDashboard::PutNumber("Shooter/Top Encoder", _topEncoder.GetRate());
   frc::SmartDashboard::PutNumber("Shooter/Top Shooter Distance", _topEncoder.GetDistance());
-  frc::SmartDashboard::PutNumber("Shooter/Top Shooter Distance Prev", (_topEncoder.GetDistance()-_topEncoderPositionPrev)/0.02);
+  frc::SmartDashboard::PutNumber("Shooter/Top Shooter Distance Prev", _topEncoderDiff);
   frc::SmartDashboard::PutNumber("Shooter/Bottom Encoder", _bottomEncoder.GetRate());
   frc::SmartDashboard::PutNumber("Shooter/Bottom Shooter Distance", _bottomEncoder.GetDistance());
-  frc::SmartDashboard::PutNumber("Shooter/Bottom Shooter Distance Prev", (_bottomEncoder.GetDistance()-_bottomEncoderPositionPrev)/0.02);
-  frc::SmartDashboard::PutNumber("Shooter/Bottom Velocity Error", std::abs(ShootFarTarget.value() - ((_bottomEncoder.GetDistance() - _bottomEncoderPositionPrev) / 0.02)));
-  frc::SmartDashboard::PutNumber("Shooter/Top Velocity Error", std::abs(ShootFarTarget.value() - ((_topEncoder.GetDistance() - _topEncoderPositionPrev) / 0.02)));
+  frc::SmartDashboard::PutNumber("Shooter/Bottom Shooter Distance Prev", (_bottomEncoderDiff));
+  frc::SmartDashboard::PutNumber("Shooter/Bottom Velocity Error", std::abs(ShootFarTarget.value() - _bottomEncoderDiff));
+  frc::SmartDashboard::PutNumber("Shooter/Top Velocity Error", std::abs(ShootFarTarget.value() - _topEncoderDiff));
+  frc::SmartDashboard::PutNumber("Shooter/Top velocity avg", _topPastVelocityAvg);
+  frc::SmartDashboard::PutNumber("Shooter/Bottom velocity avg", _bottomPastVelocityAvg);
   frc::SmartDashboard::PutBoolean("Shooter/CheckShoote boolean", CheckShooterSpeed());
-
-  _bottomEncoderPositionPrev = _bottomEncoder.GetDistance();
-  _topEncoderPositionPrev = _topEncoder.GetDistance();
-
-  UpdatePIDFF();
 }
 
 void SubShooter::SimulationPeriodic(){
@@ -85,33 +108,34 @@ void SubShooter::SimulationPeriodic(){
  _shooterFeederMotor.UpdateSimEncoder(_feederSim.GetAngularPosition(), _feederSim.GetAngularVelocity());
 }
 
-void SubShooter::UpdatePIDFF(units::turns_per_second_t TargetVelocity) {
-           if (solShooter.Get() == frc::DoubleSolenoid::kReverse) {
-             auto FFVolts = _shooterFF.Calculate(TargetVelocity);
-             _topShooterMotor.SetVoltage(
-                 _topPID.Calculate((_topEncoder.GetDistance()-_topEncoderPositionPrev)/0.02, TargetVelocity.value()) * 1_V + FFVolts);
-             _bottomShooterMotor.SetVoltage(
-                 _bottomPID.Calculate((_bottomEncoder.GetDistance()-_bottomEncoderPositionPrev)/0.02, TargetVelocity.value()) * 1_V +
-                 FFVolts);
-           } else {
-             auto FFVolts = _shooterFF.Calculate(TargetVelocity);
-             _topShooterMotor.SetVoltage(
-                 _topPID.Calculate((_topEncoder.GetDistance()-_topEncoderPositionPrev)/0.02, TargetVelocity.value()) * 1_V +
-                 FFVolts);
-             _bottomShooterMotor.SetVoltage(
-                 _bottomPID.Calculate((_bottomEncoder.GetDistance()-_bottomEncoderPositionPrev)/0.02, TargetVelocity.value()) * 1_V +
-                 FFVolts);
-           }
+void SubShooter::UpdatePIDFF() {
+  auto FFVolts = _shooterFF.Calculate(CurrentShooterTarget);
+  auto Topvolts = _topPID.Calculate(_topPastVelocityAvg, CurrentShooterTarget.value()) * 1_V + FFVolts;
+  if (Topvolts < 0_V){
+    Topvolts = 0_V;
+  }
+  _topShooterMotor.SetVoltage(Topvolts);
+
+  auto Bottomvolts = _bottomPID.Calculate(_bottomPastVelocityAvg, CurrentShooterTarget.value()) * 1_V + FFVolts;
+  if (Bottomvolts < 0_V){
+    Bottomvolts = 0_V;
+  }
+  _bottomShooterMotor.SetVoltage(Bottomvolts);
 }
 
 frc2::CommandPtr SubShooter::StartShooter() {
-  return Run([this] {UpdatePIDFF(ShootFarTarget);})
+  return Run([this] {
+           if (solShooter.Get() == frc::DoubleSolenoid::kReverse) {
+             CurrentShooterTarget = ShootFarTarget;
+           } else {
+             CurrentShooterTarget = ShootCloseTarget;
+           }
+         })
       .Until([this] { return CheckShooterSpeed(); });
 }
 
 void SubShooter::StopShooterFunc(){
- _topShooterMotor.Set(0); 
- _bottomShooterMotor.Set(0);
+ CurrentShooterTarget = 0_tps;
  _shooterFeederMotor.Set(0);
 }
 
@@ -152,8 +176,8 @@ frc2::CommandPtr SubShooter::AutoShootSequence() {
 
 
 bool SubShooter::CheckShooterSpeed(){
-  if (std::abs(ShootFarTarget.value() - ((_bottomEncoder.GetDistance() - _bottomEncoderPositionPrev) / 0.02)) < 8 &&
-      std::abs(ShootFarTarget.value() - ((_topEncoder.GetDistance() - _topEncoderPositionPrev) / 0.02)) < 8) {
+  if (std::abs(ShootFarTarget.value() - _bottomPastVelocityAvg) < 3 &&
+      std::abs(ShootFarTarget.value() - _topPastVelocityAvg) < 3) {
     return true;
   }
  return false;
