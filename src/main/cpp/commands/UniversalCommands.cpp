@@ -13,8 +13,8 @@ using namespace frc2::cmd;
 frc2::CommandPtr ArmToAmpPos() {
   return SubIntake::GetInstance()
       .ExtendIntake()
-      .AndThen(SubArm::GetInstance().TiltArmToAngle(SubArm::AMP_ANGLE))
-      .AndThen(SubArm::GetInstance().FastAmpShooter().WithTimeout(3_s));
+      .AndThen(WaitUntil([] { return SubIntake::GetInstance().IsIntakeDeployed(); }))
+      .AndThen(SubArm::GetInstance().TiltArmToAngle(SubArm::AMP_ANGLE));
 }
 
 frc2::CommandPtr ArmToTrapPos() {
@@ -26,8 +26,7 @@ frc2::CommandPtr ArmToTrapPos() {
 frc2::CommandPtr ArmToStow() {
   return SubArm::GetInstance()
       .TiltArmToAngle(SubArm::HOME_ANGLE)
-      .Until([] { return SubArm::GetInstance().CheckIfArmIsHome(); });/*
-      .AndThen([] { SubIntake::GetInstance().FuncRetractIntake(); });*/
+      .AndThen([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }
 
 frc2::CommandPtr SequenceArmToAmpPos() {
@@ -59,14 +58,18 @@ frc2::CommandPtr ShootFullSequenceWithoutVision() {
       }).AndThen({SubArm::GetInstance().FeedNote()}));
 }
 
-frc2::CommandPtr IntakefullSequence(){
+frc2::CommandPtr ShootSpeakerOrAmp(){
+  return Either(ShootFullSequenceWithoutVision(), SubArm::GetInstance().FastAmpShooter(),
+                [] { return SubArm::GetInstance().GetAngle() < 0.4_tr; });
+}
+
+frc2::CommandPtr IntakefullSequence() {
   return SubIntake::GetInstance()
       .Intake()
       .AlongWith(SubArm::GetInstance().StoreNote())
       .Until([]{return SubArm::GetInstance().CheckIfArmHasGamePiece();})
       .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }
-
 
 frc2::CommandPtr StartTrapSequence() {
   return SubIntake::GetInstance().ExtendIntake().AndThen(ArmToTrapPos()).AndThen(SubShooter::GetInstance().StartShooter());

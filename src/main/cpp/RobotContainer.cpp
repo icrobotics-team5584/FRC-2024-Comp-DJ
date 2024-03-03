@@ -115,7 +115,7 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
   _operatorController.LeftBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosClose());
   _operatorController.RightBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosFar());
-  _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequenceWithoutVision());
+  _operatorController.RightTrigger().WhileTrue(cmd::ShootSpeakerOrAmp());
 
   _operatorController.Y().OnTrue(cmd::ArmToAmpPos());
   _operatorController.Y().OnFalse(cmd::ArmToStow());
