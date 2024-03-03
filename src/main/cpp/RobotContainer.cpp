@@ -74,12 +74,13 @@ void RobotContainer::ConfigureBindings() {
 // //  _driverController.B().OnTrue(SubIntake::GetInstance().ExtendIntake());
 //   _driverController.X().WhileTrue(cmd::OuttakeNote());
 
-//   _driverController.RightBumper().OnTrue(cmd::ShootFullSequenceWithoutVision());
+//   _driverController.RightBumper().WhileTrue(cmd::ShootFullSequenceWithoutVision());
 //   _driverController.RightTrigger().WhileTrue(cmd::ShootFullSequenceWithVision());
 
 //   _driverController.A().OnTrue(cmd::VisionRotateToZero());
 //   _driverController.B().OnTrue(SubIntake::GetInstance().ExtendIntake());
 //   _driverController.Y().OnTrue(cmd::PrepareToShoot());
+//   //POVHelper::Up(&_driverController).WhileTrue(SubShooter::GetInstance().StartFeeder());
 
 
 //   _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequenceWithVision());
@@ -115,7 +116,7 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
   _operatorController.LeftBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosClose());
   _operatorController.RightBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosFar());
-  _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequenceWithoutVision());
+  _operatorController.RightTrigger().WhileTrue(cmd::ShootSpeakerOrAmp());
 
   _operatorController.Y().OnTrue(cmd::ArmToAmpPos());
   _operatorController.Y().OnFalse(cmd::ArmToStow());

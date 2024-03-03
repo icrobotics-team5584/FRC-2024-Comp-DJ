@@ -32,7 +32,7 @@ class SubArm : public frc2::SubsystemBase {
 
   // variables
   static constexpr units::degree_t OFFSET_ANGLE = 0.8080900_tr;
-  static constexpr units::degree_t HOME_ANGLE = 0.108_tr; //0.108_tr
+  static constexpr units::degree_t HOME_ANGLE = 0.098_tr; //0.108_tr
   static constexpr units::degree_t AMP_ANGLE = 0.626_tr; //0.65_tr
   static constexpr units::degree_t TRAP_ANGLE = 110_deg;
 
@@ -60,6 +60,7 @@ class SubArm : public frc2::SubsystemBase {
   frc2::CommandPtr Outtake();
   bool CheckIfArmIsHome();
   bool CheckIfArmHasGamePiece();
+  units::degree_t GetAngle();
 
   // Sysid commands
    frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction) {

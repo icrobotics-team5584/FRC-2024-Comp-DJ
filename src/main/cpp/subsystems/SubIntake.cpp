@@ -34,9 +34,7 @@ void SubIntake::SimulationPeriodic(){
 }
 
 frc2::CommandPtr SubIntake::ExtendIntake() {
-  return Run([this] { solIntake.Set(frc::DoubleSolenoid::kForward); }).Until([this] {
-    return IsIntakeDeployed() == true;
-  });
+  return RunOnce([this] { solIntake.Set(frc::DoubleSolenoid::kForward); });
 }
 
 frc2::CommandPtr SubIntake::StopSpinningIntake() {
@@ -52,7 +50,7 @@ frc2::CommandPtr SubIntake::Outtake() {
 }
 
 frc2::CommandPtr SubIntake::Intake(){
-  return ExtendIntake().AndThen(StartSpinningIntake());
+  return ExtendIntake().AndThen(Wait(0.1_s)).AndThen(StartSpinningIntake());
 }
 
 frc2::CommandPtr SubIntake::EndIntake(){
