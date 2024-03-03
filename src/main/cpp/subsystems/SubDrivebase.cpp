@@ -45,7 +45,7 @@ SubDrivebase::SubDrivebase() {
       },  // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       HolonomicPathFollowerConfig(
           PIDConstants(2, 0.0, 0.0),    // Translation PID constants
-          PIDConstants(0.5, 0.0, 0.0),  // Rotation PID constants
+          PIDConstants(1, 0.0, 0.0),  // Rotation PID constants
           MAX_VELOCITY,                        // Max module speed, in m/s
           432_mm,  // Drive base radius in meters. Distance from robot center to furthest module.
                    // NEEDS TO BE CHECKED AND MADE ACCURATE!!

@@ -176,8 +176,8 @@ frc2::CommandPtr SubShooter::AutoShootSequence() {
 
 
 bool SubShooter::CheckShooterSpeed(){
-  if (std::abs(ShootFarTarget.value() - _bottomPastVelocityAvg) < 3 &&
-      std::abs(ShootFarTarget.value() - _topPastVelocityAvg) < 3) {
+  if (std::abs(ShootFarTarget.value() - _bottomPastVelocityAvg) < 1 &&
+      std::abs(ShootFarTarget.value() - _topPastVelocityAvg) < 1) {
     return true;
   }
  return false;
