@@ -19,8 +19,10 @@
       "/SmartDashboard/Climber/Test mech display": "Mechanism2d",
       "/SmartDashboard/Climber/testMech": "Mechanism2d",
       "/SmartDashboard/Delay By": "String Chooser",
-      "/SmartDashboard/amp/Arm Mechanism Display: ": "Mechanism2d",
-      "/SmartDashboard/field": "Field2d"
+      "/SmartDashboard/Drivebase/Vision/Rotation Controller: ": "ProfiledPIDController",
+      "/SmartDashboard/arm/Arm Mechanism Display": "Mechanism2d",
+      "/SmartDashboard/field": "Field2d",
+      "/SmartDashboard/photonvision_5584 Sim Field": "Field2d"
     },
     "windows": {
       "/SmartDashboard/Climber/Mech Display": {
@@ -34,6 +36,11 @@
         }
       },
       "/SmartDashboard/Climber/testMech": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/photonvision_5584 Sim Field": {
         "window": {
           "visible": true
         }
@@ -136,7 +143,9 @@
         "Climber": {
           "Left motor": {
             "open": true
-          },
+          }
+        },
+        "Vision": {
           "open": true
         },
         "amp": {
@@ -159,51 +168,8 @@
               "open": true
             },
             "open": true
-          },
-          "open": true
-        },
-        "open": true
-      }
-    }
-  },
-  "NetworkTables Info": {
-    "visible": true
-  },
-  "Plot": {
-    "Plot <0>": {
-      "plots": [
-        {
-          "backgroundColor": [
-            0.0,
-            0.0,
-            0.0,
-            0.8500000238418579
-          ],
-          "height": 783,
-          "series": [
-            {
-              "color": [
-                0.2980392277240753,
-                0.44705885648727417,
-                0.6901960968971252,
-                1.0
-              ],
-              "id": "NT:/SmartDashboard/Climber/Left motor/Position"
-            },
-            {
-              "color": [
-                0.8666667342185974,
-                0.5176470875740051,
-                0.32156863808631897,
-                1.0
-              ],
-              "id": "NT:/SmartDashboard/Climber/Left motor/Position Target"
-            }
-          ]
+          }
         }
-      ],
-      "window": {
-        "visible": false
       }
     }
   },

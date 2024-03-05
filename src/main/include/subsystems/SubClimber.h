@@ -93,8 +93,6 @@ class SubClimber : public frc2::SubsystemBase {
   static constexpr double currentLimit = 10;
 
   // Limit switches
-  frc::DigitalInput TopLimitSwitch{5};
-  frc::DigitalInput BottomLimitSwitch{6};
 
   // Unit translation
   static constexpr units::meter_t WheelCir = 0.12538_m;

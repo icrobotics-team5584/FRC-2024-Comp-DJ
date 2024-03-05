@@ -60,6 +60,7 @@ class SubArm : public frc2::SubsystemBase {
   frc2::CommandPtr Outtake();
   bool CheckIfArmIsHome();
   bool CheckIfArmHasGamePiece();
+  units::degree_t GetAngle();
 
   // Sysid commands
    frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction) {

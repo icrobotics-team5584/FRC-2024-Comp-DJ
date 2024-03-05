@@ -28,7 +28,7 @@ SubDrivebase::SubDrivebase() {
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxAngularAcceleration",
                                  MAX_ANGULAR_JOYSTICK_ACCEL);
   _gyro.Calibrate();
-  Rcontroller.EnableContinuousInput(-180_deg, 180_deg);
+  Rcontroller.EnableContinuousInput(0_deg, 360_deg);
   frc::SmartDashboard::PutData("field", &_fieldDisplay);
 
   using namespace pathplanner;
@@ -105,6 +105,8 @@ void SubDrivebase::Periodic() {
   _backLeft.SendSensorsToDash();
   _backRight.SendSensorsToDash();
 
+  Drive(_forwardSpeedRequest, _sidewaysSpeedRequest, _rotationSpeedRequest, _fieldOrientedRquest);
+
   UpdateOdometry();
   frc::SmartDashboard::PutNumber("drivebase/loop time (sec)", (frc::GetTime() - loopStart).value());
 }
@@ -116,31 +118,39 @@ void SubDrivebase::SimulationPeriodic() {
   _backRight.UpdateSim(20_ms);
 }
 
-frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller) {
-  return Run([this, &controller] {
+frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller, bool ignoreJoystickRotation) {
+  return Run([this, &controller, ignoreJoystickRotation] {
     double deadband = 0.08;
     auto velocity =
-        frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) *
-        1_mps;
+        frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) * 1_mps;
     auto angularVelocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity",
-                                                          MAX_ANGULAR_VELOCITY.value()) *
-                           1_deg_per_s;
+                                                          MAX_ANGULAR_VELOCITY.value()) * 1_deg_per_s;
     static frc::SlewRateLimiter<units::scalar> _xspeedLimiter{MAX_JOYSTICK_ACCEL / 1_s};
     static frc::SlewRateLimiter<units::scalar> _yspeedLimiter{MAX_JOYSTICK_ACCEL / 1_s};
     static frc::SlewRateLimiter<units::scalar> _rotLimiter{MAX_ANGULAR_JOYSTICK_ACCEL / 1_s};
-    auto forwardSpeed =
-        _yspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftY(), deadband)) * velocity;
-    auto rotationSpeed =
-        _rotLimiter.Calculate(frc::ApplyDeadband(controller.GetRightX(), deadband)) *
-        angularVelocity;
-    auto sidewaysSpeed =
-        _xspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftX(), deadband)) * velocity;
+    auto forwardSpeed = _yspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftY(), deadband)) * velocity;
+    auto rotationSpeed = _rotLimiter.Calculate(frc::ApplyDeadband(controller.GetRightX(), deadband)) * angularVelocity;
+    auto sidewaysSpeed = _xspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftX(), deadband)) * velocity;
+    
+    // when optionalRotationContro is false, 
     if (frc::RobotBase::IsSimulation()) {
-      Drive(-forwardSpeed, -sidewaysSpeed, -rotationSpeed, true);
+      _sidewaysSpeedRequest = -sidewaysSpeed;
+      _forwardSpeedRequest = -forwardSpeed;
+      if(ignoreJoystickRotation == false){
+        _rotationSpeedRequest = -rotationSpeed;
+      }
+      _fieldOrientedRquest = true;
+
     } else {
-      Drive(forwardSpeed, sidewaysSpeed, rotationSpeed, true);
+      _forwardSpeedRequest = forwardSpeed;
+      _sidewaysSpeedRequest = sidewaysSpeed;
+      if(ignoreJoystickRotation == false){
+        _rotationSpeedRequest = rotationSpeed;
+      }
+      _fieldOrientedRquest = true;
     }
   });
+
 }
 
 void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
@@ -248,8 +258,7 @@ void SubDrivebase::DriveToPose(frc::Pose2d targetPose) {
   frc::Pose2d currentPosition = _poseEstimator.GetEstimatedPosition();
   double speedX = Xcontroller.Calculate(currentPosition.X().value(), targetPose.X().value());
   double speedY = Ycontroller.Calculate(currentPosition.Y().value(), targetPose.Y().value());
-  double speedRot =
-      Rcontroller.Calculate(currentPosition.Rotation().Radians(), targetPose.Rotation().Radians());
+  double speedRot = Rcontroller.Calculate(currentPosition.Rotation().Radians(), targetPose.Rotation().Radians());
 
   speedX = std::clamp(speedX, -0.5, 0.5);
   speedY = std::clamp(speedY, -0.5, 0.5);
@@ -268,8 +277,19 @@ void SubDrivebase::RotateToZero(units::degree_t rotationError) {
   double speedRot = Rcontroller.Calculate(rotationError, 0_deg);
   speedRot = std::clamp(speedRot, -2.0, 2.0);
 
-  Drive(0_mps, 0_mps, speedRot * 1_rad_per_s, false);
+  _rotationSpeedRequest = speedRot * 1_rad_per_s;
+
 }
+
+void SubDrivebase::TranslateToZero(units::degree_t translationError){
+  double speedRot = Rcontroller.Calculate(translationError, 0_deg);
+  speedRot = std::clamp(speedRot, -2.0, 2.0);
+
+  double speedX = Xcontroller.Calculate(translationError.value(), 0);
+
+  _sidewaysSpeedRequest = speedX * 1_mps;
+}
+
 
 bool SubDrivebase::IsAtPose(frc::Pose2d pose) {
   auto currentPose = _poseEstimator.GetEstimatedPosition();

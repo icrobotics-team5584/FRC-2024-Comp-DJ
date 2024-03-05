@@ -36,6 +36,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   void UpdatePosition(frc::Pose2d robotPosition);
   void DriveToPose(frc::Pose2d targetPose);
   void RotateToZero(units::degree_t rotationError);
+  void TranslateToZero(units::degree_t translationError);
   bool IsAtPose(frc::Pose2d pose);
   void DisplayTrajectory(std::string name, frc::Trajectory trajectory);
   void SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode);
@@ -59,7 +60,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   double MAX_ANGULAR_JOYSTICK_ACCEL = 3;
 
   // Commands
-  frc2::CommandPtr JoystickDrive(frc2::CommandXboxController& controller);
+  frc2::CommandPtr JoystickDrive(frc2::CommandXboxController& controller, bool optionalRotationControl);
   frc2::CommandPtr SyncSensorBut();
   frc2::CommandPtr ResetGyroCmd();
   frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction) {
@@ -77,10 +78,10 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::Translation2d _backLeftLocation{-0.281_m, +0.281_m};
   frc::Translation2d _backRightLocation{-0.281_m, -0.281_m};
 
-  const double FRONT_RIGHT_MAG_OFFSET =  -0.875732; // <- Low Modules | Raised modules -> -0.01904296875;  
-  const double FRONT_LEFT_MAG_OFFSET =   -0.443359; // <- Low Modules | Raised modules -> -0.670898;        
-  const double BACK_RIGHT_MAG_OFFSET =   -0.959473; // <- Low Modules | Raised modules -> -0.900146484375;  
-  const double BACK_LEFT_MAG_OFFSET =    -0.825928; // <- Low Modules | Raised modules -> -0.453125;         
+  const double FRONT_RIGHT_MAG_OFFSET =  -0.875732; //Raised modules -> -0.014648; | Low modules -> -0.875732; new
+  const double FRONT_LEFT_MAG_OFFSET =   -0.443359 ; //Raised modules -> -0.673584; | Low modules -> -0.443359; new
+  const double BACK_RIGHT_MAG_OFFSET =   -0.959473; //Raised modules -> -0.898926; | Low modules -> -0.959473;
+  const double BACK_LEFT_MAG_OFFSET =    -0.825928; //Raised modules -> -0.455322; | Low modules -> -0.825928;
 
   SwerveModule _frontLeft{canid::DriveBaseFrontLeftDrive, canid::DriveBaseFrontLeftTurn,
                           canid::DriveBaseFrontLeftEncoder, FRONT_LEFT_MAG_OFFSET};
@@ -111,6 +112,12 @@ class SubDrivebase : public frc2::SubsystemBase {
 
   frc::Field2d _fieldDisplay;
   frc::Pose2d _prevPose;  // Used for velocity calculations
+
+  // Drive variables
+  units::meters_per_second_t _forwardSpeedRequest = 0_mps;
+  units::meters_per_second_t _sidewaysSpeedRequest = 0_mps;
+  units::degrees_per_second_t _rotationSpeedRequest = 0_deg_per_s;
+  bool _fieldOrientedRquest = true; 
 
   // Sysid
   frc2::sysid::SysIdRoutine _sysIdRoutine{

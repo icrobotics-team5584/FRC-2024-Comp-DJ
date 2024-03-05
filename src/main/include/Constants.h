@@ -8,29 +8,29 @@ namespace canivore {
 namespace canid {
 
   //drivebase IDS used: 1-12
- constexpr int DriveBaseFrontRightDrive = 7;
+ constexpr int DriveBaseFrontRightDrive = 7; //done
  constexpr int DriveBaseFrontRightTurn = 8;
- constexpr int DriveBaseFrontRightEncoder = 10;
+ constexpr int DriveBaseFrontRightEncoder = 10; //done
 
  constexpr int DriveBaseFrontLeftDrive = 3;
  constexpr int DriveBaseFrontLeftTurn = 6; //6
  constexpr int DriveBaseFrontLeftEncoder = 9;
       
- constexpr int DriveBaseBackRightDrive = 5;
+ constexpr int DriveBaseBackRightDrive = 5; //done
  constexpr int DriveBaseBackRightTurn = 2;
- constexpr int DriveBaseBackRightEncoder = 12;
+ constexpr int DriveBaseBackRightEncoder = 12; //done
 
- constexpr int DriveBaseBackLeftDrive = 1; 
+ constexpr int DriveBaseBackLeftDrive = 1; //done
  constexpr int DriveBaseBackLeftTurn = 4;
- constexpr int DriveBaseBackLeftEncoder = 11;
+ constexpr int DriveBaseBackLeftEncoder = 11; //done
 
 
 //Intake IDS used: 13
   constexpr int IntakeMotor = 17;
 
 //Shooter IDS used: 14-16
-  constexpr int ShooterMotorMain = 18;
-  constexpr int SecondaryShooterMotor = 16;
+  constexpr int TopShooterMotor = 18;
+  constexpr int BottomShooterMotor = 16;
   constexpr int ShooterFeederMotor = 14;
 
 //Arm IDS used: 17-18
@@ -45,6 +45,9 @@ namespace canid {
 
   constexpr int ClimberLeftLaserCAN = 21;
   constexpr int ClimberRightLaserCAN = 99; //same ID as Pcm1D
+
+  constexpr int SpareSpark1 = 58;
+  constexpr int SpareSpark2 = 60;
 
 }
 
@@ -75,11 +78,13 @@ namespace OperatorConstants {}
 constexpr int kDriverControllerPort = 0;
 
 namespace dio {
-  constexpr int FDLineBreak = 9;
+  constexpr int FDLineBreak = 3;
   constexpr int SDLineBreak = 1;
   constexpr int ShooterLineBreak = 4;
   constexpr int IntakeRetractedReed = 2;
   constexpr int IntakeExtendedReed = 0;
-  constexpr int ShooterEncoderChannelA = 7;
-  constexpr int ShooterEncoderChannelB = 8;
+  constexpr int TopShooterEncoderChannelA = 8;
+  constexpr int TopShooterEncoderChannelB = 9;
+  constexpr int BottomShooterEncoderChannelA = 6;
+  constexpr int BottomShooterEncoderChannelB = 7;
 }
