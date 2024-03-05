@@ -6,6 +6,7 @@
 #include "subsystems/SubArm.h"
 #include "commands/VisionCommands.h"
 #include "subsystems/SubVision.h"
+#include "subsystems/SubLED.h"
 
 namespace cmd {
 using namespace frc2::cmd;
@@ -102,5 +103,4 @@ frc2::CommandPtr FeedNoteToShooter() {
 frc2::CommandPtr PrepareToShoot() {
   return FeedNoteToShooter().AndThen(SubShooter::GetInstance().StartShooter());
 }
-
 }  // namespace cmd

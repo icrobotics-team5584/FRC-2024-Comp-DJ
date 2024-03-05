@@ -8,34 +8,23 @@
 #include <frc/Timer.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
-int R = std::rand() % 255;
-int G = std::rand() % 255;
-int B = std::rand() % 255;
 
 using namespace frc2::cmd;
 
 SubLED::SubLED() {
-  _led.SetLength(kLength);
-  _led.SetData(m_ledBuffer);
-  _led.Start();
+
 }
 // This method will be called once per scheduler run
 void SubLED::Periodic() {
-  auto loopStart = frc::GetTime();
-  frc::SmartDashboard::PutNumber("led/loop time (sec)", (frc::GetTime()-loopStart).value());
 }
 
-frc2::CommandPtr SubLED::IndicateSourceDrop() {
-  return RunOnce([this] {
-           for (auto& LED : m_ledBuffer) {
-             LED.SetRGB(255, 0, 0);
-           }
-           _led.SetData(m_ledBuffer);
-         })
-      .AndThen(Wait(10_s).FinallyDo([this] {
-        for (auto& LED : m_ledBuffer) {
-          LED.SetRGB(0, 0, 0);
-        }
-        _led.SetData(m_ledBuffer);
-      }));
+void SubLED::SetLEDFunc(double PWMSIGNAL){
+  _blinkin.Set(PWMSIGNAL);
 }
+
+frc2::CommandPtr SubLED::SetLEDCommand(double PWMSIGNAL) {
+  return RunOnce([this, PWMSIGNAL]{_blinkin.Set(PWMSIGNAL);});
+}
+
+
+

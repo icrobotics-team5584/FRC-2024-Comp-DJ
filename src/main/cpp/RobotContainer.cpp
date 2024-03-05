@@ -19,6 +19,8 @@
 #include "commands/VisionCommands.h"
 #include "subsystems/SubArm.h"
 #include "utilities/POVHelper.h"
+#include <frc2/command/button/Trigger.h>
+#include "subsystems/SubLED.h"
 
 RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("Intake", SubIntake::GetInstance().Intake());
@@ -45,6 +47,7 @@ RobotContainer::RobotContainer() {
   SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController, false));
   SubClimber::GetInstance().SetDefaultCommand(SubClimber::GetInstance().JoyStickDrive(_operatorController));
   ConfigureBindings();
+  ConfigureLEDS();
   _delayChooser.AddOption("0 Seconds", 0);
   _delayChooser.AddOption("1 Seconds", 1);
   _delayChooser.AddOption("2 Seconds", 2);
@@ -134,6 +137,12 @@ void RobotContainer::ConfigureBindings() {
   // _operatorController.X().WhileTrue(SubArm::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kForward));
   // _operatorController.Y().WhileTrue(SubArm::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kReverse));
 
+}
+
+void RobotContainer::ConfigureLEDS() {
+  frc2::Trigger([] { return SubArm::GetInstance().CheckIfArmHasGamePiece(); })
+      .OnTrue(SubLED::GetInstance().SetLEDCommand(0.71))
+      .OnFalse(SubLED::GetInstance().SetLEDCommand(0.85));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
