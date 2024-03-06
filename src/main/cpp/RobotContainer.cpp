@@ -15,6 +15,7 @@
 #include "subsystems/SubClimber.h"
 #include <frc2/command/button/CommandXboxController.h>
 #include "commands/UniversalCommands.h"
+#include "utilities/BotVars.h"
 #include "subsystems/SubVision.h"
 #include "commands/VisionCommands.h"
 #include "subsystems/SubArm.h"
