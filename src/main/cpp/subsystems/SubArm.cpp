@@ -114,10 +114,7 @@ frc2::CommandPtr SubArm::Outtake() {
   return Run([this]{_ampMotor.Set(1);}).FinallyDo([this]{return _ampMotor.Set(0);});
 }
 
-// booleans
-
-
-
+// getters
 bool SubArm::CheckIfArmIsHome() {
   return units::math::abs(_armMotor.GetPosition() - HOME_ANGLE) < 2_deg;
 }
@@ -128,4 +125,8 @@ bool SubArm::CheckIfArmHasGamePiece() {
   } else {
     return false;
   }
+}
+
+units::degree_t SubArm::GetAngle() {
+  return _armMotor.GetPosition();
 }

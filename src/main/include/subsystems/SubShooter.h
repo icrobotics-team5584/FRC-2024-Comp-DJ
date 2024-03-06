@@ -42,6 +42,7 @@ class SubShooter : public frc2::SubsystemBase {
   frc2::CommandPtr AutoShootSequence();
   frc2::CommandPtr StopShooterCommand();
   frc2::CommandPtr FeedNoteToArm();
+  frc2::CommandPtr ShootIntoAmp();
   void StopShooterFunc();
   bool CheckShooterSpeed();
   bool CheckShooterLineBreak();
@@ -56,12 +57,13 @@ class SubShooter : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  static constexpr double ShooterP = 0; 
+  static constexpr double ShooterP = 0.2; 
   static constexpr double ShooterI = 0;
   static constexpr double ShooterD = 0;
 
-  units::turns_per_second_t ShootFarTarget = 42.5_tps;
-  units::turns_per_second_t ShootCloseTarget = 42.5_tps;
+  units::turns_per_second_t ShootFarTarget = 60_tps;
+  units::turns_per_second_t ShootCloseTarget = 60_tps;
+  units::turns_per_second_t ShootAmpTarget = 10_tps;
 
   units::turns_per_second_t CurrentShooterTarget = 0_tps;
 

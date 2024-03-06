@@ -36,6 +36,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   void UpdatePosition(frc::Pose2d robotPosition);
   void DriveToPose(frc::Pose2d targetPose);
   void RotateToZero(units::degree_t rotationError);
+  void TranslateToZero(units::degree_t translationError);
   bool IsAtPose(frc::Pose2d pose);
   void DisplayTrajectory(std::string name, frc::Trajectory trajectory);
   void SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode);
@@ -59,7 +60,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   double MAX_ANGULAR_JOYSTICK_ACCEL = 3;
 
   // Commands
-  frc2::CommandPtr JoystickDrive(frc2::CommandXboxController& controller);
+  frc2::CommandPtr JoystickDrive(frc2::CommandXboxController& controller, bool optionalRotationControl);
   frc2::CommandPtr SyncSensorBut();
   frc2::CommandPtr ResetGyroCmd();
   frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction) {
@@ -111,6 +112,12 @@ class SubDrivebase : public frc2::SubsystemBase {
 
   frc::Field2d _fieldDisplay;
   frc::Pose2d _prevPose;  // Used for velocity calculations
+
+  // Drive variables
+  units::meters_per_second_t _forwardSpeedRequest = 0_mps;
+  units::meters_per_second_t _sidewaysSpeedRequest = 0_mps;
+  units::degrees_per_second_t _rotationSpeedRequest = 0_deg_per_s;
+  bool _fieldOrientedRquest = true; 
 
   // Sysid
   frc2::sysid::SysIdRoutine _sysIdRoutine{
