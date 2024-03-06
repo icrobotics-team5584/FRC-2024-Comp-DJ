@@ -22,7 +22,7 @@
 #include <frc/DigitalInput.h>
 #include <frc2/command/sysid/SysIdRoutine.h>
 #include <optional>
-
+#include <utilities/BotVars.h>
 #include "Constants.h"
 #include "utilities/ICSparkMax.h"
 
@@ -31,7 +31,7 @@ class SubArm : public frc2::SubsystemBase {
   SubArm();
 
   // variables
-  static constexpr units::degree_t OFFSET_ANGLE = 0.8080900_tr;
+  static const inline units::degree_t OFFSET_ANGLE = BotVars::Choose(0.055_tr, 0.80809_tr); //zeroing procedure: Move arm to home, set offset to 0, read current pos, set offset to home pos - current angle
   static constexpr units::degree_t HOME_ANGLE = 0.098_tr; //0.108_tr
   static constexpr units::degree_t AMP_ANGLE = 0.626_tr; //0.65_tr
   static constexpr units::degree_t TRAP_ANGLE = 110_deg;
