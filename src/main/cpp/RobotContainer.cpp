@@ -130,6 +130,19 @@ void RobotContainer::ConfigureBindings() {
   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
   POVHelper::Left(&_operatorController).OnTrue(SubIntake::GetInstance().ExtendIntake());
 
+  frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
+    return _operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2;
+  }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDriveLeft(_operatorController));
+
+  frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
+    return _operatorController.GetRightY() < -0.2 || _operatorController.GetRightY() > 0.2;
+  }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDriveRight(_operatorController));
+
+  frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
+    return (_operatorController.GetRightY() < -0.2 || _operatorController.GetRightY() > 0.2) && 
+    ( _operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2);
+  }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDrive(_operatorController));
+
   // Operator controls sysID
   // _operatorController.A().WhileTrue(SubArm::GetInstance().SysIdDynamic(frc2::sysid::Direction::kForward));
   // _operatorController.B().WhileTrue(SubArm::GetInstance().SysIdDynamic(frc2::sysid::Direction::kReverse));
