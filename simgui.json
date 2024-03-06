@@ -1,0 +1,177 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [1]": {
+        "header": {
+          "open": true
+        }
+      },
+      "window": {
+        "visible": false
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Chosen Path": "String Chooser",
+      "/SmartDashboard/Climber/Mech Display": "Mechanism2d",
+      "/SmartDashboard/Climber/Test mech display": "Mechanism2d",
+      "/SmartDashboard/Climber/testMech": "Mechanism2d",
+      "/SmartDashboard/Delay By": "String Chooser",
+      "/SmartDashboard/Drivebase/Vision/Rotation Controller: ": "ProfiledPIDController",
+      "/SmartDashboard/arm/Arm Mechanism Display": "Mechanism2d",
+      "/SmartDashboard/field": "Field2d",
+      "/SmartDashboard/photonvision_5584 Sim Field": "Field2d"
+    },
+    "windows": {
+      "/SmartDashboard/Climber/Mech Display": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Climber/Test mech display": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Climber/testMech": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/photonvision_5584 Sim Field": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "NetworkTables Info": {
+      "Connections": {
+        "open": true
+      },
+      "Server": {
+        "Subscribers": {
+          "open": true
+        }
+      }
+    },
+    "Persistent Values": {
+      "open": false
+    },
+    "Plot": {
+      "Plot <0>": {
+        "plots": [
+          {
+            "backgroundColor": [
+              0.0,
+              0.0,
+              0.0,
+              0.8500000238418579
+            ],
+            "height": 578,
+            "series": [
+              {
+                "color": [
+                  0.2980392277240753,
+                  0.44705885648727417,
+                  0.6901960968971252,
+                  1.0
+                ],
+                "id": "NT:/SmartDashboard/amp/Dizzy Claw tilt motor: /Position"
+              },
+              {
+                "color": [
+                  0.8666667342185974,
+                  0.5176470875740051,
+                  0.32156863808631897,
+                  1.0
+                ],
+                "id": "NT:/SmartDashboard/amp/Dizzy Claw tilt motor: /Position Target"
+              }
+            ]
+          }
+        ],
+        "window": {
+          "visible": false
+        }
+      },
+      "Plot <1>": {
+        "plots": [
+          {
+            "backgroundColor": [
+              0.0,
+              0.0,
+              0.0,
+              0.8500000238418579
+            ],
+            "height": 502,
+            "series": [
+              {
+                "color": [
+                  0.2980392277240753,
+                  0.44705885648727417,
+                  0.6901960968971252,
+                  1.0
+                ],
+                "id": "NT:/SmartDashboard/amp/Dizzy Arm tilt motor: /Position"
+              },
+              {
+                "color": [
+                  0.8666667342185974,
+                  0.5176470875740051,
+                  0.32156863808631897,
+                  1.0
+                ],
+                "id": "NT:/SmartDashboard/amp/Dizzy Arm tilt motor: /Position Target"
+              }
+            ]
+          }
+        ]
+      },
+      "Plot <2>": {
+        "window": {
+          "visible": false
+        }
+      }
+    },
+    "open": true,
+    "transitory": {
+      "SmartDashboard": {
+        "Climber": {
+          "Left motor": {
+            "open": true
+          }
+        },
+        "Vision": {
+          "open": true
+        },
+        "amp": {
+          "Dizzy Arm tilt motor: ": {
+            "open": true
+          },
+          "Dizzy Claw tilt motor speed:: ": {
+            "open": true
+          },
+          "Dizzy Claw tilt motor: ": {
+            "open": true
+          },
+          "Mechanism Display": {
+            "open": true
+          }
+        },
+        "arm": {
+          "Climber": {
+            "Left motor": {
+              "open": true
+            },
+            "open": true
+          }
+        }
+      }
+    }
+  },
+  "visible": true
+}

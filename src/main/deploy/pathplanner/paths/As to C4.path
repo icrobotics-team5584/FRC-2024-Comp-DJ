@@ -1,0 +1,92 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.356284084893418,
+        "y": 3.4429859444597626
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.012090931457183,
+        "y": 2.4475648380683346
+      },
+      "isLocked": false,
+      "linkedName": "Speaker-Side Shoot Pos"
+    },
+    {
+      "anchor": {
+        "x": 7.696425549769787,
+        "y": 2.4709865111598974
+      },
+      "prevControl": {
+        "x": 4.171463749489552,
+        "y": 0.8314693947504864
+      },
+      "nextControl": {
+        "x": 7.933861594666071,
+        "y": 2.5814218808790996
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.356284084893418,
+        "y": 3.4429859444597626
+      },
+      "prevControl": {
+        "x": 4.651608047866594,
+        "y": 0.2927709136445362
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Speaker-Side Shoot Pos"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Shoot3",
+      "waypointRelativePos": 1.95,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "AutoShootFullSequence"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 135.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "S1",
+  "previewStartingState": {
+    "rotation": 135.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
