@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.012090931457183,
-        "y": 2.4475648380683346
+        "x": 3.1285509939440934,
+        "y": 1.8103774804040837
       },
       "isLocked": false,
       "linkedName": "Speaker-Side Shoot Pos"
     },
     {
       "anchor": {
-        "x": 7.696425549769787,
-        "y": 2.4709865111598974
+        "x": 7.735228979229889,
+        "y": 2.2003128216782755
       },
       "prevControl": {
-        "x": 4.171463749489552,
-        "y": 0.8314693947504864
+        "x": 5.266369890585308,
+        "y": 1.3992468407882783
       },
       "nextControl": {
-        "x": 7.933861594666071,
-        "y": 2.5814218808790996
+        "x": 9.440062564335653,
+        "y": 2.7534769104625934
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 3.4429859444597626
       },
       "prevControl": {
-        "x": 4.651608047866594,
-        "y": 0.2927709136445362
+        "x": 3.962831258995852,
+        "y": 0.34131875281294377
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,6 +48,26 @@
     {
       "waypointRelativePos": 1.0,
       "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1.45,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1.7,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1.85,
+      "rotationDegrees": 135.0,
       "rotateFast": false
     }
   ],
@@ -69,11 +89,34 @@
           ]
         }
       }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.7,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StoreNote"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

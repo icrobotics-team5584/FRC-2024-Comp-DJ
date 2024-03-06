@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.36086297850199,
-      "y": 4.133925300660873
+      "x": 0.76,
+      "y": 4.37
     },
-    "rotation": 180.0
+    "rotation": 120.96
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake"
+            "name": "ShooterChangePosClose"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShootFullSequence"
           }
         },
         {
@@ -27,6 +39,12 @@
           "type": "path",
           "data": {
             "pathName": "As to C5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShootFullSequence"
           }
         },
         {

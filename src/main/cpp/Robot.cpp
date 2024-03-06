@@ -12,7 +12,6 @@
 #include <frc/DriverStation.h>
 
 void Robot::RobotInit() {
-  frc::DataLogManager::Start();
   frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog(),true);
 }
 

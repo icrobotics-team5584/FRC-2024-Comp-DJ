@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.36086297850199,
-        "y": 4.133925300660873
+        "x": 0.7617341550472575,
+        "y": 4.3676278580627335
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6419230556007458,
-        "y": 4.028527771748838
+        "x": 1.0427942321460135,
+        "y": 4.262230329150698
       },
       "isLocked": false,
       "linkedName": null
@@ -28,12 +28,18 @@
       "linkedName": "Speaker-Side Shoot Pos"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0,
+      "rotationDegrees": 120.96,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -45,7 +51,7 @@
   "reversed": false,
   "folder": "S1",
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": 121.32869286780411,
     "velocity": 0
   },
   "useDefaultConstraints": true

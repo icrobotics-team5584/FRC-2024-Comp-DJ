@@ -6,7 +6,6 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 SubShooter::SubShooter() {
-  solShooter.Set(frc::DoubleSolenoid::kReverse);
 
   _bottomShooterMotor.SetInverted(true);
   _topShooterMotor.SetInverted(true);
@@ -30,12 +29,12 @@ SubShooter::SubShooter() {
   
 
   _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 500);
-  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 20);
-  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 500);
-  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus3, 500);
-  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus4, 500);
-  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus5, 500);
-  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus6, 500);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 500);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 65000);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus3, 65000);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus4, 65000);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus5, 65000);
+  _shooterFeederMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus6, 65000);
 }
 
 using namespace frc2::cmd;
@@ -87,7 +86,7 @@ void SubShooter::Periodic() {
   frc::SmartDashboard::PutNumber("Shooter/Top Velocity Error", std::abs(ShootFarTarget.value() - _topEncoderDiff));
   frc::SmartDashboard::PutNumber("Shooter/Top velocity avg", _topPastVelocityAvg);
   frc::SmartDashboard::PutNumber("Shooter/Bottom velocity avg", _bottomPastVelocityAvg);
-  frc::SmartDashboard::PutBoolean("Shooter/CheckShoote boolean", CheckShooterSpeed());
+  frc::SmartDashboard::PutBoolean("Shooter/Is at speed", CheckShooterSpeed());
 }
 
 void SubShooter::SimulationPeriodic(){
