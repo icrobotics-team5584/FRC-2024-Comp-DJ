@@ -46,37 +46,27 @@ class SubClimber : public frc2::SubsystemBase {
   units::radians_per_second_t DistanceToTurn(units::meters_per_second_t distance);
   units::meter_t TurnToDistance(units::turn_t turn);
 
-  // Tools
-  void DriveToDistance(units::meter_t distance);
-
-  // Actions
-  void Extend();
-  void Retract();
+  // Primary actions
   void Start(double power);
   void Stop();
-  void Lock();
-  void Unlock();
 
   void ZeroClimber();
 
   double GetLeftCurrent();
   double GetRightCurrent();
 
+  void DriveToDistance(units::meter_t distance);
+
   void EnableSoftLimit(bool enabled);
 
-  bool GetTrapStatus();
-  void SetTrapStatus(bool stat);
-
+  //Command actions
   frc2::CommandPtr ClimberJoystickDrive(frc2::CommandXboxController& _controller);
   frc2::CommandPtr ClimberJoystickDriveLeft(frc2::CommandXboxController& _controller);
   frc2::CommandPtr ClimberJoystickDriveRight(frc2::CommandXboxController& _controller);
-  frc2::CommandPtr ClimberHold(bool left, bool right);
 
   frc2::CommandPtr ClimberPosition(units::meter_t distance);
   frc2::CommandPtr ClimberManualDrive(float power);
   frc2::CommandPtr ClimberStop();
-  frc2::CommandPtr ClimberLock();
-  frc2::CommandPtr ClimberUnlock();
   frc2::CommandPtr ClimberResetZero();
   frc2::CommandPtr ClimberAutoReset();
   frc2::CommandPtr ClimberResetCheck();
@@ -95,8 +85,6 @@ class SubClimber : public frc2::SubsystemBase {
 
   static constexpr double currentLimit = 10;
 
-  // Limit switches
-
   // Unit translation
   static constexpr units::meter_t WheelCir = 0.12538_m;
 
@@ -109,13 +97,6 @@ class SubClimber : public frc2::SubsystemBase {
   bool Reseted = false;
 
   bool ResetLeft = false; bool ResetRight = false;
-
-  bool OnJoyStick = false;
-
-  // Trap sequence
-  bool TrapSequencing = false;
-
-  double inputDistance;
 
   // Sim
 
