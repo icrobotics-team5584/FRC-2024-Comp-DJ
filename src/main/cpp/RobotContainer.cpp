@@ -21,6 +21,8 @@
 #include "utilities/POVHelper.h"
 
 RobotContainer::RobotContainer() {
+  frc::SmartDashboard::PutData("Command Scheduler", &frc2::CommandScheduler::GetInstance());
+
   pathplanner::NamedCommands::registerCommand("Intake", SubIntake::GetInstance().Intake());
   pathplanner::NamedCommands::registerCommand("StopIntakeSpinning", SubIntake::GetInstance().StopSpinningIntake());
   pathplanner::NamedCommands::registerCommand("StartShooter", SubShooter::GetInstance().StartShooter());
@@ -42,7 +44,7 @@ RobotContainer::RobotContainer() {
   SubVision::GetInstance();
 
   SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController));
-  SubClimber::GetInstance().SetDefaultCommand(SubClimber::GetInstance().JoyStickDrive(_operatorController));
+  // SubClimber::GetInstance().SetDefaultCommand(SubClimber::GetInstance().JoyStickDrive(_operatorController));
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
   _delayChooser.AddOption("1 Seconds", 1);
@@ -76,10 +78,28 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());  // working
   _operatorController.Y().WhileTrue(cmd::ArmToAmpPos());
   _operatorController.Y().OnFalse(cmd::ArmToStow());
-  _operatorController.Back().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
-  POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.625_m));
-  POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
+  _operatorController.Back().WhileTrue(SubClimber::GetInstance().ClimberAutoReset().AlongWith(SubIntake::GetInstance().ExtendIntake()));
+  POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.625_m).AlongWith(SubIntake::GetInstance().ExtendIntake()));
+  POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m).AlongWith(SubIntake::GetInstance().ExtendIntake()));
   POVHelper::Right(&_operatorController).OnTrue(SubIntake::GetInstance().ExtendIntake());
+
+  // frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
+  //   return _operatorController.GetLeftY() > -0.2 && _operatorController.GetLeftY() < 0.2 &&
+  //          _operatorController.GetRightY() > -0.2 && _operatorController.GetRightY() < 0.2;
+  // }).WhileFalse(SubIntake::GetInstance().ExtendIntake().AlongWith(SubClimber::GetInstance().ClimberJoystickDrive(_operatorController)));''
+
+  frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
+    return _operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2;
+  }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDriveLeft(_operatorController));
+
+  frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
+    return _operatorController.GetRightY() < -0.2 || _operatorController.GetRightY() > 0.2;
+  }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDriveRight(_operatorController));
+
+  frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
+    return (_operatorController.GetRightY() < -0.2 || _operatorController.GetRightY() > 0.2) && 
+    ( _operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2);
+  }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDrive(_operatorController));
 
   // new controls below WIP 
   /*
