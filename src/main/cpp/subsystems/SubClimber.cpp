@@ -7,6 +7,7 @@
 #include <frc/RobotBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/MathUtil.h>
+#include "utilities/BotVars.h"
 
 SubClimber::SubClimber() {
     _lClimbMotor.SetConversionFactor(1.0 / gearRatio);
@@ -132,10 +133,10 @@ bool SubClimber::GetTrapStatus() { return TrapSequencing; }
 void SubClimber::SetTrapStatus(bool stat) { TrapSequencing = stat;}
 
 void SubClimber::EnableSoftLimit(bool enabled) {
-    _lClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, enabled);
-    _lClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, enabled);
-    _rClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, enabled);
-    _rClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, enabled);
+    _lClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, false);
+    _lClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, false);
+    _rClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, false);
+    _rClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, false);
 }
 
 frc2::CommandPtr SubClimber::ClimberJoystickDrive(frc2::CommandXboxController& _controller) {

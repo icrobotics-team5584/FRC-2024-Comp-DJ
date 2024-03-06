@@ -120,7 +120,7 @@ bool SubArm::CheckIfArmIsHome() {
 }
 
 bool SubArm::CheckIfArmHasGamePiece() {
-  if ( _sdLineBreak.Get() == true) {
+  if ( _sdLineBreak.Get() == BotVars::Choose(false,true)) {
     return true;
   } else {
     return false;
