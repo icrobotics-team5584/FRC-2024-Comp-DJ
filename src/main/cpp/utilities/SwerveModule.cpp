@@ -22,6 +22,7 @@ SwerveModule::SwerveModule(int canDriveMotorID, int canTurnMotorID, int canTurnE
   _configTurnEncoder.MagnetSensor.SensorDirection = SensorDirectionValue::CounterClockwise_Positive;
   _configTurnEncoder.MagnetSensor.MagnetOffset = cancoderMagOffset;
   _canTurnEncoder.GetConfigurator().Apply(_configTurnEncoder);
+  frc::SmartDashboard::PutNumber("swerve/cancoder "+std::to_string(canTurnEncoderID) + " mag offset", cancoderMagOffset);
 
   // Config Turning Motor
   _canTurnMotor.RestoreFactoryDefaults();
