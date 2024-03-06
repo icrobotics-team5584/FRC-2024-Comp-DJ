@@ -47,6 +47,18 @@
           "data": {
             "pathName": "Amp Side C2 Rush"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShootFullSequence"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
         }
       ]
     }
