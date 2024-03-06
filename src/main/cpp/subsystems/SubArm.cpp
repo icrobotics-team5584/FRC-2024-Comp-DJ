@@ -30,6 +30,7 @@ SubArm::SubArm() {
   _armMotor.UseAbsoluteEncoder(OFFSET_ANGLE);
   _armMotor.SetPIDFF(ARM_P, ARM_I, ARM_D, ARM_F);
   _armMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
+  _ampMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
   _armMotor.ConfigSmartMotion(ARM_MAX_VEL, ARM_MAX_ACCEL, ARM_TOLERANCE);
   _armMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, (AMP_ANGLE+5_deg).value());
   _armMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, HOME_ANGLE.value());
@@ -108,8 +109,12 @@ frc2::CommandPtr SubArm::StoreNote() {
 frc2::CommandPtr SubArm::FeedNote(){
   return Run([this]{_ampMotor.Set(-1);}).FinallyDo([this]{return  _ampMotor.Set(0);});
 }
-// booleans
 
+frc2::CommandPtr SubArm::Outtake() {
+  return Run([this]{_ampMotor.Set(1);}).FinallyDo([this]{return _ampMotor.Set(0);});
+}
+
+// getters
 bool SubArm::CheckIfArmIsHome() {
   return units::math::abs(_armMotor.GetPosition() - HOME_ANGLE) < 2_deg;
 }
@@ -120,4 +125,8 @@ bool SubArm::CheckIfArmHasGamePiece() {
   } else {
     return false;
   }
+}
+
+units::degree_t SubArm::GetAngle() {
+  return _armMotor.GetPosition();
 }
