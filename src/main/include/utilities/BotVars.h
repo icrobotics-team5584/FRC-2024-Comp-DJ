@@ -8,8 +8,8 @@
 namespace BotVars {
 
 enum Robot { COMP, PRACTICE };
-const std::string COMP_BOT_MAC_ADDRESS = "00:15:5d:45:d7:5f";
-const std::string PRACTICE_BOT_MAC_ADDRESS = "ff:ff:ff:ff:ff:ff";
+const inline std::string COMP_BOT_MAC_ADDRESS = "00:80:2f:18:5a:33";
+const inline std::string PRACTICE_BOT_MAC_ADDRESS = "00:80:2f:34:07:fe";
 
 Robot DetermineRobot();
 
