@@ -22,6 +22,8 @@
 #include "utilities/POVHelper.h"
 
 RobotContainer::RobotContainer() {
+  frc::SmartDashboard::PutData("Command Scheduler", &frc2::CommandScheduler::GetInstance());
+
   pathplanner::NamedCommands::registerCommand("Intake", SubIntake::GetInstance().Intake());
   pathplanner::NamedCommands::registerCommand("StopIntakeSpinning", SubIntake::GetInstance().StopSpinningIntake());
   pathplanner::NamedCommands::registerCommand("StartShooter", SubShooter::GetInstance().StartShooter());
@@ -43,8 +45,7 @@ RobotContainer::RobotContainer() {
   SubIntake::GetInstance();
   SubVision::GetInstance();
 
-  SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController, false));
-  SubClimber::GetInstance().SetDefaultCommand(SubClimber::GetInstance().JoyStickDrive(_operatorController));
+  SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController,false));
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
   _delayChooser.AddOption("1 Seconds", 1);
@@ -128,6 +129,19 @@ void RobotContainer::ConfigureBindings() {
   POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.625_m));
   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
   POVHelper::Left(&_operatorController).OnTrue(SubIntake::GetInstance().ExtendIntake());
+
+  frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
+    return _operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2;
+  }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDriveLeft(_operatorController));
+
+  frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
+    return _operatorController.GetRightY() < -0.2 || _operatorController.GetRightY() > 0.2;
+  }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDriveRight(_operatorController));
+
+  frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
+    return (_operatorController.GetRightY() < -0.2 || _operatorController.GetRightY() > 0.2) && 
+    ( _operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2);
+  }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDrive(_operatorController));
 
   // Operator controls sysID
   // _operatorController.A().WhileTrue(SubArm::GetInstance().SysIdDynamic(frc2::sysid::Direction::kForward));

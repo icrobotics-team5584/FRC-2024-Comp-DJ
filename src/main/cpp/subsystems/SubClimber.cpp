@@ -41,6 +41,7 @@ void SubClimber::Periodic() {
     frc::SmartDashboard::PutNumber("Climber/Right current", _rClimbMotor.GetOutputCurrent());
     frc::SmartDashboard::PutBoolean("Climber/Reseted", Reseted);
     frc::SmartDashboard::PutBoolean("Climber/Reseting", Reseting);
+    frc::SmartDashboard::PutBoolean("Climber/OnJoyStick", OnJoyStick);
 }
 
 void SubClimber::SimulationPeriodic() {
@@ -137,27 +138,43 @@ void SubClimber::EnableSoftLimit(bool enabled) {
     _rClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, enabled);
 }
 
-frc2::CommandPtr SubClimber::JoyStickDrive(frc2::CommandXboxController& _controller) {
+frc2::CommandPtr SubClimber::ClimberJoystickDrive(frc2::CommandXboxController& _controller) {
     return Run([this, &_controller] {
-        double lspeed = -_controller.GetLeftY();
-        frc::SmartDashboard::PutNumber("Climber/Input left", lspeed);
-        if (lspeed < 0.2 && lspeed > -0.2) {lspeed = 0;}
-        if (!Reseting) {
-            if (lspeed != 0) {OnJoyStick = true;}
-            if (OnJoyStick) {
-                _lClimbMotor.Set(lspeed);
-            }
-        }
-        double rspeed = -_controller.GetRightY();
-        if (rspeed < 0.2 && rspeed > -0.2) {rspeed = 0;}
-        if (!Reseting) {
-            if (rspeed != 0) {OnJoyStick = true;}
-            if (OnJoyStick) {
-                _rClimbMotor.Set(rspeed);
-            }
+        OnJoyStick = true;
+        _lClimbMotor.Set(-_controller.GetLeftY());
+        _rClimbMotor.Set(-_controller.GetRightY());
+    }).FinallyDo([this] {
+        _lClimbMotor.SetPositionTarget(_lClimbMotor.GetPosition());
+        _rClimbMotor.SetPositionTarget(_rClimbMotor.GetPosition());
+    });
+}
+
+frc2::CommandPtr SubClimber::ClimberJoystickDriveLeft(frc2::CommandXboxController& _controller) {
+    return Run([this, &_controller] {
+        OnJoyStick = true;
+        _lClimbMotor.Set(-_controller.GetLeftY());
+    }).FinallyDo([this] {
+        _lClimbMotor.SetPositionTarget(_lClimbMotor.GetPosition());
+    });
+}
+
+frc2::CommandPtr SubClimber::ClimberJoystickDriveRight(frc2::CommandXboxController& _controller) {
+    return Run([this, &_controller] {
+        OnJoyStick = true;
+        _rClimbMotor.Set(-_controller.GetRightY());
+    }).FinallyDo([this] {
+        _rClimbMotor.SetPositionTarget(_rClimbMotor.GetPosition());
+    });
+}
+
+frc2::CommandPtr SubClimber::ClimberHold(bool left, bool right) {
+    return Run([this] {
+        if (OnJoyStick) {
+            _lClimbMotor.SetPositionTarget(_lClimbMotor.GetPosition());
+            _rClimbMotor.SetPositionTarget(_rClimbMotor.GetPosition());
         }
     });
-} 
+}
 
 //Pointer Commands
 
@@ -171,7 +188,7 @@ frc2::CommandPtr SubClimber::ClimberManualDrive(float power) {
 }
 
 frc2::CommandPtr SubClimber::ClimberStop() {
-    return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Stop();});
+    return frc2::cmd::RunOnce([this] {SubClimber::GetInstance().Stop(); OnJoyStick = false;});
 }
 
 frc2::CommandPtr SubClimber::ClimberLock() {

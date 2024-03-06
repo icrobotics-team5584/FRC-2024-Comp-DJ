@@ -67,7 +67,10 @@ class SubClimber : public frc2::SubsystemBase {
   bool GetTrapStatus();
   void SetTrapStatus(bool stat);
 
-  frc2::CommandPtr JoyStickDrive(frc2::CommandXboxController& _controller);
+  frc2::CommandPtr ClimberJoystickDrive(frc2::CommandXboxController& _controller);
+  frc2::CommandPtr ClimberJoystickDriveLeft(frc2::CommandXboxController& _controller);
+  frc2::CommandPtr ClimberJoystickDriveRight(frc2::CommandXboxController& _controller);
+  frc2::CommandPtr ClimberHold(bool left, bool right);
 
   frc2::CommandPtr ClimberPosition(units::meter_t distance);
   frc2::CommandPtr ClimberManualDrive(float power);
@@ -98,7 +101,7 @@ class SubClimber : public frc2::SubsystemBase {
   static constexpr units::meter_t WheelCir = 0.12538_m;
 
   // Robot info
-  static constexpr units::meter_t BaseHeight = 0.2_m;
+  static constexpr units::meter_t BaseHeight = 0.0_m;
   static constexpr units::meter_t TopHeight = 0.62_m;
 
   //reset
@@ -116,8 +119,8 @@ class SubClimber : public frc2::SubsystemBase {
 
   // Sim
 
-  frc::sim::ElevatorSim lElvSim{frc::DCMotor::NEO(), gearRatio, 26_kg, (WheelCir/std::numbers::pi)/2, BaseHeight, 1.5_m, false, BaseHeight};
-  frc::sim::ElevatorSim rElvSim{frc::DCMotor::NEO(), gearRatio, 26_kg, (WheelCir/std::numbers::pi)/2, BaseHeight, 1.5_m, false, BaseHeight};
+  frc::sim::ElevatorSim lElvSim{frc::DCMotor::NEO(), gearRatio, 26_kg, (WheelCir/std::numbers::pi)/2, BaseHeight, TopHeight, false, BaseHeight};
+  frc::sim::ElevatorSim rElvSim{frc::DCMotor::NEO(), gearRatio, 26_kg, (WheelCir/std::numbers::pi)/2, BaseHeight, TopHeight, false, BaseHeight};
 
   frc::Mechanism2d mech{4, 4};
   frc::MechanismRoot2d* mechRootL = mech.GetRoot("ClimberL", 1, 1);
