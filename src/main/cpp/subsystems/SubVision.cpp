@@ -28,22 +28,28 @@ using namespace std;
 
 // This method will be called once per scheduler run
 void SubVision::Periodic() {
-  frc::SmartDashboard::PutBoolean("Vision/best target has targets: ", VisionHasTargets());
+  frc::SmartDashboard::PutBoolean("Vision/has vision targets ", VisionHasTargets());
 
   auto _lastSeenTag = _camera.GetLatestResult().GetBestTarget();
 
   if (auto ally = frc::DriverStation::GetAlliance()) {
+    frc::SmartDashboard::PutNumber("Vision/Alliance ", ally.value());
     if (ally.value() == frc::DriverStation::Alliance::kBlue) {
       if (std::find(std::begin(blueTrap), std::end(blueTrap), _lastSeenTag.GetFiducialId()) != std::end(blueTrap)) {
         _lastSeenTrapTag = _lastSeenTag;
       }
     }
-    if (ally.value() == frc::DriverStation::Alliance::kBlue) {
+    if (ally.value() == frc::DriverStation::Alliance::kRed) {
       if (std::find(std::begin(redTrap), std::end(redTrap), _lastSeenTag.GetFiducialId()) != std::end(redTrap)) {
         _lastSeenTrapTag = _lastSeenTag;
       }
     }
   }
+
+  frc::SmartDashboard::PutNumber("Vision/last seen tag ID ", _lastSeenTag.GetFiducialId());
+  frc::SmartDashboard::PutNumber("Vision/last seen trap tag ID ", _lastSeenTrapTag.GetFiducialId());
+  
+
 }
 
 void SubVision::SimulationPeriodic() {
@@ -108,9 +114,7 @@ std::optional<units::degree_t> SubVision::getCamToTrapYaw() {
 }
 
 units::degree_t SubVision::getTrapAngle() {
-  auto result = _camera.GetLatestResult();
-  auto target = result.GetBestTarget();
-  auto trapID = target.GetFiducialId();
+  auto trapID = _lastSeenTrapTag.GetFiducialId();
 
   return trapAngle[trapID];
 }

@@ -76,7 +76,7 @@ void SubDrivebase::Periodic() {
   frc::SmartDashboard::PutNumber("Drivebase/heading", GetHeading().Degrees().value());
   frc::SmartDashboard::PutNumber("Drivebase/velocity", GetVelocity().value());
 
-  frc::SmartDashboard::PutNumberArray("drivebase/true swerve states",
+  frc::SmartDashboard::PutNumberArray("Drivebase/true swerve states",
                                       std::array{
                                           _frontLeft.GetAngle().Degrees().value(),
                                           _frontLeft.GetSpeed().value(),
@@ -88,7 +88,7 @@ void SubDrivebase::Periodic() {
                                           _backRight.GetSpeed().value(),
                                       });
 
-  frc::SmartDashboard::PutNumberArray("drivebase/can coders swerve states",
+  frc::SmartDashboard::PutNumberArray("Drivebase/can coders swerve states",
                                       std::array{
                                           _frontLeft.GetCanCoderAngle().Degrees().value(),
                                           _frontLeft.GetSpeed().value(),
@@ -105,10 +105,14 @@ void SubDrivebase::Periodic() {
   _backLeft.SendSensorsToDash();
   _backRight.SendSensorsToDash();
 
-  Drive(_forwardSpeedRequest, _sidewaysSpeedRequest, _rotationSpeedRequest, _fieldOrientedRquest);
+  Drive(_forwardSpeedRequest, _sidewaysSpeedRequest, _rotationSpeedRequest, _fieldOrientedRequest);
+  frc::SmartDashboard::PutNumber("Drivebase/ x-axis translation speed request ", _forwardSpeedRequest.value());
+  frc::SmartDashboard::PutNumber("Drivebase/ y-axis translation speed request ", _sidewaysSpeedRequest.value());
+  frc::SmartDashboard::PutNumber("Drivebase/ rotation speed request ", _rotationSpeedRequest.value());
+  frc::SmartDashboard::PutBoolean("Drivebase/ field oriented request", _fieldOrientedRequest);
 
   UpdateOdometry();
-  frc::SmartDashboard::PutNumber("drivebase/loop time (sec)", (frc::GetTime() - loopStart).value());
+  frc::SmartDashboard::PutNumber("Drivebase/loop time (sec)", (frc::GetTime() - loopStart).value());
 }
 
 void SubDrivebase::SimulationPeriodic() {
@@ -139,7 +143,7 @@ frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& contro
       if(ignoreJoystickRotation == false){
         _rotationSpeedRequest = -rotationSpeed;
       }
-      _fieldOrientedRquest = true;
+      _fieldOrientedRequest = true;
 
     } else {
       _forwardSpeedRequest = forwardSpeed;
@@ -147,7 +151,7 @@ frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& contro
       if(ignoreJoystickRotation == false){
         _rotationSpeedRequest = rotationSpeed;
       }
-      _fieldOrientedRquest = true;
+      _fieldOrientedRequest = true;
     }
   });
 
@@ -177,7 +181,7 @@ void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_se
   // Setting modules from aquired states
   auto [fl, fr, bl, br] = states;
 
-  frc::SmartDashboard::PutNumberArray("drivebase/desired swerve states",
+  frc::SmartDashboard::PutNumberArray("Drivebase/desired swerve states",
                                       std::array{
                                           fl.angle.Degrees().value(),
                                           fl.speed.value(),
@@ -282,13 +286,11 @@ void SubDrivebase::RotateToZero(units::degree_t rotationError) {
 }
 
 void SubDrivebase::TranslateToZero(units::degree_t translationError){
-  double speedRot = Rcontroller.Calculate(translationError, 0_deg);
-  speedRot = std::clamp(speedRot, -2.0, 2.0);
-
   double speedX = Xcontroller.Calculate(translationError.value(), 0);
 
+  speedX = std::clamp(speedX, -0.5, 0.5);
   _sidewaysSpeedRequest = speedX * 1_mps;
-  _fieldOrientedRquest = false;
+  _fieldOrientedRequest = false;
 }
 
 
