@@ -11,7 +11,6 @@
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/angular_acceleration.h>
-
 #include <frc/simulation/SingleJointedArmSim.h>
 #include <frc/smartdashboard/Mechanism2d.h>
 #include <frc/smartdashboard/MechanismLigament2d.h>
@@ -31,7 +30,7 @@ class SubArm : public frc2::SubsystemBase {
   SubArm();
 
   // variables
-  static const inline units::degree_t OFFSET_ANGLE = BotVars::Choose(0.055_tr, 0.80809_tr); //zeroing procedure: Move arm to home, set offset to 0, read current pos, set offset to home pos - current angle
+  static const inline units::degree_t OFFSET_ANGLE = BotVars::Choose(0.86_tr, 0.80809_tr); //zeroing procedure: Move arm to home, set offset to 0, read current pos, set offset to current angle - home pos
   static constexpr units::degree_t HOME_ANGLE = 0.098_tr; //0.108_tr
   static constexpr units::degree_t AMP_ANGLE = 0.626_tr; //0.65_tr
   static constexpr units::degree_t TRAP_ANGLE = 110_deg;
@@ -73,7 +72,7 @@ class SubArm : public frc2::SubsystemBase {
  private:
   // motors
   ICSparkMax _ampMotor{canid::AmpMotor, 10_A}; // Amp shooter
-  ICSparkMax _armMotor{canid::ArmMotor, 30_A}; // arm
+  ICSparkMax _armMotor{canid::ArmMotor, 10_A}; // arm
 
   // arm (tune values for robot)
   static constexpr double ARM_P = 8;//44.597;
@@ -90,7 +89,7 @@ class SubArm : public frc2::SubsystemBase {
 
   static constexpr double ARM_GEAR_RATIO = 85;
   static constexpr units::degrees_per_second_squared_t ARM_MAX_ACCEL = 3000_deg_per_s_sq;
-  static constexpr units::degrees_per_second_t ARM_MAX_VEL = 400_deg_per_s;
+  static constexpr units::degrees_per_second_t ARM_MAX_VEL = 50_deg_per_s;// 400_deg_per_s;
   static constexpr units::degree_t ARM_TOLERANCE = 0.5_deg;
   static constexpr units::meter_t ARM_LENGTH = 0.9_m;
   static constexpr units::kilogram_t ARM_MASS = 1_kg;
