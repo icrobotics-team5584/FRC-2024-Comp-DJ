@@ -46,14 +46,14 @@ SubDrivebase::SubDrivebase() {
       HolonomicPathFollowerConfig(
           PIDConstants(2, 0.0, 0.0),    // Translation PID constants
           PIDConstants(0.5, 0.0, 0.0),  // Rotation PID constants
-          MAX_VELOCITY,                        // Max module speed, in m/s
+          MAX_VELOCITY,                 // Max module speed, in m/s
           432_mm,  // Drive base radius in meters. Distance from robot center to furthest module.
                    // NEEDS TO BE CHECKED AND MADE ACCURATE!!
           ReplanningConfig(
               false, false, 1_m,
               0.25_m)  // Default path replanning config. See the API for the options here
           ),
-          
+
       []() {
         // Boolean supplier that controls when the path will be mirrored for the red alliance
         // This will flip the path being followed to the red side of the field.
@@ -106,9 +106,12 @@ void SubDrivebase::Periodic() {
   _backRight.SendSensorsToDash();
 
   Drive(_forwardSpeedRequest, _sidewaysSpeedRequest, _rotationSpeedRequest, _fieldOrientedRequest);
-  frc::SmartDashboard::PutNumber("Drivebase/ x-axis translation speed request ", _forwardSpeedRequest.value());
-  frc::SmartDashboard::PutNumber("Drivebase/ y-axis translation speed request ", _sidewaysSpeedRequest.value());
-  frc::SmartDashboard::PutNumber("Drivebase/ rotation speed request ", _rotationSpeedRequest.value());
+  frc::SmartDashboard::PutNumber("Drivebase/ x-axis translation speed request ",
+                                 _forwardSpeedRequest.value());
+  frc::SmartDashboard::PutNumber("Drivebase/ y-axis translation speed request ",
+                                 _sidewaysSpeedRequest.value());
+  frc::SmartDashboard::PutNumber("Drivebase/ rotation speed request ",
+                                 _rotationSpeedRequest.value());
   frc::SmartDashboard::PutBoolean("Drivebase/ field oriented request", _fieldOrientedRequest);
 
   UpdateOdometry();
@@ -122,25 +125,32 @@ void SubDrivebase::SimulationPeriodic() {
   _backRight.UpdateSim(20_ms);
 }
 
-frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller, bool ignoreJoystickRotation) {
+frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller,
+                                             bool ignoreJoystickRotation) {
   return Run([this, &controller, ignoreJoystickRotation] {
     double deadband = 0.08;
     auto velocity =
-        frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) * 1_mps;
+        frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) *
+        1_mps;
     auto angularVelocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity",
-                                                          MAX_ANGULAR_VELOCITY.value()) * 1_deg_per_s;
+                                                          MAX_ANGULAR_VELOCITY.value()) *
+                           1_deg_per_s;
     static frc::SlewRateLimiter<units::scalar> _xspeedLimiter{MAX_JOYSTICK_ACCEL / 1_s};
     static frc::SlewRateLimiter<units::scalar> _yspeedLimiter{MAX_JOYSTICK_ACCEL / 1_s};
     static frc::SlewRateLimiter<units::scalar> _rotLimiter{MAX_ANGULAR_JOYSTICK_ACCEL / 1_s};
-    auto forwardSpeed = _yspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftY(), deadband)) * velocity;
-    auto rotationSpeed = _rotLimiter.Calculate(frc::ApplyDeadband(controller.GetRightX(), deadband)) * angularVelocity;
-    auto sidewaysSpeed = _xspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftX(), deadband)) * velocity;
-    
-    // when optionalRotationContro is false, 
+    auto forwardSpeed =
+        _yspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftY(), deadband)) * velocity;
+    auto rotationSpeed =
+        _rotLimiter.Calculate(frc::ApplyDeadband(controller.GetRightX(), deadband)) *
+        angularVelocity;
+    auto sidewaysSpeed =
+        _xspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftX(), deadband)) * velocity;
+
+    // when optionalRotationContro is false,
     if (frc::RobotBase::IsSimulation()) {
       _sidewaysSpeedRequest = -sidewaysSpeed;
       _forwardSpeedRequest = -forwardSpeed;
-      if(ignoreJoystickRotation == false){
+      if (ignoreJoystickRotation == false) {
         _rotationSpeedRequest = -rotationSpeed;
       }
       _fieldOrientedRequest = true;
@@ -148,13 +158,12 @@ frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& contro
     } else {
       _forwardSpeedRequest = forwardSpeed;
       _sidewaysSpeedRequest = sidewaysSpeed;
-      if(ignoreJoystickRotation == false){
+      if (ignoreJoystickRotation == false) {
         _rotationSpeedRequest = rotationSpeed;
       }
       _fieldOrientedRequest = true;
     }
   });
-
 }
 
 void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
@@ -282,17 +291,15 @@ void SubDrivebase::RotateToZero(units::degree_t rotationError) {
   speedRot = std::clamp(speedRot, -2.0, 2.0);
 
   _rotationSpeedRequest = speedRot * 1_rad_per_s;
-
 }
 
-void SubDrivebase::TranslateToZero(units::degree_t translationError){
+void SubDrivebase::TranslateToZero(units::degree_t translationError) {
   double speedX = Xcontroller.Calculate(translationError.value(), 0);
 
   speedX = std::clamp(speedX, -0.5, 0.5);
   _sidewaysSpeedRequest = speedX * 1_mps;
   _fieldOrientedRequest = false;
 }
-
 
 bool SubDrivebase::IsAtPose(frc::Pose2d pose) {
   auto currentPose = _poseEstimator.GetEstimatedPosition();

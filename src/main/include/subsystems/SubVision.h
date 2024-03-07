@@ -35,7 +35,6 @@ class SubVision : public frc2::SubsystemBase {
   bool IsOnTarget(FieldElement chosenFieldElement);
   units::degree_t getTrapAngle();
   std::optional<units::degree_t> getCamToTrapYaw();
-  
 
   int FindID(FieldElement chosenFieldElement);
   std::optional<units::degree_t> GetSpecificTagYaw(FieldElement chosenFieldElement);
@@ -43,13 +42,17 @@ class SubVision : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  
+
   photon::PhotonCamera _camera{"photonvision_5584"};
   double _bestYaw;
 
-  std::map<FieldElement, int> blueFieldElement = {{SPEAKER, 7}, {SPEAKER_SIDE, 8}, {AMP, 6}, {SOURCE_LEFT, 2}, {SOURCE_RIGHT, 1}};
-  std::map<FieldElement, int> redFieldElement = {{SPEAKER, 4}, {SPEAKER_SIDE, 3}, {AMP, 5}, {SOURCE_LEFT, 10}, {SOURCE_RIGHT, 9}};
-  std::map<int, units::degree_t> trapAngle{{11, 116_deg}, {12, 0_deg}, {13, 0_deg}, {14, 0_deg}, {15, 0_deg}, {16, 0_deg}}; //11-13 is red, 14-16 is blue
+  std::map<FieldElement, int> blueFieldElement = {
+      {SPEAKER, 7}, {SPEAKER_SIDE, 8}, {AMP, 6}, {SOURCE_LEFT, 2}, {SOURCE_RIGHT, 1}};
+  std::map<FieldElement, int> redFieldElement = {
+      {SPEAKER, 4}, {SPEAKER_SIDE, 3}, {AMP, 5}, {SOURCE_LEFT, 10}, {SOURCE_RIGHT, 9}};
+  std::map<int, units::degree_t> trapAngle{
+      {11, 116_deg}, {12, 0_deg}, {13, 0_deg},
+      {14, 0_deg},   {15, 0_deg}, {16, 0_deg}};  // 11-13 is red, 14-16 is blue
   std::array<int, 3> redTrap = {11, 12, 13};
   std::array<int, 3> blueTrap = {14, 15, 16};
 
@@ -57,8 +60,9 @@ class SubVision : public frc2::SubsystemBase {
 
   frc::Transform3d _camToBot{{0_mm, 0_mm, 0_mm}, {}};
 
-  frc::AprilTagFieldLayout _tagLayout = frc::LoadAprilTagLayoutField(frc::AprilTagField::k2024Crescendo);
+  frc::AprilTagFieldLayout _tagLayout =
+      frc::LoadAprilTagLayoutField(frc::AprilTagField::k2024Crescendo);
 
-  photon::SimVisionSystem _visionSim{"photonvision_5584", 45_deg, _camToBot, 9000_m, 1920, 1080, 0.0001};
-
+  photon::SimVisionSystem _visionSim{
+      "photonvision_5584", 45_deg, _camToBot, 9000_m, 1920, 1080, 0.0001};
 };

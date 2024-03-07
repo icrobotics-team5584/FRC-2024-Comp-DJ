@@ -35,12 +35,14 @@ void SubVision::Periodic() {
   if (auto ally = frc::DriverStation::GetAlliance()) {
     frc::SmartDashboard::PutNumber("Vision/Alliance ", ally.value());
     if (ally.value() == frc::DriverStation::Alliance::kBlue) {
-      if (std::find(std::begin(blueTrap), std::end(blueTrap), _lastSeenTag.GetFiducialId()) != std::end(blueTrap)) {
+      if (std::find(std::begin(blueTrap), std::end(blueTrap), _lastSeenTag.GetFiducialId()) !=
+          std::end(blueTrap)) {
         _lastSeenTrapTag = _lastSeenTag;
       }
     }
     if (ally.value() == frc::DriverStation::Alliance::kRed) {
-      if (std::find(std::begin(redTrap), std::end(redTrap), _lastSeenTag.GetFiducialId()) != std::end(redTrap)) {
+      if (std::find(std::begin(redTrap), std::end(redTrap), _lastSeenTag.GetFiducialId()) !=
+          std::end(redTrap)) {
         _lastSeenTrapTag = _lastSeenTag;
       }
     }
@@ -48,8 +50,6 @@ void SubVision::Periodic() {
 
   frc::SmartDashboard::PutNumber("Vision/last seen tag ID ", _lastSeenTag.GetFiducialId());
   frc::SmartDashboard::PutNumber("Vision/last seen trap tag ID ", _lastSeenTrapTag.GetFiducialId());
-  
-
 }
 
 void SubVision::SimulationPeriodic() {
