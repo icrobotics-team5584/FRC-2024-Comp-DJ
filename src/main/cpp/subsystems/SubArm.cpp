@@ -6,7 +6,6 @@
 #include <units/angular_velocity.h>
 #include <units/angular_acceleration.h>
 #include <units/angle.h>
-
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <cmath>
 #include <iostream>
@@ -14,7 +13,6 @@
 #include <frc2/command/button/Trigger.h>
 #include <frc/MathUtil.h>
 #include <frc/shuffleboard/Shuffleboard.h>
-
 #include "subsystems/SubArm.h"
 #include "utilities/ICSparkMax.h"
 #include "RobotContainer.h"
@@ -120,7 +118,7 @@ bool SubArm::CheckIfArmIsHome() {
 }
 
 bool SubArm::CheckIfArmHasGamePiece() {
-  if ( _sdLineBreak.Get() == true) {
+  if ( _sdLineBreak.Get() == BotVars::Choose(false, true)) {
     return true;
   } else {
     return false;

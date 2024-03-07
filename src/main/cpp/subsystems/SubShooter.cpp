@@ -4,6 +4,7 @@
 
 #include "subsystems/SubShooter.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include "utilities/BotVars.h"
 
 SubShooter::SubShooter() {
   solShooter.Set(frc::DoubleSolenoid::kReverse);
@@ -225,7 +226,7 @@ frc2::CommandPtr SubShooter::Outtake() {
 }
 
 bool SubShooter::CheckShooterLineBreak() {
-  if(_shooterLineBreak.Get() == true){
+  if(_shooterLineBreak.Get() == BotVars::Choose(false, true)){
     return true;
   }
 
