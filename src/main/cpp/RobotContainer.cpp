@@ -126,7 +126,7 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.B().OnFalse(cmd::ArmToStow());
   _operatorController.A().OnTrue(cmd::PrepareToShoot());
 
-  POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.625_m));
+  POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.498_m));
   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
   POVHelper::Left(&_operatorController).OnTrue(SubIntake::GetInstance().ExtendIntake());
 
