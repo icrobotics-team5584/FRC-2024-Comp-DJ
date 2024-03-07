@@ -11,7 +11,6 @@
 #include "utilities/ICSparkMax.h"
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/DigitalInput.h>
-
 #include <frc/simulation/DCMotorSim.h>
 #include <units/moment_of_inertia.h>
 #include <frc/Encoder.h>
