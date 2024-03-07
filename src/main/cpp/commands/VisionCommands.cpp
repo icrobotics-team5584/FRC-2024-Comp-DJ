@@ -57,43 +57,36 @@ frc2::CommandPtr ShootSequence(frc2::CommandXboxController& controller) {
 
 frc2::CommandPtr VisionRotateToTrap() {
   return Run([] {
+    frc::SmartDashboard::PutString("Vision/Command", "VisionRotateToTrap");
     auto trapAngle = SubVision::GetInstance().getTrapAngle();
     frc::SmartDashboard::PutNumber("Vision/Angle of Trap: ", trapAngle.value());
     auto currentGyroYaw = SubDrivebase::GetInstance().GetHeading().Degrees();
     frc::SmartDashboard::PutNumber("Vision/Current yaw: ", currentGyroYaw.value());
     auto errorYaw = trapAngle - currentGyroYaw;
-    frc::SmartDashboard::PutNumber("Vision/Error Yaw: ", errorYaw.value());
     SubDrivebase::GetInstance().RotateToZero(errorYaw);
   },{&SubDrivebase::GetInstance()}).Until([]{
-    return false;
-    /*
     auto trapAngle = SubVision::GetInstance().getTrapAngle();
     auto currentGyroYaw = SubDrivebase::GetInstance().GetHeading().Degrees();
-    auto errorYaw = trapAngle - currentGyroYaw;
-    return units::math::abs(errorYaw) < 4_deg;
-    */
+    auto errorYaw = units::math::fmod(trapAngle - currentGyroYaw, 360_deg);
+    frc::SmartDashboard::PutNumber("Vision/Error Yaw: ", errorYaw.value());
+    auto a =  units::math::abs(errorYaw) < 4_deg;
+    frc::SmartDashboard::PutNumber("Vision/Absolute Error Yaw", a);
+    return a;
+  
   });
 }
 
 frc2::CommandPtr VisionTranslateToTrap() {
-
-  static units::degree_t camYaw = 0_deg;
-  static units::degree_t startingGyroYaw = 0_deg;
-
   return Run([] {
-    auto result = SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER);
-
-    if (result.has_value()) {
-      camYaw = SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER).value_or(0_deg);
-      startingGyroYaw = SubDrivebase::GetInstance().GetHeading().Degrees();
-    }
-
-    SubDrivebase::GetInstance().TranslateToZero(camYaw);
+    frc::SmartDashboard::PutString("Vision/Command: ", "VisionTranslateToTRAP");
+    auto result = SubVision::GetInstance().getCamToTrapYaw();
+    frc::SmartDashboard::PutNumber("Vision/result: ", result.value_or(1000_deg).value());
+    SubDrivebase::GetInstance().TranslateToZero(-result.value_or(0_deg));
   });
 }
 
 frc2::CommandPtr VisionClimb(){
-    return VisionRotateToTrap().AndThen(VisionTranslateToTrap());
+    return VisionRotateToTrap().AlongWith(VisionTranslateToTrap());
 }
 
 }  // namespace cmd

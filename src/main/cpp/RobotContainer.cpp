@@ -109,6 +109,7 @@ void RobotContainer::ConfigureBindings() {
   // _driverController.LeftTrigger().WhileTrue(/*Align2Stage*/);
   // _driverController.LeftBumper().WhileTrue(/*IntakeFromSource*/);
   _driverController.RightTrigger().WhileTrue(cmd::VisionRotateToSpeaker(_driverController));
+  _driverController.LeftTrigger().WhileTrue(cmd::VisionClimb());
   // _driverController.RightBumper().WhileTrue(/*Align2Amp*/);
 
   _operatorController.Start().WhileTrue(cmd::OuttakeNote());

@@ -288,6 +288,7 @@ void SubDrivebase::TranslateToZero(units::degree_t translationError){
   double speedX = Xcontroller.Calculate(translationError.value(), 0);
 
   _sidewaysSpeedRequest = speedX * 1_mps;
+  _fieldOrientedRquest = false;
 }
 
 
