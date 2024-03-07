@@ -51,7 +51,7 @@ class SubVision : public frc2::SubsystemBase {
   std::map<FieldElement, int> redFieldElement = {
       {SPEAKER, 4}, {SPEAKER_SIDE, 3}, {AMP, 5}, {SOURCE_LEFT, 10}, {SOURCE_RIGHT, 9}};
   std::map<int, units::degree_t> trapAngle{
-      {11, 116_deg}, {12, 0_deg}, {13, 0_deg},
+      {11, 116_deg}, {12, 270_deg}, {13, 0_deg},
       {14, 0_deg},   {15, 0_deg}, {16, 0_deg}};  // 11-13 is red, 14-16 is blue
   std::array<int, 3> redTrap = {11, 12, 13};
   std::array<int, 3> blueTrap = {14, 15, 16};

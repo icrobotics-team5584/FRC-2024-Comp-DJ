@@ -73,7 +73,6 @@ frc2::CommandPtr VisionTranslateToTrap() {
 }
 
 frc2::CommandPtr VisionClimb() {
-  //return VisionRotateToTrap().AndThen(VisionTranslateToTrap());
   return VisionRotateToTrap().AlongWith(VisionTranslateToTrap());
 }
 
