@@ -1,5 +1,7 @@
 #pragma once
 
+#include "utilities/BotVars.h"
+
 namespace canivore {
   // 1-12 inclusive
 
@@ -58,7 +60,7 @@ namespace pcm1 {
 
     //Shooter
     constexpr int ShootClose = 3;
-    constexpr int ShootFar = 2;
+    const int ShootFar = BotVars::Choose(6,2); // change both bots to be the same if we have time
 
     //Climber
     constexpr int LockCylinderForward = 4;

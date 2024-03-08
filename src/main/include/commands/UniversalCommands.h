@@ -22,4 +22,5 @@ frc2::CommandPtr ShootFullSequenceWithoutVision();
 frc2::CommandPtr ShootSpeakerOrAmp();
 frc2::CommandPtr FeedNoteToShooter();
 frc2::CommandPtr PrepareToShoot();
+frc2::CommandPtr ShootIntoAmp();
 }  // namespace cmd
