@@ -103,4 +103,8 @@ frc2::CommandPtr PrepareToShoot() {
   return FeedNoteToShooter().AndThen(SubShooter::GetInstance().StartShooter());
 }
 
+frc2::CommandPtr ReverseEndefactor(){
+  return SubArm::GetInstance().Outtake().AlongWith(OuttakeNote());
+}
+
 }  // namespace cmd
