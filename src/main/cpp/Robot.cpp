@@ -7,12 +7,14 @@
 #include <frc2/command/CommandScheduler.h>
 #include "subsystems/SubDrivebase.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <cameraserver/CameraServer.h>
 
 #include <frc/DataLogManager.h>
 #include <frc/DriverStation.h>
 
 void Robot::RobotInit() {
   frc::DataLogManager::Start();
+  frc::CameraServer::StartAutomaticCapture();
   frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog(),true);
 }
 
