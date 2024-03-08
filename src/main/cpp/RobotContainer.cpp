@@ -109,7 +109,7 @@ void RobotContainer::ConfigureBindings() {
   _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
   // _driverController.LeftTrigger().WhileTrue(/*Align2Stage*/);
   // _driverController.LeftBumper().WhileTrue(/*IntakeFromSource*/);
-  _driverController.RightTrigger().WhileTrue(cmd::VisionRotateToSpeaker(_driverController));
+  _driverController.RightTrigger().WhileTrue(SubLED::GetInstance().SetLEDCommand(0.61).AndThen(cmd::VisionRotateToSpeaker(_driverController)).AndThen(SubLED::GetInstance().SetLEDCommand(0.61)));
   // _driverController.RightBumper().WhileTrue(/*Align2Amp*/);
 
   _operatorController.Start().WhileTrue(cmd::OuttakeNote());
@@ -140,9 +140,8 @@ void RobotContainer::ConfigureBindings() {
 }
 
 void RobotContainer::ConfigureLEDS() {
-  frc2::Trigger([] { return SubArm::GetInstance().CheckIfArmHasGamePiece(); })
-      .OnTrue(SubLED::GetInstance().SetLEDCommand(0.71))
-      .OnFalse(SubLED::GetInstance().SetLEDCommand(0.85));
+  frc2::Trigger([] { return SubArm::GetInstance().CheckIfArmHasGamePiece() || SubShooter::GetInstance().CheckShooterLineBreak();})
+      .WhileFalse(SubLED::GetInstance().SetLEDCommand(0.65));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

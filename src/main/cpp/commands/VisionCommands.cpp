@@ -1,6 +1,7 @@
 #include "commands/VisionCommands.h"
 #include "subsystems/SubDrivebase.h"
 #include "subsystems/SubVision.h"
+#include "subsystems/SubLED.h"
 
 namespace cmd {
 using namespace frc2::cmd;
@@ -95,5 +96,4 @@ frc2::CommandPtr VisionTranslateToTrap() {
 frc2::CommandPtr VisionClimb(){
     return VisionRotateToTrap().AndThen(VisionTranslateToTrap());
 }
-
 }  // namespace cmd

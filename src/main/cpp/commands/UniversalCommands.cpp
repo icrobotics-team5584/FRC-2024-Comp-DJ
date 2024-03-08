@@ -39,9 +39,10 @@ frc2::CommandPtr SequenceArmToTrapPos() {
 }
 
 frc2::CommandPtr ShootFullSequenceWithVision(frc2::CommandXboxController& controller) {
-  return VisionRotateToSpeaker(controller).Until([]{return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);})
+  return SubLED::GetInstance().SetLEDCommand(0.91).AndThen(
+  VisionRotateToSpeaker(controller)).Until([]{return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);})
       .Until([] { return true; })
-      .AndThen({SubShooter::GetInstance().ShootSequence()})
+      .AndThen({SubShooter::GetInstance().ShootSequence()}).AlongWith(SubLED::GetInstance().SetLEDCommand(0.61))
       .AlongWith(WaitUntil([] {
                    return SubShooter::GetInstance().CheckShooterSpeed();
                  }).AndThen({SubArm::GetInstance().FeedNote()}));
@@ -72,7 +73,8 @@ frc2::CommandPtr IntakefullSequence() {
       .Intake()
       .AlongWith(SubArm::GetInstance().StoreNote())
       .Until([]{return SubArm::GetInstance().CheckIfArmHasGamePiece();})
-      .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake(); });
+      .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake(); 
+      SubLED::GetInstance().SetLEDFunc(0.77);});
 }
 
 frc2::CommandPtr StartTrapSequence() {
@@ -96,7 +98,7 @@ frc2::CommandPtr FeedNoteToShooter() {
       .StartFeederSlow()
       .AlongWith(SubArm::GetInstance().FeedNote())
       .Until([] { return SubShooter::GetInstance().CheckShooterLineBreak(); })
-      .AndThen(SubShooter::GetInstance().ReverseFeeder().WithTimeout(0.2_s))
+      .AndThen(SubShooter::GetInstance().ReverseFeeder().WithTimeout(0.2_s)).AlongWith(SubLED::GetInstance().SetLEDCommand(0.87))
       .FinallyDo([] { SubShooter::GetInstance().StopFeederFunc(); });
 }
 

@@ -36,6 +36,7 @@ class SubArm : public frc2::SubsystemBase {
   static constexpr units::degree_t AMP_ANGLE = 0.626_tr; //0.65_tr
   static constexpr units::degree_t TRAP_ANGLE = 110_deg;
 
+
   // Instance
   static SubArm& GetInstance() {
     static SubArm inst;
