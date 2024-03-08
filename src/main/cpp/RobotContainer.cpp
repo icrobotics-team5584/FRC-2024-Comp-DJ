@@ -120,7 +120,7 @@ void RobotContainer::ConfigureBindings() {
 
   _operatorController.Y().OnTrue(cmd::ArmToAmpPos());
   _operatorController.Y().OnFalse(cmd::ArmToStow());
-  _operatorController.X().OnTrue(SubShooter::GetInstance().ShootIntoAmp());
+  _operatorController.X().WhileTrue(cmd::ShootIntoAmp());
   _operatorController.Back().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
   _operatorController.B().OnTrue(cmd::ArmToAmpPos());
   _operatorController.B().OnFalse(cmd::ArmToStow());

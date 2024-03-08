@@ -60,6 +60,7 @@ void SubArm::Periodic() {
   frc::SmartDashboard::PutData("arm/Arm Mechanism Display", &_doubleJointedArmMech);
   frc::SmartDashboard::PutNumber("arm/Amp Shooter Motor: ", _ampMotor.Get());
   frc::SmartDashboard::PutBoolean("arm/Linebreak", _sdLineBreak.Get());
+  frc::SmartDashboard::PutNumber("arm/End Effector Velocity", _ampMotor.GetVelocity().value());
 
   // angle of motor
   frc::SmartDashboard::PutData("arm/Arm tilt motor: ", (wpi::Sendable*)&_armMotor);

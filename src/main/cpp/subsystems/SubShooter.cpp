@@ -136,12 +136,14 @@ frc2::CommandPtr SubShooter::StartShooter() {
 }
 
 frc2::CommandPtr SubShooter::ShootIntoAmp() {
-  return ShooterChangePosClose()
-      .AndThen(Run([this] { CurrentShooterTarget = ShootAmpTarget; }).Until([this] {
-        return CheckShooterSpeed();
-      }))
-      .AndThen(StartFeeder())
-      .FinallyDo([this] { StopShooterFunc(); });
+  return ShooterChangePosFar()
+      .AndThen(RunOnce([this] { CurrentShooterTarget = ShootAmpTarget; }))
+      .AndThen(WaitUntil([this] { return CheckShooterSpeed(); }));
+}
+
+frc2::CommandPtr SubShooter::ShootIntoAmpSequence() {
+    return Sequence(ShootIntoAmp(), StartFeeder(), Idle())
+      .FinallyDo([this] {StopShooterFunc();});
 }
 
 void SubShooter::StopShooterFunc(){
@@ -186,8 +188,8 @@ frc2::CommandPtr SubShooter::AutoShootSequence() {
 
 
 bool SubShooter::CheckShooterSpeed(){
-  if (std::abs(ShootFarTarget.value() - _bottomPastVelocityAvg) < 3 &&
-      std::abs(ShootFarTarget.value() - _topPastVelocityAvg) < 3) {
+  if (std::abs(CurrentShooterTarget.value() - _bottomPastVelocityAvg) < 3 &&
+      std::abs(CurrentShooterTarget.value() - _topPastVelocityAvg) < 3) {
     return true;
   }
  return false;
