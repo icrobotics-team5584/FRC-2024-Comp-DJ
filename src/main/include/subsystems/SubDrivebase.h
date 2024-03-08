@@ -118,7 +118,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   units::meters_per_second_t _forwardSpeedRequest = 0_mps;
   units::meters_per_second_t _sidewaysSpeedRequest = 0_mps;
   units::degrees_per_second_t _rotationSpeedRequest = 0_deg_per_s;
-  bool _fieldOrientedRquest = true; 
+  bool _fieldOrientedRequest = true; 
 
   // Sysid
   frc2::sysid::SysIdRoutine _sysIdRoutine{
