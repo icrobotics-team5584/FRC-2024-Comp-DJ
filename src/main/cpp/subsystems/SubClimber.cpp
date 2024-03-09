@@ -41,7 +41,6 @@ void SubClimber::Periodic() {
     frc::SmartDashboard::PutNumber("Climber/Right current", _rClimbMotor.GetOutputCurrent());
     frc::SmartDashboard::PutBoolean("Climber/Reseted", Reseted);
     frc::SmartDashboard::PutBoolean("Climber/Reseting", Reseting);
-    frc::SmartDashboard::PutBoolean("Climber/OnJoyStick", OnJoyStick);
 }
 
 void SubClimber::SimulationPeriodic() {
@@ -85,16 +84,7 @@ void SubClimber::DriveToDistance(units::meter_t distance) {
     }
 }
 
-//Secondary move commands
-
-void SubClimber::Retract() {
-    DriveToDistance(BaseHeight);
-}
-
-void SubClimber::Extend() {
-    DriveToDistance(TopHeight);
-}
-
+// Primary actions
 void SubClimber::Start(double power) {
   _lClimbMotor.Set(power);
   _rClimbMotor.Set(power);
@@ -103,15 +93,6 @@ void SubClimber::Start(double power) {
 void SubClimber::Stop() {
   _lClimbMotor.StopMotor();
   _rClimbMotor.StopMotor();
-}
-
-void SubClimber::Lock() {
-    Stop();
-    LockCylinder.Set(frc::DoubleSolenoid::Value::kForward);
-}
-
-void SubClimber::Unlock() {
-    LockCylinder.Set(frc::DoubleSolenoid::Value::kReverse);
 }
 
 void SubClimber::ZeroClimber() {
@@ -127,10 +108,6 @@ double SubClimber::GetRightCurrent() {
     return _rClimbMotor.GetOutputCurrent();
 }
 
-bool SubClimber::GetTrapStatus() { return TrapSequencing; }
-
-void SubClimber::SetTrapStatus(bool stat) { TrapSequencing = stat;}
-
 void SubClimber::EnableSoftLimit(bool enabled) {
     _lClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, enabled);
     _lClimbMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kReverse, enabled);
@@ -140,7 +117,6 @@ void SubClimber::EnableSoftLimit(bool enabled) {
 
 frc2::CommandPtr SubClimber::ClimberJoystickDrive(frc2::CommandXboxController& _controller) {
     return Run([this, &_controller] {
-        OnJoyStick = true;
         _lClimbMotor.Set(-_controller.GetLeftY());
         _rClimbMotor.Set(-_controller.GetRightY());
     }).FinallyDo([this] {
@@ -151,7 +127,6 @@ frc2::CommandPtr SubClimber::ClimberJoystickDrive(frc2::CommandXboxController& _
 
 frc2::CommandPtr SubClimber::ClimberJoystickDriveLeft(frc2::CommandXboxController& _controller) {
     return Run([this, &_controller] {
-        OnJoyStick = true;
         _lClimbMotor.Set(-_controller.GetLeftY());
     }).FinallyDo([this] {
         _lClimbMotor.SetPositionTarget(_lClimbMotor.GetPosition());
@@ -160,26 +135,16 @@ frc2::CommandPtr SubClimber::ClimberJoystickDriveLeft(frc2::CommandXboxControlle
 
 frc2::CommandPtr SubClimber::ClimberJoystickDriveRight(frc2::CommandXboxController& _controller) {
     return Run([this, &_controller] {
-        OnJoyStick = true;
         _rClimbMotor.Set(-_controller.GetRightY());
     }).FinallyDo([this] {
         _rClimbMotor.SetPositionTarget(_rClimbMotor.GetPosition());
     });
 }
 
-frc2::CommandPtr SubClimber::ClimberHold(bool left, bool right) {
-    return Run([this] {
-        if (OnJoyStick) {
-            _lClimbMotor.SetPositionTarget(_lClimbMotor.GetPosition());
-            _rClimbMotor.SetPositionTarget(_rClimbMotor.GetPosition());
-        }
-    });
-}
-
 //Pointer Commands
 
 frc2::CommandPtr SubClimber::ClimberPosition(units::meter_t distance) {
-    return frc2::cmd::RunOnce([this,distance] { OnJoyStick = false; SubClimber::GetInstance().DriveToDistance(distance);});
+    return frc2::cmd::RunOnce([this,distance] {SubClimber::GetInstance().DriveToDistance(distance);});
 }
 
 frc2::CommandPtr SubClimber::ClimberManualDrive(float power) {
@@ -188,15 +153,7 @@ frc2::CommandPtr SubClimber::ClimberManualDrive(float power) {
 }
 
 frc2::CommandPtr SubClimber::ClimberStop() {
-    return frc2::cmd::RunOnce([this] {SubClimber::GetInstance().Stop(); OnJoyStick = false;});
-}
-
-frc2::CommandPtr SubClimber::ClimberLock() {
-    return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Lock();});
-}
-
-frc2::CommandPtr SubClimber::ClimberUnlock() {
-    return frc2::cmd::RunOnce([] {SubClimber::GetInstance().Unlock();});
+    return frc2::cmd::RunOnce([this] {SubClimber::GetInstance().Stop();});
 }
 
 frc2::CommandPtr SubClimber::ClimberResetZero() {

@@ -6,6 +6,7 @@
 
 #include <frc2/command/CommandScheduler.h>
 #include "subsystems/SubDrivebase.h"
+#include "subsystems/SubClimber.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <cameraserver/CameraServer.h>
 
@@ -47,6 +48,7 @@ void Robot::TeleopInit() {
     m_autonomousCommand->Cancel();
   }
   SubDrivebase::GetInstance().SyncSensors();
+  SubClimber::GetInstance().DriveToDistance(0.35_m);
 }
 
 void Robot::TeleopPeriodic() {}
