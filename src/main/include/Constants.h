@@ -59,8 +59,8 @@ namespace pcm1 {
     constexpr int IntakeRetract = 1;
 
     //Shooter
-    constexpr int ShootClose = 3;
-    const int ShootFar = BotVars::Choose(6,2); // change both bots to be the same if we have time
+    const int ShootClose = BotVars::Choose(6,3);
+    const int ShootFar = BotVars::Choose(3,2); // change both bots to be the same if we have time
 
     //Climber
     constexpr int LockCylinderForward = 4;
@@ -83,7 +83,6 @@ namespace dio {
   constexpr int FDLineBreak = 3;
   constexpr int SDLineBreak = 1;
   constexpr int ShooterLineBreak = 4;
-  constexpr int IntakeRetractedReed = 2;
   constexpr int IntakeExtendedReed = 0;
   constexpr int TopShooterEncoderChannelA = 8;
   constexpr int TopShooterEncoderChannelB = 9;

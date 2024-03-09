@@ -29,10 +29,10 @@ RobotContainer::RobotContainer() {
                                               SubIntake::GetInstance().StopSpinningIntake());
   pathplanner::NamedCommands::registerCommand("StartShooter",
                                               SubShooter::GetInstance().StartShooter());
-  pathplanner::NamedCommands::registerCommand("RetractIntake",
+  pathplanner::NamedCommands::registerCommand("RetractInt ake",
                                               SubIntake::GetInstance().CommandRetractIntake());
-  //  pathplanner::NamedCommands::registerCommand("ShootNote",
-  //  SubShooter::GetInstance().ShootSequence());
+  pathplanner::NamedCommands::registerCommand("ShootNote",  
+    SubShooter::GetInstance().ShootSequence());
   pathplanner::NamedCommands::registerCommand("StopShooter",
                                               SubShooter::GetInstance().StopShooterCommand());
   pathplanner::NamedCommands::registerCommand("FeedNote", SubArm::GetInstance().FeedNote());

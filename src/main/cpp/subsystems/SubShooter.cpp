@@ -136,7 +136,7 @@ frc2::CommandPtr SubShooter::StartShooter() {
 }
 
 frc2::CommandPtr SubShooter::ShootIntoAmp() {
-  return ShooterChangePosFar()
+  return ShooterChangePosClose()
       .AndThen(RunOnce([this] { CurrentShooterTarget = ShootAmpTarget; }))
       .AndThen(WaitUntil([this] { return CheckShooterSpeed(); }));
 }

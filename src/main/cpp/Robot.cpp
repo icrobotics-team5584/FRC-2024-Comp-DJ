@@ -10,10 +10,14 @@
 
 #include <frc/DataLogManager.h>
 #include <frc/DriverStation.h>
+#include <cameraserver/CameraServer.h>
+#include <subsystems/SubShooter.h>
+#include "utilities/SwerveModule.h"
 
 void Robot::RobotInit() {
   frc::DataLogManager::Start();
   frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog(),true);
+  frc::CameraServer::StartAutomaticCapture();
 }
 
 void Robot::RobotPeriodic() {
@@ -45,6 +49,7 @@ void Robot::TeleopInit() {
     m_autonomousCommand->Cancel();
   }
   SubDrivebase::GetInstance().SyncSensors();
+  SubShooter::GetInstance().StopShooterFunc();
 }
 
 void Robot::TeleopPeriodic() {}
