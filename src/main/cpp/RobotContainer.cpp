@@ -25,27 +25,37 @@ RobotContainer::RobotContainer() {
   frc::SmartDashboard::PutData("Command Scheduler", &frc2::CommandScheduler::GetInstance());
 
   pathplanner::NamedCommands::registerCommand("Intake", SubIntake::GetInstance().Intake());
-  pathplanner::NamedCommands::registerCommand("StopIntakeSpinning", SubIntake::GetInstance().StopSpinningIntake());
-  pathplanner::NamedCommands::registerCommand("StartShooter", SubShooter::GetInstance().StartShooter());
-  pathplanner::NamedCommands::registerCommand("RetractIntake", SubIntake::GetInstance().CommandRetractIntake());
-//  pathplanner::NamedCommands::registerCommand("ShootNote", SubShooter::GetInstance().ShootSequence());
-  pathplanner::NamedCommands::registerCommand("StopShooter", SubShooter::GetInstance().StopShooterCommand());
+  pathplanner::NamedCommands::registerCommand("StopIntakeSpinning",
+                                              SubIntake::GetInstance().StopSpinningIntake());
+  pathplanner::NamedCommands::registerCommand("StartShooter",
+                                              SubShooter::GetInstance().StartShooter());
+  pathplanner::NamedCommands::registerCommand("RetractIntake",
+                                              SubIntake::GetInstance().CommandRetractIntake());
+  //  pathplanner::NamedCommands::registerCommand("ShootNote",
+  //  SubShooter::GetInstance().ShootSequence());
+  pathplanner::NamedCommands::registerCommand("StopShooter",
+                                              SubShooter::GetInstance().StopShooterCommand());
   pathplanner::NamedCommands::registerCommand("FeedNote", SubArm::GetInstance().FeedNote());
- // pathplanner::NamedCommands::registerCommand("ShootFullSequence", cmd::ShootFullSequence().WithTimeout(0.5_s));
-  pathplanner::NamedCommands::registerCommand("AutoShootFullSequence", cmd::AutoShootFullSequence().WithTimeout(0.5_s));
+  // pathplanner::NamedCommands::registerCommand("ShootFullSequence",
+  // cmd::ShootFullSequence().WithTimeout(0.5_s));
+  pathplanner::NamedCommands::registerCommand("AutoShootFullSequence",
+                                              cmd::AutoShootFullSequence().WithTimeout(0.5_s));
   pathplanner::NamedCommands::registerCommand("StoreNote", SubArm::GetInstance().StoreNote());
-  pathplanner::NamedCommands::registerCommand("ShooterChangePosFar", SubShooter::GetInstance().ShooterChangePosFar());
-  pathplanner::NamedCommands::registerCommand("ShooterChangePosClose", SubShooter::GetInstance().ShooterChangePosClose());
+  pathplanner::NamedCommands::registerCommand("ShooterChangePosFar",
+                                              SubShooter::GetInstance().ShooterChangePosFar());
+  pathplanner::NamedCommands::registerCommand("ShooterChangePosClose",
+                                              SubShooter::GetInstance().ShooterChangePosClose());
   pathplanner::NamedCommands::registerCommand("StopFeeder", SubShooter::GetInstance().StopFeeder());
-  //pathplanner::NamedCommands::registerCommand("Shoot3_s", cmd::ShootFullSequenceWithVision(controller).WithTimeout(3_s));
+  // pathplanner::NamedCommands::registerCommand("Shoot3_s",
+  // cmd::ShootFullSequenceWithVision(controller).WithTimeout(3_s));
 
-  
   SubArm::GetInstance();
   SubDrivebase::GetInstance();
   SubIntake::GetInstance();
   SubVision::GetInstance();
 
-  SubDrivebase::GetInstance().SetDefaultCommand(SubDrivebase::GetInstance().JoystickDrive(_driverController,false));
+  SubDrivebase::GetInstance().SetDefaultCommand(
+      SubDrivebase::GetInstance().JoystickDrive(_driverController, false));
   ConfigureBindings();
   _delayChooser.AddOption("0 Seconds", 0);
   _delayChooser.AddOption("1 Seconds", 1);
@@ -65,50 +75,48 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureBindings() {
+  // SOFTWARE CONTROLS
 
-  //SOFTWARE CONTROLS
+  //   _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd()); //working
 
-//   _driverController.Start().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd()); //working
+  //   _driverController.LeftBumper().WhileTrue(cmd::ArmToAmpPos()); //working
+  //   _driverController.LeftBumper().OnFalse(cmd::ArmToStow()); //working
+  //   _driverController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
+  // //  _driverController.B().OnTrue(SubIntake::GetInstance().ExtendIntake());
+  //   _driverController.X().WhileTrue(cmd::OuttakeNote());
 
-//   _driverController.LeftBumper().WhileTrue(cmd::ArmToAmpPos()); //working
-//   _driverController.LeftBumper().OnFalse(cmd::ArmToStow()); //working
-//   _driverController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
-// //  _driverController.B().OnTrue(SubIntake::GetInstance().ExtendIntake());
-//   _driverController.X().WhileTrue(cmd::OuttakeNote());
+  //   _driverController.RightBumper().WhileTrue(cmd::ShootFullSequenceWithoutVision());
+  //   _driverController.RightTrigger().WhileTrue(cmd::ShootFullSequenceWithVision());
 
-//   _driverController.RightBumper().WhileTrue(cmd::ShootFullSequenceWithoutVision());
-//   _driverController.RightTrigger().WhileTrue(cmd::ShootFullSequenceWithVision());
+  //   _driverController.A().OnTrue(cmd::VisionRotateToZero());
+  //   _driverController.B().OnTrue(SubIntake::GetInstance().ExtendIntake());
+  //   _driverController.Y().OnTrue(cmd::PrepareToShoot());
+  //   //POVHelper::Up(&_driverController).WhileTrue(SubShooter::GetInstance().StartFeeder());
 
-//   _driverController.A().OnTrue(cmd::VisionRotateToZero());
-//   _driverController.B().OnTrue(SubIntake::GetInstance().ExtendIntake());
-//   _driverController.Y().OnTrue(cmd::PrepareToShoot());
-//   //POVHelper::Up(&_driverController).WhileTrue(SubShooter::GetInstance().StartFeeder());
+  //   _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequenceWithVision());
+  //   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar());
 
+  //   _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose());
+  //   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
 
-//   _operatorController.RightTrigger().WhileTrue(cmd::ShootFullSequenceWithVision());
-//   _operatorController.RightBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosFar());
+  //   _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberPosition(0.625_m));
+  //   _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
+  //   _operatorController.A().WhileTrue(SubShooter::GetInstance().StartShooter());
 
-//   _operatorController.LeftBumper().OnFalse(SubShooter::GetInstance().ShooterChangePosClose());
-//   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
+  //   _operatorController.Start().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
 
-//   _operatorController.X().OnTrue(SubClimber::GetInstance().ClimberPosition(0.625_m));
-//   _operatorController.Y().OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
-//   _operatorController.A().WhileTrue(SubShooter::GetInstance().StartShooter());
+  //   POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
+  //   POVHelper::Up(&_operatorController).OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
+  //   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
+  //   POVHelper::Down(&_operatorController).OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
 
+  // DRIVER CONTROLS
 
-//   _operatorController.Start().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
-
-//   POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
-//   POVHelper::Up(&_operatorController).OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
-//   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
-//   POVHelper::Down(&_operatorController).OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
-
-  //DRIVER CONTROLS
-  
   _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
   // _driverController.LeftTrigger().WhileTrue(/*Align2Stage*/);
   // _driverController.LeftBumper().WhileTrue(/*IntakeFromSource*/);
   _driverController.RightTrigger().WhileTrue(cmd::VisionRotateToSpeaker(_driverController));
+  _driverController.LeftTrigger().WhileTrue(cmd::VisionClimb());
   // _driverController.RightBumper().WhileTrue(/*Align2Amp*/);
 
   _operatorController.Start().WhileTrue(cmd::OuttakeNote());
@@ -120,7 +128,7 @@ void RobotContainer::ConfigureBindings() {
 
   _operatorController.Y().OnTrue(cmd::ArmToAmpPos());
   _operatorController.Y().OnFalse(cmd::ArmToStow());
-  _operatorController.X().OnTrue(SubShooter::GetInstance().ShootIntoAmp());
+  _operatorController.X().WhileTrue(cmd::ShootIntoAmp());
   _operatorController.Back().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
   _operatorController.B().OnTrue(cmd::ArmToAmpPos());
   _operatorController.B().OnFalse(cmd::ArmToStow());
@@ -142,8 +150,8 @@ void RobotContainer::ConfigureBindings() {
   }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDriveRight(_operatorController));
 
   frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
-    return (_operatorController.GetRightY() < -0.2 || _operatorController.GetRightY() > 0.2) && 
-    ( _operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2);
+    return (_operatorController.GetRightY() < -0.2 || _operatorController.GetRightY() > 0.2) &&
+           (_operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2);
   }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDrive(_operatorController));
 
   // Operator controls sysID
@@ -151,12 +159,12 @@ void RobotContainer::ConfigureBindings() {
   // _operatorController.B().WhileTrue(SubArm::GetInstance().SysIdDynamic(frc2::sysid::Direction::kReverse));
   // _operatorController.X().WhileTrue(SubArm::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kForward));
   // _operatorController.Y().WhileTrue(SubArm::GetInstance().SysIdQuasistatic(frc2::sysid::Direction::kReverse));
-
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   _autoSelected = _autoChooser.GetSelected();
   units::second_t delay = _delayChooser.GetSelected() * 1_s;
-  return frc2::cmd::Wait(delay).AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr()).AlongWith(SubClimber::GetInstance().ClimberAutoReset()); 
+  return frc2::cmd::Wait(delay)
+      .AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr())
+      .AlongWith(SubClimber::GetInstance().ClimberAutoReset());
 }
-
