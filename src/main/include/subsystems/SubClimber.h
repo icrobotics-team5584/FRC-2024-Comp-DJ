@@ -83,14 +83,14 @@ class SubClimber : public frc2::SubsystemBase {
   
                           rP = 5, rI = 0.0, rD = 0.0, rF = 0;
 
-  static constexpr double currentLimit = 10;
+  static constexpr double currentLimit = 15;
 
   // Unit translation
   static constexpr units::meter_t WheelCir = 0.12538_m;
 
   // Robot info
   static constexpr units::meter_t BaseHeight = 0.0_m;
-  static constexpr units::meter_t TopHeight = 0.62_m;
+  static constexpr units::meter_t TopHeight = 0.5_m;
 
   //reset
   bool Reseting = false;
