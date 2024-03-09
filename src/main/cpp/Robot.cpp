@@ -6,7 +6,9 @@
 
 #include <frc2/command/CommandScheduler.h>
 #include "subsystems/SubDrivebase.h"
+#include "subsystems/SubClimber.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <cameraserver/CameraServer.h>
 
 #include <frc/DataLogManager.h>
 #include <frc/DriverStation.h>
@@ -16,6 +18,7 @@
 
 void Robot::RobotInit() {
   frc::DataLogManager::Start();
+  frc::CameraServer::StartAutomaticCapture();
   frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog(),true);
   frc::CameraServer::StartAutomaticCapture();
 }
@@ -50,6 +53,7 @@ void Robot::TeleopInit() {
   }
   SubDrivebase::GetInstance().SyncSensors();
   SubShooter::GetInstance().StopShooterFunc();
+  SubClimber::GetInstance().DriveToDistance(0.35_m);
 }
 
 void Robot::TeleopPeriodic() {}
