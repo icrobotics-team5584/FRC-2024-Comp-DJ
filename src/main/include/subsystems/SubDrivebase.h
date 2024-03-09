@@ -96,10 +96,10 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::SwerveDriveKinematics<4> _kinematics{_frontLeftLocation, _frontRightLocation,
                                             _backLeftLocation, _backRightLocation};
 
-  frc::PIDController Xcontroller{0.5, 0, 0};
+  frc::PIDController Xcontroller{0.2, 0, 0};
   frc::PIDController Ycontroller{0.5, 0, 0};
   frc::ProfiledPIDController<units::radian> Rcontroller{
-      8, 0, 0.3, {MAX_ANGULAR_VELOCITY, MAX_ANG_ACCEL}};
+      6, 0, 0.3, {MAX_ANGULAR_VELOCITY, MAX_ANG_ACCEL}};
   frc::HolonomicDriveController _driveController{Xcontroller, Ycontroller, Rcontroller};
 
   frc::SwerveDrivePoseEstimator<4> _poseEstimator{
