@@ -131,11 +131,13 @@ void RobotContainer::ConfigureBindings() {
   POVHelper::Left(&_operatorController).OnTrue(SubIntake::GetInstance().ExtendIntake());
 
   frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
-    return _operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2;
+    return (_operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2) &&
+    !(_operatorController.GetRightY() < -0.2 || _operatorController.GetRightY() > 0.2);
   }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDriveLeft(_operatorController));
 
   frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
-    return _operatorController.GetRightY() < -0.2 || _operatorController.GetRightY() > 0.2;
+    return (_operatorController.GetRightY() < -0.2 || _operatorController.GetRightY() > 0.2) &&
+    !(_operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2);
   }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDriveRight(_operatorController));
 
   frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
