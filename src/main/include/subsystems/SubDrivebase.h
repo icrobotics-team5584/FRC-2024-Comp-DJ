@@ -73,7 +73,6 @@ class SubDrivebase : public frc2::SubsystemBase {
 
  private:
   AHRS _gyro{frc::SerialPort::kMXP};
-
   frc::Translation2d _frontLeftLocation{+0.281_m, +0.281_m};
   frc::Translation2d _frontRightLocation{+0.281_m, -0.281_m};
   frc::Translation2d _backLeftLocation{-0.281_m, +0.281_m};

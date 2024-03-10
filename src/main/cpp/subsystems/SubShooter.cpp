@@ -7,7 +7,6 @@
 #include "utilities/BotVars.h"
 
 SubShooter::SubShooter() {
-  solShooter.Set(frc::DoubleSolenoid::kReverse);
 
   _bottomShooterMotor.SetInverted(true);
   _topShooterMotor.SetInverted(true);
@@ -136,7 +135,7 @@ frc2::CommandPtr SubShooter::StartShooter() {
 }
 
 frc2::CommandPtr SubShooter::ShootIntoAmp() {
-  return ShooterChangePosFar()
+  return ShooterChangePosClose()
       .AndThen(RunOnce([this] { CurrentShooterTarget = ShootAmpTarget; }))
       .AndThen(WaitUntil([this] { return CheckShooterSpeed(); }));
 }

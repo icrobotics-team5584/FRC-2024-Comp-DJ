@@ -41,7 +41,11 @@ SubDrivebase::SubDrivebase() {
         return GetRobotRelativeSpeeds();
       },  // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
       [this](frc::ChassisSpeeds speeds) {
-        Drive(speeds.vx, speeds.vy, -speeds.omega, false);
+          _sidewaysSpeedRequest = speeds.vy; //TEST!
+          _forwardSpeedRequest = speeds.vx;
+          _rotationSpeedRequest = -speeds.omega;
+          _fieldOrientedRequest = false;
+     // Drive(speeds.vx, speeds.vy, -speeds.omega, false);
       },  // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       HolonomicPathFollowerConfig(
           PIDConstants(2, 0.0, 0.0),    // Translation PID constants
@@ -232,6 +236,12 @@ void SubDrivebase::SyncSensors() {
   _backLeft.SyncSensors();
   _backRight.SyncSensors();
   _gyro.Calibrate();
+
+//Set config turn motors so it can run in auto init also. Had issues with parameters not being set on startup
+  _frontLeft.ConfigTurnMotor();
+  _frontRight.ConfigTurnMotor();
+  _backLeft.ConfigTurnMotor();
+  _backRight.ConfigTurnMotor();
 }
 
 frc2::CommandPtr SubDrivebase::SyncSensorBut() {

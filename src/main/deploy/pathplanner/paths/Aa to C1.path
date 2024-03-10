@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.68,
-        "y": 6.84
+        "x": 2.6751378064159637,
+        "y": 6.843263861966321
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.499288754016105,
-        "y": 6.376372828184253
+        "x": 4.494426560432068,
+        "y": 6.379636690150574
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "M4 Aa Shoot"
     },
     {
       "anchor": {
@@ -32,22 +32,27 @@
     },
     {
       "anchor": {
-        "x": 2.29,
-        "y": 7.0
+        "x": 2.6751378064159637,
+        "y": 6.843263861966321
       },
       "prevControl": {
-        "x": 3.9295171164166858,
-        "y": 7.046843346185898
+        "x": 4.3146549228326485,
+        "y": 6.8901072081522186
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "M4 Aa Shoot"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.4,
       "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1.65,
+      "rotationDegrees": -150.0,
       "rotateFast": false
     }
   ],
@@ -89,14 +94,14 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 2.0,
     "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -141.09823736739366,
+    "rotation": -150.0,
     "rotateFast": false
   },
   "reversed": false,

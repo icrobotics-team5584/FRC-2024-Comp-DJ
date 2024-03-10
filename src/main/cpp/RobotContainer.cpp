@@ -29,10 +29,10 @@ RobotContainer::RobotContainer() {
                                               SubIntake::GetInstance().StopSpinningIntake());
   pathplanner::NamedCommands::registerCommand("StartShooter",
                                               SubShooter::GetInstance().StartShooter());
-  pathplanner::NamedCommands::registerCommand("RetractIntake",
+  pathplanner::NamedCommands::registerCommand("RetractInt ake",
                                               SubIntake::GetInstance().CommandRetractIntake());
-  //  pathplanner::NamedCommands::registerCommand("ShootNote",
-  //  SubShooter::GetInstance().ShootSequence());
+  pathplanner::NamedCommands::registerCommand("ShootNote",  
+    SubShooter::GetInstance().ShootSequence());
   pathplanner::NamedCommands::registerCommand("StopShooter",
                                               SubShooter::GetInstance().StopShooterCommand());
   pathplanner::NamedCommands::registerCommand("FeedNote", SubArm::GetInstance().FeedNote());
@@ -66,7 +66,6 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("Test Path", "Test Path");
   _autoChooser.AddOption("M4", "M4");
   _autoChooser.AddOption("S1", "S1");
-  _autoChooser.AddOption("A4", "A4");
   _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
   _autoChooser.AddOption("Nothing", "Nothing");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
@@ -110,7 +109,7 @@ void RobotContainer::ConfigureBindings() {
   //   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
   //   POVHelper::Down(&_operatorController).OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
 
-  // DRIVER CONTROLS
+  // DRIVER CONTROLS V6
 
   _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
   // _driverController.LeftTrigger().WhileTrue(/*Align2Stage*/);
@@ -118,18 +117,19 @@ void RobotContainer::ConfigureBindings() {
   _driverController.RightTrigger().WhileTrue(cmd::VisionRotateToSpeaker(_driverController));
   _driverController.LeftTrigger().WhileTrue(cmd::VisionClimb());
   // _driverController.RightBumper().WhileTrue(/*Align2Amp*/);
+  _driverController.A().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
 
   _operatorController.Start().WhileTrue(cmd::OuttakeNote());
+  _operatorController.Back().WhileTrue(cmd::OuttakeIntakeAndEndEffector());
 
   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
   _operatorController.LeftBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosClose());
   _operatorController.RightBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosFar());
   _operatorController.RightTrigger().WhileTrue(cmd::ShootSpeakerOrAmp());
 
-  _operatorController.Y().OnTrue(cmd::ArmToAmpPos());
+  _operatorController.Y().OnTrue(cmd::ArmToTrapPos());
   _operatorController.Y().OnFalse(cmd::ArmToStow());
   _operatorController.X().WhileTrue(cmd::ShootIntoAmp());
-  _operatorController.Back().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
   _operatorController.B().OnTrue(cmd::ArmToAmpPos());
   _operatorController.B().OnFalse(cmd::ArmToStow());
   _operatorController.A().OnTrue(cmd::PrepareToShoot());
@@ -137,13 +137,16 @@ void RobotContainer::ConfigureBindings() {
   POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.498_m));
   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
   POVHelper::Left(&_operatorController).OnTrue(SubIntake::GetInstance().ExtendIntake());
+  POVHelper::Right(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.35_m));
 
   frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
-    return _operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2;
+    return (_operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2) &&
+    !(_operatorController.GetRightY() < -0.2 || _operatorController.GetRightY() > 0.2);
   }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDriveLeft(_operatorController));
 
   frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
-    return _operatorController.GetRightY() < -0.2 || _operatorController.GetRightY() > 0.2;
+    return (_operatorController.GetRightY() < -0.2 || _operatorController.GetRightY() > 0.2) &&
+    !(_operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2);
   }).WhileTrue(SubClimber::GetInstance().ClimberJoystickDriveRight(_operatorController));
 
   frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
@@ -163,5 +166,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   units::second_t delay = _delayChooser.GetSelected() * 1_s;
   return frc2::cmd::Wait(delay)
       .AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr())
-      .AlongWith(SubClimber::GetInstance().ClimberAutoReset());
+      .AlongWith(SubClimber::GetInstance().ClimberAutoReset().AndThen(
+          SubClimber::GetInstance().ClimberPosition(0.35_m)));
 }
