@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.5013930170513679,
-        "y": 6.663465994549679
+        "x": 2.5202357965343594,
+        "y": 4.11050362756931
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.168910700160914,
-        "y": 6.358984244359359
+        "x": 1.571658036326057,
+        "y": 4.8131538203162
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9535367487282747,
-        "y": 6.159900023081073
+        "x": 2.5202357965343594,
+        "y": 5.574358195791997
       },
       "prevControl": {
-        "x": 2.625633325446393,
-        "y": 6.347273407813577
+        "x": 2.4382599407138885,
+        "y": 5.644623215066685
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,25 +30,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "Shoot Preload",
-      "waypointRelativePos": 0.05,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "AutoShootFullSequence"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 5.0,
@@ -56,12 +38,12 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 3.5,
-    "rotation": -155.0,
+    "velocity": 0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "A10",
+  "folder": "M4",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

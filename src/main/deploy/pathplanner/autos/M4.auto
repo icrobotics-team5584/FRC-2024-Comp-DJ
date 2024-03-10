@@ -39,34 +39,22 @@
                       }
                     },
                     {
-                      "type": "sequential",
+                      "type": "race",
                       "data": {
                         "commands": [
                           {
                             "type": "named",
                             "data": {
-                              "name": "StartShooter"
+                              "name": "AutoShootFullSequence"
                             }
                           },
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 0.5
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "AutoShootFullSequence"
+                              "waitTime": 1.0
                             }
                           }
                         ]
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "StartShooter"
                       }
                     },
                     {
