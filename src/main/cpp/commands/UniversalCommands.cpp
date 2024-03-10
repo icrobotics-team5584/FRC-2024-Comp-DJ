@@ -11,9 +11,11 @@ namespace cmd {
 using namespace frc2::cmd;
 
 frc2::CommandPtr ArmToAmpPos() {
-  return SubIntake::GetInstance()
-      .ExtendIntake()
-      .AndThen(WaitUntil([] { return SubIntake::GetInstance().IsIntakeDeployed(); })).WithTimeout(1_s)
+  return SubShooter::GetInstance()
+      .ShooterChangePosClose()
+      .AndThen(SubIntake::GetInstance().ExtendIntake())
+      .AndThen(WaitUntil([] { return SubIntake::GetInstance().IsIntakeDeployed(); }))
+      .WithTimeout(1_s)
       .AndThen(SubArm::GetInstance().TiltArmToAngle(SubArm::AMP_ANGLE));
 }
 
