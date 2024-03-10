@@ -3,51 +3,56 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.82,
-        "y": 6.95
+        "x": 2.6751378064159637,
+        "y": 6.843263861966321
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.639288754016104,
-        "y": 6.486372828184253
+        "x": 4.494426560432068,
+        "y": 6.379636690150574
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "M4 Aa Shoot"
     },
     {
       "anchor": {
-        "x": 8.12339293934531,
-        "y": 7.574300786777927
+        "x": 8.143300848005206,
+        "y": 7.441769269503451
       },
       "prevControl": {
-        "x": 8.306972440799541,
-        "y": 7.794596188523003
+        "x": 8.078924477258608,
+        "y": 7.918154412981801
       },
       "nextControl": {
-        "x": 7.788840910665586,
-        "y": 7.172838352362262
+        "x": 8.201855030739436,
+        "y": 7.008468317312405
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.82,
-        "y": 6.317304564433691
+        "x": 2.6751378064159637,
+        "y": 6.843263861966321
       },
       "prevControl": {
-        "x": 4.459517116416689,
-        "y": 6.364147910619589
+        "x": 4.3146549228326485,
+        "y": 6.8901072081522186
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "M4 Aa Shoot"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.4,
       "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1.65,
+      "rotationDegrees": -150.0,
       "rotateFast": false
     }
   ],
@@ -90,13 +95,13 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -152.51366575470155,
+    "rotation": -150.0,
     "rotateFast": false
   },
   "reversed": false,

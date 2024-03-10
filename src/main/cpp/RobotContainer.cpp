@@ -66,7 +66,6 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("Test Path", "Test Path");
   _autoChooser.AddOption("M4", "M4");
   _autoChooser.AddOption("S1", "S1");
-  _autoChooser.AddOption("A4", "A4");
   _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
   _autoChooser.AddOption("Nothing", "Nothing");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
