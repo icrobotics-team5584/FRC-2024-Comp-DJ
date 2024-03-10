@@ -66,7 +66,6 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("Test Path", "Test Path");
   _autoChooser.AddOption("M4", "M4");
   _autoChooser.AddOption("S1", "S1");
-  _autoChooser.AddOption("A4", "A4");
   _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
   _autoChooser.AddOption("Nothing", "Nothing");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
@@ -167,5 +166,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   units::second_t delay = _delayChooser.GetSelected() * 1_s;
   return frc2::cmd::Wait(delay)
       .AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr())
-      .AlongWith(SubClimber::GetInstance().ClimberAutoReset());
+      .AlongWith(SubClimber::GetInstance().ClimberAutoReset().AndThen(
+          SubClimber::GetInstance().ClimberPosition(0.35_m)));
 }

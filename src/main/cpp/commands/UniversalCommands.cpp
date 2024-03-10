@@ -11,9 +11,11 @@ namespace cmd {
 using namespace frc2::cmd;
 
 frc2::CommandPtr ArmToAmpPos() {
-  return SubIntake::GetInstance()
-      .ExtendIntake()
-      .AndThen(WaitUntil([] { return SubIntake::GetInstance().IsIntakeDeployed(); })).WithTimeout(1_s)
+  return SubShooter::GetInstance()
+      .ShooterChangePosClose()
+      .AndThen(SubIntake::GetInstance().ExtendIntake())
+      .AndThen(WaitUntil([] { return SubIntake::GetInstance().IsIntakeDeployed(); }))
+      .WithTimeout(1_s)
       .AndThen(SubArm::GetInstance().TiltArmToAngle(SubArm::AMP_ANGLE));
 }
 
@@ -28,14 +30,6 @@ frc2::CommandPtr ArmToStow() {
   return SubArm::GetInstance()
       .TiltArmToAngle(SubArm::HOME_ANGLE)
       .AndThen([] { SubIntake::GetInstance().FuncRetractIntake(); });
-}
-
-frc2::CommandPtr SequenceArmToAmpPos() {
-  return StartEnd([] { ArmToAmpPos(); }, [] { ArmToStow(); });
-}
-
-frc2::CommandPtr SequenceArmToTrapPos() {
-  return StartEnd([] { ArmToTrapPos(); }, [] { ArmToStow(); });
 }
 
 frc2::CommandPtr ShootFullSequenceWithVision(frc2::CommandXboxController& controller) {
@@ -105,6 +99,7 @@ frc2::CommandPtr FeedNoteToShooter() {
       .StartFeederSlow()
       .AlongWith(SubArm::GetInstance().FeedNote())
       .Until([] { return SubShooter::GetInstance().CheckShooterLineBreak(); })
+      .AndThen(SubShooter::GetInstance().ReverseFeeder().WithTimeout(0.2_s))
       .FinallyDo([] { SubShooter::GetInstance().StopFeederFunc(); });
 }
 

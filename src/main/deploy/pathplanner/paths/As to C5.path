@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.356284084893418,
-        "y": 3.4429859444597626
+        "x": 1.9496931747486692,
+        "y": 3.1925041627861037
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7778742005415493,
-        "y": 3.103371684632099
+        "x": 4.103518267888186,
+        "y": 1.0599721426172097
       },
       "isLocked": false,
       "linkedName": "Speaker-Side Shoot Pos"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 2.356284084893418,
-        "y": 3.4429859444597626
+        "x": 1.9496931747486692,
+        "y": 3.1925041627861037
       },
       "prevControl": {
-        "x": 3.058934277640309,
-        "y": 2.670070732438183
+        "x": 3.766421555045801,
+        "y": 0.6047911612731443
       },
       "nextControl": null,
       "isLocked": false,
@@ -89,8 +89,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

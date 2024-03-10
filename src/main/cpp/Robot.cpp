@@ -53,7 +53,6 @@ void Robot::TeleopInit() {
   }
   SubDrivebase::GetInstance().SyncSensors();
   SubShooter::GetInstance().StopShooterFunc();
-  SubClimber::GetInstance().DriveToDistance(0.35_m);
 }
 
 void Robot::TeleopPeriodic() {}

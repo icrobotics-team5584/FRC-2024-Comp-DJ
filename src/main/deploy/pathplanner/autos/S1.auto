@@ -2,37 +2,107 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.36086297850199,
-      "y": 4.133925300660873
+      "x": 0.7050561319382253,
+      "y": 4.356431195030721
     },
-    "rotation": 180.0
+    "rotation": 120.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Start to As"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "As to C5"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "As to C4"
+            "commands": [
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ShooterChangePosClose"
+                      }
+                    },
+                    {
+                      "type": "race",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "AutoShootFullSequence"
+                            }
+                          },
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 1.0
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ShooterChangePosFar"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Start to As"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShootFullSequence"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "As to C5"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShootFullSequence"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "As to C4"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "AutoShootFullSequence"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]
