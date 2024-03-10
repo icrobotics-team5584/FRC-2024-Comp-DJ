@@ -18,9 +18,10 @@ frc2::CommandPtr ArmToAmpPos() {
 }
 
 frc2::CommandPtr ArmToTrapPos() {
-  return RunOnce([]() { SubIntake::GetInstance().ExtendIntake(); }, {&SubArm::GetInstance()})
-      .AndThen([]() { return SubArm::GetInstance().CheckIfArmIsHome(); }, {&SubArm::GetInstance()})
-      .AndThen([]() { return SubArm::GetInstance().TiltArmToAngle(SubArm::TRAP_ANGLE); });
+return SubIntake::GetInstance()
+      .ExtendIntake()
+      .AndThen(WaitUntil([] { return SubIntake::GetInstance().IsIntakeDeployed(); })).WithTimeout(1_s)
+      .AndThen(SubArm::GetInstance().TiltArmToAngle(SubArm::TRAP_ANGLE));
 }
 
 frc2::CommandPtr ArmToStow() {
@@ -88,6 +89,15 @@ frc2::CommandPtr OuttakeNote() {
       .AndThen(SubIntake::GetInstance().Outtake())
       .AndThen(Idle())
       .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake(); });
+}
+
+frc2::CommandPtr OuttakeIntakeAndEndEffector() {
+    return SubIntake::GetInstance()
+      .ExtendIntake()
+      .AndThen(SubIntake::GetInstance().Outtake())
+      .AndThen(SubArm::GetInstance().Outtake())
+      .AndThen(Idle())
+      .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake();});
 }
 
 frc2::CommandPtr FeedNoteToShooter() {

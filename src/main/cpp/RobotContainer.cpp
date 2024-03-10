@@ -110,7 +110,7 @@ void RobotContainer::ConfigureBindings() {
   //   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
   //   POVHelper::Down(&_operatorController).OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
 
-  // DRIVER CONTROLS
+  // DRIVER CONTROLS V6
 
   _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
   // _driverController.LeftTrigger().WhileTrue(/*Align2Stage*/);
@@ -118,18 +118,19 @@ void RobotContainer::ConfigureBindings() {
   _driverController.RightTrigger().WhileTrue(cmd::VisionRotateToSpeaker(_driverController));
   _driverController.LeftTrigger().WhileTrue(cmd::VisionClimb());
   // _driverController.RightBumper().WhileTrue(/*Align2Amp*/);
+  _driverController.A().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
 
   _operatorController.Start().WhileTrue(cmd::OuttakeNote());
+  _operatorController.Back().WhileTrue(cmd::OuttakeIntakeAndEndEffector());
 
   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
   _operatorController.LeftBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosClose());
   _operatorController.RightBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosFar());
   _operatorController.RightTrigger().WhileTrue(cmd::ShootSpeakerOrAmp());
 
-  _operatorController.Y().OnTrue(cmd::ArmToAmpPos());
+  _operatorController.Y().OnTrue(cmd::ArmToTrapPos());
   _operatorController.Y().OnFalse(cmd::ArmToStow());
   _operatorController.X().WhileTrue(cmd::ShootIntoAmp());
-  _operatorController.Back().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
   _operatorController.B().OnTrue(cmd::ArmToAmpPos());
   _operatorController.B().OnFalse(cmd::ArmToStow());
   _operatorController.A().OnTrue(cmd::PrepareToShoot());
