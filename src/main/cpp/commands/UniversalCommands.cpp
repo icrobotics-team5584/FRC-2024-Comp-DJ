@@ -31,14 +31,6 @@ frc2::CommandPtr ArmToStow() {
       .AndThen([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }
 
-frc2::CommandPtr SequenceArmToAmpPos() {
-  return StartEnd([] { ArmToAmpPos(); }, [] { ArmToStow(); });
-}
-
-frc2::CommandPtr SequenceArmToTrapPos() {
-  return StartEnd([] { ArmToTrapPos(); }, [] { ArmToStow(); });
-}
-
 frc2::CommandPtr ShootFullSequenceWithVision(frc2::CommandXboxController& controller) {
   return VisionRotateToSpeaker(controller).Until([]{return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);})
       .Until([] { return true; })
