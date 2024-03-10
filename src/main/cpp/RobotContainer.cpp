@@ -166,5 +166,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   units::second_t delay = _delayChooser.GetSelected() * 1_s;
   return frc2::cmd::Wait(delay)
       .AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr())
-      .AlongWith(SubClimber::GetInstance().ClimberAutoReset());
+      .AlongWith(SubClimber::GetInstance().ClimberAutoReset().AndThen(
+          SubClimber::GetInstance().ClimberPosition(0.35_m)));
 }
