@@ -7,7 +7,6 @@
 #include "utilities/BotVars.h"
 
 SubShooter::SubShooter() {
-  solShooter.Set(frc::DoubleSolenoid::kReverse);
 
   _bottomShooterMotor.SetInverted(true);
   _topShooterMotor.SetInverted(true);
