@@ -24,12 +24,10 @@ void SubIntake::Periodic() {
   frc::SmartDashboard::PutNumber("Intake/Intake piston state", solIntake.Get());
   frc::SmartDashboard::PutNumber("Intake/Intake Motor: ", _intakeMotorSpin.Get());
   frc::SmartDashboard::PutBoolean("Intake/Extended Reed Switch", _intakeExtendedReed.Get());
-  frc::SmartDashboard::PutBoolean("Intake/Retracted Reed Switch", _intakeRetractedReed.Get());
   frc::SmartDashboard::PutNumber("Intake/speed", encoder.GetVelocity());
 }
 
 void SubIntake::SimulationPeriodic(){
-  _simIntakeRetractedReed.SetValue(solIntake.Get() == frc::DoubleSolenoid::Value::kReverse);
   _simIntakeExtendedReed.SetValue(solIntake.Get() == frc::DoubleSolenoid::Value::kForward);
 }
 

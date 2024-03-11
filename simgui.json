@@ -18,8 +18,11 @@
       "/SmartDashboard/Climber/Mech Display": "Mechanism2d",
       "/SmartDashboard/Climber/Test mech display": "Mechanism2d",
       "/SmartDashboard/Climber/testMech": "Mechanism2d",
+      "/SmartDashboard/Command Scheduler": "Scheduler",
       "/SmartDashboard/Delay By": "String Chooser",
       "/SmartDashboard/Drivebase/Vision/Rotation Controller: ": "ProfiledPIDController",
+      "/SmartDashboard/Shooter/Bottom PID": "PIDController",
+      "/SmartDashboard/Shooter/Top PID": "PIDController",
       "/SmartDashboard/amp/Arm Mechanism Display: ": "Mechanism2d",
       "/SmartDashboard/arm/Arm Mechanism Display": "Mechanism2d",
       "/SmartDashboard/field": "Field2d",
@@ -161,6 +164,9 @@
         "open": true
       }
     }
+  },
+  "NetworkTables Info": {
+    "visible": true
   },
   "Plot": {
     "Plot <0>": {

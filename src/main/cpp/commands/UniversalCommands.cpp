@@ -11,30 +11,25 @@ namespace cmd {
 using namespace frc2::cmd;
 
 frc2::CommandPtr ArmToAmpPos() {
-  return SubIntake::GetInstance()
-      .ExtendIntake()
+  return SubShooter::GetInstance()
+      .ShooterChangePosClose()
+      .AndThen(SubIntake::GetInstance().ExtendIntake())
       .AndThen(WaitUntil([] { return SubIntake::GetInstance().IsIntakeDeployed(); }))
+      .WithTimeout(1_s)
       .AndThen(SubArm::GetInstance().TiltArmToAngle(SubArm::AMP_ANGLE));
 }
 
 frc2::CommandPtr ArmToTrapPos() {
-  return RunOnce([]() { SubIntake::GetInstance().ExtendIntake(); }, {&SubArm::GetInstance()})
-      .AndThen([]() { return SubArm::GetInstance().CheckIfArmIsHome(); }, {&SubArm::GetInstance()})
-      .AndThen([]() { return SubArm::GetInstance().TiltArmToAngle(SubArm::TRAP_ANGLE); });
+return SubIntake::GetInstance()
+      .ExtendIntake()
+      .AndThen(WaitUntil([] { return SubIntake::GetInstance().IsIntakeDeployed(); })).WithTimeout(1_s)
+      .AndThen(SubArm::GetInstance().TiltArmToAngle(SubArm::TRAP_ANGLE));
 }
 
 frc2::CommandPtr ArmToStow() {
   return SubArm::GetInstance()
       .TiltArmToAngle(SubArm::HOME_ANGLE)
       .AndThen([] { SubIntake::GetInstance().FuncRetractIntake(); });
-}
-
-frc2::CommandPtr SequenceArmToAmpPos() {
-  return StartEnd([] { ArmToAmpPos(); }, [] { ArmToStow(); });
-}
-
-frc2::CommandPtr SequenceArmToTrapPos() {
-  return StartEnd([] { ArmToTrapPos(); }, [] { ArmToStow(); });
 }
 
 frc2::CommandPtr ShootFullSequenceWithVision(frc2::CommandXboxController& controller) {
@@ -90,6 +85,15 @@ frc2::CommandPtr OuttakeNote() {
       .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }
 
+frc2::CommandPtr OuttakeIntakeAndEndEffector() {
+    return SubIntake::GetInstance()
+      .ExtendIntake()
+      .AndThen(SubIntake::GetInstance().Outtake())
+      .AndThen(SubArm::GetInstance().Outtake())
+      .AndThen(Idle())
+      .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake();});
+}
+
 frc2::CommandPtr FeedNoteToShooter() {
   return SubShooter::GetInstance()
       .StartFeederSlow()
@@ -103,8 +107,16 @@ frc2::CommandPtr PrepareToShoot() {
   return FeedNoteToShooter().AndThen(SubShooter::GetInstance().StartShooter());
 }
 
-frc2::CommandPtr ReverseEndefactor(){
-  return SubArm::GetInstance().Outtake().AlongWith(OuttakeNote());
+frc2::CommandPtr ShootIntoAmp() {
+  return SubShooter::GetInstance()
+      .ShootIntoAmpSequence()
+      .AlongWith(WaitUntil([] {
+                   return SubShooter::GetInstance().CheckShooterSpeed();
+                 }).AndThen(SubArm::GetInstance().FeedNote()))
+      .AndThen(WaitUntil([] { return !SubShooter::GetInstance().CheckShooterLineBreak(); }))
+      .AndThen(SubShooter::GetInstance().ShooterChangePosClose());
+
+      
 }
 
 }  // namespace cmd

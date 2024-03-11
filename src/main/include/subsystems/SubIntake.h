@@ -44,9 +44,7 @@ class SubIntake : public frc2::SubsystemBase {
   frc::DoubleSolenoid solIntake{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH,
                                 pcm1::IntakeExtend, pcm1::IntakeRetract};
 
-  frc::DigitalInput _intakeRetractedReed{dio::IntakeRetractedReed};
   frc::DigitalInput _intakeExtendedReed{dio::IntakeExtendedReed};
-  frc::sim::DIOSim _simIntakeRetractedReed{_intakeRetractedReed};
   frc::sim::DIOSim _simIntakeExtendedReed{_intakeExtendedReed};
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
