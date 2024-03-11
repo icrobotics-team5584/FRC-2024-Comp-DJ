@@ -198,16 +198,6 @@ frc2::CommandPtr SubClimber::ClimberResetCheck() {
     }).Until([this] { return ResetLeft && ResetRight; }));
 }
 
-frc2::CommandPtr SubClimber::ClimberAutoReset() {
-    return frc2::cmd::RunOnce([this] { Reseting = true; EnableSoftLimit(false);})
-        .AndThen(ClimberManualDrive(-0.2))
-        .AndThen(frc2::cmd::Wait(0.5_s))
-        .AndThen(ClimberResetCheck())
-        .AndThen(ClimberResetZero())
-        .AndThen(ClimberStop())
-        .FinallyDo([this] {Reseting = false; Reseted = true; EnableSoftLimit(true); Stop();});
-}
-
 units::meter_t SubClimber::CheckLeftClimberPos() {
   return TurnToDistance(_lClimbMotor.GetPosition());
 }
