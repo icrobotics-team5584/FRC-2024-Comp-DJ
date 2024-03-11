@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.539288754016104,
-        "y": 6.236372828184253
+        "x": 4.422151422587994,
+        "y": 6.603697593409518
       },
       "isLocked": false,
       "linkedName": "M4 Aa Shoot"
     },
     {
       "anchor": {
-        "x": 8.143300848005206,
-        "y": 7.441769269503451
+        "x": 7.975984995706093,
+        "y": 5.864146820954873
       },
       "prevControl": {
-        "x": 8.078924477258608,
-        "y": 7.918154412981801
+        "x": 8.251864568962644,
+        "y": 6.464951224935808
       },
       "nextControl": {
-        "x": 8.201855030739436,
-        "y": 7.008468317312405
+        "x": 7.909568140447384,
+        "y": 5.719505669502571
       },
       "isLocked": false,
       "linkedName": null
@@ -46,8 +46,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.4,
-      "rotationDegrees": 180.0,
+      "waypointRelativePos": 0.8,
+      "rotationDegrees": 150.0,
       "rotateFast": false
     },
     {
@@ -91,6 +91,23 @@
           ]
         }
       }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 2.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "StoreNote"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -105,7 +122,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "A2",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

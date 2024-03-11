@@ -83,7 +83,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "S1",
+  "folder": null,
   "previewStartingState": {
     "rotation": 135.0,
     "velocity": 0

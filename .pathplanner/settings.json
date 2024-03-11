@@ -3,11 +3,8 @@
   "robotLength": 0.94,
   "holonomicMode": true,
   "pathFolders": [
-    "A1",
-    "A10",
-    "M4",
-    "A5",
-    "S1"
+    "A4",
+    "A2"
   ],
   "autoFolders": [
     "A4"

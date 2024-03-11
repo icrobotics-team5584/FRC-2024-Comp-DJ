@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.539288754016104,
-        "y": 6.236372828184253
+        "x": 4.422151422587994,
+        "y": 6.603697593409518
       },
       "isLocked": false,
       "linkedName": "M4 Aa Shoot"
     },
     {
       "anchor": {
-        "x": 8.143300848005206,
-        "y": 7.441769269503451
+        "x": 7.767542651467808,
+        "y": 6.826659998761065
       },
       "prevControl": {
-        "x": 8.078924477258608,
-        "y": 7.918154412981801
+        "x": 7.703166280721211,
+        "y": 7.303045142239413
       },
       "nextControl": {
-        "x": 8.201855030739436,
-        "y": 7.008468317312405
+        "x": 7.826096834202039,
+        "y": 6.393359046570019
       },
       "isLocked": false,
       "linkedName": null
@@ -59,8 +59,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0,
+      "name": "StartFeeder",
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -76,8 +76,8 @@
       }
     },
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.5,
+      "name": "StopFeeder",
+      "waypointRelativePos": 0.45,
       "command": {
         "type": "parallel",
         "data": {
@@ -105,7 +105,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "A2",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

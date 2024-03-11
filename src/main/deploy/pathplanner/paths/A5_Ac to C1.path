@@ -59,7 +59,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "A5",
+  "folder": null,
   "previewStartingState": {
     "rotation": 179.82338672738516,
     "velocity": 0
