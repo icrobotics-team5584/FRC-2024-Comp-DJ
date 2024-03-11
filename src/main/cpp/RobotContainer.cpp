@@ -114,8 +114,8 @@ void RobotContainer::ConfigureBindings() {
   _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
   // _driverController.LeftTrigger().WhileTrue(/*Align2Stage*/);
   // _driverController.LeftBumper().WhileTrue(/*IntakeFromSource*/);
-  _driverController.RightTrigger().WhileTrue(cmd::VisionRotateToSpeaker(_driverController));
-  _driverController.LeftTrigger().WhileTrue(cmd::VisionClimb());
+  _driverController.RightTrigger().WhileTrue(cmd::VisionAlignToSpeaker(_driverController));
+  _driverController.LeftTrigger().WhileTrue(cmd::VisionAlignToClimb());
   // _driverController.RightBumper().WhileTrue(/*Align2Amp*/);
   _driverController.A().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
 

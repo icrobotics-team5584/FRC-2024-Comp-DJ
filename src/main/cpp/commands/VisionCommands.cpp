@@ -5,7 +5,7 @@
 namespace cmd {
 using namespace frc2::cmd;
 
-frc2::CommandPtr VisionRotateToSpeaker(frc2::CommandXboxController& controller) {
+frc2::CommandPtr VisionAlignToSpeaker(frc2::CommandXboxController& controller) {
   static units::degree_t camYaw = 0_deg;
   static units::degree_t startingGyroYaw = 0_deg;
 
@@ -28,9 +28,31 @@ frc2::CommandPtr VisionRotateToSpeaker(frc2::CommandXboxController& controller) 
 }
 
 frc2::CommandPtr ShootSequence(frc2::CommandXboxController& controller) {
-  return VisionRotateToSpeaker(controller).Until([] {
+  return VisionAlignToSpeaker(controller).Until([] {
     return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);
   });
+}
+
+frc2::CommandPtr VisionAlignToAmp(frc2::CommandXboxController& controller) {
+  static units::degree_t camYaw = 0_deg;
+  static units::degree_t startingGyroYaw = 0_deg;
+
+  return Run([] {
+           auto result = SubVision::GetInstance().GetSpecificTagYaw(SubVision::AMP);
+
+           if (result.has_value()) {
+             camYaw =
+                 SubVision::GetInstance().GetSpecificTagYaw(SubVision::AMP).value_or(0_deg);
+             startingGyroYaw = SubDrivebase::GetInstance().GetHeading().Degrees();
+           }
+
+           units::degree_t currentGyroYaw = SubDrivebase::GetInstance().GetHeading().Degrees();
+           units::degree_t gyroAngleTravelled = currentGyroYaw - startingGyroYaw;
+           units::degree_t errorAngle = camYaw - gyroAngleTravelled;
+
+           SubDrivebase::GetInstance().RotateToZero(errorAngle);
+         })
+      .AlongWith(SubDrivebase::GetInstance().JoystickDrive(controller, true));
 }
 
 frc2::CommandPtr VisionRotateToTrap() {
@@ -72,8 +94,10 @@ frc2::CommandPtr VisionTranslateToTrap() {
       });
 }
 
-frc2::CommandPtr VisionClimb() {
+frc2::CommandPtr VisionAlignToClimb() {
   return VisionRotateToTrap().AlongWith(VisionTranslateToTrap());
 }
+
+
 
 }  // namespace cmd

@@ -33,7 +33,7 @@ frc2::CommandPtr ArmToStow() {
 }
 
 frc2::CommandPtr ShootFullSequenceWithVision(frc2::CommandXboxController& controller) {
-  return VisionRotateToSpeaker(controller).Until([]{return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);})
+  return VisionAlignToSpeaker(controller).Until([]{return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);})
       .Until([] { return true; })
       .AndThen({SubShooter::GetInstance().ShootSequence()})
       .AlongWith(WaitUntil([] {
