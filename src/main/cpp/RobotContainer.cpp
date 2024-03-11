@@ -118,13 +118,10 @@ void RobotContainer::ConfigureBindings() {
   // _driverController.LeftTrigger().WhileTrue(/*Align2Stage*/);
   _driverController.LeftBumper().WhileTrue(cmd::IntakeFromSource());
 
-  _driverController.RightTrigger().WhileTrue(
-      SubLED::GetInstance()
-          .SetLEDCommand(0.61)
-          .AndThen(cmd::VisionRotateToSpeaker(_driverController))
-          .AndThen(SubLED::GetInstance().SetLEDCommand(0.61)));
+  _driverController.RightTrigger().WhileTrue(cmd::VisionRotateToSpeaker(_driverController));
+
   _driverController.LeftTrigger().WhileTrue(cmd::VisionClimb());
-  
+
   // _driverController.RightBumper().WhileTrue(/*Align2Amp*/);
   _driverController.A().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
 

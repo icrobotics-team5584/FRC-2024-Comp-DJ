@@ -10,7 +10,7 @@ frc2::CommandPtr VisionRotateToSpeaker(frc2::CommandXboxController& controller) 
   static units::degree_t camYaw = 0_deg;
   static units::degree_t startingGyroYaw = 0_deg;
 
-  return Run([] {
+  return SubLED::GetInstance().SetLEDCommand(0.61).AndThen(Run([] {
            auto result = SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER);
 
            if (result.has_value()) {
@@ -24,8 +24,13 @@ frc2::CommandPtr VisionRotateToSpeaker(frc2::CommandXboxController& controller) 
            units::degree_t errorAngle = camYaw - gyroAngleTravelled;
 
            SubDrivebase::GetInstance().RotateToZero(errorAngle);
+
+           if (units::math::abs(errorAngle) < 2_deg){
+            SubLED::GetInstance().SetLEDFunc(0.91);
+           }
+
          })
-      .AlongWith(SubDrivebase::GetInstance().JoystickDrive(controller, true));
+      .AlongWith(SubDrivebase::GetInstance().JoystickDrive(controller, true)));
 }
 
 frc2::CommandPtr ShootSequence(frc2::CommandXboxController& controller) {
