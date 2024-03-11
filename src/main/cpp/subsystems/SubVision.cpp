@@ -14,6 +14,8 @@
 #include <fmt/format.h>
 
 SubVision::SubVision() {
+
+  // Simulating vision
   for (int i = 0; i <= 8; i++) {
     auto pose = _tagLayout.GetTagPose(i);
     if (pose.has_value()) {
