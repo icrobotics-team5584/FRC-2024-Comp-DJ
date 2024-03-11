@@ -70,6 +70,8 @@ class SubClimber : public frc2::SubsystemBase {
   frc2::CommandPtr ClimberResetZero();
   frc2::CommandPtr ClimberAutoReset();
   frc2::CommandPtr ClimberResetCheck();
+  units::meter_t CheckLeftClimberPos();
+  units::meter_t CheckRightClimberPos();
  private:
   units::meter_t TargetDistance;
 

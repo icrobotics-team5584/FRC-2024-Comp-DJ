@@ -58,7 +58,7 @@ class SubVision : public frc2::SubsystemBase {
 
   photon::PhotonTrackedTarget _lastSeenTrapTag;
 
-  frc::Transform3d _camToBot{{0_mm, 0_mm, 0_mm}, {}};
+  frc::Transform3d _camToBot{{0_mm, 0_mm, 0_mm}, {0_deg, 0_deg, 180_deg}};
 
   frc::AprilTagFieldLayout _tagLayout =
       frc::LoadAprilTagLayoutField(frc::AprilTagField::k2024Crescendo);

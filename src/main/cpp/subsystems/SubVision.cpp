@@ -14,7 +14,7 @@
 #include <fmt/format.h>
 
 SubVision::SubVision() {
-  for (int i = 0; i <= 8; i++) {
+  for (int i = 0; i <= 18; i++) {
     auto pose = _tagLayout.GetTagPose(i);
     if (pose.has_value()) {
       photon::SimVisionTarget simTag{pose.value(), 8_in, 8_in, i};

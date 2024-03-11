@@ -197,3 +197,11 @@ frc2::CommandPtr SubClimber::ClimberResetCheck() {
         }
     }).Until([this] { return ResetLeft && ResetRight; }));
 }
+
+units::meter_t SubClimber::CheckLeftClimberPos() {
+  return TurnToDistance(_lClimbMotor.GetPosition());
+}
+
+units::meter_t SubClimber::CheckRightClimberPos() {
+  return TurnToDistance(_rClimbMotor.GetPosition());
+}
