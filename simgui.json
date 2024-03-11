@@ -33,6 +33,11 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/arm/Arm Mechanism Display": {
+        "window": {
+          "visible": true
+        }
       }
     }
   },
@@ -135,8 +140,7 @@
           },
           "Right motor": {
             "open": true
-          },
-          "open": true
+          }
         },
         "amp": {
           "Dizzy Arm tilt motor: ": {
@@ -165,9 +169,6 @@
       }
     }
   },
-  "NetworkTables Info": {
-    "visible": true
-  },
   "Plot": {
     "Plot <0>": {
       "plots": [
@@ -178,7 +179,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 783,
+          "height": 578,
           "series": [
             {
               "color": [
@@ -200,7 +201,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     }
   },
   "visible": true
