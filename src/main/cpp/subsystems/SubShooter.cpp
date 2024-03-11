@@ -4,9 +4,9 @@
 
 #include "subsystems/SubShooter.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include "utilities/BotVars.h"
 
 SubShooter::SubShooter() {
-  solShooter.Set(frc::DoubleSolenoid::kReverse);
 
   _bottomShooterMotor.SetInverted(true);
   _topShooterMotor.SetInverted(true);
@@ -136,11 +136,13 @@ frc2::CommandPtr SubShooter::StartShooter() {
 
 frc2::CommandPtr SubShooter::ShootIntoAmp() {
   return ShooterChangePosClose()
-      .AndThen(Run([this] { CurrentShooterTarget = ShootAmpTarget; }).Until([this] {
-        return CheckShooterSpeed();
-      }))
-      .AndThen(StartFeeder())
-      .FinallyDo([this] { StopShooterFunc(); });
+      .AndThen(RunOnce([this] { CurrentShooterTarget = ShootAmpTarget; }))
+      .AndThen(WaitUntil([this] { return CheckShooterSpeed(); }));
+}
+  
+frc2::CommandPtr SubShooter::ShootIntoAmpSequence() {
+    return Sequence(ShootIntoAmp(), StartFeeder(), Idle())
+      .FinallyDo([this] {StopShooterFunc();});
 }
 
 void SubShooter::StopShooterFunc(){
@@ -185,8 +187,8 @@ frc2::CommandPtr SubShooter::AutoShootSequence() {
 
 
 bool SubShooter::CheckShooterSpeed(){
-  if (std::abs(ShootFarTarget.value() - _bottomPastVelocityAvg) < 3 &&
-      std::abs(ShootFarTarget.value() - _topPastVelocityAvg) < 3) {
+  if (std::abs(CurrentShooterTarget.value() - _bottomPastVelocityAvg) < 3 &&
+      std::abs(CurrentShooterTarget.value() - _topPastVelocityAvg) < 3) {
     return true;
   }
  return false;
@@ -225,9 +227,22 @@ frc2::CommandPtr SubShooter::Outtake() {
 }
 
 bool SubShooter::CheckShooterLineBreak() {
-  if(_shooterLineBreak.Get() == true){
+  if(_shooterLineBreak.Get() == BotVars::Choose(false, true)){
     return true;
   }
 
   return false;
+}
+
+frc2::CommandPtr SubShooter::IntakeFromSource() {
+  return Run([this] {
+           _topShooterMotor.Set(-0.3);
+           _bottomShooterMotor.Set(-0.3);
+           _shooterFeederMotor.Set(-1);
+         })
+      .FinallyDo([this] {
+        _topShooterMotor.Set(0);
+        _bottomShooterMotor.Set(0);
+        _shooterFeederMotor.Set(0);
+      });
 }

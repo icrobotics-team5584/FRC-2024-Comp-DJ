@@ -31,6 +31,7 @@ class SwerveModule {
   void StopMotors();
   void UpdateSim(units::second_t deltaTime);
   void SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue mode);
+  void ConfigTurnMotor();
   frc::SwerveModulePosition GetPosition();
   frc::Rotation2d GetAngle();
   frc::Rotation2d GetCanCoderAngle();

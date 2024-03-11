@@ -14,13 +14,14 @@
 #include <fmt/format.h>
 
 SubVision::SubVision() {
+
+  // Simulating vision
   for (int i = 0; i <= 8; i++) {
     auto pose = _tagLayout.GetTagPose(i);
-    if (pose.has_value()){
+    if (pose.has_value()) {
       photon::SimVisionTarget simTag{pose.value(), 8_in, 8_in, i};
       _visionSim.AddSimVisionTarget(simTag);
-      SubDrivebase::GetInstance().DisplayPose(fmt::format("tag{}", i),
-                                              pose.value().ToPose2d());
+      SubDrivebase::GetInstance().DisplayPose(fmt::format("tag{}", i), pose.value().ToPose2d());
     }
   }
 }
@@ -29,7 +30,28 @@ using namespace std;
 
 // This method will be called once per scheduler run
 void SubVision::Periodic() {
-  frc::SmartDashboard::PutBoolean("Vision/best target has targets: ", VisionHasTargets());
+  frc::SmartDashboard::PutBoolean("Vision/has vision targets ", VisionHasTargets());
+
+  auto _lastSeenTag = _camera.GetLatestResult().GetBestTarget();
+
+  if (auto ally = frc::DriverStation::GetAlliance()) {
+    frc::SmartDashboard::PutNumber("Vision/Alliance ", ally.value());
+    if (ally.value() == frc::DriverStation::Alliance::kBlue) {
+      if (std::find(std::begin(blueTrap), std::end(blueTrap), _lastSeenTag.GetFiducialId()) !=
+          std::end(blueTrap)) {
+        _lastSeenTrapTag = _lastSeenTag;
+      }
+    }
+    if (ally.value() == frc::DriverStation::Alliance::kRed) {
+      if (std::find(std::begin(redTrap), std::end(redTrap), _lastSeenTag.GetFiducialId()) !=
+          std::end(redTrap)) {
+        _lastSeenTrapTag = _lastSeenTag;
+      }
+    }
+  }
+
+  frc::SmartDashboard::PutNumber("Vision/last seen tag ID ", _lastSeenTag.GetFiducialId());
+  frc::SmartDashboard::PutNumber("Vision/last seen trap tag ID ", _lastSeenTrapTag.GetFiducialId());
 }
 
 void SubVision::SimulationPeriodic() {
@@ -56,25 +78,23 @@ std::optional<units::degree_t> SubVision::GetSpecificTagYaw(FieldElement chosenF
   // returns yaw as degree value
   if (tagResult != targets.end()) {
     return tagResult->GetYaw() * -(1_deg);
-  } 
+  }
 
   // return 0 when looses target
-  else { return {}; }
-
+  else {
+    return {};
+  }
 }
 
 // exists out when the range of yaw is between [-0.4, 0.4]
 bool SubVision::IsOnTarget(FieldElement chosenFieldElement) {
-
   auto yaw = GetSpecificTagYaw(chosenFieldElement);
 
-  if(yaw.has_value()){
+  if (yaw.has_value()) {
     return yaw.value() > -0.4_deg && yaw.value() < 0.4_deg;
-  }
-  else{
+  } else {
     return false;
   }
-  
 }
 
 int SubVision::FindID(FieldElement chosenFieldElement) {
@@ -91,10 +111,12 @@ int SubVision::FindID(FieldElement chosenFieldElement) {
   return redFieldElement[chosenFieldElement];
 }
 
-units::degree_t SubVision::getTrapAngle(){
-  auto result = _camera.GetLatestResult();
-  auto target = result.GetBestTarget();
-  auto trapID = target.GetFiducialId();
+std::optional<units::degree_t> SubVision::getCamToTrapYaw() {
+  return _lastSeenTrapTag.GetYaw() * -(1_deg);
+}
+
+units::degree_t SubVision::getTrapAngle() {
+  auto trapID = _lastSeenTrapTag.GetFiducialId();
 
   return trapAngle[trapID];
 }

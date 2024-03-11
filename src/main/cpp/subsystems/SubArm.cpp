@@ -6,7 +6,6 @@
 #include <units/angular_velocity.h>
 #include <units/angular_acceleration.h>
 #include <units/angle.h>
-
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <cmath>
 #include <iostream>
@@ -14,7 +13,6 @@
 #include <frc2/command/button/Trigger.h>
 #include <frc/MathUtil.h>
 #include <frc/shuffleboard/Shuffleboard.h>
-
 #include "subsystems/SubArm.h"
 #include "utilities/ICSparkMax.h"
 #include "RobotContainer.h"
@@ -62,6 +60,7 @@ void SubArm::Periodic() {
   frc::SmartDashboard::PutData("arm/Arm Mechanism Display", &_doubleJointedArmMech);
   frc::SmartDashboard::PutNumber("arm/Amp Shooter Motor: ", _ampMotor.Get());
   frc::SmartDashboard::PutBoolean("arm/Linebreak", _sdLineBreak.Get());
+  frc::SmartDashboard::PutNumber("arm/End Effector Velocity", _ampMotor.GetVelocity().value());
 
   // angle of motor
   frc::SmartDashboard::PutData("arm/Arm tilt motor: ", (wpi::Sendable*)&_armMotor);
@@ -83,10 +82,14 @@ void SubArm::SimulationPeriodic() {
 
 // Shooter Amp
 frc2::CommandPtr SubArm::AmpShooter() {
-  return StartEnd([this] { _ampMotor.Set(0.7); }, [this] { _ampMotor.Set(0); });
+  return TiltArmToAngle(SHOOT_AMP_ANGLE).AndThen([this] { _ampMotor.Set(0.7); }).AndThen(Idle()).FinallyDo([this] { _ampMotor.Set(0); });
 }
 
 frc2::CommandPtr SubArm::FastAmpShooter() {
+  return TiltArmToAngle(SHOOT_AMP_ANGLE).AndThen([this] { _ampMotor.Set(1); }).AndThen(Idle()).FinallyDo([this] { _ampMotor.Set(0); });
+}
+
+frc2::CommandPtr SubArm::TrapShooter() {
   return StartEnd([this] { _ampMotor.Set(1); }, [this] { _ampMotor.Set(0); });
 }
 
@@ -114,13 +117,17 @@ frc2::CommandPtr SubArm::Outtake() {
   return Run([this]{_ampMotor.Set(1);}).FinallyDo([this]{return _ampMotor.Set(0);});
 }
 
+frc2::CommandPtr SubArm::StopEndEffector() {
+  return RunOnce([this]{_ampMotor.Set(0);});
+}
+
 // getters
 bool SubArm::CheckIfArmIsHome() {
   return units::math::abs(_armMotor.GetPosition() - HOME_ANGLE) < 2_deg;
 }
 
 bool SubArm::CheckIfArmHasGamePiece() {
-  if ( _sdLineBreak.Get() == true) {
+  if ( _sdLineBreak.Get() == BotVars::Choose(false, true)) {
     return true;
   } else {
     return false;

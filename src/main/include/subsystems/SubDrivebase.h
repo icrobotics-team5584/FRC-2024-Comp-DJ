@@ -19,6 +19,7 @@
 #include "utilities/SwerveModule.h"
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/sysid/SysIdRoutine.h>
+#include "utilities/BotVars.h"
 
 class SubDrivebase : public frc2::SubsystemBase {
  public:
@@ -72,16 +73,15 @@ class SubDrivebase : public frc2::SubsystemBase {
 
  private:
   AHRS _gyro{frc::SerialPort::kMXP};
-
   frc::Translation2d _frontLeftLocation{+0.281_m, +0.281_m};
   frc::Translation2d _frontRightLocation{+0.281_m, -0.281_m};
   frc::Translation2d _backLeftLocation{-0.281_m, +0.281_m};
   frc::Translation2d _backRightLocation{-0.281_m, -0.281_m};
 
-  const double FRONT_RIGHT_MAG_OFFSET =  -0.875732; //Raised modules -> -0.014648; | Low modules -> -0.875732; new
-  const double FRONT_LEFT_MAG_OFFSET =   -0.443359 ; //Raised modules -> -0.673584; | Low modules -> -0.443359; new
-  const double BACK_RIGHT_MAG_OFFSET =   -0.959473; //Raised modules -> -0.898926; | Low modules -> -0.959473;
-  const double BACK_LEFT_MAG_OFFSET =    -0.825928; //Raised modules -> -0.455322; | Low modules -> -0.825928;
+  const double FRONT_RIGHT_MAG_OFFSET = BotVars::Choose(-0.01904296875, -0.875732); //-0.875732 <- Low Modules | Raised modules -> -0.01904296875;  
+  const double FRONT_LEFT_MAG_OFFSET = BotVars::Choose(-0.670898, -0.443359);       //-0.443359 <- Low Modules | Raised modules -> -0.670898;        
+  const double BACK_RIGHT_MAG_OFFSET = BotVars::Choose(-0.900146484375, -0.959473); //-0.959473 <- Low Modules | Raised modules -> -0.900146484375;  
+  const double BACK_LEFT_MAG_OFFSET = BotVars::Choose(-0.453125, -0.825928);        //-0.825928 <- Low Modules | Raised modules -> -0.453125;         
 
   SwerveModule _frontLeft{canid::DriveBaseFrontLeftDrive, canid::DriveBaseFrontLeftTurn,
                           canid::DriveBaseFrontLeftEncoder, FRONT_LEFT_MAG_OFFSET};
@@ -95,10 +95,10 @@ class SubDrivebase : public frc2::SubsystemBase {
   frc::SwerveDriveKinematics<4> _kinematics{_frontLeftLocation, _frontRightLocation,
                                             _backLeftLocation, _backRightLocation};
 
-  frc::PIDController Xcontroller{0.5, 0, 0};
+  frc::PIDController Xcontroller{0.2, 0, 0};
   frc::PIDController Ycontroller{0.5, 0, 0};
   frc::ProfiledPIDController<units::radian> Rcontroller{
-      8, 0, 0.3, {MAX_ANGULAR_VELOCITY, MAX_ANG_ACCEL}};
+      6, 0, 0.3, {MAX_ANGULAR_VELOCITY, MAX_ANG_ACCEL}};
   frc::HolonomicDriveController _driveController{Xcontroller, Ycontroller, Rcontroller};
 
   frc::SwerveDrivePoseEstimator<4> _poseEstimator{
@@ -117,7 +117,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   units::meters_per_second_t _forwardSpeedRequest = 0_mps;
   units::meters_per_second_t _sidewaysSpeedRequest = 0_mps;
   units::degrees_per_second_t _rotationSpeedRequest = 0_deg_per_s;
-  bool _fieldOrientedRquest = true; 
+  bool _fieldOrientedRequest = true; 
 
   // Sysid
   frc2::sysid::SysIdRoutine _sysIdRoutine{

@@ -41,19 +41,23 @@ SubDrivebase::SubDrivebase() {
         return GetRobotRelativeSpeeds();
       },  // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
       [this](frc::ChassisSpeeds speeds) {
-        Drive(speeds.vx, speeds.vy, -speeds.omega, false);
+          _sidewaysSpeedRequest = speeds.vy; //TEST!
+          _forwardSpeedRequest = speeds.vx;
+          _rotationSpeedRequest = -speeds.omega;
+          _fieldOrientedRequest = false;
+     // Drive(speeds.vx, speeds.vy, -speeds.omega, false);
       },  // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       HolonomicPathFollowerConfig(
           PIDConstants(2, 0.0, 0.0),    // Translation PID constants
           PIDConstants(0.5, 0.0, 0.0),  // Rotation PID constants
-          MAX_VELOCITY,                        // Max module speed, in m/s
+          MAX_VELOCITY,                 // Max module speed, in m/s
           432_mm,  // Drive base radius in meters. Distance from robot center to furthest module.
                    // NEEDS TO BE CHECKED AND MADE ACCURATE!!
           ReplanningConfig(
               false, false, 1_m,
               0.25_m)  // Default path replanning config. See the API for the options here
           ),
-          
+
       []() {
         // Boolean supplier that controls when the path will be mirrored for the red alliance
         // This will flip the path being followed to the red side of the field.
@@ -76,7 +80,7 @@ void SubDrivebase::Periodic() {
   frc::SmartDashboard::PutNumber("Drivebase/heading", GetHeading().Degrees().value());
   frc::SmartDashboard::PutNumber("Drivebase/velocity", GetVelocity().value());
 
-  frc::SmartDashboard::PutNumberArray("drivebase/true swerve states",
+  frc::SmartDashboard::PutNumberArray("Drivebase/true swerve states",
                                       std::array{
                                           _frontLeft.GetAngle().Degrees().value(),
                                           _frontLeft.GetSpeed().value(),
@@ -88,7 +92,7 @@ void SubDrivebase::Periodic() {
                                           _backRight.GetSpeed().value(),
                                       });
 
-  frc::SmartDashboard::PutNumberArray("drivebase/can coders swerve states",
+  frc::SmartDashboard::PutNumberArray("Drivebase/can coders swerve states",
                                       std::array{
                                           _frontLeft.GetCanCoderAngle().Degrees().value(),
                                           _frontLeft.GetSpeed().value(),
@@ -105,10 +109,17 @@ void SubDrivebase::Periodic() {
   _backLeft.SendSensorsToDash();
   _backRight.SendSensorsToDash();
 
-  Drive(_forwardSpeedRequest, _sidewaysSpeedRequest, _rotationSpeedRequest, _fieldOrientedRquest);
+  Drive(_forwardSpeedRequest, _sidewaysSpeedRequest, _rotationSpeedRequest, _fieldOrientedRequest);
+  frc::SmartDashboard::PutNumber("Drivebase/ x-axis translation speed request ",
+                                 _forwardSpeedRequest.value());
+  frc::SmartDashboard::PutNumber("Drivebase/ y-axis translation speed request ",
+                                 _sidewaysSpeedRequest.value());
+  frc::SmartDashboard::PutNumber("Drivebase/ rotation speed request ",
+                                 _rotationSpeedRequest.value());
+  frc::SmartDashboard::PutBoolean("Drivebase/ field oriented request", _fieldOrientedRequest);
 
   UpdateOdometry();
-  frc::SmartDashboard::PutNumber("drivebase/loop time (sec)", (frc::GetTime() - loopStart).value());
+  frc::SmartDashboard::PutNumber("Drivebase/loop time (sec)", (frc::GetTime() - loopStart).value());
 }
 
 void SubDrivebase::SimulationPeriodic() {
@@ -118,39 +129,45 @@ void SubDrivebase::SimulationPeriodic() {
   _backRight.UpdateSim(20_ms);
 }
 
-frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller, bool ignoreJoystickRotation) {
+frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& controller,
+                                             bool ignoreJoystickRotation) {
   return Run([this, &controller, ignoreJoystickRotation] {
     double deadband = 0.08;
     auto velocity =
-        frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) * 1_mps;
+        frc::SmartDashboard::GetNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value()) *
+        1_mps;
     auto angularVelocity = frc::SmartDashboard::GetNumber("Drivebase/Config/MaxAngularVelocity",
-                                                          MAX_ANGULAR_VELOCITY.value()) * 1_deg_per_s;
+                                                          MAX_ANGULAR_VELOCITY.value()) *
+                           1_deg_per_s;
     static frc::SlewRateLimiter<units::scalar> _xspeedLimiter{MAX_JOYSTICK_ACCEL / 1_s};
     static frc::SlewRateLimiter<units::scalar> _yspeedLimiter{MAX_JOYSTICK_ACCEL / 1_s};
     static frc::SlewRateLimiter<units::scalar> _rotLimiter{MAX_ANGULAR_JOYSTICK_ACCEL / 1_s};
-    auto forwardSpeed = _yspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftY(), deadband)) * velocity;
-    auto rotationSpeed = _rotLimiter.Calculate(frc::ApplyDeadband(controller.GetRightX(), deadband)) * angularVelocity;
-    auto sidewaysSpeed = _xspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftX(), deadband)) * velocity;
-    
-    // when optionalRotationContro is false, 
+    auto forwardSpeed =
+        _yspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftY(), deadband)) * velocity;
+    auto rotationSpeed =
+        _rotLimiter.Calculate(frc::ApplyDeadband(controller.GetRightX(), deadband)) *
+        angularVelocity;
+    auto sidewaysSpeed =
+        _xspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftX(), deadband)) * velocity;
+
+    // when optionalRotationContro is false,
     if (frc::RobotBase::IsSimulation()) {
       _sidewaysSpeedRequest = -sidewaysSpeed;
       _forwardSpeedRequest = -forwardSpeed;
-      if(ignoreJoystickRotation == false){
+      if (ignoreJoystickRotation == false) {
         _rotationSpeedRequest = -rotationSpeed;
       }
-      _fieldOrientedRquest = true;
+      _fieldOrientedRequest = true;
 
     } else {
       _forwardSpeedRequest = forwardSpeed;
       _sidewaysSpeedRequest = sidewaysSpeed;
-      if(ignoreJoystickRotation == false){
+      if (ignoreJoystickRotation == false) {
         _rotationSpeedRequest = rotationSpeed;
       }
-      _fieldOrientedRquest = true;
+      _fieldOrientedRequest = true;
     }
   });
-
 }
 
 void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
@@ -177,7 +194,7 @@ void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_se
   // Setting modules from aquired states
   auto [fl, fr, bl, br] = states;
 
-  frc::SmartDashboard::PutNumberArray("drivebase/desired swerve states",
+  frc::SmartDashboard::PutNumberArray("Drivebase/desired swerve states",
                                       std::array{
                                           fl.angle.Degrees().value(),
                                           fl.speed.value(),
@@ -219,6 +236,12 @@ void SubDrivebase::SyncSensors() {
   _backLeft.SyncSensors();
   _backRight.SyncSensors();
   _gyro.Calibrate();
+
+//Set config turn motors so it can run in auto init also. Had issues with parameters not being set on startup
+  _frontLeft.ConfigTurnMotor();
+  _frontRight.ConfigTurnMotor();
+  _backLeft.ConfigTurnMotor();
+  _backRight.ConfigTurnMotor();
 }
 
 frc2::CommandPtr SubDrivebase::SyncSensorBut() {
@@ -278,18 +301,15 @@ void SubDrivebase::RotateToZero(units::degree_t rotationError) {
   speedRot = std::clamp(speedRot, -2.0, 2.0);
 
   _rotationSpeedRequest = speedRot * 1_rad_per_s;
-
 }
 
-void SubDrivebase::TranslateToZero(units::degree_t translationError){
-  double speedRot = Rcontroller.Calculate(translationError, 0_deg);
-  speedRot = std::clamp(speedRot, -2.0, 2.0);
-
+void SubDrivebase::TranslateToZero(units::degree_t translationError) {
   double speedX = Xcontroller.Calculate(translationError.value(), 0);
 
+  speedX = std::clamp(speedX, -0.5, 0.5);
   _sidewaysSpeedRequest = speedX * 1_mps;
+  _fieldOrientedRequest = false;
 }
-
 
 bool SubDrivebase::IsAtPose(frc::Pose2d pose) {
   auto currentPose = _poseEstimator.GetEstimatedPosition();

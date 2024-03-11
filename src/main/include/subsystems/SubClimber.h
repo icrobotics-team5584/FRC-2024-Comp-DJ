@@ -46,37 +46,32 @@ class SubClimber : public frc2::SubsystemBase {
   units::radians_per_second_t DistanceToTurn(units::meters_per_second_t distance);
   units::meter_t TurnToDistance(units::turn_t turn);
 
-  // Tools
-  void DriveToDistance(units::meter_t distance);
-
-  // Actions
-  void Extend();
-  void Retract();
+  // Primary actions
   void Start(double power);
   void Stop();
-  void Lock();
-  void Unlock();
 
   void ZeroClimber();
 
   double GetLeftCurrent();
   double GetRightCurrent();
 
+  void DriveToDistance(units::meter_t distance);
+
   void EnableSoftLimit(bool enabled);
 
-  bool GetTrapStatus();
-  void SetTrapStatus(bool stat);
-
-  frc2::CommandPtr JoyStickDrive(frc2::CommandXboxController& _controller);
+  //Command actions
+  frc2::CommandPtr ClimberJoystickDrive(frc2::CommandXboxController& _controller);
+  frc2::CommandPtr ClimberJoystickDriveLeft(frc2::CommandXboxController& _controller);
+  frc2::CommandPtr ClimberJoystickDriveRight(frc2::CommandXboxController& _controller);
 
   frc2::CommandPtr ClimberPosition(units::meter_t distance);
   frc2::CommandPtr ClimberManualDrive(float power);
   frc2::CommandPtr ClimberStop();
-  frc2::CommandPtr ClimberLock();
-  frc2::CommandPtr ClimberUnlock();
   frc2::CommandPtr ClimberResetZero();
   frc2::CommandPtr ClimberAutoReset();
   frc2::CommandPtr ClimberResetCheck();
+  units::meter_t CheckLeftClimberPos();
+  units::meter_t CheckRightClimberPos();
  private:
   units::meter_t TargetDistance;
 
@@ -90,16 +85,14 @@ class SubClimber : public frc2::SubsystemBase {
   
                           rP = 5, rI = 0.0, rD = 0.0, rF = 0;
 
-  static constexpr double currentLimit = 10;
-
-  // Limit switches
+  static constexpr double currentLimit = 15;
 
   // Unit translation
   static constexpr units::meter_t WheelCir = 0.12538_m;
 
   // Robot info
-  static constexpr units::meter_t BaseHeight = 0.2_m;
-  static constexpr units::meter_t TopHeight = 0.62_m;
+  static constexpr units::meter_t BaseHeight = 0.0_m;
+  static constexpr units::meter_t TopHeight = 0.5_m;
 
   //reset
   bool Reseting = false;
@@ -107,17 +100,10 @@ class SubClimber : public frc2::SubsystemBase {
 
   bool ResetLeft = false; bool ResetRight = false;
 
-  bool OnJoyStick = false;
-
-  // Trap sequence
-  bool TrapSequencing = false;
-
-  double inputDistance;
-
   // Sim
 
-  frc::sim::ElevatorSim lElvSim{frc::DCMotor::NEO(), gearRatio, 26_kg, (WheelCir/std::numbers::pi)/2, BaseHeight, 1.5_m, false, BaseHeight};
-  frc::sim::ElevatorSim rElvSim{frc::DCMotor::NEO(), gearRatio, 26_kg, (WheelCir/std::numbers::pi)/2, BaseHeight, 1.5_m, false, BaseHeight};
+  frc::sim::ElevatorSim lElvSim{frc::DCMotor::NEO(), gearRatio, 26_kg, (WheelCir/std::numbers::pi)/2, BaseHeight, 5_m, false, BaseHeight};
+  frc::sim::ElevatorSim rElvSim{frc::DCMotor::NEO(), gearRatio, 26_kg, (WheelCir/std::numbers::pi)/2, BaseHeight, 5_m, false, BaseHeight};
 
   frc::Mechanism2d mech{4, 4};
   frc::MechanismRoot2d* mechRootL = mech.GetRoot("ClimberL", 1, 1);
@@ -129,9 +115,4 @@ class SubClimber : public frc2::SubsystemBase {
       mechRootR->Append<frc::MechanismLigament2d>("Right elevator", 3, 90_deg);
   frc::MechanismLigament2d* mechTar =
       mechRootT->Append<frc::MechanismLigament2d>("Target", 2, 90_deg);
-
-  // Double solenoid
-
-  frc::DoubleSolenoid LockCylinder{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH,
-                                    pcm1::LockCylinderForward, pcm1::LockCylinderReverse};
 };

@@ -28,28 +28,6 @@ frc2::CommandPtr VisionRotateToSpeaker(frc2::CommandXboxController& controller) 
       .AlongWith(SubDrivebase::GetInstance().JoystickDrive(controller, true));
 }
 
-frc2::CommandPtr VisionTranslateToTrap(frc2::CommandXboxController& controller) {
-  static units::degree_t camYaw = 0_deg;
-  static units::degree_t startingGyroYaw = 0_deg;
-
-  return Run([] {
-           auto result = SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER);
-
-           if (result.has_value()) {
-             camYaw =
-                 SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER).value_or(0_deg);
-             startingGyroYaw = SubDrivebase::GetInstance().GetHeading().Degrees();
-           }
-
-           units::degree_t currentGyroYaw = SubDrivebase::GetInstance().GetHeading().Degrees();
-           units::degree_t gyroAngleTravelled = currentGyroYaw - startingGyroYaw;
-           units::degree_t errorAngle = camYaw - gyroAngleTravelled;
-
-           SubDrivebase::GetInstance().RotateToZero(errorAngle);
-         })
-      .AlongWith(SubDrivebase::GetInstance().JoystickDrive(controller, true));
-}
-
 frc2::CommandPtr ShootSequence(frc2::CommandXboxController& controller) {
   return VisionRotateToSpeaker(controller).Until([] {
     return SubVision::GetInstance().IsOnTarget(SubVision::SPEAKER);
@@ -57,43 +35,45 @@ frc2::CommandPtr ShootSequence(frc2::CommandXboxController& controller) {
 }
 
 frc2::CommandPtr VisionRotateToTrap() {
-  return Run([] {
-    auto trapAngle = SubVision::GetInstance().getTrapAngle();
-    frc::SmartDashboard::PutNumber("Vision/Angle of Trap: ", trapAngle.value());
-    auto currentGyroYaw = SubDrivebase::GetInstance().GetHeading().Degrees();
-    frc::SmartDashboard::PutNumber("Vision/Current yaw: ", currentGyroYaw.value());
-    auto errorYaw = trapAngle - currentGyroYaw;
-    frc::SmartDashboard::PutNumber("Vision/Error Yaw: ", errorYaw.value());
-    SubDrivebase::GetInstance().RotateToZero(errorYaw);
-  },{&SubDrivebase::GetInstance()}).Until([]{
-    return false;
-    /*
-    auto trapAngle = SubVision::GetInstance().getTrapAngle();
-    auto currentGyroYaw = SubDrivebase::GetInstance().GetHeading().Degrees();
-    auto errorYaw = trapAngle - currentGyroYaw;
-    return units::math::abs(errorYaw) < 4_deg;
-    */
-  });
+  return Run(
+             [] {
+               frc::SmartDashboard::PutBoolean("Vision/Running vision rotate to Trap ", true);
+               auto trapAngle = SubVision::GetInstance().getTrapAngle();
+
+               frc::SmartDashboard::PutNumber("Vision/Angle of Trap ", trapAngle.value());
+               auto currentGyroYaw = SubDrivebase::GetInstance().GetHeading().Degrees();
+
+               frc::SmartDashboard::PutNumber("Vision/Current yaw ", currentGyroYaw.value());
+               auto errorYaw = trapAngle - currentGyroYaw;
+               SubDrivebase::GetInstance().RotateToZero(-1 * errorYaw);
+             },
+             {&SubDrivebase::GetInstance()})
+      .Until([] {
+        auto trapAngle = SubVision::GetInstance().getTrapAngle();
+        auto currentGyroYaw = SubDrivebase::GetInstance().GetHeading().Degrees();
+        auto errorYaw = units::math::fmod(trapAngle - currentGyroYaw, 360_deg);
+        frc::SmartDashboard::PutNumber("Vision/Trap Error Yaw ", errorYaw.value());
+        auto boolOnTarget = units::math::abs(errorYaw) < 2_deg;
+        frc::SmartDashboard::PutBoolean("Vision/Is Trap rotate on target ", boolOnTarget);
+        return boolOnTarget;
+      });
 }
 
 frc2::CommandPtr VisionTranslateToTrap() {
-
-  static units::degree_t camYaw = 0_deg;
-  static units::degree_t startingGyroYaw = 0_deg;
-
-  return Run([] {
-    auto result = SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER);
-
-    if (result.has_value()) {
-      camYaw = SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER).value_or(0_deg);
-      startingGyroYaw = SubDrivebase::GetInstance().GetHeading().Degrees();
-    }
-
-    SubDrivebase::GetInstance().TranslateToZero(camYaw);
-  });
+  return Run(
+             [] {
+               frc::SmartDashboard::PutBoolean("Vision/Running vision translate to trap ", true);
+               auto result = SubVision::GetInstance().getCamToTrapYaw();
+               frc::SmartDashboard::PutNumber("Vision/result ", result.value_or(1000_deg).value());
+               SubDrivebase::GetInstance().RotateToZero(0_deg);
+               SubDrivebase::GetInstance().TranslateToZero(-result.value_or(0_deg));
+             })
+      .FinallyDo([] {
+        frc::SmartDashboard::PutBoolean("Vision/Running vision translate to trap ", false);
+      });
 }
 
-frc2::CommandPtr VisionClimb(){
-    return VisionRotateToTrap().AndThen(VisionTranslateToTrap());
+frc2::CommandPtr VisionClimb() {
+  return VisionRotateToTrap().AlongWith(VisionTranslateToTrap());
 }
 }  // namespace cmd
