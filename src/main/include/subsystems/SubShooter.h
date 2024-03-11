@@ -52,6 +52,7 @@ class SubShooter : public frc2::SubsystemBase {
   frc2::CommandPtr Outtake();
   frc2::CommandPtr StartFeederSlow();
   frc2::CommandPtr ReverseFeeder();
+  frc2::CommandPtr IntakeFromSource();
 
 
  private:

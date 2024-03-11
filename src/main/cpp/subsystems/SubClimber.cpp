@@ -186,3 +186,11 @@ frc2::CommandPtr SubClimber::ClimberAutoReset() {
         .AndThen(ClimberStop())
         .FinallyDo([this] {Reseting = false; Reseted = true; EnableSoftLimit(true); Stop();});
 }
+
+units::meter_t SubClimber::CheckLeftClimberPos() {
+  return TurnToDistance(_lClimbMotor.GetPosition());
+}
+
+units::meter_t SubClimber::CheckRightClimberPos() {
+  return TurnToDistance(_rClimbMotor.GetPosition());
+}

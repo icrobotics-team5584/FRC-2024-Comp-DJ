@@ -113,7 +113,7 @@ void RobotContainer::ConfigureBindings() {
 
   _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
   // _driverController.LeftTrigger().WhileTrue(/*Align2Stage*/);
-  // _driverController.LeftBumper().WhileTrue(/*IntakeFromSource*/);
+  _driverController.LeftBumper().WhileTrue(cmd::IntakeFromSource());
   _driverController.RightTrigger().WhileTrue(cmd::VisionRotateToSpeaker(_driverController));
   _driverController.LeftTrigger().WhileTrue(cmd::VisionClimb());
   // _driverController.RightBumper().WhileTrue(/*Align2Amp*/);
@@ -125,7 +125,7 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
   _operatorController.LeftBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosClose());
   _operatorController.RightBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosFar());
-  _operatorController.RightTrigger().WhileTrue(cmd::ShootSpeakerOrAmp());
+  _operatorController.RightTrigger().WhileTrue(cmd::ShootSpeakerOrArm());
 
   _operatorController.Y().OnTrue(cmd::ArmToTrapPos());
   _operatorController.Y().OnFalse(cmd::ArmToStow());

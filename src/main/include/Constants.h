@@ -71,7 +71,7 @@ namespace pcm1 {
 }
 
 namespace pwm {
-  constexpr int LEDS = 1;
+  constexpr int LEDS = 0;
 }
 
 

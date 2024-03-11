@@ -33,7 +33,8 @@ class SubArm : public frc2::SubsystemBase {
   static const inline units::degree_t OFFSET_ANGLE = BotVars::Choose(0.86_tr, 0.80809_tr); //zeroing procedure: Move arm to home, set offset to 0, read current pos, set offset to current angle - home pos
   static constexpr units::degree_t HOME_ANGLE = 0.098_tr; //0.108_tr
   static constexpr units::degree_t AMP_ANGLE = 0.626_tr; //0.65_tr
-  static constexpr units::degree_t TRAP_ANGLE = 110_deg;
+  static constexpr units::degree_t SHOOT_AMP_ANGLE = 0.67_tr;
+  static constexpr units::degree_t TRAP_ANGLE = 0.6_tr;
 
   // Instance
   static SubArm& GetInstance() {
@@ -47,6 +48,7 @@ class SubArm : public frc2::SubsystemBase {
 
   // shooter amp
   frc2::CommandPtr AmpShooter();
+  frc2::CommandPtr TrapShooter();
   frc2::CommandPtr FastAmpShooter();
   frc2::CommandPtr StoreNote();
 
@@ -60,6 +62,7 @@ class SubArm : public frc2::SubsystemBase {
   bool CheckIfArmIsHome();
   bool CheckIfArmHasGamePiece();
   units::degree_t GetAngle();
+  frc2::CommandPtr StopEndEffector();
 
   // Sysid commands
    frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction) {

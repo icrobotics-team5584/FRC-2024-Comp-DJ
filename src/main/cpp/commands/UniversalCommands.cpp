@@ -56,9 +56,17 @@ frc2::CommandPtr ShootFullSequenceWithoutVision(){
       .AndThen(SubShooter::GetInstance().ShooterChangePosClose());
 }
 
-frc2::CommandPtr ShootSpeakerOrAmp() {
-  return Either(ShootFullSequenceWithoutVision(), SubArm::GetInstance().FastAmpShooter(),
+frc2::CommandPtr ShootSpeakerOrArm() {
+  return Either(ShootFullSequenceWithoutVision(), ShootAmpOrTrap(),
                 [] { return SubArm::GetInstance().GetAngle() < 0.4_tr; });
+}
+
+frc2::CommandPtr ShootAmpOrTrap(){
+    return Either(SubArm::GetInstance().TrapShooter(), SubArm::GetInstance().AmpShooter(),
+                  [] {
+                    return SubClimber::GetInstance().CheckLeftClimberPos() &&
+                           SubClimber::GetInstance().CheckRightClimberPos() < 0.1_m;
+                  });
 }
 
 frc2::CommandPtr IntakefullSequence() {
@@ -89,7 +97,8 @@ frc2::CommandPtr OuttakeIntakeAndEndEffector() {
     return SubIntake::GetInstance()
       .ExtendIntake()
       .AndThen(SubIntake::GetInstance().Outtake())
-      .AndThen(SubArm::GetInstance().Outtake())
+      .AlongWith(SubArm::GetInstance().Outtake())
+      .AlongWith(SubShooter::GetInstance().Outtake())
       .AndThen(Idle())
       .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake();});
 }
@@ -115,8 +124,18 @@ frc2::CommandPtr ShootIntoAmp() {
                  }).AndThen(SubArm::GetInstance().FeedNote()))
       .AndThen(WaitUntil([] { return !SubShooter::GetInstance().CheckShooterLineBreak(); }))
       .AndThen(SubShooter::GetInstance().ShooterChangePosClose());
-
       
+}
+
+frc2::CommandPtr IntakeFromSource() {
+  return SubShooter::GetInstance()
+      .IntakeFromSource()
+      .AlongWith(SubArm::GetInstance().Outtake())
+      .Until([] { return SubArm::GetInstance().CheckIfArmHasGamePiece(); })
+      .FinallyDo([] {
+        SubShooter::GetInstance().StopShooterFunc();
+        SubArm::GetInstance().StopEndEffector();
+      });
 }
 
 }  // namespace cmd

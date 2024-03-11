@@ -13,9 +13,11 @@ frc2::CommandPtr EndTrapSequence();
 frc2::CommandPtr OuttakeNote();
 frc2::CommandPtr ShootFullSequenceWithVision(frc2::CommandXboxController& controller);
 frc2::CommandPtr ShootFullSequenceWithoutVision();
-frc2::CommandPtr ShootSpeakerOrAmp();
+frc2::CommandPtr ShootSpeakerOrArm();
 frc2::CommandPtr FeedNoteToShooter();
 frc2::CommandPtr PrepareToShoot();
 frc2::CommandPtr ShootIntoAmp();
 frc2::CommandPtr OuttakeIntakeAndEndEffector();
+frc2::CommandPtr ShootAmpOrTrap();
+frc2::CommandPtr IntakeFromSource();
 }  // namespace cmd
