@@ -35,26 +35,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "ShooterChangePosClose"
-                      }
-                    },
-                    {
-                      "type": "race",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "AutoShootFullSequence"
-                            }
-                          },
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 1.0
-                            }
-                          }
-                        ]
+                        "name": "StartShooter"
                       }
                     },
                     {
@@ -78,7 +59,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "As to C5"
+                        "pathName": "As to C4"
                       }
                     },
                     {
@@ -90,7 +71,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "As to C4"
+                        "pathName": "As to C5"
                       }
                     },
                     {
