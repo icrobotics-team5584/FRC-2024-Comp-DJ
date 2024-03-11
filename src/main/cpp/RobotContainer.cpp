@@ -116,7 +116,7 @@ void RobotContainer::ConfigureBindings() {
   // _driverController.LeftBumper().WhileTrue(/*IntakeFromSource*/);
   _driverController.RightTrigger().WhileTrue(cmd::VisionAlignToSpeaker(_driverController));
   _driverController.LeftTrigger().WhileTrue(cmd::VisionAlignToClimb());
-  // _driverController.RightBumper().WhileTrue(/*Align2Amp*/);
+  _driverController.RightBumper().WhileTrue(cmd::VisionAlignToAmp(_driverController));
   _driverController.A().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
 
   _operatorController.Start().WhileTrue(cmd::OuttakeNote());

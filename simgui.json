@@ -33,6 +33,11 @@
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/field": {
+        "window": {
+          "visible": true
+        }
       }
     }
   },
@@ -135,7 +140,9 @@
           },
           "Right motor": {
             "open": true
-          },
+          }
+        },
+        "Vision": {
           "open": true
         },
         "amp": {
@@ -158,15 +165,11 @@
               "open": true
             },
             "open": true
-          },
-          "open": true
+          }
         },
         "open": true
       }
     }
-  },
-  "NetworkTables Info": {
-    "visible": true
   },
   "Plot": {
     "Plot <0>": {
@@ -178,7 +181,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 783,
+          "height": 578,
           "series": [
             {
               "color": [
@@ -200,7 +203,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     }
   },
   "visible": true
