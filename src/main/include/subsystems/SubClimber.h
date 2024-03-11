@@ -115,9 +115,4 @@ class SubClimber : public frc2::SubsystemBase {
       mechRootR->Append<frc::MechanismLigament2d>("Right elevator", 3, 90_deg);
   frc::MechanismLigament2d* mechTar =
       mechRootT->Append<frc::MechanismLigament2d>("Target", 2, 90_deg);
-
-  // Double solenoid
-
-  frc::DoubleSolenoid LockCylinder{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH,
-                                    pcm1::LockCylinderForward, pcm1::LockCylinderReverse};
 };
