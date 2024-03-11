@@ -82,10 +82,14 @@ void SubArm::SimulationPeriodic() {
 
 // Shooter Amp
 frc2::CommandPtr SubArm::AmpShooter() {
-  return StartEnd([this] { _ampMotor.Set(0.7); }, [this] { _ampMotor.Set(0); });
+  return TiltArmToAngle(SHOOT_AMP_ANGLE).AndThen([this] { _ampMotor.Set(0.7); }).AndThen(Idle()).FinallyDo([this] { _ampMotor.Set(0); });
 }
 
 frc2::CommandPtr SubArm::FastAmpShooter() {
+  return TiltArmToAngle(SHOOT_AMP_ANGLE).AndThen([this] { _ampMotor.Set(1); }).AndThen(Idle()).FinallyDo([this] { _ampMotor.Set(0); });
+}
+
+frc2::CommandPtr SubArm::TrapShooter() {
   return StartEnd([this] { _ampMotor.Set(1); }, [this] { _ampMotor.Set(0); });
 }
 
@@ -111,6 +115,10 @@ frc2::CommandPtr SubArm::FeedNote(){
 
 frc2::CommandPtr SubArm::Outtake() {
   return Run([this]{_ampMotor.Set(1);}).FinallyDo([this]{return _ampMotor.Set(0);});
+}
+
+frc2::CommandPtr SubArm::StopEndEffector() {
+  return RunOnce([this]{_ampMotor.Set(0);});
 }
 
 // getters

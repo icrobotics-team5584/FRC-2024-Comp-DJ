@@ -139,7 +139,7 @@ frc2::CommandPtr SubShooter::ShootIntoAmp() {
       .AndThen(RunOnce([this] { CurrentShooterTarget = ShootAmpTarget; }))
       .AndThen(WaitUntil([this] { return CheckShooterSpeed(); }));
 }
-
+  
 frc2::CommandPtr SubShooter::ShootIntoAmpSequence() {
     return Sequence(ShootIntoAmp(), StartFeeder(), Idle())
       .FinallyDo([this] {StopShooterFunc();});
@@ -232,4 +232,17 @@ bool SubShooter::CheckShooterLineBreak() {
   }
 
   return false;
+}
+
+frc2::CommandPtr SubShooter::IntakeFromSource() {
+  return Run([this] {
+           _topShooterMotor.Set(-0.3);
+           _bottomShooterMotor.Set(-0.3);
+           _shooterFeederMotor.Set(-1);
+         })
+      .FinallyDo([this] {
+        _topShooterMotor.Set(0);
+        _bottomShooterMotor.Set(0);
+        _shooterFeederMotor.Set(0);
+      });
 }

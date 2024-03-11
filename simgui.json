@@ -34,7 +34,7 @@
           "visible": true
         }
       },
-      "/SmartDashboard/field": {
+      "/SmartDashboard/arm/Arm Mechanism Display": {
         "window": {
           "visible": true
         }
@@ -142,7 +142,13 @@
             "open": true
           }
         },
-        "Vision": {
+        "Shooter": {
+          "Bottom Motor": {
+            "open": true
+          },
+          "Top Motor": {
+            "open": true
+          },
           "open": true
         },
         "amp": {
@@ -160,6 +166,9 @@
           }
         },
         "arm": {
+          "Arm tilt motor: ": {
+            "open": true
+          },
           "Climber": {
             "Left motor": {
               "open": true
@@ -181,7 +190,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 578,
+          "height": 252,
           "series": [
             {
               "color": [
@@ -190,7 +199,55 @@
                 0.6901960968971252,
                 1.0
               ],
-              "id": "NT:/SmartDashboard/Climber/Left motor/Position"
+              "id": "NT:/SmartDashboard/arm/Amp Shooter Motor: "
+            }
+          ]
+        }
+      ]
+    },
+    "Plot <1>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 210,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/arm/Arm tilt motor: /Position"
+            }
+          ]
+        }
+      ]
+    },
+    "Plot <2>": {
+      "plots": [
+        {
+          "backgroundColor": [
+            0.0,
+            0.0,
+            0.0,
+            0.8500000238418579
+          ],
+          "height": 281,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Shooter/Bottom Motor/Velocity"
             },
             {
               "color": [
@@ -199,7 +256,7 @@
                 0.32156863808631897,
                 1.0
               ],
-              "id": "NT:/SmartDashboard/Climber/Right motor/Position"
+              "id": "NT:/SmartDashboard/Shooter/Top Motor/Velocity"
             }
           ]
         }
