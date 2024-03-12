@@ -46,6 +46,7 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("ShooterChangePosClose",
                                               SubShooter::GetInstance().ShooterChangePosClose());
   pathplanner::NamedCommands::registerCommand("StopFeeder", SubShooter::GetInstance().StopFeeder());
+  pathplanner::NamedCommands::registerCommand("OuttakeEndEffector", SubArm::GetInstance().Outtake());
   // pathplanner::NamedCommands::registerCommand("Shoot3_s",
   // cmd::ShootFullSequenceWithVision(controller).WithTimeout(3_s));
 
@@ -70,9 +71,11 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("A2", "A2");
   _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
   _autoChooser.AddOption("Nothing", "Nothing");
+  _autoChooser.AddOption("A2", "A2");
+  _autoChooser.AddOption("SUPRISE", "SUPRISE");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
 
-  _compressor.EnableAnalog(70_psi, 120_psi);
+  _compressor.EnableAnalog(80_psi, 120_psi);
 }
 
 void RobotContainer::ConfigureBindings() {
