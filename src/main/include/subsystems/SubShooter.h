@@ -90,7 +90,7 @@ class SubShooter : public frc2::SubsystemBase {
   ICSparkMax _topShooterMotor{canid::TopShooterMotor, 30_A};
   ICSparkMax _bottomShooterMotor{canid::BottomShooterMotor, 30_A};
 
-  ICSparkMax _shooterFeederMotor{canid::ShooterFeederMotor, 10_A};
+  ICSparkMax _shooterFeederMotor{canid::ShooterFeederMotor, 20_A};
   frc::DoubleSolenoid solShooter{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH, pcm1::ShootFar,
                                  pcm1::ShootClose};
 

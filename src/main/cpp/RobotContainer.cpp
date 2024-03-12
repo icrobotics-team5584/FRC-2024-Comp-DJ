@@ -66,7 +66,9 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("A10", "A10");
   _autoChooser.AddOption("Test Path", "Test Path");
   _autoChooser.AddOption("M4", "M4");
-  _autoChooser.AddOption("S1", "S1");
+  _autoChooser.AddOption("S1 (C5 first)", "S1 (C5 first)");
+  _autoChooser.AddOption("S1 (C4 first)", "S1 (C4 first)");
+  _autoChooser.AddOption("A2", "A2");
   _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
   _autoChooser.AddOption("Nothing", "Nothing");
   _autoChooser.AddOption("A2", "A2");
@@ -112,27 +114,26 @@ void RobotContainer::ConfigureBindings() {
   //   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberManualDrive(0.5));
   //   POVHelper::Down(&_operatorController).OnFalse(SubClimber::GetInstance().ClimberManualDrive(0));
 
-  // DRIVER CONTROLS V6
+  // DRIVER CONTROLS
 
   _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
   // _driverController.LeftTrigger().WhileTrue(/*Align2Stage*/);
   // _driverController.LeftBumper().WhileTrue(/*IntakeFromSource*/);
   _driverController.RightTrigger().WhileTrue(cmd::VisionAlignToSpeaker(_driverController));
   _driverController.LeftTrigger().WhileTrue(cmd::VisionAlignToClimb());
-  _driverController.RightBumper().WhileTrue(cmd::VisionAlignToAmp(_driverController));
-  _driverController.A().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
+  // _driverController.RightBumper().WhileTrue(/*Align2Amp*/);
 
   _operatorController.Start().WhileTrue(cmd::OuttakeNote());
-  _operatorController.Back().WhileTrue(cmd::OuttakeIntakeAndEndEffector());
 
   _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
   _operatorController.LeftBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosClose());
   _operatorController.RightBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosFar());
   _operatorController.RightTrigger().WhileTrue(cmd::ShootSpeakerOrArm());
 
-  _operatorController.Y().OnTrue(cmd::ArmToTrapPos());
+  _operatorController.Y().OnTrue(cmd::ArmToAmpPos());
   _operatorController.Y().OnFalse(cmd::ArmToStow());
   _operatorController.X().WhileTrue(cmd::ShootIntoAmp());
+  _operatorController.Back().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
   _operatorController.B().OnTrue(cmd::ArmToAmpPos());
   _operatorController.B().OnFalse(cmd::ArmToStow());
   _operatorController.A().OnTrue(cmd::PrepareToShoot());
@@ -169,7 +170,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   units::second_t delay = _delayChooser.GetSelected() * 1_s;
   return frc2::cmd::Wait(delay)
       .AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr())
-      // .AlongWith(SubClimber::GetInstance().ClimberAutoReset().AndThen(
-      //     SubClimber::GetInstance().ClimberPosition(0.35_m)))
-      ;
+      .AlongWith(SubClimber::GetInstance().ClimberAutoReset().AndThen(
+          SubClimber::GetInstance().ClimberPosition(0.35_m)));
 }

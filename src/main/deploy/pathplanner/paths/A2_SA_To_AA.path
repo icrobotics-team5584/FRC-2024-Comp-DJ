@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.3664336728228683,
-        "y": 6.7
+        "x": 2.4733924503512332,
+        "y": 6.748516140710442
       },
       "prevControl": {
-        "x": 1.3664336728228683,
-        "y": 6.7
+        "x": 1.2218941885689432,
+        "y": 6.138151144516827
       },
       "nextControl": null,
       "isLocked": false,
@@ -36,25 +36,7 @@
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "ShootNote"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 5.0,
@@ -67,7 +49,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "A2",
+  "folder": null,
   "previewStartingState": {
     "rotation": -120.32360686255,
     "velocity": 0

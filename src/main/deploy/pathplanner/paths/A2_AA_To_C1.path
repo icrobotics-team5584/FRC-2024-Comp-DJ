@@ -70,18 +70,7 @@
               "data": {
                 "name": "StoreNote"
               }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "StopFeeder",
-      "waypointRelativePos": 0.45,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
+            },
             {
               "type": "named",
               "data": {
@@ -105,7 +94,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "A2",
+  "folder": null,
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0
