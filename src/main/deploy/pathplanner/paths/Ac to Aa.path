@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.72,
-        "y": 6.7
+        "x": 2.5,
+        "y": 6.75
       },
       "prevControl": {
-        "x": 2.6146024710879665,
-        "y": 6.571180797996404
+        "x": 2.3946024710879663,
+        "y": 6.621180797996404
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,7 +50,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 4.0,
     "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
@@ -61,7 +61,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "M4",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

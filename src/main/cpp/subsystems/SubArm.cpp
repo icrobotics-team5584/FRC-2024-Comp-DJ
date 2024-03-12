@@ -40,6 +40,7 @@ SubArm::SubArm() {
   _ampMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus4, 500);
   _ampMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus5, 500);
   _ampMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus6, 500);
+  frc::SmartDashboard::PutData("arm/Endeffector", (wpi::Sendable*)&_ampMotor);
 }
 
 // This method will be called once per scheduler run
@@ -61,6 +62,7 @@ void SubArm::Periodic() {
   frc::SmartDashboard::PutNumber("arm/Amp Shooter Motor: ", _ampMotor.Get());
   frc::SmartDashboard::PutBoolean("arm/Linebreak", _sdLineBreak.Get());
   frc::SmartDashboard::PutNumber("arm/End Effector Velocity", _ampMotor.GetVelocity().value());
+  
 
   // angle of motor
   frc::SmartDashboard::PutData("arm/Arm tilt motor: ", (wpi::Sendable*)&_armMotor);
