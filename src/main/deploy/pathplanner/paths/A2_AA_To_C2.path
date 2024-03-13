@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.72,
-        "y": 6.7
+        "x": 2.5,
+        "y": 6.85
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.422151422587994,
-        "y": 6.603697593409518
+        "x": 4.202151422587994,
+        "y": 6.753697593409518
       },
       "isLocked": false,
-      "linkedName": "M4 Aa Shoot"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 2.72,
-        "y": 6.7
+        "x": 2.5,
+        "y": 6.85
       },
       "prevControl": {
-        "x": 4.359517116416685,
-        "y": 6.746843346185898
+        "x": 4.139517116416684,
+        "y": 6.896843346185897
       },
       "nextControl": null,
       "isLocked": false,
@@ -111,7 +111,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
@@ -122,7 +122,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "A2",
+  "folder": null,
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

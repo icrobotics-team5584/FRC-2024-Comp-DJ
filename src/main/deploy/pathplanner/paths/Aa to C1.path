@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.72,
-        "y": 6.7
+        "x": 2.5,
+        "y": 6.85
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.539288754016104,
-        "y": 6.236372828184253
+        "x": 4.319288754016103,
+        "y": 6.3863728281842524
       },
       "isLocked": false,
       "linkedName": "M4 Aa Shoot"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 2.72,
-        "y": 6.7
+        "x": 2.5,
+        "y": 6.85
       },
       "prevControl": {
-        "x": 4.359517116416685,
-        "y": 6.746843346185898
+        "x": 4.139517116416684,
+        "y": 6.896843346185897
       },
       "nextControl": null,
       "isLocked": false,
@@ -94,7 +94,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0

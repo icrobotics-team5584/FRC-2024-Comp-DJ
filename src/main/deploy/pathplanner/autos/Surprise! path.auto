@@ -1,0 +1,80 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7159600556714989,
+      "y": 4.380017461477765
+    },
+    "rotation": 120.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ExtendIntake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StartIntakeSpinning"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ArmOuttake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Surprise_C_Rush"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopEndEffector"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Surprise_C_To_AS"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoShootFullSequence"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

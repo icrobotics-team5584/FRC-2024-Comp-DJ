@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.05,
-        "y": 3.1
+        "x": 1.9496931747486692,
+        "y": 3.1925041627861037
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.203825093139517,
-        "y": 0.9674679798311061
+        "x": 4.103518267888186,
+        "y": 1.0599721426172097
       },
       "isLocked": false,
       "linkedName": "Speaker-Side Shoot Pos"
     },
     {
       "anchor": {
-        "x": 8.305389050150424,
-        "y": 1.2999028565817468
+        "x": 7.942353117231199,
+        "y": 0.8431802312962678
       },
       "prevControl": {
-        "x": 8.293678213604641,
-        "y": 1.2179270007612752
+        "x": 7.930642280685416,
+        "y": 0.7612043754757963
       },
       "nextControl": {
-        "x": 8.323606836407183,
-        "y": 1.4274273603790437
+        "x": 7.960570903487957,
+        "y": 0.9707047350935649
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.05,
-        "y": 3.1
+        "x": 1.9496931747486692,
+        "y": 3.1925041627861037
       },
       "prevControl": {
-        "x": 3.8667283802971317,
-        "y": 0.5122869984870406
+        "x": 3.766421555045801,
+        "y": 0.6047911612731443
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,23 +46,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 1.0,
       "rotationDegrees": 180.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1.4,
-      "rotationDegrees": 180.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1.75,
-      "rotationDegrees": 135.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1.9,
-      "rotationDegrees": 130.0,
       "rotateFast": false
     }
   ],
@@ -78,13 +63,24 @@
             {
               "type": "named",
               "data": {
-                "name": "StoreNote"
+                "name": "ShootNote"
               }
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Shoot2",
+      "waypointRelativePos": 1.9,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
             {
               "type": "named",
               "data": {
-                "name": "StopFeeder"
+                "name": "AutoShootFullSequence"
               }
             }
           ]
@@ -93,7 +89,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
@@ -104,9 +100,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "S1 (C1 first)",
+  "folder": null,
   "previewStartingState": {
-    "rotation": 140.0,
+    "rotation": 135.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

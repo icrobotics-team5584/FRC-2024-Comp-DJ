@@ -36,7 +36,7 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("StopShooter",
                                               SubShooter::GetInstance().StopShooterCommand());
   pathplanner::NamedCommands::registerCommand("FeedNote", SubArm::GetInstance().FeedNote());
-  // pathplanner::NamedCommands::registerCommand("ShootFullSequence",
+  // pathplanner::NamedCommands::registerCommand("ShootFullSequence", 
   // cmd::ShootFullSequence().WithTimeout(0.5_s));
   pathplanner::NamedCommands::registerCommand("AutoShootFullSequence",
                                               cmd::AutoShootFullSequence().WithTimeout(0.5_s));
@@ -47,6 +47,8 @@ RobotContainer::RobotContainer() {
                                               SubShooter::GetInstance().ShooterChangePosClose());
   pathplanner::NamedCommands::registerCommand("StopFeeder", SubShooter::GetInstance().StopFeeder());
   pathplanner::NamedCommands::registerCommand("OuttakeEndEffector", SubArm::GetInstance().Outtake());
+  pathplanner::NamedCommands::registerCommand("AmpShot", cmd::ShootIntoAmp());
+  pathplanner::NamedCommands::registerCommand("StopEndEffector", SubArm::GetInstance().StopEndEffector());
   // pathplanner::NamedCommands::registerCommand("Shoot3_s",
   // cmd::ShootFullSequenceWithVision(controller).WithTimeout(3_s));
 
