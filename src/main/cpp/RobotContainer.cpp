@@ -25,6 +25,14 @@ RobotContainer::RobotContainer() {
   frc::SmartDashboard::PutData("Command Scheduler", &frc2::CommandScheduler::GetInstance());
 
   pathplanner::NamedCommands::registerCommand("Intake", SubIntake::GetInstance().Intake());
+  pathplanner::NamedCommands::registerCommand(
+      "VisionAlign", cmd::VisionAlignToSpeaker(_driverController)
+                         .Until([] {
+                           return units::math::abs(SubVision::GetInstance()
+                                                       .GetSpecificTagYaw(SubVision::SPEAKER)
+                                                       .value_or(0_deg)) < 2_deg;
+                         })
+                         .WithTimeout(1_s));
   pathplanner::NamedCommands::registerCommand("StopIntakeSpinning",
                                               SubIntake::GetInstance().StopSpinningIntake());
   pathplanner::NamedCommands::registerCommand("StartShooter",
@@ -73,6 +81,7 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("Nothing", "Nothing");
   _autoChooser.AddOption("A2", "A2");
   _autoChooser.AddOption("SUPRISE", "SUPRISE");
+  _autoChooser.SetDefaultOption("Nothing", "Nothing");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
 
   _compressor.EnableAnalog(80_psi, 120_psi);
@@ -138,7 +147,7 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.B().OnFalse(cmd::ArmToStow());
   _operatorController.A().OnTrue(cmd::PrepareToShoot());
 
-  POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.498_m));
+  POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.461_m));
   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.02_m));
   POVHelper::Left(&_operatorController).OnTrue(SubIntake::GetInstance().ExtendIntake());
   POVHelper::Right(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.35_m));
