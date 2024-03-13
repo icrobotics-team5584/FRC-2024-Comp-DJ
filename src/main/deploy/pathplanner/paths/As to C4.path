@@ -57,12 +57,12 @@
     },
     {
       "waypointRelativePos": 1.8,
-      "rotationDegrees": 130.0,
+      "rotationDegrees": 125.0,
       "rotateFast": false
     },
     {
       "waypointRelativePos": 1.9,
-      "rotationDegrees": 130.0,
+      "rotationDegrees": 125.0,
       "rotateFast": false
     },
     {
@@ -128,13 +128,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 130.0,
+    "rotation": 125.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "S1 (C5 first)",
   "previewStartingState": {
-    "rotation": 125.0,
+    "rotation": 130.0,
     "velocity": 0
   },
   "useDefaultConstraints": true
