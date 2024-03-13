@@ -92,7 +92,7 @@ frc2::CommandPtr SubArm::FastAmpShooter() {
 }
 
 frc2::CommandPtr SubArm::TrapShooter() {
-  return StartEnd([this] { _ampMotor.Set(1); }, [this] { _ampMotor.Set(0); });
+  return StartEnd([this] { _ampMotor.Set(0.25); }, [this] { _ampMotor.Set(0); });
 }
 
 // arm
