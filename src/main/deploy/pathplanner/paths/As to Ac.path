@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.629796487663151,
-        "y": 5.5102290906336195
+        "x": 2.9418259121824937,
+        "y": 5.527514849608872
       },
       "prevControl": {
-        "x": 2.067380747447056,
-        "y": 5.599031575930899
+        "x": 2.3794101719663985,
+        "y": 5.616317334906151
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "M4 Middle Shot"
     }
   ],
   "rotationTargets": [

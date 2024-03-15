@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.63,
-        "y": 5.51
+        "x": 2.9418259121824937,
+        "y": 5.527514849608872
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0675090125618847,
-        "y": 6.357987201939316
+        "x": 1.2905979592273005,
+        "y": 6.124767513443729
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "M4 Middle Shot"
     },
     {
       "anchor": {
-        "x": 2.5,
-        "y": 6.75
+        "x": 2.7,
+        "y": 6.95
       },
       "prevControl": {
-        "x": 2.3946024710879663,
-        "y": 6.621180797996404
+        "x": 1.9941639306959056,
+        "y": 6.804911811820771
       },
       "nextControl": null,
       "isLocked": false,
