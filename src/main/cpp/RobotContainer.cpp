@@ -139,7 +139,7 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.RightBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosFar());
   _operatorController.RightTrigger().WhileTrue(cmd::ShootSpeakerOrArm());
 
-  _operatorController.Y().OnTrue(cmd::ArmToAmpPos());
+  _operatorController.Y().OnTrue(cmd::ArmToTrapPos());
   _operatorController.Y().OnFalse(cmd::ArmToStow());
   _operatorController.X().WhileTrue(cmd::ShootIntoAmp());
   _operatorController.Back().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
