@@ -35,18 +35,26 @@ SubDrivebase::SubDrivebase() {
   AutoBuilder::configureHolonomic(
       [this]() { return GetPose(); },  // Robot pose supplier
       [this](frc::Pose2d pose) {
-        ResetGyroHeading(pose.Rotation().Degrees());
+        auto alliance = frc::DriverStation::GetAlliance();
+        if (alliance) {
+          if (alliance.value() == frc::DriverStation::Alliance::kBlue) {
+            ResetGyroHeading(pose.Rotation().RotateBy(180_deg).Degrees());
+          } else {
+            ResetGyroHeading(pose.Rotation().Degrees());
+          }
+        }
+
         SetPose(pose);
       },  // Method to reset odometry (will be called if your auto has a starting pose)
       [this]() {
         return GetRobotRelativeSpeeds();
       },  // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
       [this](frc::ChassisSpeeds speeds) {
-          _sidewaysSpeedRequest = speeds.vy; //TEST!
-          _forwardSpeedRequest = speeds.vx;
-          _rotationSpeedRequest = -speeds.omega;
-          _fieldOrientedRequest = false;
-     // Drive(speeds.vx, speeds.vy, -speeds.omega, false);
+        _sidewaysSpeedRequest = speeds.vy;  // TEST!
+        _forwardSpeedRequest = speeds.vx;
+        _rotationSpeedRequest = -speeds.omega;
+        _fieldOrientedRequest = false;
+        // Drive(speeds.vx, speeds.vy, -speeds.omega, false);
       },  // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       HolonomicPathFollowerConfig(
           PIDConstants(2, 0.0, 0.0),    // Translation PID constants
