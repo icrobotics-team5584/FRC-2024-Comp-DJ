@@ -92,7 +92,16 @@ frc2::CommandPtr SubArm::FastAmpShooter() {
 }
 
 frc2::CommandPtr SubArm::TrapShooter() {
-  return StartEnd([this] { _ampMotor.Set(0.25); }, [this] { _ampMotor.Set(0); });
+  static bool IsRunning = false;
+  return Run([this]{
+    if(IsRunning == false) {
+      _ampMotor.Set(0.4);
+      IsRunning = true;
+    } else {
+      _ampMotor.Set(-0.1);
+      IsRunning = false;
+    }
+    ;}).FinallyDo([this]{_ampMotor.Set(0);});
 }
 
 // arm

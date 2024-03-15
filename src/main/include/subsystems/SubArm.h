@@ -30,7 +30,7 @@ class SubArm : public frc2::SubsystemBase {
   SubArm();
 
   // variables
-  static const inline units::degree_t OFFSET_ANGLE = BotVars::Choose(0.86_tr, 0.80809_tr); //zeroing procedure: Move arm to home, set offset to 0, read current pos, set offset to current angle - home pos
+  static const inline units::degree_t OFFSET_ANGLE = BotVars::Choose(0.865_tr, 0.80809_tr); //zeroing procedure: Move arm to home, set offset to 0, read current pos, set offset to current angle - home pos
   static constexpr units::degree_t HOME_ANGLE = 0.098_tr; //0.108_tr
   static constexpr units::degree_t AMP_ANGLE = 0.467_tr; //0.65_tr
   static constexpr units::degree_t SHOOT_AMP_ANGLE = 0.642_tr;
