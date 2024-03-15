@@ -35,6 +35,7 @@ SubDrivebase::SubDrivebase() {
   AutoBuilder::configureHolonomic(
       [this]() { return GetPose(); },  // Robot pose supplier
       [this](frc::Pose2d pose) {
+        ResetGyroHeading(pose.Rotation().Degrees());
         SetPose(pose);
       },  // Method to reset odometry (will be called if your auto has a starting pose)
       [this]() {
