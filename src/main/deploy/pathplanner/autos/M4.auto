@@ -39,6 +39,12 @@
                       }
                     },
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "StartShooter"
+                      }
+                    },
+                    {
                       "type": "race",
                       "data": {
                         "commands": [

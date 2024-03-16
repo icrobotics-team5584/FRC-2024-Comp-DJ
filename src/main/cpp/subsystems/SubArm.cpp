@@ -92,14 +92,24 @@ frc2::CommandPtr SubArm::FastAmpShooter() {
 }
 
 frc2::CommandPtr SubArm::TrapShooter() {
-  static bool IsRunning = false;
+  static int runningCounter = 0;
+  static int stoppedCounter = 0;
+  static bool isRunning = false;
   return Run([this]{
-    if(IsRunning == false) {
-      _ampMotor.Set(0.4);
-      IsRunning = true;
+    if(isRunning) {
+      _ampMotor.Set(0.3);
+      runningCounter++;
+      if(runningCounter > 4) {
+        runningCounter = 0;
+        isRunning = false;
+      }
     } else {
-      _ampMotor.Set(-0.1);
-      IsRunning = false;
+      _ampMotor.Set(-0.2);
+      stoppedCounter++;
+      if(stoppedCounter > 1) {
+        stoppedCounter = 0;
+        isRunning = true;
+      }
     }
     ;}).FinallyDo([this]{_ampMotor.Set(0);});
 }
