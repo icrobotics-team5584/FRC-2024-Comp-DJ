@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.9,
-        "y": 7.05
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
         "x": 4.602151422587992,
-        "y": 6.953697593409518
+        "y": 6.903697593409518
       },
       "isLocked": false,
       "linkedName": "M4 Aa Shoot"
@@ -33,11 +33,11 @@
     {
       "anchor": {
         "x": 2.9,
-        "y": 7.05
+        "y": 7.0
       },
       "prevControl": {
         "x": 4.5395171164166825,
-        "y": 7.0968433461858975
+        "y": 7.046843346185898
       },
       "nextControl": null,
       "isLocked": false,
