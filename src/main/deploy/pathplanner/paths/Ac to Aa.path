@@ -20,12 +20,12 @@
         "y": 7.1
       },
       "prevControl": {
-        "x": 2.1941639306959053,
-        "y": 6.954911811820771
+        "x": 1.9918375907784003,
+        "y": 7.096994083000375
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "M4 Aa Shoot"
     }
   ],
   "rotationTargets": [],
@@ -57,7 +57,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -143.0,
+    "rotation": -150.0,
     "rotateFast": false
   },
   "reversed": false,
