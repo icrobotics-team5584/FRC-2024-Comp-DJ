@@ -130,6 +130,8 @@ void RobotContainer::ConfigureBindings() {
   // _driverController.LeftBumper().WhileTrue(/*IntakeFromSource*/);
   _driverController.RightTrigger().WhileTrue(cmd::VisionAlignToSpeaker(_driverController));
   _driverController.LeftTrigger().WhileTrue(cmd::VisionAlignToClimb());
+  _driverController.X().WhileTrue(SubArm::GetInstance().Outtake());
+
   // _driverController.RightBumper().WhileTrue(/*Align2Amp*/);
 
   _operatorController.Start().WhileTrue(cmd::OuttakeNote());
@@ -140,7 +142,7 @@ void RobotContainer::ConfigureBindings() {
   _operatorController.RightTrigger().WhileTrue(cmd::ShootSpeakerOrArm());
 
   _operatorController.Y().OnTrue(cmd::ArmToTrapPos());
-  _operatorController.Y().OnFalse(cmd::ArmToStow());
+  _operatorController.Y().OnFalse(SubIntake::GetInstance().ExtendIntake().AndThen(frc2::cmd::Wait(1.5_s)).AndThen(cmd::ArmToStow()));
   _operatorController.X().WhileTrue(cmd::ShootIntoAmp());
   _operatorController.Back().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
   _operatorController.B().OnTrue(cmd::ArmToAmpPos());
@@ -149,7 +151,7 @@ void RobotContainer::ConfigureBindings() {
 
   POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.467_m));
   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.001_m));
-  POVHelper::Left(&_operatorController).OnTrue(SubIntake::GetInstance().ExtendIntake());
+  POVHelper::Left(&_operatorController).ToggleOnTrue(SubIntake::GetInstance().ToggleExtendIntake());
   POVHelper::Right(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.35_m));
 
   frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {

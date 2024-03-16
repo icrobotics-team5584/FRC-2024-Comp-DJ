@@ -35,6 +35,11 @@ frc2::CommandPtr SubIntake::ExtendIntake() {
   return RunOnce([this] { solIntake.Set(frc::DoubleSolenoid::kForward); });
 }
 
+frc2::CommandPtr SubIntake::ToggleExtendIntake() {
+  return StartEnd([this] { solIntake.Set(frc::DoubleSolenoid::kForward); },
+                  [this] { solIntake.Set(frc::DoubleSolenoid::kReverse); });
+}
+
 frc2::CommandPtr SubIntake::StopSpinningIntake() {
   return RunOnce([this] { _intakeMotorSpin.Set(0); });
 }

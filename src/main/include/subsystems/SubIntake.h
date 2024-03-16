@@ -26,6 +26,7 @@ class SubIntake : public frc2::SubsystemBase {
    */
   void Periodic() override;
   frc2::CommandPtr ExtendIntake();
+  frc2::CommandPtr ToggleExtendIntake();
   bool IsIntakeDeployed();
   frc2::CommandPtr StopSpinningIntake();
   frc2::CommandPtr StartSpinningIntake();
