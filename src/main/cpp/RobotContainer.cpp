@@ -136,7 +136,7 @@ void RobotContainer::ConfigureBindings() {
 
   _operatorController.Start().WhileTrue(cmd::OuttakeNote());
 
-  _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence());
+  _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence().AndThen(Rumble(1, 0.3_s)));
   _operatorController.LeftBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosClose());
   _operatorController.RightBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosFar());
   _operatorController.RightTrigger().WhileTrue(cmd::ShootSpeakerOrArm());
@@ -183,4 +183,13 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       .AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr())
       .AlongWith(SubClimber::GetInstance().ClimberAutoReset().AndThen(
           SubClimber::GetInstance().ClimberPosition(0.35_m)));
+}
+
+frc2::CommandPtr RobotContainer::Rumble(double force, units::second_t duration) {
+  frc2::cmd::Run([this, force, duration]{  
+    _driverController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, force);
+    _operatorController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, force);}).WithTimeout(duration)
+    .FinallyDo([this]{
+    _driverController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
+    _operatorController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);});
 }
