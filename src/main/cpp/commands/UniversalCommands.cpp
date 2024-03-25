@@ -106,7 +106,7 @@ frc2::CommandPtr OuttakeIntakeAndEndEffector() {
 
 frc2::CommandPtr FeedNoteToShooter() {
   return SubShooter::GetInstance()
-      .StartFeederSlow()
+      .StartFeeder()
       .AlongWith(SubArm::GetInstance().FeedNote())
       .Until([] { return SubShooter::GetInstance().CheckShooterLineBreak(); })
       .AndThen(SubShooter::GetInstance().ReverseFeeder().WithTimeout(0.2_s))

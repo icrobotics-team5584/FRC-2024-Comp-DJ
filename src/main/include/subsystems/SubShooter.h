@@ -31,8 +31,16 @@ class SubShooter : public frc2::SubsystemBase {
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
+  //Create shooter functions
   void Periodic() override;
   void SimulationPeriodic() override;
+  void StopShooterFunc();
+  bool CheckShooterSpeed();
+  bool CheckShooterLineBreak();
+  void UpdatePIDFF();
+  void StopFeederFunc();
+
+  //Create shooter commands
   frc2::CommandPtr StartShooter();
   frc2::CommandPtr ShooterChangePosFar();
   frc2::CommandPtr ShooterChangePosClose();
@@ -43,12 +51,7 @@ class SubShooter : public frc2::SubsystemBase {
   frc2::CommandPtr FeedNoteToArm();
   frc2::CommandPtr ShootIntoAmp();
   frc2::CommandPtr ShootIntoAmpSequence();
-  void StopShooterFunc();
-  bool CheckShooterSpeed();
-  bool CheckShooterLineBreak();
-  void UpdatePIDFF();
   frc2::CommandPtr StopFeeder();
-  void StopFeederFunc();
   frc2::CommandPtr Outtake();
   frc2::CommandPtr StartFeederSlow();
   frc2::CommandPtr ReverseFeeder();
@@ -58,27 +61,33 @@ class SubShooter : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
+
+  //Shooter PID values
   static constexpr double ShooterP = 0.2; 
   static constexpr double ShooterI = 0;
   static constexpr double ShooterD = 0;
 
+  //Shooter target speeds, to convert from tps to rpm use tps*60=rpm
   units::turns_per_second_t ShootFarTarget = 60_tps;
   units::turns_per_second_t ShootCloseTarget = 60_tps;
   units::turns_per_second_t ShootAmpTarget = 12_tps;
-
   units::turns_per_second_t CurrentShooterTarget = 0_tps;
 
   static constexpr units::volt_t kS = 0.0000001_V;
   static constexpr decltype(1_V / 1_tps) kV = 0.135_V / 1_tps;
   static constexpr decltype(1_V / 1_tr_per_s_sq) kA = 0.001_V / 1_tr_per_s_sq;
+
   double _bottomEncoderPositionPrev = 0;
   double _topEncoderPositionPrev = 0;
   double _bottomEncoderDiff = 0;
   double _topEncoderDiff = 0;
+
   std::array<double, 3> _topPastVelocityMeasurements{0,0,0};
   std::array<double, 3> _bottomPastVelocityMeasurements{0,0,0};
+
   double _topPastVelocityAvg = 0;
   double _bottomPastVelocityAvg = 0;
+
   frc::SimpleMotorFeedforward<units::turns> _shooterFF{kS, kV, kA};
 
   frc::Encoder _topEncoder{dio::TopShooterEncoderChannelA, dio::TopShooterEncoderChannelB, false , frc::Encoder::EncodingType::k1X};
@@ -87,13 +96,16 @@ class SubShooter : public frc2::SubsystemBase {
   frc::PIDController _topPID{ShooterP, ShooterI, ShooterD};
   frc::PIDController _bottomPID{ShooterP, ShooterI, ShooterD};
 
+  //Create shooter motors
   ICSparkMax _topShooterMotor{canid::TopShooterMotor, 30_A};
   ICSparkMax _bottomShooterMotor{canid::BottomShooterMotor, 30_A};
-
   ICSparkMax _shooterFeederMotor{canid::ShooterFeederMotor, 20_A};
+
+  //Create shooter solenoid
   frc::DoubleSolenoid solShooter{pcm1::Pcm1Id, frc::PneumaticsModuleType::REVPH, pcm1::ShootFar,
                                  pcm1::ShootClose};
 
+  //Create shooter linebreaker
   frc::DigitalInput _shooterLineBreak{dio::ShooterLineBreak};
 
   //Sim configs

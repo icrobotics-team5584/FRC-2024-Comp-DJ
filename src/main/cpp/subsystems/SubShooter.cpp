@@ -123,6 +123,7 @@ void SubShooter::UpdatePIDFF() {
   _bottomShooterMotor.SetVoltage(Bottomvolts);
 }
 
+//Set shooter pid targets to speaker speeds until the shooter is at speed, then cancel. Does not change shooter pid targets on cancelled
 frc2::CommandPtr SubShooter::StartShooter() {
   return Run([this] {
            if (solShooter.Get() == frc::DoubleSolenoid::kReverse) {
@@ -134,58 +135,69 @@ frc2::CommandPtr SubShooter::StartShooter() {
       .Until([this] { return CheckShooterSpeed(); });
 }
 
+//Move shooter to up position, set shooter pid targets to amp speeds until shooter is at speed, then cancel command. Doesn't change pid targets back to 0
 frc2::CommandPtr SubShooter::ShootIntoAmp() {
   return ShooterChangePosClose()
       .AndThen(RunOnce([this] { CurrentShooterTarget = ShootAmpTarget; }))
       .AndThen(WaitUntil([this] { return CheckShooterSpeed(); }));
 }
   
+//Sets shooter pid target, then starts the shooter feeders and waits until the command is cancelled, then stop spinning shooter
 frc2::CommandPtr SubShooter::ShootIntoAmpSequence() {
     return Sequence(ShootIntoAmp(), StartFeeder(), Idle())
       .FinallyDo([this] {StopShooterFunc();});
 }
 
+//Set shooter pid target to 0 and turn off shooter feeder motor
 void SubShooter::StopShooterFunc(){
  CurrentShooterTarget = 0_tps;
  _shooterFeederMotor.Set(0);
 }
 
+//Set shooter speeds to 0% power
 frc2::CommandPtr SubShooter::StopShooterCommand(){
  return RunOnce([this]{ _topShooterMotor.Set(0);}).AndThen(RunOnce([this] {_bottomShooterMotor.Set(0);}));
 }
 
+//Set shooter feeder motor to 100% power
 frc2::CommandPtr SubShooter::StartFeeder() {
   return RunOnce([this] { _shooterFeederMotor.Set(1); });
 }
 
+//Set shooter feeder motor to 50% power
 frc2::CommandPtr SubShooter::StartFeederSlow(){
-  return Run([this]{ _shooterFeederMotor.Set(1);});
+  return Run([this]{ _shooterFeederMotor.Set(0.5);});
 }
 
+//Reverse the shooter feeder motor and then set it to 0% power when command is cancelled
 frc2::CommandPtr SubShooter::ReverseFeeder() {
   return Run([this] { _shooterFeederMotor.Set(-0.2); }).FinallyDo([this] {
     _shooterFeederMotor.Set(0);
   });
 }
 
+//Set shooter feeder motor to 0% power
 frc2::CommandPtr SubShooter::StopFeeder() {
   return RunOnce([this] {_shooterFeederMotor.Set(0);});
 }
 
+//Function to set shooter feeder motor to 0% power
 void SubShooter::StopFeederFunc() {
   _shooterFeederMotor.Set(0);
 }
 
+//Start the shooter, then once shooter is at speed, feed note to shooter and wait until command is cancelled, then stop the shooter
 frc2::CommandPtr SubShooter::ShootSequence() {
   return Sequence(StartShooter(), StartFeeder(), Idle())
       .FinallyDo([this] {StopShooterFunc();});
 }
 
+//The shooter sequenced used in auton paths
 frc2::CommandPtr SubShooter::AutoShootSequence() {
   return Sequence(StartShooter().WithTimeout(0.25_s), StartFeeder());
 }
 
-
+//Check if the shooter speeds are within tolerance
 bool SubShooter::CheckShooterSpeed(){
   if (std::abs(CurrentShooterTarget.value() - _bottomPastVelocityAvg) < 3 &&
       std::abs(CurrentShooterTarget.value() - _topPastVelocityAvg) < 3) {
@@ -194,14 +206,17 @@ bool SubShooter::CheckShooterSpeed(){
  return false;
 }
 
+//Change shooter to down position
 frc2::CommandPtr SubShooter::ShooterChangePosFar() {
   return RunOnce([this] { solShooter.Set(frc::DoubleSolenoid::kReverse); });
 }
 
+//Change shooter to up position
 frc2::CommandPtr SubShooter::ShooterChangePosClose() {
   return RunOnce([this] { solShooter.Set(frc::DoubleSolenoid::kForward); });
 }
 
+//Deprecated
 frc2::CommandPtr SubShooter::FeedNoteToArm() {
   return Run([this] {
            _shooterFeederMotor.Set(-1);
@@ -213,6 +228,8 @@ frc2::CommandPtr SubShooter::FeedNoteToArm() {
         _bottomShooterMotor.Set(0);
         _topShooterMotor.Set(0);});
 }
+
+//Spin shooter wheels towards intake, used during outtake as a failsafe
 frc2::CommandPtr SubShooter::Outtake() {
   return Run([this] {
            _shooterFeederMotor.Set(-1);
@@ -226,6 +243,7 @@ frc2::CommandPtr SubShooter::Outtake() {
       });
 }
 
+//Check if there is a note in the shooter
 bool SubShooter::CheckShooterLineBreak() {
   if(_shooterLineBreak.Get() == BotVars::Choose(false, true)){
     return true;
@@ -234,6 +252,7 @@ bool SubShooter::CheckShooterLineBreak() {
   return false;
 }
 
+//Deprecated
 frc2::CommandPtr SubShooter::IntakeFromSource() {
   return Run([this] {
            _topShooterMotor.Set(-0.3);
