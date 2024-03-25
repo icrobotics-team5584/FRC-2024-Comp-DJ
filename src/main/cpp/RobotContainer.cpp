@@ -186,7 +186,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 }
 
 frc2::CommandPtr RobotContainer::Rumble(double force, units::second_t duration) {
-  frc2::cmd::Run([this, force, duration]{  
+return frc2::cmd::Run([this, force, duration]{  
     _driverController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, force);
     _operatorController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, force);}).WithTimeout(duration)
     .FinallyDo([this]{
