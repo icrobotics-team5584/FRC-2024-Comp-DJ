@@ -31,35 +31,43 @@ void SubIntake::SimulationPeriodic(){
   _simIntakeExtendedReed.SetValue(solIntake.Get() == frc::DoubleSolenoid::Value::kForward);
 }
 
+//Extend intake
 frc2::CommandPtr SubIntake::ExtendIntake() {
   return RunOnce([this] { solIntake.Set(frc::DoubleSolenoid::kForward); });
 }
 
+//Extend intake via toggle switch
 frc2::CommandPtr SubIntake::ToggleExtendIntake() {
   return StartEnd([this] { solIntake.Set(frc::DoubleSolenoid::kForward); },
                   [this] { solIntake.Set(frc::DoubleSolenoid::kReverse); });
 }
 
+//Stop spinning intake by setting intake motor to 0% speed
 frc2::CommandPtr SubIntake::StopSpinningIntake() {
   return RunOnce([this] { _intakeMotorSpin.Set(0); });
 }
 
+//Set intake motor to 100% speed, after cancelled turn off intake motor
 frc2::CommandPtr SubIntake::StartSpinningIntake() {
   return Run([this] { _intakeMotorSpin.Set(1); }).FinallyDo([this]{_intakeMotorSpin.Set(0);});
 }
 
+//Set intake motor to -100% speed, after cancelled turn off intake motor
 frc2::CommandPtr SubIntake::Outtake() {
   return Run([this]{ _intakeMotorSpin.Set(-1);}).FinallyDo([this]{_intakeMotorSpin.Set(0);});
 }
 
+//used with IntakeSequence(), extends intake then waits 0.1 seconds then turns intake motor to 100% power
 frc2::CommandPtr SubIntake::Intake(){
   return ExtendIntake().AndThen(Wait(0.1_s)).AndThen(StartSpinningIntake());
 }
 
+//Set intake power to 0% power
 frc2::CommandPtr SubIntake::EndIntake(){
   return StopSpinningIntake();
 }
 
+//runs the Intake command, then when cancelled set intake motor to 0% power and retract
 frc2::CommandPtr SubIntake::IntakeSequence(){
   return Intake()
       .FinallyDo([this] {
@@ -68,14 +76,17 @@ frc2::CommandPtr SubIntake::IntakeSequence(){
       });
 }
 
+//Check if intake is deployed or not via reed switch
 bool SubIntake::IsIntakeDeployed(){
   return !_intakeExtendedReed.Get();
 }  // LOCK ARM IF RETURN FALSE
 
- void SubIntake::FuncRetractIntake(){
+//The function version of retracting the intake
+void SubIntake::FuncRetractIntake(){
   solIntake.Set(frc::DoubleSolenoid::kReverse);
- }
+}
 
+//The command version of retracting the intake
  frc2::CommandPtr SubIntake::CommandRetractIntake(){
   return RunOnce([this]{solIntake.Set(frc::DoubleSolenoid::kReverse);});
  }
