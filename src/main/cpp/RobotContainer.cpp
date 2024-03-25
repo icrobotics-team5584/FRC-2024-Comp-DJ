@@ -28,11 +28,15 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand(
       "VisionAlign", cmd::VisionAlignToSpeaker(_driverController)
                          .Until([] {
-                           return units::math::abs(SubVision::GetInstance()
-                                                       .GetSpecificTagYaw(SubVision::SPEAKER)
-                                                       .value_or(0_deg)) < 2_deg;
-                         })
-                         .WithTimeout(1_s));
+                          auto Cameraresult = SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER);
+                          if(Cameraresult.has_value()){
+                            if(units::math::abs(Cameraresult.value_or(0_deg))< 2_deg){
+                              return true;
+                            }
+                            else{return false;
+                            }
+                          }})
+                         .WithTimeout(5_s));
   pathplanner::NamedCommands::registerCommand("StopIntakeSpinning",
                                               SubIntake::GetInstance().StopSpinningIntake());
   pathplanner::NamedCommands::registerCommand("StartShooter",
