@@ -18,17 +18,25 @@ frc2::CommandPtr VisionAlignToSpeaker(frc2::CommandXboxController& controller) {
           camYaw = SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER).value_or(0_deg);
           startingGyroYaw = SubDrivebase::GetInstance().GetHeading().Degrees();
         }
+        else {
+          camYaw = 0_deg;
+        }
 
         units::degree_t currentGyroYaw = SubDrivebase::GetInstance().GetHeading().Degrees();
         units::degree_t gyroAngleTravelled = currentGyroYaw - startingGyroYaw;
-        units::degree_t errorAngle = camYaw - gyroAngleTravelled;
+        units::degree_t errorAngle = camYaw;
         frc::SmartDashboard::PutNumber("Vision/Result", result.value_or(0_deg).value());
         frc::SmartDashboard::PutNumber("Vision/currentGyroYaw ", currentGyroYaw.value());
         frc::SmartDashboard::PutNumber("Vision/startingGyroYaw ", startingGyroYaw.value());
         frc::SmartDashboard::PutNumber("Vision/GyroAngleTravelled ", gyroAngleTravelled.value());
         frc::SmartDashboard::PutNumber("Vision/ErrorAngle ", errorAngle.value());
-
-        SubDrivebase::GetInstance().RotateToZero(errorAngle);
+        
+        if (camYaw != 0_deg) {
+          SubDrivebase::GetInstance().RotateToZero(errorAngle);
+        }
+        else {
+          SubDrivebase::GetInstance().RotateToZero(0_deg);
+        }
       }))
       .AlongWith(SubDrivebase::GetInstance().JoystickDrive(controller, true))
       .FinallyDo([]{SubDrivebase::GetInstance().StopDriving();});
