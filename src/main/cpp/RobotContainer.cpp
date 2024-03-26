@@ -78,6 +78,7 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("A10", "A10");
   _autoChooser.AddOption("Test Path", "Test Path");
   _autoChooser.AddOption("M4", "M4");
+  _autoChooser.AddOption("M4 No Far Note", "M4 No Far Note");
   _autoChooser.AddOption("S1 (C5 first)", "S1 (C5 first)");
   _autoChooser.AddOption("S1 (C4 first)", "S1 (C4 first)");
   _autoChooser.AddOption("A2", "A2");
