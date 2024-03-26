@@ -90,6 +90,12 @@
                     {
                       "type": "named",
                       "data": {
+                        "name": "VisionAlign"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
                         "name": "AutoShootFullSequence"
                       }
                     },
