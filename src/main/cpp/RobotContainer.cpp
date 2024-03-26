@@ -39,7 +39,7 @@ RobotContainer::RobotContainer() {
                            }
                            return false;
                          })
-                         .WithTimeout(5_s));
+                         .WithTimeout(2_s));
   pathplanner::NamedCommands::registerCommand("StopIntakeSpinning",
                                               SubIntake::GetInstance().StopSpinningIntake());
   pathplanner::NamedCommands::registerCommand("StartShooter",
