@@ -230,6 +230,12 @@ void SubDrivebase::Drive(units::meters_per_second_t xSpeed, units::meters_per_se
   }
 }
 
+void SubDrivebase::StopDriving() {
+  _rotationSpeedRequest = 0_deg_per_s;
+  _sidewaysSpeedRequest = 0_mps;
+  _forwardSpeedRequest = 0_mps;
+}
+
 frc::ChassisSpeeds SubDrivebase::GetRobotRelativeSpeeds() {
   auto fl = _frontLeft.GetState();
   auto fr = _frontRight.GetState();

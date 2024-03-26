@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.84,
-      "y": 6.830803805891741
+      "x": 0.7159600556714989,
+      "y": 6.757372005310049
     },
     "rotation": -120.0
   },
@@ -18,32 +18,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "StartShooter"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "AutoShootFullSequence"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Dont move"
+                  "name": "VisionAlign"
                 }
               }
             ]

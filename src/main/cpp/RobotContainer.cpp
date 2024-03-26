@@ -28,11 +28,18 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand(
       "VisionAlign", cmd::VisionAlignToSpeaker(_driverController)
                          .Until([] {
-                           return units::math::abs(SubVision::GetInstance()
-                                                       .GetSpecificTagYaw(SubVision::SPEAKER)
-                                                       .value_or(0_deg)) < 2_deg;
+                           auto Cameraresult =
+                               SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER);
+                           if (Cameraresult.has_value()) {
+                             if (units::math::abs(Cameraresult.value_or(0_deg)) < 2_deg) {
+                               return true;
+                             } else {
+                               return false;
+                             }
+                           }
+                           return false;
                          })
-                         .WithTimeout(1_s));
+                         .WithTimeout(2_s));
   pathplanner::NamedCommands::registerCommand("StopIntakeSpinning",
                                               SubIntake::GetInstance().StopSpinningIntake());
   pathplanner::NamedCommands::registerCommand("StartShooter",
@@ -74,6 +81,7 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("A10", "A10");
   _autoChooser.AddOption("Test Path", "Test Path");
   _autoChooser.AddOption("M4", "M4");
+  _autoChooser.AddOption("M4 No Far Note", "M4 No Far Note");
   _autoChooser.AddOption("S1 (C5 first)", "S1 (C5 first)");
   _autoChooser.AddOption("S1 (C4 first)", "S1 (C4 first)");
   _autoChooser.AddOption("A2", "A2");

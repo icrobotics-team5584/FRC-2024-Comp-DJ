@@ -32,6 +32,7 @@ class SubDrivebase : public frc2::SubsystemBase {
   void SimulationPeriodic() override;
   void Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
              units::degrees_per_second_t rot, bool fieldRelative);
+  void StopDriving();
   void AddVisionMeasurement(frc::Pose2d pose, double ambiguity, units::second_t timeStamp);
   void ResetGyroHeading(units::degree_t startingAngle = 0_deg);
   void UpdatePosition(frc::Pose2d robotPosition);
