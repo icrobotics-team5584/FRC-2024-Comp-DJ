@@ -28,14 +28,17 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand(
       "VisionAlign", cmd::VisionAlignToSpeaker(_driverController)
                          .Until([] {
-                          auto Cameraresult = SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER);
-                          if(Cameraresult.has_value()){
-                            if(units::math::abs(Cameraresult.value_or(0_deg))< 2_deg){
-                              return true;
-                            }
-                            else{return false;
-                            }
-                          }})
+                           auto Cameraresult =
+                               SubVision::GetInstance().GetSpecificTagYaw(SubVision::SPEAKER);
+                           if (Cameraresult.has_value()) {
+                             if (units::math::abs(Cameraresult.value_or(0_deg)) < 2_deg) {
+                               return true;
+                             } else {
+                               return false;
+                             }
+                           }
+                           return false;
+                         })
                          .WithTimeout(5_s));
   pathplanner::NamedCommands::registerCommand("StopIntakeSpinning",
                                               SubIntake::GetInstance().StopSpinningIntake());

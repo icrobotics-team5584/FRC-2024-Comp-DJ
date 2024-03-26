@@ -46,27 +46,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.8,
-      "rotationDegrees": -160.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1.45,
-      "rotationDegrees": -160.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1.8,
-      "rotationDegrees": 125.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1.9,
-      "rotationDegrees": 125.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1.05,
+      "waypointRelativePos": 0.85,
       "rotationDegrees": -160.0,
       "rotateFast": false
     }
@@ -128,13 +108,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 130.0,
+    "rotation": 135.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "S1 (C5 first)",
   "previewStartingState": {
-    "rotation": 130.0,
+    "rotation": 135.0,
     "velocity": 0
   },
   "useDefaultConstraints": true
