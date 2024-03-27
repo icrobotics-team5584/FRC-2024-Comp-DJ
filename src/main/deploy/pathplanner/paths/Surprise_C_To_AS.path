@@ -1,0 +1,142 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.26,
+        "y": 6.98
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.250882024516547,
+        "y": 6.782741257491394
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.736351137519145,
+        "y": 6.1974545258746465
+      },
+      "prevControl": {
+        "x": 5.684264470234868,
+        "y": 6.535995001844547
+      },
+      "nextControl": {
+        "x": 3.708305929375455,
+        "y": 5.8302955229661855
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.9005561229768415,
+        "y": 5.536568320639416
+      },
+      "prevControl": {
+        "x": 3.5450329736218116,
+        "y": 5.541012988574899
+      },
+      "nextControl": {
+        "x": 1.5696047374336706,
+        "y": 5.527389345566705
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.3952042110521514,
+        "y": 5.536568320639416
+      },
+      "prevControl": {
+        "x": 2.1019852916509385,
+        "y": 5.600821146148397
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.35,
+      "rotationDegrees": 0,
+      "rotateFast": true
+    },
+    {
+      "waypointRelativePos": 1.1,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 1.9500000000000002,
+      "maxWaypointRelativePos": 3.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 5.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "DumpNote",
+      "waypointRelativePos": 0.45,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "AmpShot"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "StoreNote",
+      "waypointRelativePos": 1.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "StoreNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "Surprise!",
+  "previewStartingState": {
+    "rotation": -90.10942701942099,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
