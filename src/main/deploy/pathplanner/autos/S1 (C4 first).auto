@@ -53,13 +53,25 @@
                     {
                       "type": "named",
                       "data": {
+                        "name": "VisionAlign"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
                         "name": "AutoShootFullSequence"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "As to C4 for c4"
+                        "pathName": "Copy of As to C5"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "VisionAlign"
                       }
                     },
                     {
@@ -72,6 +84,12 @@
                       "type": "path",
                       "data": {
                         "pathName": "As to C5"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "VisionAlign"
                       }
                     },
                     {
