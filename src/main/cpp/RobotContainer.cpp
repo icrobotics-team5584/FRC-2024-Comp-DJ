@@ -160,7 +160,7 @@ void RobotContainer::ConfigureBindings() {
   POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.467_m));
   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.001_m));
   POVHelper::Left(&_operatorController).ToggleOnTrue(SubIntake::GetInstance().ToggleExtendIntake());
-  POVHelper::Right(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.35_m));
+  POVHelper::Right(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.25_m));
 
   frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
     return (_operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2) &&
