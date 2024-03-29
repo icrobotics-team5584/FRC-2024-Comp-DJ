@@ -94,6 +94,7 @@ RobotContainer::RobotContainer() {
   _autoChooser.SetDefaultOption("Nothing", "Nothing");
   _autoChooser.SetDefaultOption("Move Back", "Move Back");
   _autoChooser.SetDefaultOption("AmpSide Preload Back up", "AmpSide Preload Back up");
+  _autoChooser.SetDefaultOption("Source side c3 rush", "S C3 rush");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
 
   _compressor.EnableAnalog(80_psi, 120_psi);
