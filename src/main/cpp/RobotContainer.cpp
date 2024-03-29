@@ -90,6 +90,7 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("A2", "A2");
   _autoChooser.AddOption("SUPRISE", "SUPRISE");
   _autoChooser.SetDefaultOption("Nothing", "Nothing");
+  _autoChooser.SetDefaultOption("Move Back", "Move Back");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
 
   _compressor.EnableAnalog(80_psi, 120_psi);
@@ -160,7 +161,7 @@ void RobotContainer::ConfigureBindings() {
   POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.467_m));
   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.001_m));
   POVHelper::Left(&_operatorController).ToggleOnTrue(SubIntake::GetInstance().ToggleExtendIntake());
-  POVHelper::Right(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.25_m));
+  POVHelper::Right(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(SubClimber::_ClimberPosStow));
 
   frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
     return (_operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2) &&
@@ -190,7 +191,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   return frc2::cmd::Wait(delay)
       .AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr())
       .AlongWith(SubClimber::GetInstance().ClimberAutoReset().AndThen(
-          SubClimber::GetInstance().ClimberPosition(0.35_m)));
+          SubClimber::GetInstance().ClimberPosition(SubClimber::_ClimberPosStow)));
 }
 
 frc2::CommandPtr RobotContainer::Rumble(double force, units::second_t duration) {

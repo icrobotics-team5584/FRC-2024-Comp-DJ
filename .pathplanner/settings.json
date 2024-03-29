@@ -7,13 +7,15 @@
     "A10",
     "A2",
     "A5",
+    "Drive Back",
     "M4",
     "M4 No Far Note",
+    "AmpSide Preload Back up",
     "S1 (C4 first)",
     "S1 (C5 first)"
   ],
   "autoFolders": [
-    "A4"
+    "Move Back"
   ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 5.0,
