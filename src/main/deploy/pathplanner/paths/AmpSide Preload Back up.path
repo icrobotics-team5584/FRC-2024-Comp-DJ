@@ -1,0 +1,76 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.7723659125479171,
+        "y": 6.748516140710442
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.8807186801249481,
+        "y": 7.120188619835157
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.613922488900611,
+        "y": 7.014791090923124
+      },
+      "prevControl": {
+        "x": 1.606790545963401,
+        "y": 7.143610292926721
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "StoreNote"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "StopFeeder"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -143.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "AmpSide Preload Back up",
+  "previewStartingState": {
+    "rotation": -120.32360686255,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

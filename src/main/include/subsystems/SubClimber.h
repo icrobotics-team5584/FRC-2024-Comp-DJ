@@ -40,6 +40,7 @@ class SubClimber : public frc2::SubsystemBase {
   // Periodic
   void Periodic() override;
   void SimulationPeriodic() override;
+  static constexpr units::length::meter_t  _ClimberPosStow = 0.25_m;
 
   //Units translation
   units::turn_t DistanceToTurn(units::meter_t distance);

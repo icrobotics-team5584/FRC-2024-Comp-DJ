@@ -76,6 +76,8 @@ RobotContainer::RobotContainer() {
   _delayChooser.AddOption("0 Seconds", 0);
   _delayChooser.AddOption("1 Seconds", 1);
   _delayChooser.AddOption("2 Seconds", 2);
+  _delayChooser.AddOption("3 Seconds", 3);
+  _delayChooser.AddOption("10 Seconds", 10);
   frc::SmartDashboard::PutData("Delay By", &_delayChooser);
 
   _autoChooser.AddOption("A10", "A10");
@@ -90,6 +92,8 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("A2", "A2");
   _autoChooser.AddOption("SUPRISE", "SUPRISE");
   _autoChooser.SetDefaultOption("Nothing", "Nothing");
+  _autoChooser.SetDefaultOption("Move Back", "Move Back");
+  _autoChooser.SetDefaultOption("AmpSide Preload Back up", "AmpSide Preload Back up");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
 
   _compressor.EnableAnalog(80_psi, 120_psi);
@@ -160,7 +164,7 @@ void RobotContainer::ConfigureBindings() {
   POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.467_m));
   POVHelper::Down(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.001_m));
   POVHelper::Left(&_operatorController).ToggleOnTrue(SubIntake::GetInstance().ToggleExtendIntake());
-  POVHelper::Right(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.25_m));
+  POVHelper::Right(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(SubClimber::_ClimberPosStow));
 
   frc2::Trigger(frc2::CommandScheduler::GetInstance().GetDefaultButtonLoop(), [=, this] {
     return (_operatorController.GetLeftY() < -0.2 || _operatorController.GetLeftY() > 0.2) &&
@@ -190,7 +194,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   return frc2::cmd::Wait(delay)
       .AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr())
       .AlongWith(SubClimber::GetInstance().ClimberAutoReset().AndThen(
-          SubClimber::GetInstance().ClimberPosition(0.35_m)));
+          SubClimber::GetInstance().ClimberPosition(SubClimber::_ClimberPosStow)));
 }
 
 frc2::CommandPtr RobotContainer::Rumble(double force, units::second_t duration) {

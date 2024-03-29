@@ -77,7 +77,7 @@ frc2::CommandPtr IntakefullSequence() {
       .Until([] { return SubArm::GetInstance().CheckIfArmHasGamePiece(); })
       .AndThen([] { SubIntake::GetInstance().FuncRetractIntake(); })
       .AndThen(SubIntake::GetInstance().Outtake().WithTimeout(0.3_s))
-      .FinallyDo([] { SubIntake::GetInstance().StopSpinningIntake(); });
+      .FinallyDo([] { SubIntake::GetInstance().FuncRetractIntake(); });
 }
 
 frc2::CommandPtr StartTrapSequence() {
