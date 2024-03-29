@@ -76,6 +76,8 @@ RobotContainer::RobotContainer() {
   _delayChooser.AddOption("0 Seconds", 0);
   _delayChooser.AddOption("1 Seconds", 1);
   _delayChooser.AddOption("2 Seconds", 2);
+  _delayChooser.AddOption("3 Seconds", 3);
+  _delayChooser.AddOption("10 Seconds", 10);
   frc::SmartDashboard::PutData("Delay By", &_delayChooser);
 
   _autoChooser.AddOption("A10", "A10");
@@ -91,6 +93,7 @@ RobotContainer::RobotContainer() {
   _autoChooser.AddOption("SUPRISE", "SUPRISE");
   _autoChooser.SetDefaultOption("Nothing", "Nothing");
   _autoChooser.SetDefaultOption("Move Back", "Move Back");
+  _autoChooser.SetDefaultOption("AmpSide Preload Back up", "AmpSide Preload Back up");
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
 
   _compressor.EnableAnalog(80_psi, 120_psi);
