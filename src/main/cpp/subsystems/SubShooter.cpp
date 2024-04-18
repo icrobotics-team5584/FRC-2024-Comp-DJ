@@ -243,6 +243,16 @@ frc2::CommandPtr SubShooter::Outtake() {
       });
 }
 
+frc2::CommandPtr SubShooter::ShooterPassNote(){
+  return RunOnce([this] { CurrentShooterTarget = ShootPassNoteTarget; })
+      .AndThen(WaitUntil([this] { return CheckShooterSpeed(); }));
+}
+
+frc2::CommandPtr SubShooter::ShooterPassNoteSequence() {
+      return Sequence(ShooterPassNote(), StartFeeder(), Idle())
+      .FinallyDo([this] {StopShooterFunc();});
+}
+
 //Check if there is a note in the shooter
 bool SubShooter::CheckShooterLineBreak() {
   if(_shooterLineBreak.Get() == BotVars::Choose(false, true)){

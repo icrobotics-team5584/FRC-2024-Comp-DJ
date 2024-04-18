@@ -130,6 +130,16 @@ frc2::CommandPtr ShootIntoAmp() {
       
 }
 
+frc2::CommandPtr PassNote() {
+    return SubShooter::GetInstance()
+      .ShooterPassNoteSequence()
+      .AlongWith(WaitUntil([] {
+                   return SubShooter::GetInstance().CheckShooterSpeed();
+                 }).AndThen(SubArm::GetInstance().FeedNote()))
+      .AndThen(WaitUntil([] { return !SubShooter::GetInstance().CheckShooterLineBreak(); }))
+      .AndThen(SubShooter::GetInstance().ShooterChangePosClose());
+}
+
 frc2::CommandPtr IntakeFromSource() {
   return SubShooter::GetInstance()
       .IntakeFromSource()

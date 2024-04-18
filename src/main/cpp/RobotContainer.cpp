@@ -152,17 +152,20 @@ void RobotContainer::ConfigureBindings() {
 
   _operatorController.Start().WhileTrue(cmd::OuttakeNote());
 
-  _operatorController.LeftTrigger().WhileTrue(cmd::IntakefullSequence().AndThen(Rumble(1, 0.3_s)));
+  _operatorController.LeftTrigger().WhileTrue(cmd::PassNote());
   _operatorController.LeftBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosClose());
   _operatorController.RightBumper().OnTrue(SubShooter::GetInstance().ShooterChangePosFar());
   _operatorController.RightTrigger().WhileTrue(cmd::ShootSpeakerOrArm());
 
-  _operatorController.Y().OnTrue(cmd::ArmToTrapPos());
-  _operatorController.Y().OnFalse(SubIntake::GetInstance().ExtendIntake().AndThen(frc2::cmd::Wait(1.5_s)).AndThen(cmd::ArmToStow()));
   _operatorController.X().WhileTrue(cmd::ShootIntoAmp());
   _operatorController.Back().WhileTrue(SubClimber::GetInstance().ClimberAutoReset());
+  // amp
   _operatorController.B().OnTrue(cmd::ArmToAmpPos());
   _operatorController.B().OnFalse(cmd::ArmToStow());
+  // amp
+  _operatorController.Y().OnTrue(cmd::ArmToAmpPos());
+  _operatorController.Y().OnFalse(cmd::ArmToStow());
+
   _operatorController.A().OnTrue(cmd::PrepareToShoot());
 
   POVHelper::Up(&_operatorController).OnTrue(SubClimber::GetInstance().ClimberPosition(0.467_m));

@@ -17,6 +17,7 @@ frc2::CommandPtr ShootSpeakerOrArm();
 frc2::CommandPtr FeedNoteToShooter();
 frc2::CommandPtr PrepareToShoot();
 frc2::CommandPtr ShootIntoAmp();
+frc2::CommandPtr PassNote();
 frc2::CommandPtr OuttakeIntakeAndEndEffector();
 frc2::CommandPtr ShootAmpOrTrap();
 frc2::CommandPtr IntakeFromSource();

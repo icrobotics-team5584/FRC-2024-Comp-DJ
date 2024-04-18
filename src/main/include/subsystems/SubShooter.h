@@ -56,7 +56,8 @@ class SubShooter : public frc2::SubsystemBase {
   frc2::CommandPtr StartFeederSlow();
   frc2::CommandPtr ReverseFeeder();
   frc2::CommandPtr IntakeFromSource();
-
+  frc2::CommandPtr ShooterPassNote();
+  frc2::CommandPtr ShooterPassNoteSequence();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -71,6 +72,7 @@ class SubShooter : public frc2::SubsystemBase {
   units::turns_per_second_t ShootFarTarget = 60_tps;
   units::turns_per_second_t ShootCloseTarget = 60_tps;
   units::turns_per_second_t ShootAmpTarget = 12_tps;
+  units::turns_per_second_t ShootPassNoteTarget = 45_tps;
   units::turns_per_second_t CurrentShooterTarget = 0_tps;
 
   static constexpr units::volt_t kS = 0.0000001_V;
