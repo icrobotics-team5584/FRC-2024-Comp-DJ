@@ -72,7 +72,7 @@ class SubShooter : public frc2::SubsystemBase {
   units::turns_per_second_t ShootFarTarget = 60_tps;
   units::turns_per_second_t ShootCloseTarget = 60_tps;
   units::turns_per_second_t ShootAmpTarget = 12_tps;
-  units::turns_per_second_t ShootPassNoteTarget = 45_tps;
+  units::turns_per_second_t ShootPassNoteTarget = 55_tps;
   units::turns_per_second_t CurrentShooterTarget = 0_tps;
 
   static constexpr units::volt_t kS = 0.0000001_V;
