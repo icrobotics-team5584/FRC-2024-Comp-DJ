@@ -138,7 +138,7 @@ void RobotContainer::ConfigureBindings() {
 
   // DRIVER CONTROLS
 
-  // _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());/];'.
+  _driverController.Y().OnTrue(SubDrivebase::GetInstance().ResetGyroCmd());
   // _driverController.LeftTrigger().WhileTrue(/*Align2Stage*/);
   // _driverController.LeftBumper().WhileTrue(/*IntakeFromSource*/);
   
@@ -206,9 +206,10 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
 frc2::CommandPtr RobotContainer::Rumble(double force, units::second_t duration) {
 return frc2::cmd::Run([this, force, duration]{  
-    _driverController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, force);
+    //_driverController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, force);
     _operatorController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, force);}).WithTimeout(duration)
     .FinallyDo([this]{
-    _driverController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
+    //_driverController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
     _operatorController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);});
 }
+
