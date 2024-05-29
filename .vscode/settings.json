@@ -123,6 +123,10 @@
     "xlocmes": "cpp",
     "xlocmon": "cpp",
     "xloctime": "cpp",
-    "xtree": "cpp"
+    "xtree": "cpp",
+    "filesystem": "cpp",
+    "queue": "cpp",
+    "stack": "cpp",
+    "xhash": "cpp"
   }
 }
