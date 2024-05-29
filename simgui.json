@@ -29,17 +29,12 @@
       "/SmartDashboard/photonvision_5584 Sim Field": "Field2d"
     },
     "windows": {
-      "/SmartDashboard/Chosen Path": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/Climber/Mech Display": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/arm/Arm Mechanism Display": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/field": {
         "window": {
           "visible": true
         }
@@ -147,14 +142,16 @@
             "open": true
           }
         },
+        "Drivebase": {
+          "open": true
+        },
         "Shooter": {
           "Bottom Motor": {
             "open": true
           },
           "Top Motor": {
             "open": true
-          },
-          "open": true
+          }
         },
         "amp": {
           "Dizzy Arm tilt motor: ": {
@@ -195,7 +192,7 @@
             0.0,
             0.8500000238418579
           ],
-          "height": 0,
+          "height": 783,
           "series": [
             {
               "color": [
@@ -208,7 +205,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     },
     "Plot <1>": {
       "plots": [
