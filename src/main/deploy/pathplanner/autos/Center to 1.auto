@@ -1,0 +1,45 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3516291379928587,
+      "y": 5.606069087982177
+    },
+    "rotation": -2.1556570992758876e-14
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center to 1"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Dynamic auto",
+  "choreoAuto": true
+}

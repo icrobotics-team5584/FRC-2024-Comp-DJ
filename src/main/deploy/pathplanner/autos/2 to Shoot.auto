@@ -1,0 +1,38 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 2.462033271789551,
+      "y": 5.5539021492004395
+    },
+    "rotation": 0.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "2 to Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoShootFullSequence"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Dynamic auto",
+  "choreoAuto": true
+}

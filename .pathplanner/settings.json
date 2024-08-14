@@ -17,7 +17,8 @@
     "S1 (C5 first)"
   ],
   "autoFolders": [
-    "Move Back"
+    "Move Back",
+    "Dynamic auto"
   ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 5.0,

@@ -1,0 +1,45 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3957700729370115,
+      "y": 5.5539021492004395
+    },
+    "rotation": 8.272890535773308e-20
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Shoot to 3"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Dynamic auto",
+  "choreoAuto": true
+}
