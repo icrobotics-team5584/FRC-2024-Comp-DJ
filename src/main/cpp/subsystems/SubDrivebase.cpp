@@ -14,6 +14,7 @@
 #include "subsystems/SubDrivebase.h"
 #include <frc/filter/SlewRateLimiter.h>
 #include <iostream>
+#include <cmath>
 
 SubDrivebase::SubDrivebase() {
   frc::SmartDashboard::PutNumber("Drivebase/Config/MaxVelocity", MAX_VELOCITY.value());
@@ -151,13 +152,19 @@ frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& contro
     static frc::SlewRateLimiter<units::scalar> _xspeedLimiter{MAX_JOYSTICK_ACCEL / 1_s};
     static frc::SlewRateLimiter<units::scalar> _yspeedLimiter{MAX_JOYSTICK_ACCEL / 1_s};
     static frc::SlewRateLimiter<units::scalar> _rotLimiter{MAX_ANGULAR_JOYSTICK_ACCEL / 1_s};
+
+    double ControllerLeftY = controller.GetLeftY();
+    double ControllerLeftX = controller.GetLeftX();
+    double LeftJoyStickr = pow(ControllerLeftY, 1.5)  + pow(ControllerLeftX, 1.5);
+    double LeftJoyStickTheta = atan2(ControllerLeftY, ControllerLeftX);
+
     auto forwardSpeed =
-        _yspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftY(), deadband)) * velocity;
+        _yspeedLimiter.Calculate(frc::ApplyDeadband((LeftJoyStickr*sin(LeftJoyStickTheta)), deadband)) * velocity;
     auto rotationSpeed =
         _rotLimiter.Calculate(frc::ApplyDeadband(controller.GetRightX(), deadband)) *
         angularVelocity;
     auto sidewaysSpeed =
-        _xspeedLimiter.Calculate(frc::ApplyDeadband(controller.GetLeftX(), deadband)) * velocity;
+        _xspeedLimiter.Calculate(frc::ApplyDeadband((LeftJoyStickr*cos(LeftJoyStickTheta)), deadband)) * velocity;
 
     // when optionalRotationContro is false,
     if (frc::RobotBase::IsSimulation()) {
@@ -264,7 +271,7 @@ frc2::CommandPtr SubDrivebase::SyncSensorBut() {
 }
 
 frc::Rotation2d SubDrivebase::GetHeading() {
-  return _gyro.GetRotation2d();
+  return -_gyro.GetRotation2d();
 }
 
 // Calculate robot's velocity over past time step (20 ms)
