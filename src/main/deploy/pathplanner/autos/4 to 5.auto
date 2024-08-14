@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3516291379928587,
-      "y": 5.606069087982177
+      "x": 7.793349266052246,
+      "y": 7.342473030090332
     },
-    "rotation": -2.1556570992758876e-14
+    "rotation": 14.886257933534166
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoShootFullSequence"
-          }
-        },
         {
           "type": "parallel",
           "data": {
@@ -31,16 +25,9 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Center to 1"
-                }
-              }
-            ]
+            "pathName": "4 to 5"
           }
         }
       ]
