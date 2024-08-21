@@ -2,37 +2,37 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.462033271789551,
-      "y": 5.5539021492004395
+      "x": 7.717373371124268,
+      "y": 2.2673652172088623
     },
-    "rotation": 0.0
+    "rotation": 16.504368057471034
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "2 to Shoot"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
-                  "name": "AutoShootFullSequence"
+                  "name": "Intake"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "7 to 6"
           }
         }
       ]
     }
   },
-  "folder": "Dynamic - CloseNote",
+  "folder": "Dynamic - SourceFar",
   "choreoAuto": true
 }
