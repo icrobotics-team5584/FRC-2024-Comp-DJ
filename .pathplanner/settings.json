@@ -20,8 +20,9 @@
   ],
   "autoFolders": [
     "Dynamic - CloseNote",
+    "Dynamic - SourceFar",
     "Move Back",
-    "Dynamic - SourceFar"
+    "Dynamic - SimpleAuto"
   ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 5.0,

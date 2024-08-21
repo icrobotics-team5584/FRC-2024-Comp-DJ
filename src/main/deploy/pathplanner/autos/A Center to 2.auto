@@ -1,0 +1,38 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3591984510421753,
+      "y": 5.5457987785339355
+    },
+    "rotation": -9.613869812529117e-27
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center to 2"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Dynamic - SimpleAuto",
+  "choreoAuto": true
+}

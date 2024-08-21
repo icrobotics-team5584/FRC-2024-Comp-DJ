@@ -20,6 +20,7 @@
 #include "commands/VisionCommands.h"
 #include "subsystems/SubArm.h"
 #include "utilities/POVHelper.h"
+#include "subsystems/SubAuto.h"
 
 RobotContainer::RobotContainer() {
   frc::SmartDashboard::PutData("Command Scheduler", &frc2::CommandScheduler::GetInstance());
@@ -80,21 +81,22 @@ RobotContainer::RobotContainer() {
   _delayChooser.AddOption("10 Seconds", 10);
   frc::SmartDashboard::PutData("Delay By", &_delayChooser);
 
-  _autoChooser.AddOption("A10", "A10");
-  _autoChooser.AddOption("Test Path", "Test Path");
-  _autoChooser.AddOption("M4", "M4");
-  _autoChooser.AddOption("M4 No Far Note", "M4 No Far Note");
-  _autoChooser.AddOption("S1 (C5 first)", "S1 (C5 first)");
-  _autoChooser.AddOption("S1 (C4 first)", "S1 (C4 first)");
-  _autoChooser.AddOption("A2", "A2");
-  _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
-  _autoChooser.AddOption("Nothing", "Nothing");
-  _autoChooser.AddOption("A2", "A2");
-  _autoChooser.AddOption("SUPRISE", "SUPRISE");
-  _autoChooser.SetDefaultOption("Nothing", "Nothing");
-  _autoChooser.SetDefaultOption("Move Back", "Move Back");
-  _autoChooser.SetDefaultOption("AmpSide Preload Back up", "AmpSide Preload Back up");
-  _autoChooser.SetDefaultOption("Source side c3 rush", "S C3 rush");
+  // _autoChooser.AddOption("A10", "A10");
+  // _autoChooser.AddOption("Test Path", "Test Path");
+  // _autoChooser.AddOption("M4", "M4");
+  // _autoChooser.AddOption("M4 No Far Note", "M4 No Far Note");
+  // _autoChooser.AddOption("S1 (C5 first)", "S1 (C5 first)");
+  // _autoChooser.AddOption("S1 (C4 first)", "S1 (C4 first)");
+  // _autoChooser.AddOption("A2", "A2");
+  // _autoChooser.AddOption("Alliance collect path", "Alliance collect path");
+  // _autoChooser.AddOption("Nothing", "Nothing");
+  // _autoChooser.AddOption("A2", "A2");
+  // _autoChooser.AddOption("SUPRISE", "SUPRISE");
+  // _autoChooser.SetDefaultOption("Nothing", "Nothing");
+  // _autoChooser.SetDefaultOption("Move Back", "Move Back");
+  // _autoChooser.SetDefaultOption("AmpSide Preload Back up", "AmpSide Preload Back up");
+  // _autoChooser.SetDefaultOption("Source side c3 rush", "S C3 rush");
+  // _autoChooser.AddOption("SimpleAuto", &myauto);
   frc::SmartDashboard::PutData("Chosen Path", &_autoChooser);
 
   _compressor.EnableAnalog(80_psi, 120_psi);
@@ -196,12 +198,13 @@ void RobotContainer::ConfigureBindings() {
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-  _autoSelected = _autoChooser.GetSelected();
-  units::second_t delay = _delayChooser.GetSelected() * 1_s;
-  return frc2::cmd::Wait(delay)
-      .AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr())
-      .AlongWith(SubClimber::GetInstance().ClimberAutoReset().AndThen(
-          SubClimber::GetInstance().ClimberPosition(SubClimber::_ClimberPosStow)));
+  return SubAuto::GetInstance().SimpleAuto();
+  // _autoSelected = _autoChooser.GetSelected();
+  // units::second_t delay = _delayChooser.GetSelected() * 1_s;
+  // return frc2::cmd::Wait(delay)
+  //     .AndThen(pathplanner::PathPlannerAuto(_autoSelected).ToPtr())
+  //     .AlongWith(SubClimber::GetInstance().ClimberAutoReset().AndThen(
+  //         SubClimber::GetInstance().ClimberPosition(SubClimber::_ClimberPosStow)));
 }
 
 frc2::CommandPtr RobotContainer::Rumble(double force, units::second_t duration) {

@@ -9,6 +9,10 @@
 
 class SubAuto : public frc2::SubsystemBase {
  public:
+  static SubAuto& GetInstance() {
+    static SubAuto inst;
+    return inst;
+  }
   SubAuto();
 
   /**
@@ -16,6 +20,7 @@ class SubAuto : public frc2::SubsystemBase {
    */
   void Periodic() override;
   frc2::CommandPtr CloseNotesAuto();
+  frc2::CommandPtr SimpleAuto();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
