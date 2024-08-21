@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.4505679607391357,
-      "y": 4.61375617980957
+      "x": 7.660603523254395,
+      "y": 0.7913602590560913
     },
-    "rotation": -51.581942046130926
+    "rotation": -12.528791431311307
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 to Shoot"
+            "pathName": "8 to Shoot"
           }
         },
         {
@@ -26,6 +26,6 @@
       ]
     }
   },
-  "folder": "Dynamic - CloseNote",
+  "folder": "Dynamic - SourceFar",
   "choreoAuto": true
 }

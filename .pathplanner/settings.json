@@ -19,8 +19,9 @@
     "S1 (C5 first)"
   ],
   "autoFolders": [
+    "Dynamic - CloseNote",
     "Move Back",
-    "Dynamic auto"
+    "Dynamic - SourceFar"
   ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 5.0,
