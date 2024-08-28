@@ -16,7 +16,6 @@ SubAuto::SubAuto() = default;
 // This method will be called once per scheduler run
 void SubAuto::Periodic() {}
 
-<<<<<<< HEAD
 
 // //Description of total auton
 // frc2::CommandPtr SubAuto::CloseNotesAuto(){
@@ -42,7 +41,6 @@ void SubAuto::Periodic() {}
 //             )
 //             ,
 //      [] {return SubArm::GetInstance().CheckIfArmHasGamePiece();});})}
-=======
 // Description of total auton
 frc2::CommandPtr SubAuto::CloseNotesAuto() {
   // Go from start pos to note 1
@@ -87,7 +85,6 @@ frc2::CommandPtr SubAuto::CloseNotesAuto() {
                 [] { return SubArm::GetInstance().CheckIfArmHasGamePiece(); });
           });
 }
->>>>>>> 7e61b1293ac1da9021103f8be057e21ef6d0342f
 
 frc2::CommandPtr SubAuto::SimpleAuto(){
     return RunOnce([this]{pathplanner::PathPlannerAuto("A Center to 2").ToPtr();})
