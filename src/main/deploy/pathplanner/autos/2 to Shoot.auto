@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.462033271789551,
-      "y": 5.5539021492004395
+      "x": 2.452009677886963,
+      "y": 5.574183464050293
     },
-    "rotation": 0.0
+    "rotation": -178.92843726640683
   },
   "command": {
     "type": "sequential",
@@ -33,6 +33,6 @@
       ]
     }
   },
-  "folder": "Dynamic - CloseNote",
+  "folder": null,
   "choreoAuto": true
 }

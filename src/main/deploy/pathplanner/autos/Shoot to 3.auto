@@ -20,14 +20,7 @@
                 "data": {
                   "name": "Intake"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "path",
                 "data": {
@@ -40,6 +33,6 @@
       ]
     }
   },
-  "folder": "Dynamic - CloseNote",
+  "folder": null,
   "choreoAuto": true
 }

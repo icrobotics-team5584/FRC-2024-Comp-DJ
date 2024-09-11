@@ -155,7 +155,7 @@ frc2::CommandPtr SubDrivebase::JoystickDrive(frc2::CommandXboxController& contro
 
     double ControllerLeftY = controller.GetLeftY();
     double ControllerLeftX = controller.GetLeftX();
-    double LeftJoyStickr = pow(ControllerLeftY, 1.5)  + pow(ControllerLeftX, 1.5);
+    double LeftJoyStickr = pow(pow(ControllerLeftY, 2)  + pow(ControllerLeftX, 2), 1.5);
     double LeftJoyStickTheta = atan2(ControllerLeftY, ControllerLeftX);
 
     auto forwardSpeed =

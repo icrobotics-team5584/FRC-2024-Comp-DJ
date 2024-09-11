@@ -8,6 +8,8 @@
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <frc2/command/CommandPtr.h>
 #include "subsystems/SubArm.h"
+#include "subsystems/SubDrivebase.h"
+
 
 using namespace frc2;
 
@@ -87,14 +89,15 @@ frc2::CommandPtr SubAuto::CloseNotesAuto() {
 }
 
 frc2::CommandPtr SubAuto::SimpleAuto(){
-    return RunOnce([this]{pathplanner::PathPlannerAuto("A Center to 2").ToPtr();})
+    return pathplanner::PathPlannerAuto("A Center to 2").ToPtr();
     .AndThen(
         cmd::Either(
             pathplanner::PathPlannerAuto("A 2 to Shoot").ToPtr()
             , 
             pathplanner::PathPlannerAuto("A 2 to 1").ToPtr()
-            ,
+            , 
      [] {return SubArm::GetInstance().CheckIfArmHasGamePiece();}));
+
 }
 /* TEMPLATE
     return RunOnce([this]{pathplanner::PathPlannerAuto("firstPath").ToPtr();})

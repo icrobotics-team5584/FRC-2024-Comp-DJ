@@ -198,7 +198,9 @@ void RobotContainer::ConfigureBindings() {
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
+  // return pathplanner::PathPlannerAuto("A Center to 2").ToPtr();
   return SubAuto::GetInstance().SimpleAuto();
+  //return SubAuto::GetInstance().SimpleAuto();
   // _autoSelected = _autoChooser.GetSelected();
   // units::second_t delay = _delayChooser.GetSelected() * 1_s;
   // return frc2::cmd::Wait(delay)
