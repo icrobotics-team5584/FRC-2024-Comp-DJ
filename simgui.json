@@ -33,11 +33,6 @@
         "window": {
           "visible": true
         }
-      },
-      "/SmartDashboard/field": {
-        "window": {
-          "visible": true
-        }
       }
     }
   },
