@@ -185,7 +185,7 @@
             {
               "type": "named",
               "data": {
-                "name": "StopIntakeSpinning"
+                "name": null
               }
             }
           ]
@@ -220,7 +220,7 @@
             {
               "type": "named",
               "data": {
-                "name": "StopIntakeSpinning"
+                "name": null
               }
             },
             {

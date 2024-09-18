@@ -5,29 +5,34 @@
       "x": 2.452009677886963,
       "y": 5.574183464050293
     },
-    "rotation": 3.009588452681373e-27
+    "rotation": -179.91942851648338
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
+            "name": "ExtendIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartIntakeSpinning"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "2 to 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopSpinningIntake"
           }
         }
       ]

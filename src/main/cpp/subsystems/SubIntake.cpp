@@ -57,7 +57,7 @@ frc2::CommandPtr SubIntake::Outtake() {
   return Run([this]{ _intakeMotorSpin.Set(-1);}).FinallyDo([this]{_intakeMotorSpin.Set(0);});
 }
 
-//used with IntakeSequence(), extends intake then waits 0.1 seconds then turns intake motor to 100% power
+//used with IntakeSequence(), extends intake then waits 0.1 seconds then turns intake motor to 100% powerx
 frc2::CommandPtr SubIntake::Intake(){
   return ExtendIntake().AndThen(Wait(0.1_s)).AndThen(StartSpinningIntake());
 }
@@ -69,7 +69,7 @@ frc2::CommandPtr SubIntake::EndIntake(){
 
 //runs the Intake command, then when cancelled set intake motor to 0% power and retract
 frc2::CommandPtr SubIntake::IntakeSequence(){
-  return Intake()
+return Intake()
       .FinallyDo([this] {
         solIntake.Set(frc::DoubleSolenoid::Value::kReverse);
         _intakeMotorSpin.Set(0);

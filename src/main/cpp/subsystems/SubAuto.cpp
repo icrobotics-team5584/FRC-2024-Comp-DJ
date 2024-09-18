@@ -89,7 +89,7 @@ frc2::CommandPtr SubAuto::CloseNotesAuto() {
 }
 
 frc2::CommandPtr SubAuto::SimpleAuto(){
-    return pathplanner::PathPlannerAuto("A Center to 2").ToPtr();
+    return pathplanner::PathPlannerAuto("A Center to 2").ToPtr()
     .AndThen(
         cmd::Either(
             pathplanner::PathPlannerAuto("A 2 to Shoot").ToPtr()

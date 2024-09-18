@@ -41,11 +41,15 @@ RobotContainer::RobotContainer() {
                            return false;
                          })
                          .WithTimeout(2_s));
-  pathplanner::NamedCommands::registerCommand("StopIntakeSpinning",
+  pathplanner::NamedCommands::registerCommand("ExtendIntake",
+                                              SubIntake::GetInstance().ExtendIntake());
+  pathplanner::NamedCommands::registerCommand("StartIntakeSpinning",
+                                              SubIntake::GetInstance().StartSpinningIntake());
+  pathplanner::NamedCommands::registerCommand("StopSpinningIntake",
                                               SubIntake::GetInstance().StopSpinningIntake());
   pathplanner::NamedCommands::registerCommand("StartShooter",
                                               SubShooter::GetInstance().StartShooter());
-  pathplanner::NamedCommands::registerCommand("RetractInt ake",
+  pathplanner::NamedCommands::registerCommand("RetractIntake",
                                               SubIntake::GetInstance().CommandRetractIntake());
   pathplanner::NamedCommands::registerCommand("ShootNote",  
     SubShooter::GetInstance().ShootSequence());
