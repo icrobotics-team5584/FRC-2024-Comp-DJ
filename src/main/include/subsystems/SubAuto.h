@@ -21,6 +21,9 @@ class SubAuto : public frc2::SubsystemBase {
   void Periodic() override;
   frc2::CommandPtr CloseNotesAuto();
   frc2::CommandPtr SimpleAuto();
+  frc2::CommandPtr CNA1();
+  frc2::CommandPtr CNA2();
+  frc2::CommandPtr CNA3();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be

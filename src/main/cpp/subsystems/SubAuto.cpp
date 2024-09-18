@@ -44,59 +44,102 @@ void SubAuto::Periodic() {}
 //             ,
 //      [] {return SubArm::GetInstance().CheckIfArmHasGamePiece();});})}
 // Description of total auton
-frc2::CommandPtr SubAuto::CloseNotesAuto() {
-  // Go from start pos to note 1
-  return pathplanner::PathPlannerAuto("Center to 1").ToPtr()
-      .AndThen(
-          // Either: go from note 1 to subwoofer or go from note 1 to note 2
-          
-            return cmd::Either(
-                // Go from note 1 to subwoofer and shoot
-                pathplanner::PathPlannerAuto("1 to Shoot")
-                    .ToPtr()
-                    .AndThen(
-                      // Then go from subwoofer to note 2
-                      pathplanner::PathPlannerAuto("Shoot to 2").ToPtr()
-                    )
-                    .AndThen(
-                      // Either: go from note 2 to subwoofer or go from note 2 to note 3
-                      return cmd::Either(
-                          // Either:go from note 2 to subwoofer and shoot. END AUTO or go from 2 to
-                          // 3
-                          pathplanner::PathPlannerAuto("2 to Shoot").ToPtr(),
-                          pathplanner::PathPlannerAuto("2 to 3").ToPtr().AndThen(
-                              pathplanner::PathPlannerAuto("3 to Shoot").ToPtr().OnlyIf([] {
-                              return SubArm::GetInstance().CheckIfArmHasGamePiece();
-                            });
-                          ),
-                          [] { return SubArm::GetInstance().CheckIfArmHasGamePiece(); });
-                    ),
-                pathplanner::PathPlannerAuto("1 to 2").ToPtr().AndThen(cmd::Either(
-                    pathplanner::PathPlannerAuto("2 to Shoot").ToPtr().AndThen(
-                    pathplanner::PathPlannerAuto("Shoot to 3").ToPtr().OnlyIf([] {
-                        return SubArm::GetInstance().CheckIfArmHasGamePiece();
-                      })
-                    ),
-                    pathplanner::PathPlannerAuto("2 to 3").ToPtr().AndThen([this] {
-                      return pathplanner::PathPlannerAuto("3 to Shoot").ToPtr().OnlyIf([] {
-                        return SubArm::GetInstance().CheckIfArmHasGamePiece();
-                      });
-                    }),
-                    [] { return SubArm::GetInstance().CheckIfArmHasGamePiece(); }  // Selector bool
-                    )),
-                [] { return SubArm::GetInstance().CheckIfArmHasGamePiece(); });
-          );
-}
 
-frc2::CommandPtr SubAuto::SimpleAuto(){
-    return pathplanner::PathPlannerAuto("A Center to 2").ToPtr()
+
+// frc2::CommandPtr SubAuto::CloseNotesAuto() {
+//   // Go from start pos to note 1
+//   return pathplanner::PathPlannerAuto("Center to 1").ToPtr()
+//       .AndThen(
+//           // Either: go from note 1 to subwoofer or go from note 1 to note 2
+          
+//               cmd::Either(
+//                 // Go from note 1 to subwoofer and shoot
+//                 pathplanner::PathPlannerAuto("1 to Shoot")
+//                     .ToPtr()
+//                     .AndThen(
+//                       // Then go from subwoofer to note 2
+//                       pathplanner::PathPlannerAuto("Shoot to 2").ToPtr()
+//                     )
+//                     .AndThen(
+//                       // Either: go from note 2 to subwoofer or go from note 2 to note 3
+//                       cmd::Either(
+//                           // Either:go from note 2 to subwoofer and shoot. END AUTO or go from 2 to
+//                           // 3
+//                           pathplanner::PathPlannerAuto("2 to Shoot").ToPtr(),
+//                           pathplanner::PathPlannerAuto("2 to 3").ToPtr().AndThen(
+//                               pathplanner::PathPlannerAuto("3 to Shoot").ToPtr().OnlyIf([] {
+//                               return SubArm::GetInstance().CheckIfArmHasGamePiece();
+//                             }));
+//                           ),
+//                           [] { return SubArm::GetInstance().CheckIfArmHasGamePiece(); });
+//                     ),
+//                 pathplanner::PathPlannerAuto("1 to 2").ToPtr().AndThen(cmd::Either(
+//                     pathplanner::PathPlannerAuto("2 to Shoot").ToPtr().AndThen(
+//                     pathplanner::PathPlannerAuto("Shoot to 3").ToPtr().OnlyIf([] {
+//                         return SubArm::GetInstance().CheckIfArmHasGamePiece();
+//                       })
+//                     ),
+//                     pathplanner::PathPlannerAuto("2 to 3").ToPtr().AndThen(
+//                       return pathplanner::PathPlannerAuto("3 to Shoot").ToPtr().OnlyIf([] {
+//                         return SubArm::GetInstance().CheckIfArmHasGamePiece();
+//                       });
+//                     ),
+//                     [] { return SubArm::GetInstance().CheckIfArmHasGamePiece(); }  // Selector bool
+//                     )),
+//                 [] { return SubArm::GetInstance().CheckIfArmHasGamePiece(); });
+//           );
+// }
+
+
+frc2::CommandPtr SubAuto::CloseNotesAuto(){
+
+    return pathplanner::PathPlannerAuto("Center to 1").ToPtr()
     .AndThen(
         cmd::Either(
-            pathplanner::PathPlannerAuto("A 2 to Shoot").ToPtr()
+            pathplanner::PathPlannerAuto("1 to Shoot").ToPtr().AndThen(pathplanner::PathPlannerAuto("Shoot to 2")
+            .ToPtr()).AndThen(SubAuto::GetInstance().CNA1())
             , 
-            pathplanner::PathPlannerAuto("A 2 to 1").ToPtr()
+            pathplanner::PathPlannerAuto("1 to 2").ToPtr().AndThen(SubAuto::GetInstance().CNA1())
             , 
      [] {return SubArm::GetInstance().CheckIfArmHasGamePiece();}));
+
+}
+
+
+frc2::CommandPtr SubAuto::CNA1(){
+
+    return cmd::Either(
+            pathplanner::PathPlannerAuto("2 to Shoot").ToPtr()
+            .AndThen(pathplanner::PathPlannerAuto("Shoot to 3")
+            .ToPtr()).AndThen(SubAuto::GetInstance().CNA2())
+            , 
+            pathplanner::PathPlannerAuto("2 to 3").ToPtr().AndThen(SubAuto::GetInstance().CNA2())
+            , 
+     [] {return SubArm::GetInstance().CheckIfArmHasGamePiece();});
+
+}
+
+frc2::CommandPtr SubAuto::CNA2(){
+
+    return cmd::Either(
+            pathplanner::PathPlannerAuto("3 to Shoot").ToPtr()
+            .AndThen(pathplanner::PathPlannerAuto("Shoot to 4")
+            .ToPtr()).AndThen(SubAuto::GetInstance().CNA3())
+            , 
+            pathplanner::PathPlannerAuto("3 to 4").ToPtr().AndThen(SubAuto::GetInstance().CNA3())
+            , 
+     [] {return SubArm::GetInstance().CheckIfArmHasGamePiece();});
+
+}
+
+frc2::CommandPtr SubAuto::CNA3(){
+
+    return cmd::Either(
+            pathplanner::PathPlannerAuto("4 to Shoot").ToPtr().AndThen(pathplanner::PathPlannerAuto("Shoot to 5").ToPtr())
+            , 
+            pathplanner::PathPlannerAuto("4 to 5").ToPtr()
+            , 
+     [] {return SubArm::GetInstance().CheckIfArmHasGamePiece();});
 
 }
 /* TEMPLATE
