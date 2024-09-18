@@ -46,31 +46,31 @@ void SubAuto::Periodic() {}
 // Description of total auton
 frc2::CommandPtr SubAuto::CloseNotesAuto() {
   // Go from start pos to note 1
-  return RunOnce([this] { pathplanner::PathPlannerAuto("Center to 1").ToPtr(); })
+  return pathplanner::PathPlannerAuto("Center to 1").ToPtr()
       .AndThen(
           // Either: go from note 1 to subwoofer or go from note 1 to note 2
-          [this] {
+          
             return cmd::Either(
                 // Go from note 1 to subwoofer and shoot
                 pathplanner::PathPlannerAuto("1 to Shoot")
                     .ToPtr()
-                    .AndThen([this] {
+                    .AndThen(
                       // Then go from subwoofer to note 2
-                      pathplanner::PathPlannerAuto("Shoot to 2").ToPtr();
-                    })
-                    .AndThen([this] {
+                      pathplanner::PathPlannerAuto("Shoot to 2").ToPtr()
+                    )
+                    .AndThen(
                       // Either: go from note 2 to subwoofer or go from note 2 to note 3
                       return cmd::Either(
                           // Either:go from note 2 to subwoofer and shoot. END AUTO or go from 2 to
                           // 3
                           pathplanner::PathPlannerAuto("2 to Shoot").ToPtr(),
-                          pathplanner::PathPlannerAuto("2 to 3").ToPtr().AndThen([this] {
-                            return pathplanner::PathPlannerAuto("3 to Shoot").ToPtr().OnlyIf([] {
+                          pathplanner::PathPlannerAuto("2 to 3").ToPtr().AndThen(
+                              pathplanner::PathPlannerAuto("3 to Shoot").ToPtr().OnlyIf([] {
                               return SubArm::GetInstance().CheckIfArmHasGamePiece();
                             });
-                          }),
+                          ),
                           [] { return SubArm::GetInstance().CheckIfArmHasGamePiece(); });
-                    }),
+                    ),
                 pathplanner::PathPlannerAuto("1 to 2").ToPtr().AndThen(cmd::Either(
                     pathplanner::PathPlannerAuto("2 to Shoot").ToPtr().AndThen(
                     pathplanner::PathPlannerAuto("Shoot to 3").ToPtr().OnlyIf([] {
@@ -85,7 +85,7 @@ frc2::CommandPtr SubAuto::CloseNotesAuto() {
                     [] { return SubArm::GetInstance().CheckIfArmHasGamePiece(); }  // Selector bool
                     )),
                 [] { return SubArm::GetInstance().CheckIfArmHasGamePiece(); });
-          });
+          );
 }
 
 frc2::CommandPtr SubAuto::SimpleAuto(){
