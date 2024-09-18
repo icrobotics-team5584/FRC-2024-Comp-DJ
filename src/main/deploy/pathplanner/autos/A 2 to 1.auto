@@ -12,27 +12,49 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "ExtendIntake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartIntakeSpinning"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "2 to 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopSpinningIntake"
+            "commands": [
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Intake"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "StoreNote"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "sequential",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "2 to 1"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]
