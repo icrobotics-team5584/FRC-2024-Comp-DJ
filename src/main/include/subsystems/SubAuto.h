@@ -6,6 +6,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/commands.h>
+#include <pathplanner/lib/commands/PathPlannerAuto.h>
 
 class SubAuto : public frc2::SubsystemBase {
  public:

@@ -5,7 +5,6 @@
 #include "subsystems/SubAuto.h"
 #include <choreo/lib/Choreo.h>
 #include <pathplanner/lib/path/PathPlannerPath.h>
-#include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <frc2/command/CommandPtr.h>
 #include "subsystems/SubArm.h"
 #include "subsystems/SubDrivebase.h"
