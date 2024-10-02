@@ -5,7 +5,7 @@
       "x": 2.540570020675659,
       "y": 6.717046737670898
     },
-    "rotation": 218.53928286679798
+    "rotation": -135.38001792865137
   },
   "command": {
     "type": "sequential",
@@ -16,42 +16,21 @@
           "data": {
             "commands": [
               {
-                "type": "race",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "parallel",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Intake"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "StoreNote"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "type": "sequential",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "path",
-                            "data": {
-                              "pathName": "1 to Shoot"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  ]
+                  "pathName": "1 to Shoot"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 3.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoShootFullSequence"
                 }
               }
             ]

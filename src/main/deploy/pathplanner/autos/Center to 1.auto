@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3516291379928589,
+      "x": 1.351629137992859,
       "y": 5.606069087982178
     },
     "rotation": 179.2908730893167
@@ -11,6 +11,12 @@
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShooter"
+          }
+        },
         {
           "type": "named",
           "data": {

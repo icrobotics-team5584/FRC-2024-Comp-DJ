@@ -34,6 +34,7 @@ class SubIntake : public frc2::SubsystemBase {
   frc2::CommandPtr Outtake();
   frc2::CommandPtr EndIntake();
   frc2::CommandPtr IntakeSequence();
+  
   frc2::CommandPtr CommandRetractIntake();
 
   //Defind functions for intake

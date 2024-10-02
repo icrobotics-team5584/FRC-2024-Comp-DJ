@@ -34,12 +34,16 @@ void Robot::DisabledPeriodic() {}
 void Robot::DisabledExit() {}
 
 void Robot::AutonomousInit() {
+  auto loopStart = frc::GetTime();
   m_autonomousCommand = m_container.GetAutonomousCommand();
-
   if (m_autonomousCommand) {
     m_autonomousCommand->Schedule();
   }
+  frc::SmartDashboard::PutNumber("LoopTime/Autonomousinit (sec)", (frc::GetTime() - loopStart).value());
+
+  loopStart = frc::GetTime();
   SubDrivebase::GetInstance().SyncSensors();
+  frc::SmartDashboard::PutNumber("LoopTime/SyncSensors (sec)", (frc::GetTime() - loopStart).value());
 }
 
 void Robot::AutonomousPeriodic() {}

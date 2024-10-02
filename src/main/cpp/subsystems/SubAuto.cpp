@@ -93,40 +93,36 @@ void SubAuto::Periodic() {}
 
 frc2::CommandPtr SubAuto::CloseNotesAuto(){
 
-    return pathplanner::PathPlannerAuto("Center to 1").ToPtr()
+    return _centerTo1
     .AndThen(
         cmd::Either(
-            pathplanner::PathPlannerAuto("1 to Shoot").ToPtr().AndThen(pathplanner::PathPlannerAuto("Shoot to 2")
-            .ToPtr()).AndThen(SubAuto::GetInstance().CNA1())
+            _1ToShoot.AndThen(_shootTo2).AndThen(SubAuto::GetInstance().CNA1())
             , 
-            pathplanner::PathPlannerAuto("1 to 2").ToPtr().AndThen(SubAuto::GetInstance().CNA1())
+
+            _1To2.AndThen(SubAuto::GetInstance().CNA1())
             , 
-     [] {return SubArm::GetInstance().CheckIfArmHasGamePiece();}));
-
-}
-
+     [] {return SubArm::GetInstance().CheckIfArmHasGamePiece();} ));
+}  
 
 frc2::CommandPtr SubAuto::CNA1(){
 
     return cmd::Either(
-            pathplanner::PathPlannerAuto("2 to Shoot").ToPtr()
-            .AndThen(pathplanner::PathPlannerAuto("Shoot to 3")
-            .ToPtr()).AndThen(SubAuto::GetInstance().CNA2())
+            _2ToShoot
+            .AndThen(_shootTo3).AndThen(SubAuto::GetInstance().CNA2())
             , 
-            pathplanner::PathPlannerAuto("2 to 3").ToPtr().AndThen(SubAuto::GetInstance().CNA2())
+            _2To3.AndThen(SubAuto::GetInstance().CNA2())
             , 
      [] {return SubArm::GetInstance().CheckIfArmHasGamePiece();});
-
 }
+
 
 frc2::CommandPtr SubAuto::CNA2(){
 
     return cmd::Either(
-            pathplanner::PathPlannerAuto("3 to Shoot").ToPtr()
-            .AndThen(pathplanner::PathPlannerAuto("Shoot to 4")
-            .ToPtr()).AndThen(SubAuto::GetInstance().CNA3())
+            _3ToShoot
+            .AndThen(_shootTo4).AndThen(SubAuto::GetInstance().CNA3())
             , 
-            pathplanner::PathPlannerAuto("3 to 4").ToPtr().AndThen(SubAuto::GetInstance().CNA3())
+            _3To4.AndThen(SubAuto::GetInstance().CNA3())
             , 
      [] {return SubArm::GetInstance().CheckIfArmHasGamePiece();});
 
@@ -135,13 +131,14 @@ frc2::CommandPtr SubAuto::CNA2(){
 frc2::CommandPtr SubAuto::CNA3(){
 
     return cmd::Either(
-            pathplanner::PathPlannerAuto("4 to Shoot").ToPtr().AndThen(pathplanner::PathPlannerAuto("Shoot to 5").ToPtr())
+            _4ToShoot.AndThen(_shootTo5)
             , 
-            pathplanner::PathPlannerAuto("4 to 5").ToPtr()
+            _4To5
             , 
      [] {return SubArm::GetInstance().CheckIfArmHasGamePiece();});
 
 }
+
 /* TEMPLATE
     return RunOnce([this]{pathplanner::PathPlannerAuto("firstPath").ToPtr();})
     .AndThen(
